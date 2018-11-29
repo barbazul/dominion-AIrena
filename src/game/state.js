@@ -126,10 +126,9 @@ export default class State {
    * @see https://github.com/rspeer/dominiate/issues/64
    * @param {Player} player
    * @param {int} num
-   * @param {function(Card):boolean} filterFunction
    * @return {Card[]}
    */
-  allowDiscard (player, num, filterFunction = () => true) {
+  allowDiscard (player, num) {
     const discarded = [];
 
     while (discarded.length < num) {
@@ -153,5 +152,35 @@ export default class State {
     }
 
     return discarded;
+  }
+
+  /**
+   * Allows a player to trash up to num cards.
+   * Used in optional trash effects
+   * filterFunction allows to pass a filter on the allowed cards
+   *
+   * @param {Player} player
+   * @param {int} num
+   * @return {Card[]}
+   */
+  allowTrash (player, num) {
+    const trashed = [];
+
+    while (trashed.length < num) {
+      const validTrashes = player.hand.slice(0);
+      let choice;
+
+      validTrashes.push(null);
+      choice = player.agent.choose('trash', this, validTrashes);
+
+      if (choice === null) {
+        return trashed;
+      }
+
+      trashed.push(choice);
+      this.doTrash(player, choice);
+    }
+
+    return trashed;
   }
 }

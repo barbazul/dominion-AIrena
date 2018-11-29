@@ -12,12 +12,13 @@ const basic2PlayerKingdom = {
   Gold: 30
 };
 
-const createPlayers = (quantiy) => {
+/**
+ *
+ * @param {int} quantiy
+ * @returns {BasicAI[]}
+ */
+const createPlayers = (quantiy = 2) => {
   const players = [];
-
-  if (!quantiy) {
-    quantiy = 2;
-  }
 
   for (let i = 0; i < quantiy; i++) {
     players.push(new BasicAI());
@@ -126,7 +127,7 @@ test('AllowDiscard returns empty array when allowing 0 cards', () => {
   const players = createPlayers(2);
 
   state.setUp(players);
-  expect(state.allowDiscard(players[0], 0)).toHaveLength(0);
+  expect(state.allowDiscard(state.current, 0)).toHaveLength(0);
 });
 
 test('Default warn is console', () => {
@@ -271,4 +272,67 @@ test('AllowDiscard interrupts on null', () => {
   expect(state.current.hand.length).toBe(1);
   expect(state.current.discard.length).toBe(1);
   expect(state.current.discard.indexOf(card1)).toBeGreaterThan(-1);
+});
+
+test('allowTrash returns empty array when allowing 0 cards', () => {
+  const state = new State();
+  const players = createPlayers(2);
+
+  state.setUp(players);
+  expect(state.allowTrash(state.current, 0)).toHaveLength(0);
+});
+
+test('allowTrash trashes whole hand if agent chooses', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+  const card2 = new Card();
+  let trashed;
+
+  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.current.agent.trashValue = card => card ? 1 : 0; // Prefer trash over null
+  state.current.hand = [card1, card2];
+  state.current.discard = [];
+  trashed = state.allowTrash(state.current, 2);
+
+  expect(trashed).toEqual([card1, card2]);
+  expect(state.current.hand).toHaveLength(0);
+  expect(state.trash).toHaveLength(2);
+  expect(state.trash).toContain(card1);
+  expect(state.trash).toContain(card2);
+});
+
+test('allowTrash has null as a valid choice', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+
+  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.current.hand.push(card1);
+  state.current.agent.choose = jest.fn(state.current.agent.choose);
+  state.current.agent.trashPriority = () => [ 'Worst Card', null, 'Best Card' ];
+  state.allowTrash(state.current, 2);
+  expect(state.current.agent.choose).toHaveBeenCalledWith('trash', state, expect.arrayContaining([ null ]));
+});
+
+test('allowTrash interrupts on null', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+  const card2 = new Card();
+  let trashed;
+
+  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.current.agent.trashPriority = () => [ 'Worst Card', null, 'Best Card' ];
+  card1.name = 'Worst Card';
+  state.current.hand.push(card1);
+  card2.name = 'Best Card';
+  state.current.hand.push(card2);
+  state.current.discard = [];
+  trashed = state.allowTrash(state.current, 2);
+
+  expect(trashed).toEqual([card1]);
+  expect(state.current.hand).toHaveLength(1);
+  expect(state.trash).toHaveLength(1);
+  expect(state.trash).toContain(card1);
 });
