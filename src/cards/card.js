@@ -64,6 +64,17 @@ export default class Card {
   }
 
   /**
+   * What happens when this card is in hand and an opponent plays an attack
+   *
+   * @param {State} state
+   * @param {Player} player
+   * @param {{blocked:boolean}} attackEvent
+   */
+  reactToAttack (state, player, attackEvent) {
+
+  }
+
+  /**
    * Making each card convert to its own name allows for the card variable to be used indistinctly in most cases
    *
    * @returns {String}
