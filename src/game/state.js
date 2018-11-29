@@ -82,6 +82,7 @@ export default class State {
   /**
    * Causes a player to discard a card
    *
+   * @todo Should allow to discard from deck and other places
    * @param {Player} player
    * @param {Card} card
    */
@@ -96,6 +97,34 @@ export default class State {
     this.log(`${player.agent.name} discards ${card}.`);
     player.hand.splice(index, 1);
     player.discard.push(card);
+  }
+
+  /**
+   * Put a card on top of deck
+   *
+   * @param {Player} player
+   * @param {Card} card
+   * @param {String} from
+   */
+  doTopdeck (player, card, from = 'hand') {
+    let index;
+    const source = player[from];
+
+    if (source === undefined) {
+      this.warn(`${player.agent.name} tried to topdeck a card from invalid location ${from}`);
+      return;
+    }
+
+    index = source.indexOf(card);
+
+    if (index === -1) {
+      this.warn(`${player.agent.name} has no ${card} to topdeck`);
+      return;
+    }
+
+    this.log(`${player.agent.name} topdecks ${card}.`);
+    source.splice(index, 1);
+    player.draw.unshift(card);
   }
 
   /**

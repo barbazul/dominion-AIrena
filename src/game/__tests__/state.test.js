@@ -336,3 +336,76 @@ test('allowTrash interrupts on null', () => {
   expect(state.trash).toHaveLength(1);
   expect(state.trash).toContain(card1);
 });
+
+test('doTopdeck has no effect with wrong card', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+  const card2 = new Card();
+
+  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.current.hand.push(card1);
+  state.current.draw = [];
+  state.doTopdeck(state.current, card2);
+
+  expect(state.current.hand).toHaveLength(1);
+  expect(state.current.draw).toHaveLength(0);
+});
+
+test('doTopdeck moves the card from the hand to the top of deck', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+  const card2 = new Card();
+  const card3 = new Card();
+
+  state.setUp(players, { log: () => {}, warn: () => {} });
+  card1.name = 'A Card';
+  card2.name = 'Other Card';
+  card3.name = 'Topdeck this Card';
+  state.current.hand = [card2, card3];
+  state.current.draw = [card1];
+  state.doTopdeck(state.current, card3);
+
+  expect(state.current.hand).toHaveLength(1);
+  expect(state.current.hand).not.toContain(card3);
+  expect(state.current.draw).toHaveLength(2);
+  expect(state.current.draw[0]).toBe(card3);
+});
+
+test('doTopdeck with invalid origin does nothing', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+
+  state.setUp(players, { log: () => {}, warn: () => {} });
+  card1.name = 'A Card';
+  state.current.hand = [card1];
+  state.current.draw = [];
+  state.doTopdeck(state.current, card1, 'mordor');
+
+  expect(state.current.hand).toHaveLength(1);
+  expect(state.current.draw).not.toContain(card1);
+  expect(state.current.draw).toHaveLength(0);
+});
+
+test('doTopdeck moves the card from the hand to the top of deck from other origins', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+  const card2 = new Card();
+  const card3 = new Card();
+
+  state.setUp(players, { log: () => {}, warn: () => {} });
+  card1.name = 'A Card';
+  card2.name = 'Other Card';
+  card3.name = 'Topdeck this Card';
+  state.current.discard = [card2, card3];
+  state.current.draw = [card1];
+  state.doTopdeck(state.current, card3, 'discard');
+
+  expect(state.current.discard).toHaveLength(1);
+  expect(state.current.discard).not.toContain(card3);
+  expect(state.current.draw).toHaveLength(2);
+  expect(state.current.draw[0]).toBe(card3);
+});
