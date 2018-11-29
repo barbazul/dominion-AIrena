@@ -6,6 +6,7 @@ export default class State {
   constructor () {
     this.kingdom = {};
     this.players = [];
+    this.trash = [];
     this.current = null;
   }
 
@@ -86,14 +87,34 @@ export default class State {
    */
   doDiscard (player, card) {
     const index = player.hand.indexOf(card);
+
     if (index === -1) {
       this.warn(`${player.agent.name} has no ${card} to discard`);
       return;
     }
 
     this.log(`${player.agent.name} discards ${card}.`);
-    player.hand.splice(card, 1);
+    player.hand.splice(index, 1);
     player.discard.push(card);
+  }
+
+  /**
+   * Causes a player to trash a particular card
+   *
+   * @param {Player} player
+   * @param {Card} card
+   */
+  doTrash (player, card) {
+    const index = player.hand.indexOf(card);
+
+    if (index === -1) {
+      this.warn(`${player.agent.name} has no ${card} to trash`);
+      return;
+    }
+
+    this.log(`${player.agent.name} trashes ${card}.`);
+    player.hand.splice(index, 1);
+    this.trash.push(card);
   }
 
   /**
@@ -108,7 +129,7 @@ export default class State {
    * @param {function(Card):boolean} filterFunction
    * @return {Card[]}
    */
-  allowDiscard (player, num, filterFunction = card => true) {
+  allowDiscard (player, num, filterFunction = () => true) {
     const discarded = [];
 
     while (discarded.length < num) {

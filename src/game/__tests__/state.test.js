@@ -169,15 +169,52 @@ test('Do discard moves the card from the hand to the discard', () => {
   const state = new State();
   const players = createPlayers(2);
   const card1 = new Card();
+  const card2 = new Card();
+  const card3 = new Card();
+
+  state.setUp(players, { log: () => {}, warn: () => {} });
+  card1.name = 'A Card';
+  card2.name = 'Other Card';
+  card3.name = 'Discard this Card';
+  state.current.hand = [card1, card2, card3];
+  state.current.discard = [];
+  state.doDiscard(state.current, card3);
+
+  expect(state.current.hand.length).toBe(2);
+  expect(state.current.hand).not.toContain(card3);
+  expect(state.current.discard.length).toBe(1);
+  expect(state.current.discard).toContain(card3);
+});
+
+test('doTrash has no effect with wrong card', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+  const card2 = new Card();
 
   state.setUp(players, { log: () => {}, warn: () => {} });
   state.current.hand.push(card1);
-  state.current.discard = [];
-  state.doDiscard(state.current, card1);
+  state.trash = [];
+  state.doTrash(state.current, card2);
+  expect(state.current.hand).toHaveLength(1);
+  expect(state.trash).toHaveLength(0);
+});
 
-  expect(state.current.hand.length).toBe(0);
-  expect(state.current.discard.length).toBe(1);
-  expect(state.current.discard.indexOf(card1)).toBeGreaterThan(-1);
+test('doTrash moves the card from the hand to the trash', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+  const card2 = new Card();
+
+  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.current.hand = [card1, card2];
+  state.trash = [];
+  state.doTrash(state.current, card1);
+
+  expect(state.current.hand).toHaveLength(1);
+  expect(state.current.hand).not.toContain(card1);
+  expect(state.trash).toHaveLength(1);
+  expect(state.trash).toContain(card1);
 });
 
 test('AllowDiscard discards whole hand if agent chooses', () => {
