@@ -1,0 +1,13 @@
+extends: standard
+globals:
+  expect: true
+  test: true
+rules:
+  complexity:
+    - error
+    - 10
+  semi:
+    - error
+    - always
+env:
+  jest: true
