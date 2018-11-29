@@ -13,7 +13,7 @@ test('Cellar card definition', () => {
 test('Play effect allows discard', () => {
   const card = new Cellar();
   const state = new State();
-  const allowDiscardMock = jest.fn((player, num) => {});
+  const allowDiscardMock = jest.fn(() => []);
 
   state.allowDiscard = allowDiscardMock;
   state.setUp([ new BasicAI(), new BasicAI() ], { log: () => {} });

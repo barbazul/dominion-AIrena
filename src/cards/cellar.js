@@ -13,11 +13,8 @@ export default class Cellar extends BasicAction {
    * @param state
    */
   playEffect (state) {
-    const startingCards = state.current.hand.length;
-    let numDiscarded;
+    const discarded = state.allowDiscard(state.current, Infinity);
 
-    state.allowDiscard(state.current, Infinity);
-    numDiscarded = startingCards - state.current.hand.length;
-    state.current.drawCards(numDiscarded);
+    state.current.drawCards(discarded.length);
   }
 }
