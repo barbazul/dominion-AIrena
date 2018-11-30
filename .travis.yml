@@ -1,0 +1,8 @@
+language: node_js
+node_js: 8.10
+jobs:
+  include:
+    - stage: static
+      script: yarn static
+    - stage: test
+      script: yarn test
