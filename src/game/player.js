@@ -15,7 +15,13 @@ export default class Player {
     this.actions = 1;
     this.buys = 1;
     this.coins = 0;
+
+    /**
+     * @type {Card[]}
+     */
     this.hand = [];
+
+    // index 0 is the top of the discard
     this.discard = [
       cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Estate,
       cards.Estate, cards.Estate

@@ -1,4 +1,5 @@
 import BasicAI from '../../agents/basicAI';
+import BasicAction from '../../cards/basicAction';
 import Card from '../../cards/card';
 import State from '../state';
 
@@ -11,6 +12,8 @@ const basic2PlayerKingdom = {
   Silver: 40,
   Gold: 30
 };
+
+const muteConfig = { log: () => {}, warn: () => {} };
 
 /**
  *
@@ -151,40 +154,103 @@ test('Warn uses the configured function', () => {
   expect(warnFunction).toHaveBeenCalledWith('Warning message');
 });
 
-test('Do discard has no effect with wrong card', () => {
+test('doDiscard has no effect with wrong card', () => {
   const state = new State();
   const players = createPlayers(2);
   const card1 = new Card();
   const card2 = new Card();
+  let result;
 
-  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.setUp(players, muteConfig);
   state.current.hand.push(card1);
   state.current.discard = [];
-  state.doDiscard(state.current, card2);
+  result = state.doDiscard(state.current, card2);
 
+  expect(result).toBeNull();
   expect(state.current.hand.length).toBe(1);
   expect(state.current.discard.length).toBe(0);
 });
 
-test('Do discard moves the card from the hand to the discard', () => {
+test('doDiscard moves the card from the hand to the discard', () => {
   const state = new State();
   const players = createPlayers(2);
   const card1 = new Card();
   const card2 = new Card();
   const card3 = new Card();
+  let result;
 
-  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.setUp(players, muteConfig);
   card1.name = 'A Card';
   card2.name = 'Other Card';
   card3.name = 'Discard this Card';
   state.current.hand = [card1, card2, card3];
   state.current.discard = [];
-  state.doDiscard(state.current, card3);
+  result = state.doDiscard(state.current, card3);
 
   expect(state.current.hand.length).toBe(2);
   expect(state.current.hand).not.toContain(card3);
   expect(state.current.discard.length).toBe(1);
   expect(state.current.discard).toContain(card3);
+  expect(result).toBe(card3);
+});
+
+test('doDiscard with invalid origin does nothing', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+  let result;
+
+  state.setUp(players, muteConfig);
+  card1.name = 'A Card';
+  state.current.hand = [card1];
+  state.current.discard = [];
+  result = state.doDiscard(state.current, card1, 'mordor');
+
+  expect(state.current.hand).toHaveLength(1);
+  expect(state.current.discard).not.toContain(card1);
+  expect(state.current.discard).toHaveLength(0);
+  expect(result).toBeNull();
+});
+
+test('doDiscard discards the card from other origins', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+  const card2 = new Card();
+  const card3 = new Card();
+  let result;
+
+  state.setUp(players, muteConfig);
+  card1.name = 'A Card';
+  card2.name = 'Other Card';
+  card3.name = 'Topdeck this Card';
+  state.current.discard = [card1];
+  state.current.draw = [card2, card3];
+  result = state.doDiscard(state.current, card3, 'draw');
+
+  expect(state.current.discard).toHaveLength(2);
+  expect(state.current.draw).not.toContain(card3);
+  expect(state.current.draw).toHaveLength(1);
+  expect(state.current.discard[0]).toBe(card3);
+  expect(result).toBe(card3);
+});
+
+test('doDiscard from deck discards from the top', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+  const card2 = new Card();
+  let result;
+
+  state.setUp(players, muteConfig);
+  card2.name = 'Mutiples';
+  card1.name = 'Single';
+  state.current.draw = [card1, card2, card2, card1]; // index 0 is top
+  state.current.discard = [];
+  result = state.doDiscard(state.current, card1, 'draw');
+
+  expect(state.current.draw).toEqual([card2, card2, card1]);
+  expect(result).toBe(card1);
 });
 
 test('doTrash has no effect with wrong card', () => {
@@ -193,7 +259,7 @@ test('doTrash has no effect with wrong card', () => {
   const card1 = new Card();
   const card2 = new Card();
 
-  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.setUp(players, muteConfig);
   state.current.hand.push(card1);
   state.trash = [];
   state.doTrash(state.current, card2);
@@ -207,7 +273,7 @@ test('doTrash moves the card from the hand to the trash', () => {
   const card1 = new Card();
   const card2 = new Card();
 
-  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.setUp(players, muteConfig);
   state.current.hand = [card1, card2];
   state.trash = [];
   state.doTrash(state.current, card1);
@@ -225,7 +291,7 @@ test('AllowDiscard discards whole hand if agent chooses', () => {
   const card2 = new Card();
   let discarded;
 
-  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.setUp(players, muteConfig);
   state.current.agent.discardValue = card => card ? 1 : 0; // Prefer discard over null
   state.current.hand.push(card1);
   state.current.hand.push(card2);
@@ -244,7 +310,7 @@ test('AllowDiscard has null as a valid choice', () => {
   const players = createPlayers(2);
   const card1 = new Card();
 
-  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.setUp(players, muteConfig);
   state.current.hand.push(card1);
   state.current.agent.choose = jest.fn(state.current.agent.choose);
   state.current.agent.discardPriority = () => [ 'Worst Card', null, 'Best Card' ];
@@ -259,7 +325,7 @@ test('AllowDiscard interrupts on null', () => {
   const card2 = new Card();
   let discarded;
 
-  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.setUp(players, muteConfig);
   state.current.agent.discardPriority = () => [ 'Worst Card', null, 'Best Card' ];
   card1.name = 'Worst Card';
   state.current.hand.push(card1);
@@ -289,7 +355,7 @@ test('allowTrash trashes whole hand if agent chooses', () => {
   const card2 = new Card();
   let trashed;
 
-  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.setUp(players, muteConfig);
   state.current.agent.trashValue = card => card ? 1 : 0; // Prefer trash over null
   state.current.hand = [card1, card2];
   state.current.discard = [];
@@ -307,7 +373,7 @@ test('allowTrash has null as a valid choice', () => {
   const players = createPlayers(2);
   const card1 = new Card();
 
-  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.setUp(players, muteConfig);
   state.current.hand.push(card1);
   state.current.agent.choose = jest.fn(state.current.agent.choose);
   state.current.agent.trashPriority = () => [ 'Worst Card', null, 'Best Card' ];
@@ -322,7 +388,7 @@ test('allowTrash interrupts on null', () => {
   const card2 = new Card();
   let trashed;
 
-  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.setUp(players, muteConfig);
   state.current.agent.trashPriority = () => [ 'Worst Card', null, 'Best Card' ];
   card1.name = 'Worst Card';
   state.current.hand.push(card1);
@@ -343,7 +409,7 @@ test('doTopdeck has no effect with wrong card', () => {
   const card1 = new Card();
   const card2 = new Card();
 
-  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.setUp(players, muteConfig);
   state.current.hand.push(card1);
   state.current.draw = [];
   state.doTopdeck(state.current, card2);
@@ -359,7 +425,7 @@ test('doTopdeck moves the card from the hand to the top of deck', () => {
   const card2 = new Card();
   const card3 = new Card();
 
-  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.setUp(players, muteConfig);
   card1.name = 'A Card';
   card2.name = 'Other Card';
   card3.name = 'Topdeck this Card';
@@ -378,7 +444,7 @@ test('doTopdeck with invalid origin does nothing', () => {
   const players = createPlayers(2);
   const card1 = new Card();
 
-  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.setUp(players, muteConfig);
   card1.name = 'A Card';
   state.current.hand = [card1];
   state.current.draw = [];
@@ -389,14 +455,14 @@ test('doTopdeck with invalid origin does nothing', () => {
   expect(state.current.draw).toHaveLength(0);
 });
 
-test('doTopdeck moves the card from the hand to the top of deck from other origins', () => {
+test('doTopdeck moves the card to the top of deck from other origins', () => {
   const state = new State();
   const players = createPlayers(2);
   const card1 = new Card();
   const card2 = new Card();
   const card3 = new Card();
 
-  state.setUp(players, { log: () => {}, warn: () => {} });
+  state.setUp(players, muteConfig);
   card1.name = 'A Card';
   card2.name = 'Other Card';
   card3.name = 'Topdeck this Card';
@@ -408,4 +474,82 @@ test('doTopdeck moves the card from the hand to the top of deck from other origi
   expect(state.current.discard).not.toContain(card3);
   expect(state.current.draw).toHaveLength(2);
   expect(state.current.draw[0]).toBe(card3);
+});
+
+test('playAction has no effect with wrong card', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new BasicAction();
+  const card2 = new BasicAction();
+
+  state.setUp(players, muteConfig);
+  state.current.hand.push(card1);
+  state.current.inPlay = [];
+  state.playAction(card2);
+
+  expect(state.current.hand).toHaveLength(1);
+  expect(state.current.inPlay).toHaveLength(0);
+});
+
+test('playAction removes card from hand and puts it in play', () => {
+  const state = new State();
+  const card = new BasicAction();
+  const basicAI = new BasicAI();
+
+  state.setUp([basicAI, basicAI], muteConfig);
+  state.current.hand = [card];
+  state.current.inPlay = [];
+  state.playAction(card);
+
+  expect(state.current.hand).toHaveLength(0);
+  expect(state.current.inPlay).toHaveLength(1);
+});
+
+test('playAction with invalid origin does nothing', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card = new BasicAction();
+
+  state.setUp(players, muteConfig);
+  state.current.hand = [card];
+  state.current.inPlay = [];
+  state.playAction(card, 'oz');
+
+  expect(state.current.hand).toHaveLength(1);
+  expect(state.current.inPlay).toHaveLength(0);
+});
+
+test('playAction puts the card in play from other origins', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new BasicAction();
+  const card2 = new BasicAction();
+  const card3 = new BasicAction();
+
+  state.setUp(players, muteConfig);
+  card1.name = 'An action';
+  card2.name = 'Different action';
+  card3.name = 'Play this action';
+  state.current.discard = [card2, card3];
+  state.current.hand = [card1];
+  state.inPlay = [];
+  state.playAction(card3, 'discard');
+
+  expect(state.current.discard).toHaveLength(1);
+  expect(state.current.discard).not.toContain(card3);
+  expect(state.current.inPlay).toHaveLength(1);
+  expect(state.current.inPlay).toContain(card3);
+});
+
+test('playAction triggers card playEffect', () => {
+  const card = new BasicAction();
+  const state = new State();
+  const basicAI = new BasicAI();
+
+  state.setUp([basicAI, basicAI], muteConfig);
+  state.current.hand = [card];
+  card.playEffect = jest.fn(() => {});
+  state.playAction(card);
+
+  expect(card.playEffect).toHaveBeenCalledWith(state);
 });

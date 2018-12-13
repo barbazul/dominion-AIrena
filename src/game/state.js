@@ -7,6 +7,10 @@ export default class State {
     this.kingdom = {};
     this.players = [];
     this.trash = [];
+
+    /**
+     * @type {Player}
+     */
     this.current = null;
   }
 
@@ -80,23 +84,60 @@ export default class State {
   }
 
   /**
-   * Causes a player to discard a card
+   * The current player plays an action and performs the effects
    *
-   * @todo Should allow to discard from deck and other places
-   * @param {Player} player
-   * @param {Card} card
+   * @param {Card} action
+   * @param {String} from
    */
-  doDiscard (player, card) {
-    const index = player.hand.indexOf(card);
+  playAction (action, from = 'hand') {
+    let index;
+    const source = this.current[from];
 
-    if (index === -1) {
-      this.warn(`${player.agent.name} has no ${card} to discard`);
+    if (source === undefined) {
+      this.warn(`${this.current.agent.name} tried to play a card from invalid location ${from}`);
       return;
     }
 
+    index = source.indexOf(action);
+
+    if (index === -1) {
+      this.warn(`${this.current.agent.name} tried to play ${action} but has none in ${from}`);
+      return;
+    }
+
+    source.splice(index, 1);
+    this.current.inPlay.push(action);
+    action.playEffect(this);
+  }
+
+  /**
+   * Causes a player to discard a card
+   *
+   * @param {Player} player
+   * @param {Card} card
+   * @param {String} from
+   * @return {Card|void}
+   */
+  doDiscard (player, card, from = 'hand') {
+    let index;
+    const source = player[from];
+
+    if (source === undefined) {
+      this.warn(`${player.agent.name} tried to discard a card from invalid location ${from}`);
+      return null;
+    }
+
+    index = source.indexOf(card);
+
+    if (index === -1) {
+      this.warn(`${player.agent.name} has no , ${card} to discard`);
+      return null;
+    }
+
     this.log(`${player.agent.name} discards ${card}.`);
-    player.hand.splice(index, 1);
-    player.discard.push(card);
+    source.splice(index, 1);
+    player.discard.unshift(card);
+    return card;
   }
 
   /**
