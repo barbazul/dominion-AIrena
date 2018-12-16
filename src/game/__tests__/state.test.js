@@ -697,5 +697,5 @@ test('gainCard to different destination', () => {
 
   expect(state.current.draw).toHaveLength(2);
   expect(state.current.draw[0]).toBe(card1);
-  expect(state.current.discard).toHaveLength(0)
+  expect(state.current.discard).toHaveLength(0);
 });
