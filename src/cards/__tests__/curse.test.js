@@ -5,6 +5,7 @@ import State from '../../game/state';
 test('Curse card definition', () => {
   const card = new Curse();
 
+  expect(card.toString()).toBe('Curse');
   expect(card.cost).toBe(0);
   expect(card.vp).toBe(-1);
   expect(card.isCurse()).toBe(true);

@@ -6,6 +6,7 @@ import State from '../../game/state';
 test('Cellar card definition', () => {
   const card = new Cellar();
 
+  expect(card.toString()).toBe('Cellar');
   expect(card.cost).toBe(2);
   expect(card.actions).toBe(1);
 });

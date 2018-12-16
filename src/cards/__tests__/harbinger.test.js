@@ -6,6 +6,7 @@ import Harbinger from '../harbinger';
 test('Harbinger card definition', () => {
   const card = new Harbinger();
 
+  expect(card.toString()).toBe('Harbinger');
   expect(card.cost).toBe(3);
   expect(card.actions).toBe(1);
   expect(card.cards).toBe(1);

@@ -5,6 +5,7 @@ import State from '../../game/state';
 test('Estate card definition', () => {
   const card = new Estate();
 
+  expect(card.toString()).toBe('Estate');
   expect(card.cost).toBe(2);
   expect(card.vp).toBe(1);
   expect(card.isVictory()).toBe(true);

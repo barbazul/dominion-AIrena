@@ -5,6 +5,7 @@ import Moat from '../moat';
 test('Moat card definition', () => {
   const card = new Moat();
 
+  expect(card.toString()).toBe('Moat');
   expect(card.cost).toBe(2);
   expect(card.cards).toBe(2);
   expect(card.isReaction()).toBe(true);

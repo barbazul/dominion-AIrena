@@ -4,6 +4,7 @@ import Curse from '../cards/curse';
 import Copper from '../cards/copper';
 import Harbinger from '../cards/harbinger';
 import Moat from '../cards/moat';
+import Moneylender from '../cards/moneylender';
 import Silver from '../cards/silver';
 import Gold from '../cards/gold';
 import Estate from '../cards/estate';
@@ -28,6 +29,7 @@ const cards = {
   Chapel: new Chapel(),
   Moat: new Moat(),
   Harbinger: new Harbinger(),
+  Moneylender: new Moneylender(),
   Vassal: new Vassal(),
   Village: new Village(),
   Workshop: new Workshop()

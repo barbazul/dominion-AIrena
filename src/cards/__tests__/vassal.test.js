@@ -7,6 +7,7 @@ import Vassal from '../vassal';
 test('Vassal card definition', () => {
   const card = new Vassal();
 
+  expect(card.toString()).toBe('Vassal');
   expect(card.cost).toBe(3);
   expect(card.coins).toBe(2);
 });

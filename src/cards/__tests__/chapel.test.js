@@ -5,6 +5,7 @@ import Chapel from '../chapel';
 test('Chapel card definition', () => {
   const card = new Chapel();
 
+  expect(card.toString()).toBe('Chapel');
   expect(card.cost).toBe(2);
 });
 

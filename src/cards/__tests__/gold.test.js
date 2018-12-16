@@ -5,6 +5,7 @@ import State from '../../game/state';
 test('Gold card definition', () => {
   const card = new Gold();
 
+  expect(card.toString()).toBe('Gold');
   expect(card.cost).toBe(6);
   expect(card.coins).toBe(3);
   expect(card.isTreasure()).toBe(true);

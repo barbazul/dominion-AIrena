@@ -6,6 +6,7 @@ import Workshop from '../workshop';
 test('Workshop card definition', () => {
   const card = new Workshop();
 
+  expect(card.toString()).toBe('Workshop');
   expect(card.cost).toBe(3);
 });
 
