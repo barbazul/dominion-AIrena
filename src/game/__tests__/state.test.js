@@ -553,3 +553,149 @@ test('playAction triggers card playEffect', () => {
 
   expect(card.playEffect).toHaveBeenCalledWith(state);
 });
+
+test('gainOneOf calls for a gain choice in AI', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const chooseMock = jest.fn(() => {});
+  const card1 = new Card();
+  const card2 = new Card();
+  let choice;
+
+  state.setUp(players, muteConfig);
+  state.current.agent.choose = chooseMock;
+  choice = state.gainOneOf(state.current, [card1, card2]);
+
+  expect(chooseMock).toHaveBeenCalledWith('gain', state, [card1, card2]);
+  expect(choice).not.toBeNull();
+});
+
+test('gainOneOf causes player to gain the card', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+  let choice;
+
+  state.setUp(players, muteConfig);
+  state.current.agent.choose = () => card1;
+  state.gainCard = jest.fn(() => {});
+  choice = state.gainOneOf(state.current, [card1]);
+
+  expect(state.gainCard).toHaveBeenCalledWith(state.current, card1, 'discard');
+  expect(choice).toBe(card1);
+});
+
+test('gainOneOf has no effect when choice is null', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+  let choice;
+
+  state.setUp(players, muteConfig);
+  state.current.agent.choose = () => null;
+  state.gainCard = jest.fn(() => {});
+  choice = state.gainOneOf(state.current, [card1, null]);
+
+  expect(state.gainCard).not.toHaveBeenCalled();
+  expect(choice).toBeNull();
+});
+
+test('gainCard adds the card to the player discard', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+  const card2 = new Card();
+
+  card1.name = 'A Card';
+  card2.name = 'Another Card';
+  state.setUp(players, muteConfig);
+  state.kingdom[card1] = 10;
+  state.current.discard = [card2];
+  state.gainCard(state.current, card1);
+
+  expect(state.current.discard).toHaveLength(2);
+  expect(state.current.discard[0]).toBe(card1);
+});
+
+test('gainCard lowers the pile', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card = new Card();
+
+  state.setUp(players, muteConfig);
+  state.kingdom[card] = 10;
+  state.gainCard(state.current, card);
+
+  expect(state.kingdom[card]).toBe(9);
+});
+
+test('gainCard does nothing when pile is empty', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card = new Card();
+
+  state.setUp(players, muteConfig);
+  state.kingdom[card] = 0;
+  state.current.discard = [];
+  state.gainCard(state.current, card);
+
+  expect(state.current.discard).toHaveLength(0);
+  expect(state.kingdom[card]).toBe(0);
+});
+
+test('countInSupply returns the number left from the kingdom', () => {
+  const state = new State();
+  const card = new Card();
+
+  state.kingdom[card] = 5;
+  expect(state.countInSupply(card)).toBe(5);
+});
+
+test('countInSupply returns 0 when the card is not in kingdom', () => {
+  const state = new State();
+  const card = new Card();
+
+  expect(state.countInSupply(card)).toBe(0);
+});
+
+test('countInSupply returns the number left from the special pile', () => {
+  const state = new State();
+  const card = new Card();
+
+  state.specialPiles[card] = 5;
+  expect(state.countInSupply(card)).toBe(5);
+});
+
+test('gainCard from special pile', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card = new Card();
+
+  state.setUp(players, muteConfig);
+  state.specialPiles[card] = 10;
+  state.current.discard = [];
+  state.gainCard(state.current, card);
+
+  expect(state.current.discard).toHaveLength(1);
+  expect(state.current.discard[0]).toBe(card);
+  expect(state.specialPiles[card]).toBe(9);
+});
+
+test('gainCard to different destination', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+  const card2 = new Card();
+
+  card1.name = 'A Card';
+  card2.name = 'Another Card';
+  state.setUp(players, muteConfig);
+  state.kingdom[card1] = 10;
+  state.current.draw = [card2];
+  state.current.discard = [];
+  state.gainCard(state.current, card1, 'draw');
+
+  expect(state.current.draw).toHaveLength(2);
+  expect(state.current.draw[0]).toBe(card1);
+  expect(state.current.discard).toHaveLength(0)
+});

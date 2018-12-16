@@ -5,6 +5,7 @@ import Player from './player';
 export default class State {
   constructor () {
     this.kingdom = {};
+    this.specialPiles = {};
     this.players = [];
     this.trash = [];
 
@@ -252,5 +253,72 @@ export default class State {
     }
 
     return trashed;
+  }
+
+  /**
+   * gainOneOf gives the player a choice of cards to gain. Include null if gaining nothing is an option.
+   *
+   * @param {Player} player
+   * @param {Card[]} options
+   * @param {String} location
+   * @return {Card|null}
+   */
+  gainOneOf (player, options, location = 'discard') {
+    const choice = player.agent.choose('gain', this, options);
+
+    if (choice === null) {
+      return null;
+    }
+
+    this.gainCard(player, choice, location);
+    return choice;
+  }
+
+  /**
+   * Perform the effects of a player gaining a card
+   *
+   * Affects a particular player and also the overall state of the game.
+   *
+   * @param {Player} player
+   * @param {Card} card
+   * @param {String} gainLocation
+   */
+  gainCard (player, card, gainLocation = 'discard') {
+    if (this.countInSupply(card) <= 0) {
+      this.log(`There is no ${card} to gain.`);
+      return;
+    }
+
+    // Add to top of the list
+    player[gainLocation].unshift(card);
+
+    // Remove the card from the supply
+    if (this.kingdom[card] > 0) {
+      this.kingdom[card]--;
+    } else {
+      this.specialPiles[card]--;
+    }
+
+    this.log(`${player.agent} gains ${card}`);
+  }
+
+  /**
+   * Returns the number of copies of a card that remain on its pile.
+   *
+   * If the card is not part of the kingdom, it returns 0.
+   *
+   * @param {Card} card
+   * @return int
+   */
+  countInSupply (card) {
+    if (this.kingdom[card]) {
+      return this.kingdom[card];
+    }
+
+    if (this.specialPiles[card]) {
+      return this.specialPiles[card];
+    }
+
+    return 0;
   }
 }
