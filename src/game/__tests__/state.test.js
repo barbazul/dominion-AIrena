@@ -699,3 +699,9 @@ test('gainCard to different destination', () => {
   expect(state.current.draw[0]).toBe(card1);
   expect(state.current.discard).toHaveLength(0);
 });
+
+test('attackOpponents attacks each player', () => {});
+
+test('attackPlayer', () => {});
+
+test('revealHand', () => {});

@@ -275,6 +275,28 @@ export default class State {
   }
 
   /**
+   * Takes a function of one argument and applies it to all players except the current one.
+   *
+   * The function takes a Player to attack and alter it somehow.
+   *
+   * @param {function(Player, State)} effect
+   */
+  attackOpponents (effect) {
+
+  }
+
+  /**
+   * Applies an attack on a player, including handling reactions
+   *
+   * @todo Reactions should be handled before applying attacks to any player
+   * @param {Player} player
+   * @param {function(Player)} effect
+   */
+  attackPlayer (player, effect) {
+
+  }
+
+  /**
    * Perform the effects of a player gaining a card
    *
    * Affects a particular player and also the overall state of the game.
@@ -300,6 +322,18 @@ export default class State {
     }
 
     this.log(`${player.agent} gains ${card}`);
+  }
+
+  /**
+   * Reveal player's hand.
+   *
+   * Returns the list of cards in hand.
+   *
+   * @param {Player} player
+   * @return {Card[]}
+   */
+  revealHand (player) {
+
   }
 
   /**
