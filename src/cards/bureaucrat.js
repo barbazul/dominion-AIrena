@@ -1,7 +1,7 @@
 import cards from '../game/cards';
-import BasicAction from './basicAction';
+import BasicAttack from './basicAttack';
 
-export default class Bureaucrat extends BasicAction {
+export default class Bureaucrat extends BasicAttack {
   constructor () {
     super();
     this.cost = 4;
