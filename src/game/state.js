@@ -279,7 +279,7 @@ export default class State {
    *
    * The function takes a Player to attack and alter it somehow.
    *
-   * @param {function(Player, State)} effect
+   * @param {function(Player, State):void} effect
    */
   attackOpponents (effect) {
 

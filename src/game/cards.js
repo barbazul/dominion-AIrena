@@ -1,3 +1,4 @@
+import Bureaucrat from '../cards/bureaucrat';
 import Cellar from '../cards/cellar';
 import Chapel from '../cards/chapel';
 import Curse from '../cards/curse';
@@ -12,6 +13,7 @@ import Duchy from '../cards/duchy';
 import Province from '../cards/province';
 import Vassal from '../cards/vassal';
 import Village from '../cards/village';
+import Witch from '../cards/witch';
 import Workshop from '../cards/workshop';
 
 const cards = {
@@ -25,6 +27,7 @@ const cards = {
   Province: new Province(),
 
   // Base set cards
+  Bureaucrat: new Bureaucrat(),
   Cellar: new Cellar(),
   Chapel: new Chapel(),
   Moat: new Moat(),
@@ -32,6 +35,7 @@ const cards = {
   Moneylender: new Moneylender(),
   Vassal: new Vassal(),
   Village: new Village(),
+  Witch: new Witch(),
   Workshop: new Workshop()
 };
 
