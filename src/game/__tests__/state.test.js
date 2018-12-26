@@ -1,6 +1,7 @@
 import BasicAI from '../../agents/basicAI';
 import BasicAction from '../../cards/basicAction';
 import Card from '../../cards/card';
+import Player from '../player';
 import State from '../state';
 
 const basic2PlayerKingdom = {
@@ -700,8 +701,74 @@ test('gainCard to different destination', () => {
   expect(state.current.discard).toHaveLength(0);
 });
 
-test('attackOpponents attacks each player', () => {});
+test('attackOpponents attacks each player', () => {
+  const state = new State();
+  const players = createPlayers();
+  const effect = () => {};
 
-test('attackPlayer', () => {});
+  state.setUp(players, muteConfig);
+  state.attackPlayer = jest.fn(() => {});
+  state.attackOpponents(effect);
 
-test('revealHand', () => {});
+  expect(state.attackPlayer).toHaveBeenCalledTimes(1);
+  expect(state.attackPlayer).toHaveBeenCalledWith(expect.any(Player), effect);
+});
+
+test('attackPlayer calls effect on player', () => {
+  const state = new State();
+  const effect = jest.fn(() => {});
+  const players = createPlayers();
+
+  state.setUp(players, muteConfig);
+  state.attackPlayer(state.current, effect);
+
+  expect(effect).toHaveBeenCalledWith(state.current, state);
+});
+
+test('attackPlayer calls for reaction cards in player hand', () => {
+  const state = new State();
+  const effect = jest.fn(() => {});
+  const players = createPlayers();
+  const reaction = new Card();
+  const nonReaction = new Card();
+
+  state.setUp(players, muteConfig);
+  reaction.isReaction = () => true;
+  reaction.reactToAttack = jest.fn(() => {});
+  nonReaction.isReaction = () => false;
+  nonReaction.reactToAttack = jest.fn(() => {});
+  state.current.hand = [reaction, nonReaction];
+  state.attackPlayer(state.current, effect);
+
+  expect(reaction.reactToAttack).toHaveBeenCalled();
+  expect(nonReaction.reactToAttack).not.toHaveBeenCalled();
+});
+
+test('attackPlayer has no effect when reaction blocks the attack', () => {
+  const state = new State();
+  const effect = jest.fn(() => {});
+  const players = createPlayers();
+  const reaction = new Card();
+
+  state.setUp(players, muteConfig);
+  reaction.isReaction = () => true;
+  reaction.reactToAttack = jest.fn((state, player, attackEvent) => { attackEvent.blocked = true; });
+  state.current.hand = [reaction];
+  state.attackPlayer(state.current, effect);
+
+  expect(effect).not.toHaveBeenCalled();
+});
+
+test('revealHand outputs player hand.', () => {
+  const state = new State();
+  const players = createPlayers();
+  const logFn = jest.fn(() => {});
+  const card = new Card();
+
+  state.setUp(players, { log: logFn });
+  card.name = 'A card';
+  state.current.hand = [card];
+  state.revealHand(state.current);
+
+  expect(logFn).toHaveBeenCalledWith(expect.stringContaining('A card'));
+});

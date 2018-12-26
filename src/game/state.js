@@ -282,7 +282,11 @@ export default class State {
    * @param {function(Player, State):void} effect
    */
   attackOpponents (effect) {
-
+    for (let opp of this.players) {
+      if (opp !== this.current) {
+        this.attackPlayer(opp, effect);
+      }
+    }
   }
 
   /**
@@ -290,10 +294,28 @@ export default class State {
    *
    * @todo Reactions should be handled before applying attacks to any player
    * @param {Player} player
-   * @param {function(Player)} effect
+   * @param {function(Player, State):void} effect
    */
   attackPlayer (player, effect) {
+    /**
+     * Transport event passed to each reaction function.
+     * Any reaction can block the effect by setting blocked to true.
+     *
+     * @type {{blocked: boolean}}
+     */
+    const attackEvent = { blocked: false };
 
+    // Handle reaction cards in hand
+    for (let card of player.hand) {
+      if (card.isReaction()) {
+        card.reactToAttack(this, player, attackEvent);
+      }
+    }
+
+    // Apply the attack effect unless it has been blocked by a card
+    if (!attackEvent.blocked) {
+      effect(player, this);
+    }
   }
 
   /**
@@ -333,7 +355,7 @@ export default class State {
    * @return {Card[]}
    */
   revealHand (player) {
-
+    this.log(`${player.agent.name} reveals the hand (${player.hand})`);
   }
 
   /**
