@@ -2,8 +2,15 @@ import seedrandom from 'seedrandom';
 import cards from './cards';
 import Player from './player';
 
+export const PHASE_START = 'start';
+export const PHASE_ACTION = 'action';
+export const PHASE_TREASURE = 'treasure';
+export const PHASE_BUY = 'buy';
+export const PHASE_CLEANUP = 'cleanup';
+
 export default class State {
   constructor () {
+    this.phase = PHASE_START;
     this.kingdom = {};
     this.specialPiles = {};
     this.players = [];
@@ -82,6 +89,50 @@ export default class State {
     });
 
     return kingdom;
+  }
+
+  /**
+   * List of empty supply piles
+   *
+   * @return {String[]}
+   */
+  emptyPiles () {
+    const piles = [];
+
+    for (let card in this.kingdom) {
+      if (this.kingdom.hasOwnProperty(card) && this.kingdom[card] === 0) {
+        piles.push(card);
+      }
+    }
+
+    return piles;
+  }
+
+  /**
+   * Whether the game has finished
+   *
+   * @return {boolean}
+   */
+  isGameOver () {
+    // Game can only be over at the end of a turn. So we check if we are starting a new turn which is the same
+    if (this.phase !== PHASE_START) {
+      return false;
+    }
+
+    return this.kingdom.Province === 0 || this.emptyPiles().length >= this.totalPilesToEndGame();
+  }
+
+  /**
+   * How many piles need to be empty for game to be over
+   *
+   * @return {int}
+   */
+  totalPilesToEndGame () {
+    if (this.players.length > 4) {
+      return 4;
+    }
+
+    return 3;
   }
 
   /**
@@ -193,6 +244,7 @@ export default class State {
    * Used in discard for benefit effects
    * filterFunction allows to pass a filter on the allowed cards
    *
+   * @todo Refactor all decision making methods out of state class
    * @todo This is missing context on what the benefit is so the AI is making bad decisions
    * @see https://github.com/rspeer/dominiate/issues/64
    * @param {Player} player
@@ -230,6 +282,7 @@ export default class State {
    * Used in optional trash effects
    * filterFunction allows to pass a filter on the allowed cards
    *
+   * @todo Refactor all decision making methods out of state class
    * @param {Player} player
    * @param {int} num
    * @return {Card[]}
@@ -258,6 +311,7 @@ export default class State {
   /**
    * gainOneOf gives the player a choice of cards to gain. Include null if gaining nothing is an option.
    *
+   * @todo Refactor all decision making methods out of state class
    * @param {Player} player
    * @param {Card[]} options
    * @param {String} location
@@ -292,7 +346,6 @@ export default class State {
   /**
    * Applies an attack on a player, including handling reactions
    *
-   * @todo Reactions should be handled before applying attacks to any player
    * @param {Player} player
    * @param {function(Player, State):void} effect
    */

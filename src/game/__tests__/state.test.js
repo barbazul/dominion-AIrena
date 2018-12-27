@@ -2,7 +2,7 @@ import BasicAI from '../../agents/basicAI';
 import BasicAction from '../../cards/basicAction';
 import Card from '../../cards/card';
 import Player from '../player';
-import State from '../state';
+import State, { PHASE_BUY } from '../state';
 
 const basic2PlayerKingdom = {
   Curse: 10,
@@ -124,6 +124,88 @@ test('Kingdom contains cards required by AI', () => {
   players[0].requires = ['Village'];
   state.setUp(players);
   expect(state.kingdom).toMatchObject({ Village: 10 });
+});
+
+test('No empty piles at the start of the game', () => {
+  const state = new State();
+  const players = createPlayers(2);
+
+  state.setUp(players);
+  expect(state.emptyPiles()).toHaveLength(0);
+});
+
+test('emptyPiles returns the list of empty supply piles', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  let emptyPiles;
+
+  state.setUp(players);
+  state.kingdom.Curse = 0;
+  state.kingdom.Estate = 0;
+  emptyPiles = state.emptyPiles();
+
+  expect(emptyPiles).toHaveLength(2);
+  expect(emptyPiles).toContain('Curse');
+  expect(emptyPiles).toContain('Estate');
+});
+
+test('Game is not over at the start of the game', () => {
+  const state = new State();
+  const players = createPlayers(2);
+
+  state.setUp(players);
+
+  expect(state.isGameOver()).toBe(false);
+});
+
+test('Game is over when provinces are depleted', () => {
+  const state = new State();
+  const players = createPlayers(2);
+
+  state.setUp(players);
+  state.kingdom.Province = 0;
+
+  expect(state.isGameOver()).toBe(true);
+});
+
+test('Total piles to end game is 3 for 2-4 players', () => {
+  const state = new State();
+
+  for (let num = 2; num < 5; num++) {
+    state.setUp(createPlayers(num));
+    expect(state.totalPilesToEndGame()).toBe(3);
+  }
+});
+
+test('Total piles to end game is 4 for 5-6 players', () => {
+  const state = new State();
+
+  for (let num = 5; num < 7; num++) {
+    state.setUp(createPlayers(num));
+    expect(state.totalPilesToEndGame()).toBe(4);
+  }
+});
+
+test('Game is over when enough piles are depleted', () => {
+  const state = new State();
+  const players = createPlayers(2);
+
+  state.setUp(players);
+  state.totalPilesToEndGame = jest.fn(() => 1);
+  state.kingdom.Estate = 0;
+
+  expect(state.isGameOver()).toBe(true);
+});
+
+test('Game can only be over at the end of the turn', () => {
+  const state = new State();
+  const players = createPlayers(2);
+
+  state.setUp(players);
+  state.kingdom.Province = 0;
+  state.phase = PHASE_BUY;
+
+  expect(state.isGameOver()).toBe(false);
 });
 
 test('AllowDiscard returns empty array when allowing 0 cards', () => {
