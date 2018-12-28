@@ -140,6 +140,7 @@ export default class State {
    *
    * @param {Card} action
    * @param {String} from
+   * @return void
    */
   playAction (action, from = 'hand') {
     let index;
@@ -160,6 +161,34 @@ export default class State {
     source.splice(index, 1);
     this.current.inPlay.push(action);
     action.playEffect(this);
+  }
+
+  /**
+   * The current player plays a treasure and performs its effects
+   *
+   * @param {Card} treasure
+   * @param {String} from
+   * @return void
+   */
+  playTreasure (treasure, from = 'hand') {
+    const source = this.current[from];
+    let index;
+
+    if (source === undefined) {
+      this.warn(`${this.current.agent.name} tried to play a card from invalid location ${from}`);
+      return;
+    }
+
+    index = source.indexOf(treasure);
+
+    if (index === -1) {
+      this.warn(`${this.current.agent.name} tried to play ${treasure} but has none in ${from}`);
+      return;
+    }
+
+    source.splice(index, 1);
+    this.current.inPlay.push(treasure);
+    treasure.onPlay(this);
   }
 
   /**
@@ -429,5 +458,111 @@ export default class State {
     }
 
     return 0;
+  }
+
+  /**
+   * Performs the next phase of the game.
+   *
+   * PHASE_START: Resolve start of turn effects
+   * PHASE_ACTION: Play and resolve one or more action cards
+   * PHASE_TRUEASURE: This is the first step of the buy phase where treasures are played
+   * PHASE_BUY: Buy and gain cards based on the number of +buy available
+   * PHASE_CLEANUP: Resolve cleanup effects, discard everything, draw new hand.
+   *
+   * @return void
+   */
+  doPhase () {
+    switch (this.phase) {
+      case PHASE_START:
+        this.current.turnsTaken++;
+        this.phase = PHASE_ACTION;
+        break;
+
+      case PHASE_ACTION:
+        this.doActionPhase();
+        this.phase = PHASE_TREASURE;
+        break;
+
+      case PHASE_TREASURE:
+        this.doTreasurePhase();
+        this.phase = PHASE_BUY;
+        break;
+
+      case PHASE_BUY:
+        this.doBuyPhase();
+        this.phase = PHASE_CLEANUP;
+        break;
+
+      case PHASE_CLEANUP:
+        this.doCleanupPhase();
+        this.rotatePlayer();
+        this.phase = PHASE_START;
+        break;
+    }
+  }
+
+  /**
+   * Perform the action phase. Ask the agent repeatedly which action to play,
+   * until there are no more actions cards to play or there are no actions
+   * remaining or the agent chooses to stop (null)
+   */
+  doActionPhase () {
+    let actions;
+    let choice;
+
+    while (this.current.actions > 0) {
+      actions = [null];
+
+      for (let card of this.current.hand) {
+        if (card.isAction()) {
+          actions.push(card);
+        }
+      }
+
+      choice = this.current.agent.choose('play', this, actions);
+
+      if (choice === null) {
+        break;
+      }
+
+      this.current.actions--;
+      this.playAction(choice);
+    }
+  }
+
+  /**
+   * Before purchasing any cards, play any number of treasures from hand
+   *
+   * @todo This is not really a phase and should be included in the buy phase
+   * @return void
+   */
+  doTreasurePhase () {
+    const treasures = [];
+    let choice;
+
+    for (const card of this.current.hand) {
+      if (card.isTreasure() && treasures.indexOf(card) === -1) {
+        treasures.push(card);
+      }
+    }
+
+    if (treasures.length === 0) {
+      return;
+    }
+
+    choice = this.current.agent.choose('play', this, treasures);
+    this.playTreasure(choice);
+  }
+
+  doBuyPhase () {
+
+  }
+
+  doCleanupPhase () {
+
+  }
+
+  rotatePlayer () {
+
   }
 }

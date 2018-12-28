@@ -2,7 +2,7 @@ import BasicAI from '../../agents/basicAI';
 import BasicAction from '../../cards/basicAction';
 import Card from '../../cards/card';
 import Player from '../player';
-import State, { PHASE_BUY } from '../state';
+import State, { PHASE_ACTION, PHASE_BUY, PHASE_CLEANUP, PHASE_START, PHASE_TREASURE } from '../state';
 
 const basic2PlayerKingdom = {
   Curse: 10,
@@ -637,6 +637,93 @@ test('playAction triggers card playEffect', () => {
   expect(card.playEffect).toHaveBeenCalledWith(state);
 });
 
+test('playTreasure removes card from hand and puts it in play', () => {
+  const state = new State();
+  const card = new Card();
+  const basicAI = new BasicAI();
+
+  card.types.push('Treasure');
+  state.setUp([basicAI, basicAI], muteConfig);
+  state.current.hand = [card];
+  state.current.inPlay = [];
+  state.playTreasure(card);
+
+  expect(state.current.hand).toHaveLength(0);
+  expect(state.current.inPlay).toHaveLength(1);
+});
+
+test('playTreasure has no effect with wrong card', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+  const card2 = new Card();
+
+  card1.name = 'Card 1';
+  card1.types.push('Treasure');
+  card2.name = 'Card 2';
+  card2.types.push('Treasure');
+  state.setUp(players, muteConfig);
+  state.current.hand = [card1];
+  state.current.inPlay = [];
+  state.playTreasure(card2);
+
+  expect(state.current.hand).toHaveLength(1);
+  expect(state.current.inPlay).toHaveLength(0);
+});
+
+test('playTreasure with invalid origin does nothing', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card = new Card();
+
+  card.types.push('Treasure');
+  state.setUp(players, muteConfig);
+  state.current.hand = [card];
+  state.current.inPlay = [];
+  state.playTreasure(card, 'narnia');
+
+  expect(state.current.hand).toHaveLength(1);
+  expect(state.current.inPlay).toHaveLength(0);
+});
+
+test('playTreasure puts the card in play from other origins', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+  const card2 = new Card();
+  const card3 = new Card();
+
+  state.setUp(players, muteConfig);
+  card1.name = 'A treasure';
+  card1.types.push('Treasure');
+  card2.name = 'Different treasure';
+  card2.types.push('Treasure');
+  card3.name = 'Play this treasure';
+  card3.types.push('Treasure');
+  state.current.discard = [card2, card3];
+  state.current.hand = [card1];
+  state.inPlay = [];
+  state.playAction(card3, 'discard');
+
+  expect(state.current.discard).toHaveLength(1);
+  expect(state.current.discard).not.toContain(card3);
+  expect(state.current.inPlay).toHaveLength(1);
+  expect(state.current.inPlay).toContain(card3);
+});
+
+test('playAction triggers card onPlay', () => {
+  const card = new BasicAction();
+  const state = new State();
+  const basicAI = new BasicAI();
+
+  state.setUp([basicAI, basicAI], muteConfig);
+  state.current.hand = [card];
+  card.onPlay = jest.fn(() => {});
+  state.playTreasure(card);
+
+  expect(card.onPlay).toHaveBeenCalledWith(state);
+});
+
 test('gainOneOf calls for a gain choice in AI', () => {
   const state = new State();
   const players = createPlayers(2);
@@ -854,3 +941,234 @@ test('revealHand outputs player hand.', () => {
 
   expect(logFn).toHaveBeenCalledWith(expect.stringContaining('A card'));
 });
+
+test('doPhase increases the turn count and changes to action phase on start phase', () => {
+  const state = new State();
+  const players = createPlayers();
+
+  state.setUp(players);
+  state.phase = PHASE_START;
+  state.current.turnsTaken = 2;
+  state.doPhase();
+
+  expect(state.current.turnsTaken).toBe(3);
+  expect(state.phase).toBe(PHASE_ACTION);
+});
+
+test('doPhase triggers action phase and moves into treasure phase on action phase', () => {
+  const state = new State();
+  const players = createPlayers();
+
+  state.setUp(players);
+  state.phase = PHASE_ACTION;
+  state.current.turnsTaken = 2;
+  state.doActionPhase = jest.fn(() => {});
+  state.doPhase();
+
+  expect(state.current.turnsTaken).toBe(2);
+  expect(state.doActionPhase).toHaveBeenCalled();
+  expect(state.phase).toBe(PHASE_TREASURE);
+});
+
+test('doPhase triggers treasure phase and moves into buy phase on treasure phase', () => {
+  const state = new State();
+  const players = createPlayers();
+
+  state.setUp(players);
+  state.phase = PHASE_TREASURE;
+  state.current.turnsTaken = 2;
+  state.doTreasurePhase = jest.fn(() => {});
+  state.doPhase();
+
+  expect(state.current.turnsTaken).toBe(2);
+  expect(state.doTreasurePhase).toHaveBeenCalled();
+  expect(state.phase).toBe(PHASE_BUY);
+});
+
+test('doPhase triggers buy phase and moves into cleanup phase on buy phase', () => {
+  const state = new State();
+  const players = createPlayers();
+
+  state.setUp(players);
+  state.phase = PHASE_BUY;
+  state.current.turnsTaken = 2;
+  state.doBuyPhase = jest.fn(() => {});
+  state.doPhase();
+
+  expect(state.current.turnsTaken).toBe(2);
+  expect(state.doBuyPhase).toHaveBeenCalled();
+  expect(state.phase).toBe(PHASE_CLEANUP);
+});
+
+test('doPhase triggers cleanup phase, rotates players and moves into start phase on cleanup phase', () => {
+  const state = new State();
+  const players = createPlayers();
+
+  state.setUp(players);
+  state.phase = PHASE_CLEANUP;
+  state.doCleanupPhase = jest.fn(() => {});
+  state.rotatePlayer = jest.fn(() => {});
+  state.doPhase();
+
+  expect(state.doCleanupPhase).toHaveBeenCalled();
+  expect(state.rotatePlayer).toHaveBeenCalled();
+  expect(state.phase).toBe(PHASE_START);
+});
+
+test('doActionPhase calls for an action decision.', () => {
+  const state = new State();
+  const players = createPlayers();
+  const action1 = new BasicAction();
+  const action2 = new BasicAction();
+  const nonaction = new Card();
+
+  state.setUp(players);
+  state.current.agent.choose = jest.fn(() => action1);
+  state.current.hand = [action1, action2, nonaction];
+  state.doActionPhase();
+
+  expect(state.current.agent.choose).toHaveBeenCalledWith('play', state, expect.arrayContaining([action1, action2]));
+  expect(state.current.agent.choose).toHaveBeenCalledWith('play', state, expect.not.arrayContaining([nonaction]));
+});
+
+test('doActionPhase plays the action card', () => {
+  const state = new State();
+  const players = createPlayers();
+  const action1 = new BasicAction();
+
+  state.setUp(players);
+  state.playAction = jest.fn(() => {});
+  state.current.hand = [action1];
+  state.current.agent.choose = () => action1;
+  state.doActionPhase();
+
+  expect(state.playAction).toHaveBeenCalledWith(action1);
+});
+
+test('doActionPhase keeps playing actions while there are actions available', () => {
+  const state = new State();
+  const players = createPlayers();
+  const action1 = new BasicAction();
+  const action2 = new BasicAction();
+
+  state.setUp(players);
+  state.playAction = jest.fn(state.playAction);
+  state.current.hand = [action1, action2];
+  action1.name = 'Action 1';
+  action2.name = 'Action 2';
+  state.current.actions = 2;
+  state.current.agent.playPriority = () => ['Action 1', 'Action 2'];
+  state.doActionPhase();
+
+  expect(state.playAction).toHaveBeenCalledTimes(2);
+  expect(state.playAction).toHaveBeenCalledWith(action1);
+  expect(state.playAction).toHaveBeenCalledWith(action2);
+});
+
+test('doActionPhase allows for the null choice', () => {
+  const state = new State();
+  const players = createPlayers();
+  const action1 = new BasicAction();
+  const action2 = new BasicAction();
+  const nonaction = new Card();
+
+  state.setUp(players);
+  state.current.agent.choose = jest.fn(() => action1);
+  state.current.hand = [action1, action2, nonaction];
+  state.doActionPhase();
+
+  expect(state.current.agent.choose).toHaveBeenCalledWith('play', state, expect.arrayContaining([null]));
+});
+
+test('doActionPhase stops playing actions when the agent chooses to', () => {
+  const state = new State();
+  const players = createPlayers();
+  const action1 = new BasicAction();
+  const action2 = new BasicAction();
+
+  state.setUp(players);
+  state.playAction = jest.fn(state.playAction);
+  state.current.hand = [action1, action2];
+  action1.name = 'Action 1';
+  action2.name = 'Action 2';
+  state.current.actions = 2;
+  state.current.agent.playPriority = () => [null, 'Action 1', 'Action 2'];
+  state.doActionPhase();
+
+  expect(state.playAction).not.toHaveBeenCalled();
+});
+
+test('doTreasurePhase calls for a play decision with only treasures', () => {
+  const state = new State();
+  const players = createPlayers();
+  const card1 = new Card();
+  const card2 = new Card();
+
+  state.setUp(players);
+  card1.isTreasure = () => true;
+  state.current.agent.choose = jest.fn(() => card1);
+  state.current.hand = [card1, card2];
+  state.doTreasurePhase();
+
+  expect(state.current.agent.choose).toHaveBeenCalledWith('play', state, expect.arrayContaining([card1]));
+  expect(state.current.agent.choose).toHaveBeenCalledWith('play', state, expect.not.arrayContaining([card2]));
+});
+
+test('doTreasurePhase plays the chosen treasures', () => {
+  const state = new State();
+  const players = createPlayers();
+  const card1 = new Card();
+  const card2 = new Card();
+
+  state.setUp(players);
+  card1.isTreasure = () => true;
+  card1.name = 'Card 1';
+  card2.isTreasure = () => true;
+  card2.name = 'Card 2';
+  state.playTreasure = jest.fn(() => {});
+  state.current.agent.choose = jest.fn(() => card2);
+  state.current.hand = [card1, card2];
+  state.doTreasurePhase();
+
+  expect(state.playTreasure).toHaveBeenCalledWith(card2);
+});
+
+test('doTreasurePhase does nothing with no treasures in hand', () => {
+  const state = new State();
+  const players = createPlayers();
+  const card1 = new Card();
+  const card2 = new Card();
+
+  state.setUp(players);
+  state.playTreasure = jest.fn(() => {});
+  state.current.agent.choose = jest.fn(() => card1);
+  state.current.hand = [card1, card2];
+  state.doTreasurePhase();
+
+  expect(state.current.agent.choose).not.toHaveBeenCalled();
+  expect(state.playTreasure).not.toHaveBeenCalled();
+});
+
+// test('doTreasurePhase plays multiple treasures if available', () => {
+//   const state = new State();
+//   const players = createPlayers();
+//   const card1 = new Card();
+//   const card2 = new Card();
+//
+//   state.setUp(players);
+//   card1.isTreasure = () => true;
+//   card1.name = 'Card 1';
+//   card2.isTreasure = () => true;
+//   card2.name = 'Card 2';
+//   state.playTreasure = jest.fn(state.playTreasure);
+//   state.current.agent.playPriority = () => ['Card 1', 'Card 2'];
+//   state.current.hand = [card1, card2];
+//   state.doTreasurePhase();
+//
+//   expect(state.playTreasure).toHaveBeenCalledWith(card1);
+//   expect(state.playTreasure).toHaveBeenCalledWith(card2);
+// });
+
+test('doTreasurePhase allows for the null choice', () => {});
+
+test('doTreasurePhase stops playing treasures when agent shooses to', () => {});

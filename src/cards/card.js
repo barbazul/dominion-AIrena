@@ -75,6 +75,17 @@ export default class Card {
   }
 
   /**
+   * Apply all effects of playing a card, both simple and complex effects.
+   * Complex effects should override playEffect, not this.
+   *
+   * @const
+   * @param {State} state
+   */
+  onPlay (state) {
+
+  }
+
+  /**
    * Making each card convert to its own name allows for the card variable to be used indistinctly in most cases
    *
    * @returns {String}
