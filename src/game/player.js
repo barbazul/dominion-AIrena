@@ -21,16 +21,32 @@ export default class Player {
      */
     this.hand = [];
 
-    // index 0 is the top of the discard
+    /**
+     * Index 0 is the top of the discard
+     *
+     * @type {Card[]}
+     */
     this.discard = [
       cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Estate,
       cards.Estate, cards.Estate
     ];
 
-    // index 0 is the top of the draw pile
+    /**
+     * Index 0 is the top of the draw pile
+     *
+     * @type {Card[]}
+     */
     this.draw = [];
+
     this.inPlay = [];
     this.turnsTaken = 0;
+
+    /**
+     * History of cards played (also virtual cards)
+     *
+     * @type {Card[]}
+     */
+    this.cardsPlayed = [];
   }
 
   /**

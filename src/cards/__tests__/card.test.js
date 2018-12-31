@@ -65,3 +65,45 @@ test('Default card name is its class name', () => {
 
   expect(card.toString()).toBe('Card');
 });
+
+test('onPlay resolves all basic effects', () => {
+  const card = new Card();
+  const state = new State();
+
+  state.setUp([new BasicAI(), new BasicAI()]);
+  state.current.actions = 0;
+  state.current.coins = 0;
+  state.current.buys = 0;
+  card.actions = 1;
+  card.coins = 2;
+  card.buys = 3;
+  card.cards = 0;
+  card.onPlay(state);
+
+  expect(state.current.actions).toBe(1);
+  expect(state.current.coins).toBe(2);
+  expect(state.current.buys).toBe(3);
+});
+
+test('onPlay draws cards', () => {
+  const card = new Card();
+  const state = new State();
+
+  state.setUp([new BasicAI(), new BasicAI()]);
+  card.cards = 3;
+  state.current.drawCards = jest.fn(() => {});
+  card.onPlay(state);
+
+  expect(state.current.drawCards).toHaveBeenCalledWith(3);
+});
+
+test('onPlay triggers playEffect', () => {
+  const card = new Card();
+  const state = new State();
+
+  state.setUp([new BasicAI(), new BasicAI()]);
+  card.playEffect = jest.fn(card.playEffect);
+  card.onPlay(state);
+
+  expect(card.playEffect).toHaveBeenCalledWith(state);
+});

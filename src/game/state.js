@@ -160,7 +160,19 @@ export default class State {
 
     source.splice(index, 1);
     this.current.inPlay.push(action);
-    action.playEffect(this);
+    this.resolveAction(action);
+  }
+
+  /**
+   * Resolves the effects of playing an action.
+   * Effects that cause virtual cards to be played (Throne Room, Band of
+   * Misfits, etc) should call this.
+   *
+   * @param {BasicAction} action
+   */
+  resolveAction (action) {
+    this.current.cardsPlayed.push(action);
+    action.onPlay(this);
   }
 
   /**
@@ -537,21 +549,32 @@ export default class State {
    * @return void
    */
   doTreasurePhase () {
-    const treasures = [];
-    let choice;
+    do {
+      const treasures = [];
+      let choice;
 
-    for (const card of this.current.hand) {
-      if (card.isTreasure() && treasures.indexOf(card) === -1) {
-        treasures.push(card);
+      // Prepare the set of treasures that may be played.
+      for (const card of this.current.hand) {
+        if (card.isTreasure() && treasures.indexOf(card) === -1) {
+          treasures.push(card);
+        }
       }
-    }
 
-    if (treasures.length === 0) {
-      return;
-    }
+      if (treasures.length === 0) {
+        return;
+      }
 
-    choice = this.current.agent.choose('play', this, treasures);
-    this.playTreasure(choice);
+      // Ask the agent for a choice
+      treasures.push(null);
+      choice = this.current.agent.choose('play', this, treasures);
+
+      if (choice === null) {
+        return;
+      }
+
+      // Play the chosen treasure
+      this.playTreasure(choice);
+    } while (true);
   }
 
   doBuyPhase () {

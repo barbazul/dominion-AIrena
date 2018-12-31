@@ -82,7 +82,15 @@ export default class Card {
    * @param {State} state
    */
   onPlay (state) {
+    state.current.actions += this.actions;
+    state.current.coins += this.coins;
+    state.current.buys += this.buys;
 
+    if (this.cards > 0) {
+      state.current.drawCards(this.cards);
+    }
+
+    this.playEffect(state);
   }
 
   /**
