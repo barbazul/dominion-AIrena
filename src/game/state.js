@@ -138,7 +138,7 @@ export default class State {
   /**
    * The current player plays an action and performs the effects
    *
-   * @param {Card} action
+   * @param {BasicAction} action
    * @param {String} from
    * @return void
    */

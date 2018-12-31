@@ -18,13 +18,13 @@ const muteConfig = { log: () => {}, warn: () => {} };
 
 /**
  *
- * @param {int} quantiy
+ * @param {int} quantity
  * @returns {BasicAI[]}
  */
-const createPlayers = (quantiy = 2) => {
+const createPlayers = (quantity = 2) => {
   const players = [];
 
-  for (let i = 0; i < quantiy; i++) {
+  for (let i = 0; i < quantity; i++) {
     players.push(new BasicAI());
   }
 
@@ -326,7 +326,7 @@ test('doDiscard from deck discards from the top', () => {
   let result;
 
   state.setUp(players, muteConfig);
-  card2.name = 'Mutiples';
+  card2.name = 'Multiples';
   card1.name = 'Single';
   state.current.draw = [card1, card2, card2, card1]; // index 0 is top
   state.current.discard = [];
