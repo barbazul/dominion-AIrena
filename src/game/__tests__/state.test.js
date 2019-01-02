@@ -1269,3 +1269,53 @@ test('doBuyPhase stops buying cards if the agent chooses to', () => {
   expect(state.current.coins).toBe(4);
   expect(state.current.buys).toBe(2);
 });
+
+test('gainsToEndGame is the sum of the lowest piles when piles are low', () => {
+  const state = new State();
+
+  state.kingdom.Estate = 1;
+  state.kingdom.Duchy = 2;
+  state.kingdom.Province = 8;
+  state.kingdom.Curse = 0;
+  state.totalPilesToEndGame = jest.fn(() => 3);
+
+  expect(state.gainsToEndGame()).toBe(3);
+  expect(state.totalPilesToEndGame).toHaveBeenCalled();
+});
+
+test('gainsToEndGame returns Province count when it is low', () => {
+  const state = new State();
+
+  state.kingdom.Estate = 1;
+  state.kingdom.Duchy = 2;
+  state.kingdom.Province = 2;
+  state.kingdom.Curse = 0;
+
+  expect(state.gainsToEndGame()).toBe(2);
+});
+
+test('gainsToEndGame returns value from cache if available', () => {
+  const state = new State();
+
+  state.totalPilesToEndGame = jest.fn(() => 3);
+  state.kingdom.Estate = 1;
+  state.kingdom.Duchy = 2;
+  state.kingdom.Province = 2;
+  state.kingdom.Curse = 0;
+  state.cache.gainsToEndGame = 2;
+
+  expect(state.gainsToEndGame()).toBe(2);
+  expect(state.totalPilesToEndGame).not.toHaveBeenCalled();
+});
+
+test('gainsToEndGame updates cache', () => {
+  const state = new State();
+
+  state.kingdom.Estate = 1;
+  state.kingdom.Duchy = 2;
+  state.kingdom.Province = 2;
+  state.kingdom.Curse = 0;
+
+  expect(state.gainsToEndGame()).toBe(2);
+  expect(state.cache.gainsToEndGame).toBe(2);
+});

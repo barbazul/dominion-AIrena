@@ -20,6 +20,11 @@ export default class State {
      * @type {Player}
      */
     this.current = null;
+
+    /**
+     * @type {Object}
+     */
+    this.cache = {};
   }
 
   /**
@@ -133,6 +138,27 @@ export default class State {
     }
 
     return 3;
+  }
+
+  /**
+   * Minimum number of buys/gains necessary to end the game.
+   */
+  gainsToEndGame () {
+    let piles;
+    let lowestPiles;
+    let returnValue;
+
+    if (this.cache.gainsToEndGame !== undefined) {
+      return this.cache.gainsToEndGame;
+    }
+
+    piles = Object.values(this.kingdom);
+    lowestPiles = piles.sort((a, b) => a - b).slice(0, this.totalPilesToEndGame());
+
+    returnValue = Math.min(lowestPiles.reduce((sum, value) => sum + value, 0), this.kingdom.Province);
+
+    this.cache.gainsToEndGame = returnValue;
+    return returnValue;
   }
 
   /**
