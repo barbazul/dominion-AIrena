@@ -1,6 +1,7 @@
 import BasicAI from '../../agents/basicAI';
 import BasicAction from '../../cards/basicAction';
 import Card from '../../cards/card';
+import cards from '../cards';
 import Player from '../player';
 import State, { PHASE_ACTION, PHASE_BUY, PHASE_CLEANUP, PHASE_START, PHASE_TREASURE } from '../state';
 
@@ -703,7 +704,7 @@ test('playTreasure puts the card in play from other origins', () => {
   state.current.discard = [card2, card3];
   state.current.hand = [card1];
   state.inPlay = [];
-  state.playAction(card3, 'discard');
+  state.playTreasure(card3, 'discard');
 
   expect(state.current.discard).toHaveLength(1);
   expect(state.current.discard).not.toContain(card3);
@@ -1207,4 +1208,64 @@ test('resolveAction updates history and triggers card onPlay', () => {
 
   expect(state.current.cardsPlayed).toContain(action);
   expect(action.onPlay).toHaveBeenCalledWith(state);
+});
+
+test('doBuyPhase calls for a gain choice', () => {
+  const state = new State();
+  const players = createPlayers();
+
+  state.setUp(players, muteConfig);
+  state.getSingleBuyDecision = jest.fn(() => cards.Copper);
+  state.doBuyPhase();
+
+  expect(state.getSingleBuyDecision).toHaveBeenCalled();
+});
+
+test('doBuyPhase causes player to gain chosen card and spend resources', () => {
+  const state = new State();
+  const players = createPlayers();
+
+  state.setUp(players, muteConfig);
+  state.current.coins = 2;
+  state.current.buys = 1;
+  state.getSingleBuyDecision = jest.fn(() => cards.Estate);
+  state.gainCard = jest.fn(() => {});
+  state.doBuyPhase();
+
+  expect(state.gainCard).toHaveBeenCalledWith(state.current, cards.Estate);
+  expect(state.current.coins).toBe(0);
+  expect(state.current.buys).toBe(0);
+});
+
+test('doBuyPhase buys multiple cards with multiple buys and enough money', () => {
+  const state = new State();
+  const players = createPlayers();
+
+  state.setUp(players, muteConfig);
+  state.current.coins = 4;
+  state.current.buys = 2;
+  state.getSingleBuyDecision = jest.fn(() => cards.Estate);
+  state.gainCard = jest.fn(() => {});
+  state.doBuyPhase();
+
+  expect(state.gainCard).toHaveBeenCalledTimes(2);
+  expect(state.gainCard).toHaveBeenCalledWith(state.current, cards.Estate);
+  expect(state.current.coins).toBe(0);
+  expect(state.current.buys).toBe(0);
+});
+
+test('doBuyPhase stops buying cards if the agent chooses to', () => {
+  const state = new State();
+  const players = createPlayers();
+
+  state.setUp(players, muteConfig);
+  state.current.coins = 4;
+  state.current.buys = 2;
+  state.getSingleBuyDecision = jest.fn(() => null);
+  state.gainCard = jest.fn(() => {});
+  state.doBuyPhase();
+
+  expect(state.gainCard).not.toHaveBeenCalled();
+  expect(state.current.coins).toBe(4);
+  expect(state.current.buys).toBe(2);
 });

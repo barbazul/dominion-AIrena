@@ -577,8 +577,36 @@ export default class State {
     } while (true);
   }
 
-  doBuyPhase () {
+  /**
+   * Determines what single card (or none) the agent wants to buy
+   *
+   * @return {Card}
+   */
+  getSingleBuyDecision () {
 
+  }
+
+  /**
+   * Steps through the buy phase, asking the agent, to choose a card to buy
+   * until it has no buys left or chooses to buy nothing.
+   */
+  doBuyPhase () {
+    while (this.current.buys > 0) {
+      const choice = this.getSingleBuyDecision();
+
+      if (choice === null) {
+        return;
+      }
+
+      this.log(`${this.current.agent} buys ${choice}`);
+
+      // Update money and buys
+      this.current.coins -= choice.cost;
+      this.current.buys--;
+
+      // Gain the card.
+      this.gainCard(this.current, choice);
+    }
   }
 
   doCleanupPhase () {
