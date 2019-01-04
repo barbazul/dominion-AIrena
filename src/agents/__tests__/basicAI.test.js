@@ -257,3 +257,129 @@ test('Throw an error when AI cant make a choice', () => {
     ai1.choose('fake', state, [card1, card2]);
   }).toThrow('BasicAI somehow failed to make a choice');
 });
+
+test('Default gainPriority', () => {
+  const ai1 = new BasicAI();
+  const ai2 = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai1, ai2]);
+  state.current.countInDeck = jest.fn(() => 1);
+  state.countInSupply = jest.fn(() => 8);
+  state.gainsToEndGame = jest.fn(() => 8);
+
+  expect(state.current.agent.gainPriority(state, state.current)).toEqual(
+    [
+      'Colony',
+      'Platinum',
+      'Gold',
+      'Silver'
+    ]
+  );
+});
+
+test('Skip colony without Platinum', () => {
+  const ai1 = new BasicAI();
+  const ai2 = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai1, ai2]);
+  state.current.countInDeck = jest.fn(() => 0);
+  state.countInSupply = jest.fn(() => 8);
+  state.gainsToEndGame = jest.fn(() => 8);
+
+  expect(state.current.agent.gainPriority(state, state.current)).not.toContain('Colony');
+});
+
+test('Prefer Province with less than 7 colonies', () => {
+  const ai1 = new BasicAI();
+  const ai2 = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai1, ai2]);
+  state.current.countInDeck = jest.fn(() => 0);
+  state.countInSupply = jest.fn(() => 6);
+  state.gainsToEndGame = jest.fn(() => 8);
+
+  expect(state.current.agent.gainPriority(state, state.current)).toContain('Province');
+});
+
+test('Prefer Duchy with less than 6 gains to end game', () => {
+  const ai1 = new BasicAI();
+  const ai2 = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai1, ai2]);
+  state.current.countInDeck = jest.fn(() => 0);
+  state.countInSupply = jest.fn(() => 6);
+  state.gainsToEndGame = jest.fn(() => 5);
+
+  expect(state.current.agent.gainPriority(state, state.current)).toContain('Duchy');
+});
+
+test('Prefer Estate with less than 3 gains to end game', () => {
+  const ai1 = new BasicAI();
+  const ai2 = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai1, ai2]);
+  state.current.countInDeck = jest.fn(() => 0);
+  state.countInSupply = jest.fn(() => 6);
+  state.gainsToEndGame = jest.fn(() => 2);
+
+  expect(state.current.agent.gainPriority(state, state.current)).toContain('Estate');
+});
+
+test('Prefer Copper with less than 4 gains to end game', () => {
+  const ai1 = new BasicAI();
+  const ai2 = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai1, ai2]);
+  state.current.countInDeck = jest.fn(() => 0);
+  state.countInSupply = jest.fn(() => 6);
+  state.gainsToEndGame = jest.fn(() => 3);
+
+  expect(state.current.agent.gainPriority(state, state.current)).toContain('Copper');
+});
+
+test('Fallback gainValue is negative.', () => {
+  const ai = new BasicAI();
+  const state = new State();
+  const player = new Player(ai, () => {});
+  const card = new Card();
+
+  card.cost = 3;
+
+  expect(ai.gainValue(state, card, player)).toBeLessThan(0);
+});
+
+test('Fallback gainValue prefers treasures and actions', () => {
+  const ai = new BasicAI();
+  const state = new State();
+  const player = new Player(ai, () => {});
+  const card1 = new Card();
+  const card2 = new Card();
+  const card3 = new Card();
+  const card4 = new Card();
+  let card1Value, card2Value, card3Value, card4Value;
+
+  card1.cost = 3;
+  card2.cost = 3;
+  card2.isTreasure = () => true;
+  card3.cost = 3;
+  card3.isAction = () => true;
+  card4.cost = 3;
+  card4.isTreasure = () => true;
+  card4.isAction = () => true;
+
+  card1Value = ai.gainValue(state, card1, player);
+  card2Value = ai.gainValue(state, card2, player);
+  card3Value = ai.gainValue(state, card3, player);
+  card4Value = ai.gainValue(state, card4, player);
+
+  expect(card2Value).toBeGreaterThan(card1Value);
+  expect(card3Value).toBeGreaterThan(card1Value);
+  expect(card4Value).toBeGreaterThan(card2Value);
+  expect(card4Value).toBeGreaterThan(card3Value);
+});

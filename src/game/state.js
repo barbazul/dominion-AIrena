@@ -483,7 +483,7 @@ export default class State {
    *
    * If the card is not part of the kingdom, it returns 0.
    *
-   * @param {Card} card
+   * @param {Card|String} card
    * @return int
    */
   countInSupply (card) {
@@ -609,7 +609,21 @@ export default class State {
    * @return {Card}
    */
   getSingleBuyDecision () {
+    const buyable = [];
 
+    for (const cardName in this.kingdom) {
+      let card;
+
+      if (this.kingdom.hasOwnProperty(cardName)) {
+        card = cards[cardName];
+
+        if (card.cost <= this.current.coins) {
+          buyable.push(card);
+        }
+      }
+    }
+
+    return this.current.agent.choose('gain', this, buyable);
   }
 
   /**

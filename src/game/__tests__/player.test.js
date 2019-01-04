@@ -1,5 +1,6 @@
 import BasicAI from '../../agents/basicAI';
 import Card from '../../cards/card';
+import cards from '../cards';
 import Player from '../player';
 
 test('Initial state', () => {
@@ -147,4 +148,53 @@ test('Draw more than draw causes shuffle', () => {
   expect(player.discard).toHaveLength(0);
   expect(player.draw).toHaveLength(1);
   expect(player.hand).toEqual([card4, card3, card2]);
+});
+
+test('getDeck returns cards in every possible location', () => {
+  const player = new Player(new BasicAI(), () => {});
+  const cardInDraw = new Card();
+  const cardInDiscard = new Card();
+  const cardInHand = new Card();
+  const cardInPlay = new Card();
+
+  cardInDraw.name = 'Card in Draw';
+  cardInDiscard.name = 'Card in Discard';
+  cardInHand.name = 'Card in hand';
+  cardInPlay.name = 'Card in Play';
+
+  player.draw = [cardInDraw];
+  player.discard = [cardInDiscard];
+  player.hand = [cardInHand];
+  player.inPlay = [cardInPlay];
+
+  expect(player.getDeck()).toContain(cardInDraw);
+  expect(player.getDeck()).toContain(cardInDiscard);
+  expect(player.getDeck()).toContain(cardInHand);
+  expect(player.getDeck()).toContain(cardInPlay);
+});
+
+test('countInDeck returns the number of copies of a card', () => {
+  const player = new Player(new BasicAI(), () => {});
+
+  player.getDeck = jest.fn(
+    () => [
+      cards.Copper, cards.Estate, cards.Copper, cards.Estate, cards.Copper, cards.Estate, cards.Copper, cards.Copper,
+      cards.Copper, cards.Copper
+    ]
+  );
+
+  expect(player.countInDeck(cards.Copper)).toBe(7);
+});
+
+test('countInDeck works with strings', () => {
+  const player = new Player(new BasicAI(), () => {});
+
+  player.getDeck = jest.fn(
+    () => [
+      cards.Copper, cards.Estate, cards.Copper, cards.Estate, cards.Copper, cards.Estate, cards.Copper, cards.Copper,
+      cards.Copper, cards.Copper
+    ]
+  );
+
+  expect(player.countInDeck('Estate')).toBe(3);
 });

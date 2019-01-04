@@ -1319,3 +1319,21 @@ test('gainsToEndGame updates cache', () => {
   expect(state.gainsToEndGame()).toBe(2);
   expect(state.cache.gainsToEndGame).toBe(2);
 });
+
+test('getSingleBuyDecision calls for a gain choice with the cards the player can afford', () => {
+  const state = new State();
+
+  state.setUp(createPlayers());
+  state.kingdom = {
+    Copper: 10,
+    Silver: 10,
+    Curse: 10,
+    Estate: 8,
+    Duchy: 8
+  };
+
+  state.current.coins = 2;
+  state.current.agent.choose = jest.fn(state.current.agent.choose);
+  state.getSingleBuyDecision();
+  expect(state.current.agent.choose).toHaveBeenCalledWith('gain', state, [cards.Copper, cards.Curse, cards.Estate]);
+});

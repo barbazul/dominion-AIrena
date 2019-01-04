@@ -50,6 +50,34 @@ export default class Player {
   }
 
   /**
+   * Returns all cards owned by the player regardless of current location
+   * (like mats or aside)
+   *
+   * @return {Card[]}
+   */
+  getDeck () {
+    return [].concat(this.draw, this.discard, this.hand, this.inPlay);
+  }
+
+  /**
+   * Counts the number of copies of a card inthe player deck.
+   *
+   * @param {Card|String} card
+   * @return {Number}
+   */
+  countInDeck (card) {
+    let count = 0;
+
+    for (const aCard of this.getDeck()) {
+      if (card.toString() === aCard.toString()) {
+        count++;
+      }
+    }
+
+    return count;
+  }
+
+  /**
    * Draw cards from deck into hand
    *
    * @param {int} num

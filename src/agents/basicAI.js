@@ -166,6 +166,60 @@ export default class BasicAI {
   }
 
   /**
+   * The default buying strategy is a form of Big Money.
+   *
+   * @param {State} state
+   * @param {Player} my
+   * @return {String[]}
+   */
+  gainPriority (state, my) {
+    const priority = [];
+    const basePriority = [
+      'Platinum',
+      'Gold',
+      'Silver'
+    ];
+
+    if (my.countInDeck('Platinum') > 0) {
+      priority.push('Colony');
+    }
+
+    if (state.countInSupply('Colony') <= 6) {
+      priority.push('Province');
+    }
+
+    if (state.gainsToEndGame() <= 5) {
+      priority.push('Duchy');
+    }
+
+    if (state.gainsToEndGame() <= 2) {
+      priority.push('Estate');
+    }
+
+    priority.splice(priority.length, 0, ...basePriority);
+
+    if (state.gainsToEndGame() <= 3) {
+      priority.push('Copper');
+    }
+
+    return priority;
+  }
+
+  /**
+   * Default is to favor more expensive cards, particularly actions and treasures.
+   * Values are negative to prefer skipping gain when not on priority list and
+   * only gaining when forced to.
+   *
+   * @param {State} state
+   * @param {Card} card
+   * @param {Player} my
+   * @return {Number}
+   */
+  gainValue (state, card, my) {
+    return card.cost + (card.isTreasure() ? 1 : 0) + (card.isAction() ? 1 : 0) - 20;
+  }
+
+  /**
    * Heuristic discard priority .
    *
    * The default `discardPriority` is tuned for Big Money where the decisions
