@@ -29,6 +29,7 @@
     }
   },
   "dependencies": {
+    "esm": "^3.0.84",
     "seedrandom": "^2.4.4"
   }
 }
