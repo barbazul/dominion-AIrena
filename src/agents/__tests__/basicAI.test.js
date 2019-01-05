@@ -3,6 +3,14 @@ import Card from '../../cards/card';
 import Player from '../../game/player';
 import State from '../../game/state';
 
+test('toString returns agent name', () => {
+  const ai = new BasicAI();
+
+  expect(ai.toString()).toBe('BasicAI');
+  ai.name = 'Carlos';
+  expect(ai.toString()).toBe('Carlos');
+});
+
 test('myPlayer throws error when agent is not playing', () => {
   const ai1 = new BasicAI();
   const ai2 = new BasicAI();

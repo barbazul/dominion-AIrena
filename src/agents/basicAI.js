@@ -9,6 +9,10 @@ export default class BasicAI {
     this.name = this.constructor.name;
   }
 
+  toString () {
+    return this.name;
+  }
+
   /**
    * Returns the Player state object associated to the AI making the choice.
    * state.current cannot be used since some decisions are made on other players turns
