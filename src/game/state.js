@@ -1,4 +1,4 @@
-import seedrandom from 'seedrandom';
+import shuffle from '../lib/shuffle';
 import cards from './cards';
 import Player from './player';
 
@@ -43,7 +43,7 @@ export default class State {
       log: console.log,
       warn: msg => console.log('WARN: ' + msg),
       required: [],
-      rng: seedrandom
+      rng: new Math.seedrandom() // eslint-disable-line new-cap
     };
 
     const options = Object.assign(defaults, config);
@@ -57,6 +57,7 @@ export default class State {
     this.log = options.log;
     this.warn = options.warn;
     this.players = players.map(agent => new Player(agent, this.log, this.rng));
+    this.players = shuffle(this.players, this.rng);
     this.current = this.players[0];
 
     if (options.required) {
@@ -68,6 +69,7 @@ export default class State {
     });
 
     this.kingdom = this.buildKingdom(selectedCards);
+    this.totalCards = this.countTotalCards();
 
     return this;
   }

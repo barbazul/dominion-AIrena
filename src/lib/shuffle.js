@@ -1,11 +1,11 @@
+import seedrandom from 'seedrandom';
+
 /**
  *
  * @param {Array} arr
  * @param {function():number} rng
  * @returns {Array}
  */
-import seedrandom from 'seedrandom';
-
 export default function shuffle (arr, rng = null) {
   const resp = [];
   const keys = [];
