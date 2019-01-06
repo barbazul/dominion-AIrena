@@ -1344,14 +1344,15 @@ test('doCleanupPhase cleans cards in play and hand', () => {
   const card1 = new Card();
   const card2 = new Card();
 
-  state.setUp(createPlayers());
-  state.kingdom.Curse = 8; // Lower Curse pile by 2 for the 2 cards simulated below
+  state.setUp(createPlayers(), muteConfig);
+  state.kingdom.Curse = 2; // Lower Curse pile by 8 for the 8 cards simulated below
   state.current.inPlay = [card1];
   state.current.hand = [card2];
+  state.current.draw = [card1, card1, card1, card1, card1, card1];
   state.doCleanupPhase();
 
   expect(state.current.inPlay).toHaveLength(0);
-  expect(state.current.hand).toHaveLength(0);
+  expect(state.current.hand).toHaveLength(5);
   expect(state.current.discard).toContain(card1);
   expect(state.current.discard).toContain(card2);
 });
@@ -1371,7 +1372,7 @@ test('doCleanupPhase resets player status', () => {
   expect(state.current.cardsPlayed).toHaveLength(0);
 });
 
-test('doCleanupPhase throws an error when cards are missing', () => {
+test('doCleanupPhase throws an error when cards banished', () => {
   const state = new State();
 
   state.setUp(createPlayers());
@@ -1396,4 +1397,19 @@ test('countTotalCards counts supply + players decks + trash', () => {
   state.players[1].numCardsInDeck = jest.fn(() => 20);
   state.trash = [new Card()];
   expect(state.countTotalCards()).toBe(101);
+});
+
+test('rotatePLayer shifts player order and updates current player', () => {
+  const state = new State();
+  let player1, player2;
+
+  state.setUp(createPlayers());
+  state.phase = PHASE_CLEANUP;
+  player1 = state.players[0];
+  player2 = state.players[1];
+  state.rotatePlayer();
+
+  expect(state.current).toBe(player2);
+  expect(state.players).toEqual([player2, player1]);
+  expect(state.phase).toBe(PHASE_START);
 });

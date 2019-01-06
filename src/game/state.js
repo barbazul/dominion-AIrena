@@ -689,13 +689,23 @@ export default class State {
     this.current.buys = 1;
     this.current.cardsPlayed = [];
 
+    // Draw new hand
+    this.current.drawCards(5);
+
     // Make sure we didn't drop any cards on the floor
     if (totalCards !== this.totalCards) {
       throw new Error(`The game started with ${this.totalCards}; now there are ${totalCards}`);
     }
   }
 
+  /**
+   * The player list is implemented so that the current player is always first
+   *
+   * The attribute current points to the current player
+   */
   rotatePlayer () {
-
+    this.players.splice(0, 0, this.players.pop());
+    this.current = this.players[0];
+    this.phase = PHASE_START;
   }
 }
