@@ -198,3 +198,10 @@ test('countInDeck works with strings', () => {
 
   expect(player.countInDeck('Estate')).toBe(3);
 });
+
+test('numCardsInDeck returns the number of cards in players deck', () => {
+  const player = new Player(new BasicAI(), () => {});
+
+  player.getDeck = jest.fn(() => [new Card(), new Card(), new Card()]);
+  expect(player.numCardsInDeck()).toBe(3);
+});

@@ -78,6 +78,15 @@ export default class Player {
   }
 
   /**
+   * The size of the player's deck
+   *
+   * @return {Number}
+   */
+  numCardsInDeck () {
+    return this.getDeck().length;
+  }
+
+  /**
    * Draw cards from deck into hand
    *
    * @param {int} num

@@ -1344,9 +1344,9 @@ test('doCleanupPhase cleans cards in play and hand', () => {
   const card2 = new Card();
 
   state.setUp(createPlayers());
+  state.kingdom.Curse = 8; // Lower Curse pile by 2 for the 2 cards simulated below
   state.current.inPlay = [card1];
   state.current.hand = [card2];
-  state.current.discard = [];
   state.doCleanupPhase();
 
   expect(state.current.inPlay).toHaveLength(0);
@@ -1380,4 +1380,19 @@ test('doCleanupPhase throws an error when cards are missing', () => {
   expect(() => {
     state.doCleanupPhase();
   }).toThrow();
+});
+
+test('countTotalCards counts supply + players decks + trash', () => {
+  const state = new State();
+
+  state.setUp(createPlayers());
+  state.kingdom = {
+    'Copper': 60,
+    'Curse': 10
+  };
+
+  state.players[0].numCardsInDeck = jest.fn(() => 10);
+  state.players[1].numCardsInDeck = jest.fn(() => 20);
+  state.trash = [new Card()];
+  expect(state.countTotalCards()).toBe(101);
 });

@@ -502,10 +502,26 @@ export default class State {
   }
 
   /**
-   * Counts the total number of cards everywhere
+   * Counts the total number of cards anywhere
+   *
+   * @return {Number}
    */
   countTotalCards () {
+    let total = 0;
 
+    for (const player of this.players) {
+      total += player.numCardsInDeck();
+    }
+
+    for (const card in this.kingdom) {
+      if (this.kingdom.hasOwnProperty(card)) {
+        total += this.kingdom[card];
+      }
+    }
+
+    total += this.trash.length;
+
+    return total;
   }
 
   /**
