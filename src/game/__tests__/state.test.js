@@ -1337,3 +1337,47 @@ test('getSingleBuyDecision calls for a gain choice with the cards the player can
   state.getSingleBuyDecision();
   expect(state.current.agent.choose).toHaveBeenCalledWith('gain', state, [cards.Copper, cards.Curse, cards.Estate]);
 });
+
+test('doCleanupPhase cleans cards in play and hand', () => {
+  const state = new State();
+  const card1 = new Card();
+  const card2 = new Card();
+
+  state.setUp(createPlayers());
+  state.current.inPlay = [card1];
+  state.current.hand = [card2];
+  state.current.discard = [];
+  state.doCleanupPhase();
+
+  expect(state.current.inPlay).toHaveLength(0);
+  expect(state.current.hand).toHaveLength(0);
+  expect(state.current.discard).toContain(card1);
+  expect(state.current.discard).toContain(card2);
+});
+
+test('doCleanupPhase resets player status', () => {
+  const state = new State();
+
+  state.setUp(createPlayers());
+  state.current.actions = 0;
+  state.current.buys = 0;
+  state.current.coins = 2;
+  state.current.cardsPlayed = [new Card()];
+  state.doCleanupPhase();
+
+  expect(state.current.actions).toBe(1);
+  expect(state.current.buys).toBe(1);
+  expect(state.current.cardsPlayed).toHaveLength(0);
+});
+
+test('doCleanupPhase throws an error when cards are missing', () => {
+  const state = new State();
+
+  state.setUp(createPlayers());
+  state.totalCards = 100;
+  state.countTotalCards = jest.fn(() => 50);
+
+  expect(() => {
+    state.doCleanupPhase();
+  }).toThrow();
+});

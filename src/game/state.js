@@ -12,6 +12,7 @@ export default class State {
   constructor () {
     this.phase = PHASE_START;
     this.kingdom = {};
+    this.totalCards = 0;
     this.specialPiles = {};
     this.players = [];
     this.trash = [];
@@ -499,6 +500,13 @@ export default class State {
   }
 
   /**
+   * Counts the total number of cards everywhere
+   */
+  countTotalCards () {
+
+  }
+
+  /**
    * Performs the next phase of the game.
    *
    * PHASE_START: Resolve start of turn effects
@@ -650,7 +658,23 @@ export default class State {
   }
 
   doCleanupPhase () {
+    const totalCards = this.countTotalCards();
 
+    // Put cards in play into discard pile (at the top)
+    this.current.discard.splice(0, 0, ...this.current.inPlay.splice(0));
+
+    // Discard cards remaining in hand
+    this.current.discard.splice(0, 0, ...this.current.hand.splice(0));
+
+    // Reset player status
+    this.current.actions = 1;
+    this.current.buys = 1;
+    this.current.cardsPlayed = [];
+
+    // Make sure we didn't drop any cards on the floor
+    if (totalCards !== this.totalCards) {
+      throw new Error(`The game started with ${this.totalCards}; now there are ${totalCards}`);
+    }
   }
 
   rotatePlayer () {
