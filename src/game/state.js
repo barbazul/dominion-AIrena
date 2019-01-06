@@ -643,7 +643,7 @@ export default class State {
       if (this.kingdom.hasOwnProperty(cardName)) {
         card = cards[cardName];
 
-        if (card.cost <= this.current.coins) {
+        if (this.kingdom[cardName] > 0 && card.cost <= this.current.coins) {
           buyable.push(card);
         }
       }

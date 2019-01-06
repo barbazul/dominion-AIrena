@@ -1327,7 +1327,7 @@ test('getSingleBuyDecision calls for a gain choice with the cards the player can
   state.kingdom = {
     Copper: 10,
     Silver: 10,
-    Curse: 10,
+    Curse: 0,
     Estate: 8,
     Duchy: 8
   };
@@ -1335,7 +1335,8 @@ test('getSingleBuyDecision calls for a gain choice with the cards the player can
   state.current.coins = 2;
   state.current.agent.choose = jest.fn(state.current.agent.choose);
   state.getSingleBuyDecision();
-  expect(state.current.agent.choose).toHaveBeenCalledWith('gain', state, [cards.Copper, cards.Curse, cards.Estate]);
+  expect(state.current.agent.choose).toHaveBeenCalledWith('gain', state, expect.arrayContaining([cards.Copper, cards.Estate]));
+  expect(state.current.agent.choose).toHaveBeenCalledWith('gain', state, expect.not.arrayContaining([cards.Curse]));
 });
 
 test('doCleanupPhase cleans cards in play and hand', () => {
