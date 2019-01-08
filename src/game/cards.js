@@ -36,7 +36,10 @@ const cards = {
   Vassal: new Vassal(),
   Village: new Village(),
   Witch: new Witch(),
-  Workshop: new Workshop()
+  Workshop: new Workshop(),
+
+  // Placeholder for later
+  Crossroads: {}
 };
 
 export default cards;
