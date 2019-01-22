@@ -74,6 +74,11 @@ export default class State {
     return this;
   }
 
+  startGame () {
+    // Draw initial hands
+    this.players.forEach(p => p.drawCards(5));
+  }
+
   /**
    * Builds the kingdom configuration for a selection of required kingdom cards and the number of players
    *
@@ -175,6 +180,8 @@ export default class State {
     let index;
     const source = this.current[from];
 
+    this.log(`${this.current.agent} plays ${action}.`);
+
     if (source === undefined) {
       this.warn(`${this.current.agent.name} tried to play a card from invalid location ${from}`);
       return;
@@ -214,6 +221,8 @@ export default class State {
   playTreasure (treasure, from = 'hand') {
     const source = this.current[from];
     let index;
+
+    this.log(`${this.current.agent} plays ${treasure}.`);
 
     if (source === undefined) {
       this.warn(`${this.current.agent.name} tried to play a card from invalid location ${from}`);
@@ -657,6 +666,7 @@ export default class State {
    * until it has no buys left or chooses to buy nothing.
    */
   doBuyPhase () {
+    console.log(`${this.current.buys} Buys and ${this.current.coins} coins.`);
     while (this.current.buys > 0) {
       const choice = this.getSingleBuyDecision();
 
@@ -687,6 +697,7 @@ export default class State {
     // Reset player status
     this.current.actions = 1;
     this.current.buys = 1;
+    this.current.coins = 0;
     this.current.cardsPlayed = [];
 
     // Draw new hand

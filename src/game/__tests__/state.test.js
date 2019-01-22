@@ -1369,6 +1369,7 @@ test('doCleanupPhase resets player status', () => {
 
   expect(state.current.actions).toBe(1);
   expect(state.current.buys).toBe(1);
+  expect(state.current.coins).toBe(0);
   expect(state.current.cardsPlayed).toHaveLength(0);
 });
 

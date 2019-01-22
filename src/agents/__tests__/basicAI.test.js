@@ -757,7 +757,7 @@ test('Fallback playValue function -> Baron', () => {
   ai.gainValue = () => 1;
   expect(ai.playValue(state, cards.Baron, state.current)).toBe(5);
 
-  // Without and doesnot want to gain Estate
+  // Without and does not want to gain Estate
   state.current.hand = [];
   ai.gainValue = () => -1;
   expect(ai.playValue(state, cards.Baron, state.current)).toBe(-5);
