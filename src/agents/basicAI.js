@@ -287,192 +287,436 @@ export default class BasicAI {
    */
   playValue (state, card, my) {
     const playValues = {
-      'Advisor': 1000,
-      'Adventurer': 176,
-      'Alchemist': 785,
-      // 'Ambassador': my.actions > 0 && wantsToTrash > 0 ? 1100 : -1
-      'Apothecary': 880,
-      'Apprentice': 730,
-      'Bag of Gold': 885,
-      'Bandit Camp': 821,
-      'Baker': 774,
-      'Bank': 20,
-      // 'Baron': my.hand.indexOf(cards.Estate) > -1 ? 184 : (this.cardInDeckValue(state, cards.Estate, my) ? 5 : -5),
-      'Bazaar': 835,
-      'Beggar': 243,
-      'Bishop': 243,
-      'Border Village': 817,
-      'Bridge': 246,
-      'Bureaucrat': 128,
-      'Candlestick Maker': 734,
-      'Caravan': 780,
-      'Cartographer': 890,
-      'Cellar': 450,
-      'Chancellor': 160,
-      // 'Chapel': wantsToTrash > 0 ? 146 : 30,
-      'City': 829,
-      'Conspirator': (state, my) => my.inPlay.length >= 2 ? 760 : (my.actions < 2 ? 124 : 10),
-      // 'Coppersmith': my.countInHand('Copper') ? 0, 1 => 105 : 2 => 156 : 213,
-      'Council Room': (state, my) => my.actions > 0 ? 619 : 194,
-      'Counting House': 158,
-      'Courtyard': (state, my) => my.actions > 1 && (my.discard.length + my.draw.length) <= 3 ? 615 : 188,
-      // 'Crossroads': (state, my) => {
-      //   // This represents a particularly dumb strategy. It doesn't even take into account whether it has any
-      //   // victory cards, or whether it could draw more.
-      //   my.countInPlay('Crossroads') > 0 ? 298 : 580
-      // },
-      'Cutpurse': 250,
-      'Develop': 271, // A rough approximation to when you want to Develop: when all you've got to play is terminals.
-      'Duchess': 102,
-      'Embassy': (state, my) => my.actions > 1 ? 660 : 198,
-      'Envoy': 203,
-      'Expand': 226,
-      // 'Explorer': my.countInHand('Province') > 1 ? 282 : 166,
-      'Familiar': 755,
-      'Farming Village': 838,
-      'Feast': 108,
-      'Festival': 845,
-      'Fishing Village': 823,
-      'Followers': 292,
-      'Fortune Teller': 130,
-      'Ghost Ship': (state, my) => my.actions > 1 ? 670 : 266,
-      'Golem': 743,
-      'Goons': 278,
-      'Grand Market': 795,
-      // I'll suppose Graverobber is a bit better to play than Remodel and worse than Expand, but I really don't know.
-      'Graverobber': 225,
-      'Great Hall': (state, my) => my.hand.indexOf(cards.Crossroads) > -1 ? 520 : 742,
-      'Haven': 710,
-      'Haggler': 170,
-      'Hamlet': 720,
-      'Harvest': 174,
-      'Herbalist': 122,
-      'Highway': 750,
-      // 'Horn of Plenty': my.numUniqueCardsInPlay() >= 2 ? 10 : -10,
-      'Horse Traders': 240,
-      'Hunting Grounds': (state, my) => my.actions > 1 ? 666 : 201,
-      'Hunting Party': 790,
-      // The current ai_playValue assumes that Ironworks is a terminal. If it wants to gain an action, it should have
-      // a higher value.
-      'Ironworks': 115,
-      'Island': 132,
-      'Jack of All Trades': 236,
-      'Jester': 258,
-      // 'Journeyman': wantsToJM > ? 146 : 0,
-      // 'King\'s Court': wantstoPlayMultiplier ? 910 : 390,
-      'Laboratory': 832,
+      // Priority #1: cards that succeed if we play them now, and might not if we play them later (950 - 999)
+      /**
+       * Evaluates whether it would trigger or not
+       *
+       * @param {State} state
+       * @param {Player} my
+       * @return {number}
+       */
+      'Menagerie': (state, my) => {
+        // @todo This calculation should be a helper method in the card itself
+        const cardsInHand = my.hand.map(c => c.toString());
+        const indexOfMenagerie = cardsInHand.indexOf('Menagerie');
+        let seen = null;
+
+        // Remove Menagerie from hypothetical hand
+        if (indexOfMenagerie > -1) {
+          cardsInHand.splice(indexOfMenagerie, 1);
+        }
+
+        cardsInHand.sort();
+
+        for (const c of cardsInHand) {
+          if (c === seen) {
+            return 340;
+          }
+
+          seen = c;
+        }
+
+        return 980;
+      },
 
       /**
-       * @todo
-       if my.actions > 1
-       switch my.hand.length
-       when 0, 1, 2, 3 then 955
-       when 4 then 695
-       when 5 then 620
-       when 6 then 420
-       when 7 then 101
-       else 20
-       else
-       switch my.hand.length
-       when 0, 1, 2, 3 then 260
-       when 4 then 210
-       when 5 then 192
-       when 6 then 118
-       when 7 then 101
-       else 20
+       * Evaluates whether it would trigger or not
+       *
+       * @param {State} state
+       * @param {Player} my
+       * @return {number}
        */
-      'Library': (state, my) => my.actions > 1 ? 520 : 155,
-      'Lighthouse': 715,
-      'Loan': 70,
-      'Lookout': (state, my) => state.gainsToEndGame() >= 5 || my.draw.indexOf(cards.Curse) > -1 ? 895 : -5,
-      'Mandarin': 168,
-      'Margrave': (state, my) => my.actions > 1 ? 685 : 280,
-      'Masquerade': 270,
-      'Market': 775,
-      // 'Menagerie': my.menagerieDraws() === 3 ? 980 : 340,
-      'Merchant Guild': 269,
-      'Merchant Ship': 186,
-      'Militia': 254,
-      'Mine': 217,
-      'Mining Village': 814,
-      'Minion': 705,
-      // 'Mint': this.choose('mint', state, my.hand) ? 140 : -7,
-      'Moat': 120,
-      'Moneylender': 230,
-      'Monument': 182,
-      'Mountebank': 290,
-      'Navigator': 126,
-      'Noble Brigand': 134,
-      'Nobles': 296,
-      'Nomad Camp': 162,
-      'Oasis': 480,
-      'Oracle': (state, my) => my.actions > 1 ? 610 : 180,
-      // 'Outpost': state.extraTurn ? -15 : 154,
-      'Pawn': 470,
-      'Pearl Diver': 725,
-      'Peddler': 770,
-      'Pirate Ship': 136,
-      'Plaza': 820,
-      'Poor House': 103,
-      'Princess': 264,
-      'Rabble': (state, my) => my.actions > 1 ? 680 : 206,
-      // 'Rats': wantsToPlayRats ? 486 : -1,
-      // 'Remake': wantsToTrash >= multiplayer * 2 ? 178 : -35,
-      // 'Rebuild': wantsToRebuild ? 1000 : -1,
-      'Remodel': 223,
-      'Rogue': 136,
-      'Saboteur': 104,
-      'Sage': 746,
-      'Salvager': 220,
-      'Scheme': 745,
+      'Shanty Town': (state, my) => {
+        const cardsInHand = my.hand.slice();
+        const indexOfShanty = cardsInHand.indexOf(cards.ShantyTown);
+
+        if (indexOfShanty > -1) {
+          cardsInHand.splice(indexOfShanty, 1);
+        }
+
+        for (const c of cardsInHand) {
+          if (c.isAction()) {
+            if (my.actions < 2) {
+              return 340;
+            }
+            return 70;
+          }
+        }
+
+        return 970;
+      },
+
+      /**
+       * Cares if you have exactly 3 provinces in hand (why 3?)
+       *
+       * @param {State} state
+       * @param {Player} my
+       * @return {number}
+       */
+      'Tournament': (state, my) => {
+        return my.countInHand('Province') === 3 ? 960 : 360;
+      },
+
+      /**
+       * @param {State} state
+       * @param {Player} my
+       * @return {number}
+       */
+      'Library': (state, my) => {
+        const terminalValues = [260, 260, 260, 260, 210, 192, 118, 101];
+        const nonTerminalValues = [955, 955, 955, 955, 695, 620, 420, 101];
+
+        if (my.actions > 1) {
+          if (nonTerminalValues[my.hand.length]) {
+            return nonTerminalValues[my.hand.length];
+          }
+        }
+
+        if (terminalValues[my.hand.length]) {
+          return terminalValues[my.hand.length];
+        }
+
+        return 20;
+      },
+
+      // 2: Multipliers that do something sufficiently cool. (900-949)
+
+      /**
+       * Simplified from what was in Dominiate.
+       * Wants to throne if it has a non-throne action
+       *
+       * @param {State} state
+       * @param {Player} my
+       * @return {number}
+       */
+      'Throne Room': (state, my) => {
+        for (const card of my.hand) {
+          if (card.isAction() && card !== cards.ThroneRoom) {
+            return 920;
+          }
+        }
+
+        return -50;
+      },
+
+      /**
+       * Removed the wantsToMultiply part for a more naive approach
+       *
+       * @param {State} state
+       * @param {Player} my
+       * @return {number}
+       */
+      'King\'s Court': (state, my) => {
+        for (const card of my.hand) {
+          if (card.isAction() && card !== cards.KingsCourt) {
+            return 910;
+          }
+        }
+
+        return 390;
+      },
+
+      // 3: cards that stack the deck. (850-899)
+      /**
+       * @param {State} state
+       * @param {Player} my
+       * @return {number}
+       */
+      'Lookout': (state, my) => {
+        return state.gainsToEndGame() >= 5 || my.draw.indexOf(cards.Curse) > -1 ? 895 : -5;
+      },
+      'Cartographer': 890,
+      'Bag of Gold': 885,
+      'Apothecary': 880,
       'Scout': 875,
       'Scrying Pool': 870,
-      'Sea Hag': 286,
-      'Secret Chamber': 138,
-      // 'Shanty Town': my.shantyTownDraws(true) == 2 ? 970 : (my.actions < 2 ? 340 : 70),
-      'Smithy': (state, my) => my.actions > 1 ? 665 : 200,
-      'Smugglers': 110,
-      'Soothsayer': 199,
-      // 'Spice Merchant': my.hand.indexOf(cards.Copper) > -1 ? 740 : (spiceMerchantWantsToTrash ? 410 : 80),
-      // 'Spoils': my.agent.wantsToPlaySpoils(state) ? 81 : null,
       'Spy': 860,
-      // 'Stables': stablesDiscardChoice ? 735 :  50,
-      'Steward': 233,
-      'Tactician': 272, // playing Tactician is extremely situational and this doesn't take it into account.
-      'Thief': 100,
-      // 'Throne Room': this.wantsToPlayMultiplier(state) ? 920 : (this.okayToPlayMultiplier(state) ? 380 : -50),
-      'Torturer': (state, my) => my.actions > 1 ? 690 : 284,
-      // 'Tournament': my.countInHand('Province') == 3 ? 960 : 360,
-      // 'Trade Route': wantsToTrash >= multiplier ? 160 : -25,
-      // 'Transmute': this.choose('mint', state, my.hand) ? 106 : -27,
-      // 'Trader': wantsToTrash >= multiplier ? 142 : -22,
-      // 'Trading Post': wantsToTrash >= multiplier * 2 ? 148 : -38,
-      // 'Treasure Map': (state, my) => {
-      //   my.countInHand("Treasure Map") >= 2 ? 294 : (my.countInDeck("Gold") >= 4
-      //     && state.current.countInDeck("Treasure Map") == 1 ? 90 : -40)
-      // },
-      'Treasury': 765,
-      'Tribute': 281, // after Curses but before other terminals; there is probably a better spot for it
+
+      // 4: cards that give +2 actions. (800-849)
       'Trusty Steed': 848,
+      'Festival': 845,
       'University': 842,
-      // 'Upgrade': wantsToTrash >= multiplayer ? 490 : -30,
-      'Vault': 268,
-      'Venture': 80,
-      'Village': 820,
-      'Walled Village': 826,
-      'Warehouse': 460,
-      'Watchtower': (state, my) => {
-        return my.actions > 1 ?
-          (my.hand.length < 5 ? 650 : -1) :
-          (my.hand.length < 4 ? 196 : (my.hand.length === 4 ? 190 : -1));
-      },
-      'Wharf': 275,
-      'Wishing Well': 745,
-      'Witch': (state, my) => my.actions > 1 ? 675 : 288,
-      'Woodcutter': 164,
+      'Farming Village': 838,
+      'Bazaar': 835,
       'Worker\' Village': 832,
+      'City': 829,
+      'Walled Village': 826,
+      'Fishing Village': 823,
+      'Village': 820,
+      'Border Village': 817,
+      'Mining Village': 814,
+
+      // 5: cards that give +1 action and are almost always good. (700-800)
+      'Grand Market': 795,
+      'Hunting Party': 790,
+      'Alchemist': 785,
+      'Laboratory': 782,
+      'Caravan': 780,
+      'Market': 775,
+      'Peddler': 770,
+      'Treasury': 765,
+
+      /**
+       * Removed the check for multiplier
+       *
+       * @param {State} state
+       * @param {Player} my
+       * @return {number}
+       */
+      'Conspirator': (state, my) => {
+        if (my.inPlay.length >= 2) {
+          return 760;
+        }
+
+        if (my.actions < 2) {
+          return 124;
+        }
+
+        return 10;
+      },
+
+      'Familiar': 755,
+      'Highway': 750,
+      'Scheme': 745,
+      'Wishing Well': 745,
+      'Golem': 743, // seems to be reasonable to expect +1 action from Golem
+
+      /**
+       * @param {State} state
+       * @param {Player} my
+       * @return {number}
+       */
+      'Great Hall': (state, my) => {
+        return my.hand.indexOf(cards.Crossroads) > -1 ? 520 : 742;
+      },
+
+      // 'Spice Merchant': (state, my) => my.hand.indexOf(cards.Copper) > -1 ? 740 : (spiceMerchantWantsToTrash ? 410 : 80),
+      // 'Stables': stablesDiscardChoice ? 735 :  50,
+      'Apprentice': 730,
+      'Pearl Diver': 725,
+      'Hamlet': 720,
+      'Lighthouse': 715,
+      'Haven': 710,
+      'Minion': 705,
+
+      // 6: terminal card-drawers, if we have actions to spare. (600-699)
+      /**
+       * @param {State} state
+       * @param {Player} my
+       * @return {number}
+       */
+      'Watchtower': (state, my) => {
+        if (my.actions > 1) {
+          if (my.hand.length < 5) {
+            return 650;
+          }
+        }
+
+        if (my.hand.length < 4) {
+          return 196;
+        }
+
+        if (my.hand.length === 4) {
+          return 190;
+        }
+
+        return -1;
+      },
+
+      /**
+       * @param {State} state
+       * @param {Player} my
+       * @return {number}
+       */
+      'Courtyard': (state, my) => {
+        return my.actions > 1 && (my.discard.length + my.draw.length) <= 3 ? 615 : 188;
+      },
+
+      // Unified Torturer, Margrave, Rabble, Witch, Ghost Ship, Smithy, Embassy and Council Room in a single terminal
+      // draw logic (see below)
+
+      // Leaving Oracle as a special case because it does not read +2 draw
+      'Oracle': (state, my) => my.actions > 1 ? 610 : 180,
+
+      //  7: Let's insert here an overly simplistic idea of how to play Crossroads.
+
+      /**
+       * @param {State} state
+       * @param {Player} my
+       * @return {number}
+       */
+      'Crossroads': (state, my) => {
+        // This represents a particularly dumb strategy. It doesn't even take into account whether it has any
+        // victory cards, or whether it could draw more.
+        return my.countInPlay('Crossroads') > 0 ? 298 : 580;
+      },
+
+      // 8: card-cycling that might improve the hand. (400-499)
+      // 'Upgrade': wantsToTrash >= multiplayer ? 490 : -30,
+      'Oasis': 480,
+      'Pawn': 470,
+      'Warehouse': 460,
+      'Cellar': 450,
+
+      // 9: non-terminal cards that don't succeed but at least give us something. (300-399)
+      // 10: terminals. Of course, Nobles might be a non-terminal
+      'Nobles': 296,
+
+      /**
+       * @param {State} state
+       * @param {Player} my
+       * @return {number}
+       */
+      'Treasure Map': (state, my) => {
+        if (my.countInHand('Treasure Map') >= 2) {
+          return 294;
+        }
+
+        if (my.countInDeck('Gold') >= 4 && state.current.countInDeck('Treasure Map') === 1) {
+          return 90;
+        }
+
+        return -40;
+      },
+      'Followers': 292,
+      'Mountebank': 290,
+      'Sea Hag': 286,
+      'Young Witch': 282,
+      'Tribute': 281, // after Curses but before other terminals; there is probably a better spot for it
+      'Goons': 278,
+      'Wharf': 275,
+      'Tactician': 272, // playing Tactician is extremely situational and this doesn't take it into account.
+      'Masquerade': 270,
+      'Vault': 268,
+      'Princess': 264,
+
+      /**
+       * @param {State} state
+       * @param {Player} my
+       * @return {number}
+       */
+      'Explorer': (state, my) => {
+        return my.countInHand('Province') > 0 ? 282 : 166;
+      },
+      'Jester': 258,
+      'Militia': 254,
+      'Cutpurse': 250,
+      'Bridge': 246,
+      'Bishop': 243,
+      'Horse Traders': 240,
+      'Jack of All Trades': 236,
+      'Steward': 233,
+      'Moneylender': 230,
+      'Expand': 226,
+      'Remodel': 223,
+      'Salvager': 220,
+      'Mine': 217,
+
+      /**
+       * @param {State} state
+       * @param {Player} my
+       * @return {number}
+       */
+      'Coppersmith': (state, my) => {
+        switch (my.countInHand('Copper')) {
+          case 0:
+          case 1:
+            return 105;
+          case 2:
+            return 156;
+          default:
+            return 213;
+        }
+      },
+      'Envoy': 203,
+      'Merchant Ship': 186,
+
+      /**
+       * Simplification to avoid implementing cardInDeckValue
+       *
+       * @param {State} state
+       * @param {Player} my
+       * @return {number}
+       */
+      'Baron': (state, my) => {
+        if (my.hand.indexOf(cards.Estate) > -1) {
+          return 184;
+        }
+
+        // @todo Should use choiceToValue
+        if (this.gainValue(state, cards.Estate, my) > 0) {
+          return 5;
+        }
+
+        return -5;
+      },
+      'Monument': 182,
+      // 'Remake': wantsToTrash >= multiplayer * 2 ? 178 : -35,
+      'Adventurer': 176,
+      'Harvest': 174,
+      'Haggler': 170,
+      'Mandarin': 168,
+      'Woodcutter': 164,
+      'Nomad Camp': 162,
+      'Chancellor': 160,
+      'Counting House': 158,
+      // 'Outpost': state.extraTurn ? -15 : 154,
+      // 'Ambassador': my.actions > 0 && wantsToTrash > 0 ? 1100 : -1
+      // 'Trading Post': wantsToTrash >= multiplier * 2 ? 148 : -38,
+      // 'Chapel': wantsToTrash > 0 ? 146 : 30,
+      // 'Trader': wantsToTrash >= multiplier ? 142 : -22,
+      // 'Trade Route': wantsToTrash >= multiplier ? 160 : -25,
+      // 'Mint': this.choose('mint', state, my.hand) ? 140 : -7,
+      'Secret Chamber': 138,
+      'Pirate Ship': 136,
+      'Noble Brigand': 134,
+      'Island': 132,
+      'Fortune Teller': 130,
+      'Bureaucrat': 128,
+      'Navigator': 126,
+      'Herbalist': 122,
+      'Moat': 120,
+      'Ironworks': 115,
       'Workshop': 112,
-      'Young Witch': 282
+      'Smugglers': 110,
+      'Feast': 108,
+      // 'Transmute': this.choose('mint', state, my.hand) ? 106 : -27,
+      'Saboteur': 104,
+      'Poor House': 103,
+      'Duchess': 102,
+      'Thief': 100
+
+      // 11: cards that have become useless. Maybe they'll decrease
+      // the cost of Peddler, trigger Conspirator, or something. (20-99)
+
+      // 12: Conspirator when +actions remain. (10)
+
+      // At this point, we take no action if that choice is available.
+
+      // 'Advisor': 1000,
+      // 'Bandit Camp': 821,
+      // 'Baker': 774,
+      // 'Bank': 20,
+      // 'Beggar': 243,
+      // 'Candlestick Maker': 734,
+      // 'Develop': 271, // A rough approximation to when you want to Develop: when all you've got to play is terminals.
+      // I'll suppose Graverobber is a bit better to play than Remodel and worse than Expand, but I really don't know.
+      // 'Graverobber': 225,
+      // 'Horn of Plenty': my.numUniqueCardsInPlay() >= 2 ? 10 : -10,
+      // 'Hunting Grounds': (state, my) => my.actions > 1 ? 666 : 201,
+      // The current ai_playValue assumes that Ironworks is a terminal. If it wants to gain an action, it should have
+      // a higher value.
+      // 'Journeyman': wantsToJM > ? 146 : 0,
+      // 'Loan': 70,
+      // 'Merchant Guild': 269,
+      // 'Plaza': 820,
+      // 'Rats': wantsToPlayRats ? 486 : -1,
+      // 'Rebuild': wantsToRebuild ? 1000 : -1,
+      // 'Rogue': 136,
+      // 'Sage': 746,
+      // 'Soothsayer': 199,
+      // 'Spoils': my.agent.wantsToPlaySpoils(state) ? 81 : null,
+      // 'Venture': 80,
     };
 
     const cardName = card.toString();
@@ -487,6 +731,14 @@ export default class BasicAI {
 
     if (card.isTreasure()) {
       return 100;
+    }
+
+    if (card.isAction() && card.cards > 0 && card.actions === 0) {
+      if (my.actions > 1) {
+        return state.rng() * 100 + 600;
+      }
+
+      return state.rng() * 110 + 180;
     }
 
     return null;

@@ -205,3 +205,45 @@ test('numCardsInDeck returns the number of cards in players deck', () => {
   player.getDeck = jest.fn(() => [new Card(), new Card(), new Card()]);
   expect(player.numCardsInDeck()).toBe(3);
 });
+
+test('countInHand returns the number of copies of a card in players hand', () => {
+  const player = new Player(new BasicAI(), () => {});
+  const card1 = new Card();
+  const card2 = new Card();
+
+  card1.name = 'A Card';
+  card2.name = 'Another Card';
+
+  player.hand = [card1, card2, card1];
+  expect(player.countInHand(card1)).toBe(2);
+});
+
+test('countInHand works with strings', () => {
+  const player = new Player(new BasicAI(), () => {});
+  const card1 = new Card();
+  const card2 = new Card();
+
+  card1.name = 'A Card';
+  card2.name = 'Another Card';
+
+  player.hand = [card1, card2, card1];
+  expect(player.countInHand('A Card')).toBe(2);
+});
+
+test('countInPlay returns the number of copies of a card in play', () => {
+  const player = new Player(new BasicAI(), () => {});
+  const card1 = new Card();
+  const card2 = new Card();
+  let count;
+
+  card1.name = 'A Card';
+  card2.name = 'Another Card';
+
+  player.inPlay = [card1, card2, card1];
+  player.hand = [card1];
+  player.countInStack = jest.fn(() => 2);
+  count = player.countInPlay(card1);
+
+  expect(player.countInStack).toHaveBeenCalledWith(card1, player.inPlay);
+  expect(count).toBe(2);
+});

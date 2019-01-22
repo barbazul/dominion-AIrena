@@ -4,6 +4,7 @@ import Chapel from '../cards/chapel';
 import Curse from '../cards/curse';
 import Copper from '../cards/copper';
 import Harbinger from '../cards/harbinger';
+import Library from '../cards/library';
 import Moat from '../cards/moat';
 import Moneylender from '../cards/moneylender';
 import Silver from '../cards/silver';
@@ -30,6 +31,7 @@ const cards = {
   Bureaucrat: new Bureaucrat(),
   Cellar: new Cellar(),
   Chapel: new Chapel(),
+  Library: new Library(),
   Moat: new Moat(),
   Harbinger: new Harbinger(),
   Moneylender: new Moneylender(),
@@ -39,7 +41,21 @@ const cards = {
   Workshop: new Workshop(),
 
   // Placeholder for later
-  Crossroads: {}
+  Crossroads: { toString: () => 'Crossroads' },
+  Lookout: { toString: () => 'Lookout' },
+  Menagerie: { toString: () => 'Menagerie' },
+  ShantyTown: { toString: () => 'Shanty Town' },
+  Tournament: { toString: () => 'Tournament' },
+  ThroneRoom: { toString: () => 'Throne Room', isAction: () => true },
+  KingsCourt: { toString: () => 'King\'s Court', isAction: () => true },
+  Conspirator: { toString: () => 'Conspirator' },
+  GreatHall: { toString: () => 'Great Hall' },
+  Oracle: { toString: () => 'Oracle', isAction: () => true },
+  TreasureMap: { toString: () => 'Treasure Map' },
+  Explorer: { toString: () => 'Explorer' },
+  Coppersmith: { toString: () => 'Coppersmith' },
+  Baron: { toString: () => 'Baron' },
+  Watchtower: { toString: () => 'Watchtower' }
 };
 
 export default cards;

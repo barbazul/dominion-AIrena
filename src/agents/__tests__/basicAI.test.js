@@ -1,3 +1,5 @@
+import BasicAction from '../../cards/basicAction';
+import cards from '../../game/cards';
 import BasicAI from '../basicAI';
 import Card from '../../cards/card';
 import Player from '../../game/player';
@@ -390,4 +392,373 @@ test('Fallback gainValue prefers treasures and actions', () => {
   expect(card3Value).toBeGreaterThan(card1Value);
   expect(card4Value).toBeGreaterThan(card2Value);
   expect(card4Value).toBeGreaterThan(card3Value);
+});
+
+test('Fallback playValue function -> Basic treasures', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // Base treasures
+  expect(ai.playValue(state, cards.Copper, state.current)).toBe(100);
+  expect(ai.playValue(state, cards.Silver, state.current)).toBe(100);
+  expect(ai.playValue(state, cards.Gold, state.current)).toBe(100);
+});
+
+test('Fallback playValue function -> Menagerie', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // No duplicates in hand
+  state.current.hand = [cards.Copper, cards.Estate];
+  expect(ai.playValue(state, cards.Menagerie, state.current)).toBe(980);
+
+  // Duplicates in hand
+  state.current.hand = [cards.Copper, cards.Estate, cards.Estate];
+  expect(ai.playValue(state, cards.Menagerie, state.current)).toBe(340);
+
+  // 2 Menageries still trigger as one will leave hand
+  state.current.hand = [cards.Menagerie, cards.Menagerie];
+  expect(ai.playValue(state, cards.Menagerie, state.current)).toBe(980);
+});
+
+test('Fallback playValue function -> Shanty Town', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // No actions in hand
+  state.current.hand = [cards.Copper, cards.Estate];
+  expect(ai.playValue(state, cards.ShantyTown, state.current)).toBe(970);
+
+  // Actions in hand
+  state.current.hand = [cards.Copper, cards.Copper, cards.Village];
+
+  // ... single action
+  state.current.actions = 1;
+  expect(ai.playValue(state, cards.ShantyTown, state.current)).toBe(340);
+
+  // ... multiple actions
+  state.current.actions = 2;
+  expect(ai.playValue(state, cards.ShantyTown, state.current)).toBe(70);
+
+  // Make sure Shanty Town is not considered as in hand
+  state.current.hand = [cards.Copper, cards.ShantyTown, cards.Copper];
+  state.current.actions = 2;
+  expect(ai.playValue(state, cards.ShantyTown, state.current)).toBe(970);
+});
+
+test('Fallback playValue function -> Tournament', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // No province in hand
+  state.current.hand = [cards.Copper, cards.Estate];
+  expect(ai.playValue(state, cards.Tournament, state.current)).toBe(360);
+
+  // 3 provinces in hand
+  state.current.hand = [cards.Province, cards.Province, cards.Province];
+  expect(ai.playValue(state, cards.Tournament, state.current)).toBe(960);
+});
+
+test('Fallback playValue function -> Library', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // ... as a terminal
+  state.current.actions = 1;
+  state.current.hand = [
+    cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper
+  ];
+
+  expect(ai.playValue(state, cards.Library, state.current)).toBe(20);
+  state.current.hand.pop();
+  expect(ai.playValue(state, cards.Library, state.current)).toBe(101);
+  state.current.hand.pop();
+  expect(ai.playValue(state, cards.Library, state.current)).toBe(118);
+  state.current.hand.pop();
+  expect(ai.playValue(state, cards.Library, state.current)).toBe(192);
+  state.current.hand.pop();
+  expect(ai.playValue(state, cards.Library, state.current)).toBe(210);
+  state.current.hand.pop();
+  expect(ai.playValue(state, cards.Library, state.current)).toBe(260);
+  state.current.hand.pop();
+  expect(ai.playValue(state, cards.Library, state.current)).toBe(260);
+  state.current.hand.pop();
+  expect(ai.playValue(state, cards.Library, state.current)).toBe(260);
+  state.current.hand.pop();
+  expect(ai.playValue(state, cards.Library, state.current)).toBe(260);
+
+  // ... as a non-terminal
+  state.current.actions = 2;
+  state.current.hand = [
+    cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper
+  ];
+
+  expect(ai.playValue(state, cards.Library, state.current)).toBe(20);
+  state.current.hand.pop();
+  expect(ai.playValue(state, cards.Library, state.current)).toBe(101);
+  state.current.hand.pop();
+  expect(ai.playValue(state, cards.Library, state.current)).toBe(420);
+  state.current.hand.pop();
+  expect(ai.playValue(state, cards.Library, state.current)).toBe(620);
+  state.current.hand.pop();
+  expect(ai.playValue(state, cards.Library, state.current)).toBe(695);
+  state.current.hand.pop();
+  expect(ai.playValue(state, cards.Library, state.current)).toBe(955);
+  state.current.hand.pop();
+  expect(ai.playValue(state, cards.Library, state.current)).toBe(955);
+  state.current.hand.pop();
+  expect(ai.playValue(state, cards.Library, state.current)).toBe(955);
+  state.current.hand.pop();
+  expect(ai.playValue(state, cards.Library, state.current)).toBe(955);
+});
+
+test('Fallback playValue function -> Throne Room', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // Another action in hand
+  state.current.hand = [cards.ThroneRoom, cards.Village];
+  expect(ai.playValue(state, cards.ThroneRoom, state.current)).toBe(920);
+
+  // No other action in hand
+  state.current.hand = [cards.ThroneRoom, cards.Province, cards.Province];
+  expect(ai.playValue(state, cards.ThroneRoom, state.current)).toBe(-50);
+});
+
+test('Fallback playValue function -> King\'s Court', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // Another action in hand
+  state.current.hand = [cards.KingsCourt, cards.Village];
+  expect(ai.playValue(state, cards.KingsCourt, state.current)).toBe(910);
+
+  // No other action in hand
+  state.current.hand = [cards.KingsCourt, cards.Province, cards.Province];
+  expect(ai.playValue(state, cards.KingsCourt, state.current)).toBe(390);
+});
+
+test('Fallback playValue function -> Lookout', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // Not in endgame yet
+  state.gainsToEndGame = jest.fn(() => 6);
+  state.current.draw = [];
+  expect(ai.playValue(state, cards.Lookout, state.current)).toBe(895);
+
+  // Curse in deck
+  state.gainsToEndGame = jest.fn(() => 1);
+  state.current.draw = [cards.Curse];
+  expect(ai.playValue(state, cards.Lookout, state.current)).toBe(895);
+
+  // Otherwise
+  state.gainsToEndGame = jest.fn(() => 1);
+  state.current.draw = [];
+  expect(ai.playValue(state, cards.Lookout, state.current)).toBe(-5);
+});
+
+test('Fallback playValue function -> Conspirator', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // It it activates
+  state.current.inPlay = [new Card(), new Card()];
+  expect(ai.playValue(state, cards.Conspirator, state.current)).toBe(760);
+
+  // Multiple actions available
+  state.current.inPlay = [];
+  state.current.actions = 2;
+  expect(ai.playValue(state, cards.Conspirator, state.current)).toBe(10);
+
+  // Single action
+  state.current.inPlay = [];
+  state.current.actions = 1;
+  expect(ai.playValue(state, cards.Conspirator, state.current)).toBe(124);
+});
+
+test('Fallback playValue function -> Great Hall', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // With Crossroads
+  state.current.hand = [cards.Crossroads];
+  expect(ai.playValue(state, cards.GreatHall, state.current)).toBe(520);
+
+  // Without
+  state.current.hand = [];
+  expect(ai.playValue(state, cards.GreatHall, state.current)).toBe(742);
+});
+
+test('Fallback playValue function -> Watchtower', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // With extra actions
+  state.current.hand = [cards.Copper, cards.Copper, cards.Copper];
+  state.current.actions = 2;
+  expect(ai.playValue(state, cards.Watchtower, state.current)).toBe(650);
+
+  // Without + big draw
+  state.current.hand = [];
+  state.current.actions = 1;
+  expect(ai.playValue(state, cards.Watchtower, state.current)).toBe(196);
+
+  // Without + small draw
+  state.current.hand = [cards.Copper, cards.Copper, cards.Copper, cards.Copper];
+  state.current.actions = 1;
+  expect(ai.playValue(state, cards.Watchtower, state.current)).toBe(190);
+
+  // Otherwise
+  state.current.hand = [cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper];
+  state.current.actions = 1;
+  expect(ai.playValue(state, cards.Watchtower, state.current)).toBe(-1);
+});
+
+test('Fallback playValue function -> Terminal draw', () => {
+  const ai = new BasicAI();
+  const state = new State();
+  const hypothetical = new BasicAction();
+
+  hypothetical.cards = 10;
+  state.setUp([ai, ai]);
+
+  const testCards = [
+    hypothetical,
+    cards.Oracle
+  ];
+
+  for (let i = 0; i < testCards.length; i++) {
+    let actualValue;
+
+    // With extra actions
+    state.current.actions = 2;
+
+    actualValue = ai.playValue(state, testCards[i], state.current);
+    expect(actualValue).toBeGreaterThanOrEqual(600);
+    expect(actualValue).toBeLessThan(700);
+
+    // Without
+    state.current.actions = 1;
+    actualValue = ai.playValue(state, testCards[i], state.current);
+    expect(actualValue).toBeGreaterThanOrEqual(180);
+    expect(actualValue).toBeLessThan(290);
+  }
+});
+
+test('Fallback playValue function -> Crossroads', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // With Crossroads in play
+  state.current.inPlay = [cards.Crossroads];
+  expect(ai.playValue(state, cards.Crossroads, state.current)).toBe(298);
+
+  // Without
+  state.current.inPlay = [];
+  expect(ai.playValue(state, cards.Crossroads, state.current)).toBe(580);
+});
+
+test('Fallback playValue function -> Treasure Map', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // With 2+ Treasure Maps in hand
+  state.current.hand = [cards.TreasureMap, cards.TreasureMap];
+  expect(ai.playValue(state, cards.TreasureMap, state.current)).toBe(294);
+
+  // Getting rid of unnecesary TM
+  state.current.draw = [cards.Gold, cards.Gold, cards.Gold, cards.Gold];
+  state.current.hand = [cards.TreasureMap];
+  expect(ai.playValue(state, cards.TreasureMap, state.current)).toBe(90);
+
+  // Failed Treasure Map
+  state.current.draw = [cards.TreasureMap];
+  state.current.hand = [cards.TreasureMap];
+  expect(ai.playValue(state, cards.TreasureMap, state.current)).toBe(-40);
+});
+
+test('Fallback playValue function -> Explorer', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // With Province in hand
+  state.current.hand = [cards.Province];
+  expect(ai.playValue(state, cards.Explorer, state.current)).toBe(282);
+
+  // Getting rid of unnecesary TM
+  state.current.hand = [];
+  expect(ai.playValue(state, cards.Explorer, state.current)).toBe(166);
+});
+
+test('Fallback playValue function -> Coppersmith', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // With no Coppers
+  state.current.hand = [];
+  expect(ai.playValue(state, cards.Coppersmith, state.current)).toBe(105);
+
+  // With 1 Copper
+  state.current.hand = [cards.Copper];
+  expect(ai.playValue(state, cards.Coppersmith, state.current)).toBe(105);
+
+  // With 2 Coppers
+  state.current.hand = [cards.Copper, cards.Copper];
+  expect(ai.playValue(state, cards.Coppersmith, state.current)).toBe(156);
+
+  // With more Coppers
+  state.current.hand = [cards.Copper, cards.Copper, cards.Copper, cards.Copper];
+  expect(ai.playValue(state, cards.Coppersmith, state.current)).toBe(213);
+});
+
+test('Fallback playValue function -> Baron', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // With Estate in hand
+  state.current.hand = [cards.Estate];
+  expect(ai.playValue(state, cards.Baron, state.current)).toBe(184);
+
+  // Without but wants to gain Estate
+  state.current.hand = [];
+  ai.gainValue = () => 1;
+  expect(ai.playValue(state, cards.Baron, state.current)).toBe(5);
+
+  // Without and doesnot want to gain Estate
+  state.current.hand = [];
+  ai.gainValue = () => -1;
+  expect(ai.playValue(state, cards.Baron, state.current)).toBe(-5);
 });

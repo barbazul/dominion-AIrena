@@ -38,6 +38,11 @@ export default class Player {
      */
     this.draw = [];
 
+    /**
+     * Cards in play in the order they were played
+     *
+     * @type {Card[]}
+     */
     this.inPlay = [];
     this.turnsTaken = 0;
 
@@ -60,21 +65,51 @@ export default class Player {
   }
 
   /**
-   * Counts the number of copies of a card inthe player deck.
-   *
+   * Counts the number of copies of a card in a given stack of cards.
    * @param {Card|String} card
-   * @return {Number}
+   * @param {Card[]} stack
+   * @return {number}
    */
-  countInDeck (card) {
+  countInStack (card, stack) {
     let count = 0;
 
-    for (const aCard of this.getDeck()) {
+    for (const aCard of stack) {
       if (card.toString() === aCard.toString()) {
         count++;
       }
     }
 
     return count;
+  }
+
+  /**
+   * Counts the number of copies of a card in the player deck.
+   *
+   * @param {Card|String} card
+   * @return {Number}
+   */
+  countInDeck (card) {
+    return this.countInStack(card, this.getDeck());
+  }
+
+  /**
+   * Counts the number of copies of a card in hand.
+   *
+   * @param {Card|String} card
+   * @return {number}
+   */
+  countInHand (card) {
+    return this.countInStack(card, this.hand);
+  }
+
+  /**
+   * Counts the number of copies of a card in play.
+   *
+   * @param {Card|String} card
+   * @return {number}
+   */
+  countInPlay (card) {
+    return this.countInStack(card, this.inPlay);
   }
 
   /**
