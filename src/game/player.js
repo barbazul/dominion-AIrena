@@ -123,6 +123,27 @@ export default class Player {
   }
 
   /**
+   * Adds up the total money in the player's deck, including both treasure
+   * simple treasures and + coin cantrips
+   *
+   * This is a very naive heuristic that doesn't take into account terminal
+   * silvers, duration cards, coffers, or any variable coin effects.
+   *
+   * @return {number}
+   */
+  getTotalMoney () {
+    let total = 0;
+
+    for (let card of this.getDeck()) {
+      if (card.isTreasure() || card.actions >= 1) {
+        total += card.coins;
+      }
+    }
+
+    return total;
+  }
+
+  /**
    * The size of the player's deck
    *
    * @return {Number}

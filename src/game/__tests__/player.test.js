@@ -264,3 +264,27 @@ test('countPlayed returns the number of times a card was played', () => {
   expect(player.countInStack).toHaveBeenCalledWith(card1, player.cardsPlayed);
   expect(count).toBe(2);
 });
+
+test('getTotalMoney sums all treasures and cantrips', () => {
+  const player = new Player(new BasicAI(), () => {});
+  const cantrip = new Card();
+
+  cantrip.actions = 1;
+  cantrip.coins = 2;
+  player.getDeck = () => [cards.Copper, cards.Silver, cantrip];
+  expect(player.getTotalMoney()).toBe(5);
+});
+
+test('getTotalMoney excludes oher cards',  () => {
+  const player = new Player(new BasicAI(), () => {});
+  const cantrip = new Card();
+  const terminal = new Card();
+
+  cantrip.actions = 1;
+  cantrip.coins = 2;
+  terminal.actions = 0;
+  terminal.coins = 2;
+
+  player.getDeck = () => [cards.Copper, cards.Silver, cantrip, terminal];
+  expect(player.getTotalMoney()).toBe(5);
+});
