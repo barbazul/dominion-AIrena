@@ -103,7 +103,12 @@ export default class BasicAI {
       return bestChoice;
     }
 
-    throw new Error(`${this.name} somehow failed to make a choice`);
+    // If we get here, the AI probably wants to choose none of the above.
+    if (choices.indexOf(null) > -1) {
+      return null;
+    }
+
+    throw new Error(`${this.name} somehow failed to make a choice (${choices.join(',')})`);
   }
 
   /**
@@ -272,6 +277,16 @@ export default class BasicAI {
     }
 
     return 0 - card.cost;
+  }
+
+  /**
+   * @param {State} state
+   * @param {Card} card
+   * @param {Player} my
+   * @return {number}
+   */
+  trashValue (state, card, my) {
+    return 0 - card.vp - card.cost;
   }
 
   /**
@@ -665,7 +680,7 @@ export default class BasicAI {
       // 'Trading Post': wantsToTrash >= multiplier * 2 ? 148 : -38,
       // 'Chapel': wantsToTrash > 0 ? 146 : 30,
       // 'Trader': wantsToTrash >= multiplier ? 142 : -22,
-      // 'Trade Route': wantsToTrash >= multiplier ? 160 : -25,
+      // 'Trade Route': wantsToTras >= multiplier ? 160 : -25,
       // 'Mint': this.choose('mint', state, my.hand) ? 140 : -7,
       'Secret Chamber': 138,
       'Pirate Ship': 136,

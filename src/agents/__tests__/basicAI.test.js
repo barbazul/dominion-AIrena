@@ -268,6 +268,19 @@ test('Throw an error when AI cant make a choice', () => {
   }).toThrow('BasicAI somehow failed to make a choice');
 });
 
+test('Choose null if available and AI cannot decide', () => {
+  const ai1 = new BasicAI();
+  const ai2 = new BasicAI();
+  const state = new State();
+  const card1 = new Card();
+  const card2 = new Card();
+
+  state.setUp([ ai1, ai2 ]);
+  ai1.fakeValue = () => -Infinity;
+
+  expect(ai1.choose('fake', state, [card1, card2, null])).toBeNull();
+});
+
 test('Default gainPriority', () => {
   const ai1 = new BasicAI();
   const ai2 = new BasicAI();
