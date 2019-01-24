@@ -46,6 +46,7 @@ export default class State {
    * @param {Object} config configuration parameters
    */
   setUp (players, config = {}) {
+    // noinspection JSPotentiallyInvalidConstructorUsage
     const defaults = {
       log: console.log,
       warn: msg => console.log('WARN: ' + msg),
@@ -706,6 +707,9 @@ export default class State {
     this.current.buys = 1;
     this.current.coins = 0;
     this.current.cardsPlayed = [];
+
+    // Clean event observers
+    this.onPlayHandlers = [];
 
     // Draw new hand
     this.current.drawCards(5);
