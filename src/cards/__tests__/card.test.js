@@ -107,3 +107,19 @@ test('onPlay triggers playEffect', () => {
 
   expect(card.playEffect).toHaveBeenCalledWith(state);
 });
+
+test('onPlay triggers global onPlay handlers', () => {
+  const state = new State();
+  const card = new Card();
+  const handler = jest.fn(() => {});
+
+  state.setUp([new BasicAI(), new BasicAI()]);
+  state.current.hand = [card];
+
+  state.onPlayHandlers = [handler];
+
+  card.onPlay(state);
+
+  expect(handler).toHaveBeenCalledTimes(1);
+  expect(handler).toHaveBeenCalledWith(state, card);
+});

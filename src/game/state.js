@@ -8,6 +8,8 @@ export const PHASE_TREASURE = 'treasure';
 export const PHASE_BUY = 'buy';
 export const PHASE_CLEANUP = 'cleanup';
 
+const seedrandom = require('seedrandom');
+
 export default class State {
   constructor () {
     this.phase = PHASE_START;
@@ -16,6 +18,11 @@ export default class State {
     this.specialPiles = {};
     this.players = [];
     this.trash = [];
+
+    /**
+     * @type {Array<function(State, Card):void>}
+     */
+    this.onPlayHandlers = [];
 
     /**
      * @type {Player}
@@ -43,7 +50,7 @@ export default class State {
       log: console.log,
       warn: msg => console.log('WARN: ' + msg),
       required: [],
-      rng: new Math.seedrandom() // eslint-disable-line new-cap
+      rng: new seedrandom() // eslint-disable-line new-cap
     };
 
     const options = Object.assign(defaults, config);
@@ -707,6 +714,9 @@ export default class State {
     if (totalCards !== this.totalCards) {
       throw new Error(`The game started with ${this.totalCards}; now there are ${totalCards}`);
     }
+
+    // Clean cache
+    this.cache = {};
   }
 
   /**

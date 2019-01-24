@@ -91,6 +91,11 @@ export default class Card {
     }
 
     this.playEffect(state);
+
+    // Trigger global onPlayHandlers
+    state.onPlayHandlers.forEach(handler => {
+      handler(state, this);
+    });
   }
 
   /**

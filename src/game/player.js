@@ -113,6 +113,16 @@ export default class Player {
   }
 
   /**
+   * Counts the number of times a card was played this turn.
+   *
+   * @param {Card|String} card
+   * @return {number}
+   */
+  countPlayed (card) {
+    return this.countInStack(card, this.cardsPlayed);
+  }
+
+  /**
    * The size of the player's deck
    *
    * @return {Number}

@@ -247,3 +247,20 @@ test('countInPlay returns the number of copies of a card in play', () => {
   expect(player.countInStack).toHaveBeenCalledWith(card1, player.inPlay);
   expect(count).toBe(2);
 });
+
+test('countPlayed returns the number of times a card was played', () => {
+  const player = new Player(new BasicAI(), () => {});
+  const card1 = new Card();
+  const card2 = new Card();
+  let count;
+
+  card1.name = 'A Card';
+  card2.name = 'Another Card';
+
+  player.cardsPlayed = [card1, card2, card1];
+  player.countInStack = jest.fn(() => 2);
+  count = player.countPlayed(card1);
+
+  expect(player.countInStack).toHaveBeenCalledWith(card1, player.cardsPlayed);
+  expect(count).toBe(2);
+});
