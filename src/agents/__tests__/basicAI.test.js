@@ -775,3 +775,18 @@ test('Fallback playValue function -> Baron', () => {
   ai.gainValue = () => -1;
   expect(ai.playValue(state, cards.Baron, state.current)).toBe(-5);
 });
+
+test('Fallback playValue function -> Chapel', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // Wants to trash
+  ai.wantsToTrash = () => true;
+  expect(ai.playValue(state, cards.Chapel, state.current)).toBe(146);
+
+  // Doesn't want to trash
+  ai.wantsToTrash = () => false;
+  expect(ai.playValue(state, cards.Chapel, state.current)).toBe(30);
+});

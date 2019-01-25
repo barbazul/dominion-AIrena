@@ -678,7 +678,13 @@ export default class BasicAI {
       // 'Outpost': state.extraTurn ? -15 : 154,
       // 'Ambassador': my.actions > 0 && wantsToTrash > 0 ? 1100 : -1
       // 'Trading Post': wantsToTrash >= multiplier * 2 ? 148 : -38,
-      // 'Chapel': wantsToTrash > 0 ? 146 : 30,
+      'Chapel': (state, my) => {
+        if (my.agent.wantsToTrash(state, my) > 0) {
+          return 146;
+        }
+
+        return 30;
+      },
       // 'Trader': wantsToTrash >= multiplier ? 142 : -22,
       // 'Trade Route': wantsToTras >= multiplier ? 160 : -25,
       // 'Mint': this.choose('mint', state, my.hand) ? 140 : -7,
@@ -758,6 +764,26 @@ export default class BasicAI {
 
     return null;
   }
+
+  /**
+   *
+   * @param {State} state
+   * @param {Player} my
+   * @return {number}
+   * @todo Avoid using the decision engine here
+   */
+  wantsToTrash (state, my) {
+    let trashableCards = 0;
+
+    for (let card of my.hand) {
+      if (this.choose(BasicAI.CHOICE_TRASH, state, [card, null])) {
+        trashableCards++;
+      }
+    }
+
+    return trashableCards;
+  }
 }
 
 BasicAI.CHOICE_DISCARD = 'discard';
+BasicAI.CHOICE_TRASH = 'trash';
