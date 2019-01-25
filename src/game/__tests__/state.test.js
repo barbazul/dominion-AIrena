@@ -1339,6 +1339,24 @@ test('getSingleBuyDecision calls for a gain choice with the cards the player can
   expect(state.current.agent.choose).toHaveBeenCalledWith('gain', state, expect.not.arrayContaining([cards.Curse]));
 });
 
+test('getSingleBuyDecision allows for the null choice', () => {
+  const state = new State();
+
+  state.setUp(createPlayers());
+  state.kingdom = {
+    Copper: 10,
+    Silver: 10,
+    Curse: 0,
+    Estate: 8,
+    Duchy: 8
+  };
+
+  state.current.coins = 2;
+  state.current.agent.choose = jest.fn(state.current.agent.choose);
+  state.getSingleBuyDecision();
+  expect(state.current.agent.choose).toHaveBeenCalledWith('gain', state, expect.arrayContaining([null]));
+});
+
 test('doCleanupPhase cleans cards in play and hand', () => {
   const state = new State();
   const card1 = new Card();

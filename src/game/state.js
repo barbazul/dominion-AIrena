@@ -652,7 +652,7 @@ export default class State {
    * @return {Card}
    */
   getSingleBuyDecision () {
-    const buyable = [];
+    const buyable = [null];
 
     for (const cardName in this.kingdom) {
       let card;
