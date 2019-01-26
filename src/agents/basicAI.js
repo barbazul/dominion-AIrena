@@ -280,6 +280,34 @@ export default class BasicAI {
   }
 
   /**
+   *
+   * @param {State} state
+   * @param {Player} my
+   * @return {String[]}
+   */
+  trashPriority (state, my) {
+    const priority = ['Curse'];
+
+    if (state.gainsToEndGame() > 4) {
+      priority.push('Estate');
+    }
+
+    if (my.getTotalMoney() > 4) {
+      priority.push('Copper');
+    }
+
+    if (my.turnsTaken >= 10) {
+      priority.push('Potion');
+    }
+
+    if (state.gainsToEndGame() > 2) {
+      priority.push('Estate');
+    }
+
+    return priority;
+  }
+
+  /**
    * @param {State} state
    * @param {Card} card
    * @param {Player} my

@@ -790,3 +790,16 @@ test('Fallback playValue function -> Chapel', () => {
   ai.wantsToTrash = () => false;
   expect(ai.playValue(state, cards.Chapel, state.current)).toBe(30);
 });
+
+test('Default trashPriority', () => {
+  const ai = new BasicAI();
+  const state = new State();
+  const player = new Player(ai, () => {});
+  const priority = ai.trashPriority(state, player);
+
+  expect(priority.length).toBeGreaterThan(0);
+
+  priority.forEach(choice => {
+    expect(choice).toEqual(expect.any(String));
+  });
+});

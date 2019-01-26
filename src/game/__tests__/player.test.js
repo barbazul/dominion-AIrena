@@ -275,7 +275,7 @@ test('getTotalMoney sums all treasures and cantrips', () => {
   expect(player.getTotalMoney()).toBe(5);
 });
 
-test('getTotalMoney excludes oher cards',  () => {
+test('getTotalMoney excludes oher cards', () => {
   const player = new Player(new BasicAI(), () => {});
   const cantrip = new Card();
   const terminal = new Card();
