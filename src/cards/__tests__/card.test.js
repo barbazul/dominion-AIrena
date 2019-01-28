@@ -1,4 +1,5 @@
 import BasicAI from '../../agents/basicAI';
+import Player from '../../game/player';
 import Card from '../card';
 import State from '../../game/state';
 
@@ -122,4 +123,13 @@ test('onPlay triggers global onPlay handlers', () => {
 
   expect(handler).toHaveBeenCalledTimes(1);
   expect(handler).toHaveBeenCalledWith(state, card);
+});
+
+test('getVP returns the vp value by default', () => {
+  const card = new Card();
+  const player = new Player(new BasicAI(), () => {});
+
+  card.vp = 5;
+
+  expect(card.getVP(player)).toBe(5);
 });

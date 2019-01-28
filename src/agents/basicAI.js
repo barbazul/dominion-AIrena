@@ -314,7 +314,7 @@ export default class BasicAI {
    * @return {number}
    */
   trashValue (state, card, my) {
-    return 0 - card.vp - card.cost;
+    return 0 - card.getVP(my) - card.cost;
   }
 
   /**

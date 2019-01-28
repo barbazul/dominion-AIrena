@@ -30,6 +30,16 @@ export default class Card {
     return 10;
   }
 
+  /**
+   * Override this method for victory cards that need to calculate their vp value based on the state
+   *
+   * @param {Player} player
+   * @return {number}
+   */
+  getVP (player) {
+    return this.vp;
+  }
+
   isAction () {
     return this.types.indexOf('Action') > -1;
   }
