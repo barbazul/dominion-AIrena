@@ -782,7 +782,13 @@ export default class BasicAI {
       return 100;
     }
 
-    if (card.isAction() && card.cards > 0 && card.actions === 0) {
+    // Cantrips
+    if (card.isAction() && card.actions === 1) {
+      return state.rng() * 100 + 700;
+    }
+
+    // Terminal draw
+    if (card.cards > 0 && card.actions === 0) {
       if (my.actions > 1) {
         return state.rng() * 100 + 600;
       }
@@ -790,7 +796,16 @@ export default class BasicAI {
       return state.rng() * 110 + 180;
     }
 
+    // Other terminals
+    if (card.actions === 0) {
+      return state.rng() * 100 + 100;
+    }
+
     return null;
+  }
+
+  topdeckValue (state, card, my) {
+    return this.discardValue(state, card, my);
   }
 
   /**

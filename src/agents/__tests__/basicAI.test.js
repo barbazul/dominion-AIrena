@@ -650,6 +650,28 @@ test('Fallback playValue function -> Watchtower', () => {
   expect(ai.playValue(state, cards.Watchtower, state.current)).toBe(-1);
 });
 
+test('Fallback playValue function -> Cantrips', () => {
+  const ai = new BasicAI();
+  const state = new State();
+  const hypothetical = new BasicAction();
+
+  hypothetical.actions = 1;
+  state.setUp([ai, ai]);
+
+  const testCards = [
+    hypothetical,
+    cards.Harbinger
+  ];
+
+  for (let i = 0; i < testCards.length; i++) {
+    let actualValue;
+
+    actualValue = ai.playValue(state, testCards[i], state.current);
+    expect(actualValue).toBeGreaterThanOrEqual(700);
+    expect(actualValue).toBeLessThan(800);
+  }
+});
+
 test('Fallback playValue function -> Terminal draw', () => {
   const ai = new BasicAI();
   const state = new State();
@@ -678,6 +700,29 @@ test('Fallback playValue function -> Terminal draw', () => {
     actualValue = ai.playValue(state, testCards[i], state.current);
     expect(actualValue).toBeGreaterThanOrEqual(180);
     expect(actualValue).toBeLessThan(290);
+  }
+});
+
+test('Fallback playValue function -> Other terminals', () => {
+  const ai = new BasicAI();
+  const state = new State();
+  const hypothetical = new BasicAction();
+
+  hypothetical.cards = 0;
+  hypothetical.actions = 0;
+  state.setUp([ai, ai]);
+
+  const testCards = [
+    hypothetical,
+    cards.Vassal
+  ];
+
+  for (let i = 0; i < testCards.length; i++) {
+    let actualValue;
+
+    actualValue = ai.playValue(state, testCards[i], state.current);
+    expect(actualValue).toBeGreaterThanOrEqual(100);
+    expect(actualValue).toBeLessThan(200);
   }
 });
 
@@ -802,4 +847,66 @@ test('Default trashPriority', () => {
   priority.forEach(choice => {
     expect(choice).toEqual(expect.any(String));
   });
+});
+
+test('wantsToTrash returns 0 with empty hand', () => {
+  const ai = new BasicAI();
+  const player = new Player(ai, () => {});
+  const state = new State();
+
+  player.hand = [];
+
+  expect(ai.wantsToTrash(state, player)).toBe(0);
+});
+
+test('wantsToTrash returns 0 when ai does not want to trash', () => {
+  const ai = new BasicAI();
+  const player = new Player(ai, () => {});
+  const state = new State();
+
+  player.hand = [new Card()];
+  ai.choose = () => null;
+
+  expect(ai.wantsToTrash(state, player)).toBe(0);
+});
+
+test('wantsToTrash returns the number of cards to trash', () => {
+  const ai = new BasicAI();
+  const player = new Player(ai, () => {});
+  const state = new State();
+  let trashable = new Card();
+  let untrashable = new Card();
+
+  trashable.name = 'Trashable';
+  untrashable.name = 'Not Trashable';
+  player.hand = [trashable, trashable];
+
+  ai.choose = (type, state, options) => {
+    const values = {
+      'Trashable': true,
+      'Not Trashable': false
+    };
+
+    for (let card of options) {
+      if (values[card]) {
+        return card;
+      }
+    }
+
+    return null;
+  };
+
+  expect(ai.wantsToTrash(state, player)).toBe(2);
+});
+
+test('topdeckValue forwards to discardValue', () => {
+  const state = new State();
+  const card = new Card();
+  const ai = new BasicAI();
+  const player = new Player(ai, () => {});
+
+  ai.discardValue = jest.fn(ai.discardValue);
+  ai.topdeckValue(state, card, player);
+
+  expect(ai.discardValue).toHaveBeenCalledWith(state, card, player);
 });

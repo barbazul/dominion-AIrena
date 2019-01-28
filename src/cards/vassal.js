@@ -19,6 +19,7 @@ export default class Vassal extends basicAction {
     if (top.length > 0) {
       card = top[0];
       state.current.discard.unshift(card);
+      state.log(`...discarding ${card}`);
 
       if (card.isAction()) {
         choice = state.current.agent.choose('play', state, [null, card]);
