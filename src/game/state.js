@@ -1,3 +1,4 @@
+import BasicAI from '../agents/basicAI';
 import shuffle from '../lib/shuffle';
 import cards from './cards';
 import Player from './player';
@@ -359,6 +360,33 @@ export default class State {
 
       this.doDiscard(player, choice);
       discarded.push(choice);
+    }
+
+    return discarded;
+  }
+
+  /**
+   * Requires the player to discard exactly num cards, or a many as possible
+   * if there are less in hand
+   *
+   * @todo Refactor all decision making methods out of state class
+   * @todo This is not even the right method for "discarding down to..." as cards like Diplomat may alter the number of cards after calculating
+   * @param {Player} player
+   * @param {number} num
+   * @return {Card[]}
+   */
+  requireDiscard (player, num) {
+    const discarded = [];
+    let choice;
+
+    while (discarded.length < num) {
+      if (player.hand.length === 0) {
+        return discarded;
+      }
+
+      choice = player.agent.choose(BasicAI.CHOICE_DISCARD, this, player.hand);
+      discarded.push(choice);
+      this.doDiscard(player, choice);
     }
 
     return discarded;

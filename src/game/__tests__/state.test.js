@@ -1432,3 +1432,52 @@ test('rotatePLayer shifts player order and updates current player', () => {
   expect(state.players).toEqual([player2, player1]);
   expect(state.phase).toBe(PHASE_START);
 });
+
+test('requireDiscard returns empty array when requiring 0 cards', () => {
+  const state = new State();
+  const players = createPlayers(2);
+
+  state.setUp(players);
+  expect(state.requireDiscard(state.current, 0)).toHaveLength(0);
+});
+
+test('requireDiscard discards the required number of cards chosen by the agent', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+  const card2 = new Card();
+  let discarded;
+
+  state.setUp(players, muteConfig);
+  state.current.agent.choose = jest.fn(state.current.agent.choose);
+  state.current.agent.discardValue = card => card === card1 ? 1 : 0; // Only discard card1
+  state.current.hand = [card1, card2, card1, card1, card2];
+  state.current.discard = [];
+  discarded = state.requireDiscard(state.current, 2);
+
+  expect(state.current.agent.choose).toHaveBeenCalledTimes(2);
+  expect(discarded).toEqual([card1, card1]);
+  expect(state.current.hand.length).toBe(3);
+  expect(state.current.discard.length).toBe(2);
+  expect(state.current.discard).toContainEqual(card1);
+});
+
+test('requireDiscard discards the whole hand if player does not have enough', () => {
+  const state = new State();
+  const players = createPlayers(2);
+  const card1 = new Card();
+  const card2 = new Card();
+  let discarded;
+
+  state.setUp(players, muteConfig);
+  state.current.agent.choose = jest.fn(state.current.agent.choose);
+  state.current.hand = [card1, card2];
+  state.current.discard = [];
+  discarded = state.requireDiscard(state.current, 3);
+
+  expect(state.current.agent.choose).toHaveBeenCalledTimes(2);
+  expect(discarded).toEqual([card1, card2]);
+  expect(state.current.hand.length).toBe(0);
+  expect(state.current.discard.length).toBe(2);
+  expect(state.current.discard).toEqual([card1, card2]);
+});

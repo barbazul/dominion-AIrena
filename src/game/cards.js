@@ -6,6 +6,7 @@ import Copper from '../cards/copper';
 import Gardens from '../cards/gardens';
 import Harbinger from '../cards/harbinger';
 import Library from '../cards/library';
+import Militia from '../cards/militia';
 import Moat from '../cards/moat';
 import Moneylender from '../cards/moneylender';
 import Silver from '../cards/silver';
@@ -34,6 +35,7 @@ const cards = {
   Chapel: new Chapel(),
   Gardens: new Gardens(),
   Library: new Library(),
+  Militia: new Militia(),
   Moat: new Moat(),
   Harbinger: new Harbinger(),
   Moneylender: new Moneylender(),
