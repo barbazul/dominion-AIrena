@@ -9,6 +9,7 @@ import Library from '../cards/library';
 import Militia from '../cards/militia';
 import Moat from '../cards/moat';
 import Moneylender from '../cards/moneylender';
+import Poacher from '../cards/poacher';
 import Silver from '../cards/silver';
 import Gold from '../cards/gold';
 import Estate from '../cards/estate';
@@ -34,11 +35,12 @@ const cards = {
   Cellar: new Cellar(),
   Chapel: new Chapel(),
   Gardens: new Gardens(),
+  Harbinger: new Harbinger(),
   Library: new Library(),
   Militia: new Militia(),
   Moat: new Moat(),
-  Harbinger: new Harbinger(),
   Moneylender: new Moneylender(),
+  Poacher: new Poacher(),
   Vassal: new Vassal(),
   Village: new Village(),
   Witch: new Witch(),
