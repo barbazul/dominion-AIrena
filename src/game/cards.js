@@ -10,6 +10,7 @@ import Militia from '../cards/militia';
 import Moat from '../cards/moat';
 import Moneylender from '../cards/moneylender';
 import Poacher from '../cards/poacher';
+import Remodel from '../cards/remodel';
 import Silver from '../cards/silver';
 import Gold from '../cards/gold';
 import Estate from '../cards/estate';
@@ -41,6 +42,7 @@ const cards = {
   Moat: new Moat(),
   Moneylender: new Moneylender(),
   Poacher: new Poacher(),
+  Remodel: new Remodel(),
   Vassal: new Vassal(),
   Village: new Village(),
   Witch: new Witch(),

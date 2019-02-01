@@ -830,3 +830,4 @@ export default class BasicAI {
 
 BasicAI.CHOICE_DISCARD = 'discard';
 BasicAI.CHOICE_TRASH = 'trash';
+BasicAI.CHOICE_UPGRADE = 'upgrade';
