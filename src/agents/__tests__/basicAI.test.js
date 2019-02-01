@@ -1001,3 +1001,24 @@ test('CardInDeckValue powers the gain value on the endgame', () => {
 
   expect(ai.cardInDeckValue(state, card, state.current)).toBe(7);
 });
+
+test('upgradeValue is the difference of between wanting the gained card and the trashed one', () => {
+  const ai = new BasicAI();
+  const state = new State();
+  const choice = {
+    trash: [cards.Estate],
+    gain: [cards.Silver]
+  };
+
+  ai.cardInDeckValue = (state, card) => {
+    const values = {
+      Estate: 1,
+      Silver: 5
+    };
+
+    return values[card.toString()];
+  };
+
+  state.setUp([ai, ai]);
+  expect(ai.upgradeValue(state, choice, state.current)).toBe(4);
+});

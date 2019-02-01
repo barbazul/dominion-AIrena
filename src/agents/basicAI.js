@@ -851,6 +851,19 @@ export default class BasicAI {
   }
 
   /**
+   * upgradeValue measures the benefit of choices on Remodel, Upgrade,
+   * and so on, where you exchange one card for a better one.
+   *
+   * @param {State} state
+   * @param {Object} choice
+   * @param {Player} my
+   * @return {number}
+   */
+  upgradeValue (state, choice, my) {
+    return this.cardInDeckValue(state, choice.gain[0], my) - this.cardInDeckValue(state, choice.trash[0], my);
+  }
+
+  /**
    *
    * @param {State} state
    * @param {Player} my
