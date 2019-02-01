@@ -122,13 +122,14 @@ export default class BasicAI {
    * while the choiceToValue of discarding an extra terminal is 1.
    *
    * @todo Revisit this after normalizing all value functions
+   * @todo This is not considering the fact that everything in priority after null should be negative
    * @param {String} type
    * @param {State} state
-   * @param {Card} choice
+   * @param {Card|String} choice
+   * @param {Player} my
    * @return {number}
    */
-  choiceToValue (type, state, choice) {
-    let my;
+  choiceToValue (type, state, choice, my) {
     let priorityFunc;
     let priority = [];
     let priorityIndex;
@@ -137,7 +138,6 @@ export default class BasicAI {
       return 0;
     }
 
-    my = this.myPlayer(state);
     priorityFunc = this.getPriorityFunction(type);
 
     if (priorityFunc) {
@@ -868,8 +868,30 @@ export default class BasicAI {
 
     return trashableCards;
   }
+
+  /**
+   * Taking into account gain priorities, gain values, trash priorities, and
+   * trash values, how much do we like having this card in our deck overall?
+   *
+   * @param {State} state
+   * @param {Card} card
+   * @param {Player} my
+   * @return {number}
+   */
+  cardInDeckValue (state, card, my) {
+    let endGamePower = 1;
+
+    // Are we in the late game? If so, we care much more about getting cards
+    // at the top of our priority order.
+    if (state.gainsToEndGame() <= 5) {
+      endGamePower = 3;
+    }
+
+    return Math.pow(this.choiceToValue(BasicAI.CHOICE_GAIN, state, card, my), endGamePower) - this.choiceToValue(BasicAI.CHOICE_TRASH, state, card, my);
+  }
 }
 
 BasicAI.CHOICE_DISCARD = 'discard';
+BasicAI.CHOICE_GAIN = 'gain';
 BasicAI.CHOICE_TRASH = 'trash';
 BasicAI.CHOICE_UPGRADE = 'upgrade';

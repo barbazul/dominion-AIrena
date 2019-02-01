@@ -915,7 +915,8 @@ test('ChoiceToValue of null choice is always 0', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  expect(ai.choiceToValue('fake', state, null)).toBe(0);
+  state.setUp([ai, ai]);
+  expect(ai.choiceToValue('fake', state, null, state.current)).toBe(0);
 });
 
 test('ChoiceToValue returns position in priority list times 100', () => {
@@ -930,7 +931,7 @@ test('ChoiceToValue returns position in priority list times 100', () => {
     'Crappy card'
   ];
 
-  expect(ai.choiceToValue('fake', state, 'My card')).toBe(200);
+  expect(ai.choiceToValue('fake', state, 'My card', state.current)).toBe(200);
 });
 
 test('ChoiceToValue forwards to choiceValue when choice is not on list', () => {
@@ -946,7 +947,7 @@ test('ChoiceToValue forwards to choiceValue when choice is not on list', () => {
 
   ai.getChoiceValue = jest.fn(() => 55);
 
-  expect(ai.choiceToValue('fake', state, 'My card')).toBe(55);
+  expect(ai.choiceToValue('fake', state, 'My card', state.current)).toBe(55);
   expect(ai.getChoiceValue).toHaveBeenCalledWith('fake', state, 'My card', state.current);
 });
 
@@ -958,6 +959,45 @@ test('ChoiceToValue forwards to choiceValue when no priority list is available',
 
   ai.getChoiceValue = jest.fn(() => 55);
 
-  expect(ai.choiceToValue('fake', state, 'My card')).toBe(55);
+  expect(ai.choiceToValue('fake', state, 'My card', state.current)).toBe(55);
   expect(ai.getChoiceValue).toHaveBeenCalledWith('fake', state, 'My card', state.current);
+});
+
+test('CardInDeckValue returns gain value minus trash value', () => {
+  const card = new Card();
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  ai.choiceToValue = jest.fn((type, state, card) => {
+    const values = {
+      trash: 1,
+      gain: 2
+    };
+
+    return values[type];
+  });
+
+  expect(ai.cardInDeckValue(state, card, state.current)).toBe(1);
+});
+
+test('CardInDeckValue powers the gain value on the endgame', () => {
+  const card = new Card();
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+  state.gainsToEndGame = () => 2;
+
+  ai.choiceToValue = jest.fn((type, state, card) => {
+    const values = {
+      trash: 1,
+      gain: 2
+    };
+
+    return values[type];
+  });
+
+  expect(ai.cardInDeckValue(state, card, state.current)).toBe(7);
 });
