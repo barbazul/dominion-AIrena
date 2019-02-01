@@ -910,3 +910,54 @@ test('topdeckValue forwards to discardValue', () => {
 
   expect(ai.discardValue).toHaveBeenCalledWith(state, card, player);
 });
+
+test('ChoiceToValue of null choice is always 0', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  expect(ai.choiceToValue('fake', state, null)).toBe(0);
+});
+
+test('ChoiceToValue returns position in priority list times 100', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+  ai.fakePriority = () => [
+    'Some card',
+    'Another card',
+    'My card',
+    'Crappy card'
+  ];
+
+  expect(ai.choiceToValue('fake', state, 'My card')).toBe(200);
+});
+
+test('ChoiceToValue forwards to choiceValue when choice is not on list', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+  ai.fakePriority = () => [
+    'Some card',
+    'Another card',
+    'Crappy card'
+  ];
+
+  ai.getChoiceValue = jest.fn(() => 55);
+
+  expect(ai.choiceToValue('fake', state, 'My card')).toBe(55);
+  expect(ai.getChoiceValue).toHaveBeenCalledWith('fake', state, 'My card', state.current);
+});
+
+test('ChoiceToValue forwards to choiceValue when no priority list is available', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  ai.getChoiceValue = jest.fn(() => 55);
+
+  expect(ai.choiceToValue('fake', state, 'My card')).toBe(55);
+  expect(ai.getChoiceValue).toHaveBeenCalledWith('fake', state, 'My card', state.current);
+});
