@@ -16,6 +16,7 @@ import Gold from '../cards/gold';
 import Estate from '../cards/estate';
 import Duchy from '../cards/duchy';
 import Province from '../cards/province';
+import Smithy from '../cards/smithy';
 import Vassal from '../cards/vassal';
 import Village from '../cards/village';
 import Witch from '../cards/witch';
@@ -43,6 +44,7 @@ const cards = {
   Moneylender: new Moneylender(),
   Poacher: new Poacher(),
   Remodel: new Remodel(),
+  Smithy: new Smithy(),
   Vassal: new Vassal(),
   Village: new Village(),
   Witch: new Witch(),
