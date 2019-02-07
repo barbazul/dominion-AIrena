@@ -542,12 +542,12 @@ test('Fallback playValue function -> Throne Room', () => {
   state.setUp([ai, ai]);
 
   // Another action in hand
-  state.current.hand = [cards.ThroneRoom, cards.Village];
-  expect(ai.playValue(state, cards.ThroneRoom, state.current)).toBe(920);
+  state.current.hand = [cards['Throne Room'], cards.Village];
+  expect(ai.playValue(state, cards['Throne Room'], state.current)).toBe(920);
 
   // No other action in hand
-  state.current.hand = [cards.ThroneRoom, cards.Province, cards.Province];
-  expect(ai.playValue(state, cards.ThroneRoom, state.current)).toBe(-50);
+  state.current.hand = [cards['Throne Room'], cards.Province, cards.Province];
+  expect(ai.playValue(state, cards['Throne Room'], state.current)).toBe(-50);
 });
 
 test('Fallback playValue function -> King\'s Court', () => {
@@ -970,7 +970,7 @@ test('CardInDeckValue returns gain value minus trash value', () => {
 
   state.setUp([ai, ai]);
 
-  ai.choiceToValue = jest.fn((type, state, card) => {
+  ai.choiceToValue = jest.fn((type) => {
     const values = {
       trash: 1,
       gain: 2
@@ -990,7 +990,7 @@ test('CardInDeckValue powers the gain value on the endgame', () => {
   state.setUp([ai, ai]);
   state.gainsToEndGame = () => 2;
 
-  ai.choiceToValue = jest.fn((type, state, card) => {
+  ai.choiceToValue = jest.fn((type) => {
     const values = {
       trash: 1,
       gain: 2

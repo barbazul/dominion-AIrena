@@ -476,7 +476,7 @@ export default class BasicAI {
        */
       'Throne Room': (state, my) => {
         for (const card of my.hand) {
-          if (card.isAction() && card !== cards.ThroneRoom) {
+          if (card.isAction() && card !== cards['Throne Room']) {
             return 920;
           }
         }
@@ -906,5 +906,6 @@ export default class BasicAI {
 
 BasicAI.CHOICE_DISCARD = 'discard';
 BasicAI.CHOICE_GAIN = 'gain';
+BasicAI.CHOICE_PLAY = 'play';
 BasicAI.CHOICE_TRASH = 'trash';
 BasicAI.CHOICE_UPGRADE = 'upgrade';

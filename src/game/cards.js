@@ -17,6 +17,7 @@ import Estate from '../cards/estate';
 import Duchy from '../cards/duchy';
 import Province from '../cards/province';
 import Smithy from '../cards/smithy';
+import ThroneRoom from '../cards/throneRoom';
 import Vassal from '../cards/vassal';
 import Village from '../cards/village';
 import Witch from '../cards/witch';
@@ -45,6 +46,7 @@ const cards = {
   Poacher: new Poacher(),
   Remodel: new Remodel(),
   Smithy: new Smithy(),
+  'Throne Room': new ThroneRoom(),
   Vassal: new Vassal(),
   Village: new Village(),
   Witch: new Witch(),
@@ -56,7 +58,6 @@ const cards = {
   Menagerie: { toString: () => 'Menagerie' },
   ShantyTown: { toString: () => 'Shanty Town' },
   Tournament: { toString: () => 'Tournament' },
-  ThroneRoom: { toString: () => 'Throne Room', isAction: () => true },
   KingsCourt: { toString: () => 'King\'s Court', isAction: () => true },
   Conspirator: { toString: () => 'Conspirator' },
   GreatHall: { toString: () => 'Great Hall' },
