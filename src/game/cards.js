@@ -5,6 +5,7 @@ import Chapel from '../cards/chapel';
 import CouncilRoom from '../cards/councilRoom';
 import Curse from '../cards/curse';
 import Copper from '../cards/copper';
+import Festival from '../cards/festival';
 import Gardens from '../cards/gardens';
 import Harbinger from '../cards/harbinger';
 import Library from '../cards/library';
@@ -41,6 +42,7 @@ const cards = {
   Cellar: new Cellar(),
   Chapel: new Chapel(),
   'Council Room': new CouncilRoom(),
+  Festival: new Festival(),
   Gardens: new Gardens(),
   Harbinger: new Harbinger(),
   Library: new Library(),

@@ -33,6 +33,7 @@ export default class ThroneRoom extends BasicAction {
       state.playAction(choice);
 
       // Play again
+      state.log(`...plays ${choice} again.`);
       state.resolveAction(choice);
     }
   }
