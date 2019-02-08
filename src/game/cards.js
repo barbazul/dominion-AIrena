@@ -8,6 +8,7 @@ import Copper from '../cards/copper';
 import Festival from '../cards/festival';
 import Gardens from '../cards/gardens';
 import Harbinger from '../cards/harbinger';
+import Laboratory from '../cards/laboratory';
 import Library from '../cards/library';
 import Militia from '../cards/militia';
 import Moat from '../cards/moat';
@@ -45,6 +46,7 @@ const cards = {
   Festival: new Festival(),
   Gardens: new Gardens(),
   Harbinger: new Harbinger(),
+  Laboratory: new Laboratory(),
   Library: new Library(),
   Militia: new Militia(),
   Moat: new Moat(),

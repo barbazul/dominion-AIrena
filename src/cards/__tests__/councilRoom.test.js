@@ -1,6 +1,5 @@
 import BasicAI from '../../agents/basicAI';
 import State from '../../game/state';
-import Card from '../card';
 import CouncilRoom from '../councilRoom';
 
 test('Council Room card definition', () => {
