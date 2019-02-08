@@ -2,6 +2,7 @@ import Bandit from '../cards/bandit';
 import Bureaucrat from '../cards/bureaucrat';
 import Cellar from '../cards/cellar';
 import Chapel from '../cards/chapel';
+import CouncilRoom from '../cards/councilRoom';
 import Curse from '../cards/curse';
 import Copper from '../cards/copper';
 import Gardens from '../cards/gardens';
@@ -39,6 +40,7 @@ const cards = {
   Bureaucrat: new Bureaucrat(),
   Cellar: new Cellar(),
   Chapel: new Chapel(),
+  'Council Room': new CouncilRoom(),
   Gardens: new Gardens(),
   Harbinger: new Harbinger(),
   Library: new Library(),
