@@ -10,6 +10,7 @@ import Gardens from '../cards/gardens';
 import Harbinger from '../cards/harbinger';
 import Laboratory from '../cards/laboratory';
 import Library from '../cards/library';
+import Market from '../cards/market';
 import Militia from '../cards/militia';
 import Moat from '../cards/moat';
 import Moneylender from '../cards/moneylender';
@@ -48,6 +49,7 @@ const cards = {
   Harbinger: new Harbinger(),
   Laboratory: new Laboratory(),
   Library: new Library(),
+  Market: new Market(),
   Militia: new Militia(),
   Moat: new Moat(),
   Moneylender: new Moneylender(),
