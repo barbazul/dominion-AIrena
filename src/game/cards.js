@@ -11,6 +11,7 @@ import Harbinger from '../cards/harbinger';
 import Laboratory from '../cards/laboratory';
 import Library from '../cards/library';
 import Market from '../cards/market';
+import Merchant from '../cards/merchant';
 import Militia from '../cards/militia';
 import Moat from '../cards/moat';
 import Moneylender from '../cards/moneylender';
@@ -50,6 +51,7 @@ const cards = {
   Laboratory: new Laboratory(),
   Library: new Library(),
   Market: new Market(),
+  Merchant: new Merchant(),
   Militia: new Militia(),
   Moat: new Moat(),
   Moneylender: new Moneylender(),
