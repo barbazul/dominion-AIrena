@@ -19,7 +19,7 @@
   },
   "jest": {
     "collectCoverage": true,
-    "collectCoverageFrom": ["src/**/*.js", "!src/agents/dominiate/*.js"],
+    "collectCoverageFrom": ["src/**/*.js", "!src/agents/dominiate/*.js", "!src/agents/domsim/*.js"],
     "coverageThreshold": {
       "global": {
         "branches": 95,
