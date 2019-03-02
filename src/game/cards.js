@@ -13,6 +13,7 @@ import Library from '../cards/library';
 import Market from '../cards/market';
 import Merchant from '../cards/merchant';
 import Militia from '../cards/militia';
+import Mine from '../cards/mine';
 import Moat from '../cards/moat';
 import Moneylender from '../cards/moneylender';
 import Poacher from '../cards/poacher';
@@ -53,6 +54,7 @@ const cards = {
   Market: new Market(),
   Merchant: new Merchant(),
   Militia: new Militia(),
+  Mine: new Mine(),
   Moat: new Moat(),
   Moneylender: new Moneylender(),
   Poacher: new Poacher(),

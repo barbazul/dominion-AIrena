@@ -6,22 +6,39 @@ export default class Remodel extends BasicAction {
   constructor () {
     super();
     this.cost = 4;
+    this.exactCostUpgrade = false;
   }
 
   /**
    * Trash a card from your hand.
    * Gain a card costing up to $2 more than it.
    *
-   * Not using the whole upgradeFilter logic from Dominiate for now.
-   *
    * @param {State} state
    */
   playEffect (state) {
+    const choice = state.current.agent.choose(
+      BasicAI.CHOICE_UPGRADE,
+      state,
+      this.upgradeChoices(state, state.current.hand)
+    );
+
+    state.doTrash(state.current, choice.trash[0]);
+    state.gainCard(state.current, choice.gain[0]);
+  }
+
+  // Auxiliary functions for remodel-like effects
+
+  /**
+   *
+   * @param {State} state
+   * @param {Card[]} cardList
+   * @return {Array}
+   */
+  upgradeChoices (state, cardList) {
     const choices = [];
-    let choice;
     let used = [];
 
-    for (let card of state.current.hand) {
+    for (let card of cardList) {
       if (used.indexOf(card) === -1) {
         used.push(card);
 
@@ -35,7 +52,7 @@ export default class Remodel extends BasicAction {
 
             card2 = cards[cardName];
 
-            if (card.cost + 2 >= card2.cost) {
+            if (this.upgradeFilter(state, card, card2)) {
               choices.push({ trash: [card], gain: [card2] });
             }
           }
@@ -43,9 +60,28 @@ export default class Remodel extends BasicAction {
       }
     }
 
-    choice = state.current.agent.choose(BasicAI.CHOICE_UPGRADE, state, choices);
+    return choices;
+  }
 
-    state.doTrash(state.current, choice.trash[0]);
-    state.gainCard(state.current, choice.gain[0]);
+  /**
+   * Remodel allows up to 2 additional coins from trashed card cost
+   *
+   * @param {number} coins Trashed card cost in coins
+   * @return {number}
+   */
+  costFunction (coins) {
+    return coins + 2;
+  }
+
+  /**
+   * Given two cards, return wether upgrading from oldCard to newCard is allowed.
+   *
+   * @param {State} state
+   * @param {Card} oldCard
+   * @param {Card} newCard
+   * @return boolean
+   */
+  upgradeFilter (state, oldCard, newCard) {
+    return this.costFunction(oldCard.cost) >= newCard.cost;
   }
 }
