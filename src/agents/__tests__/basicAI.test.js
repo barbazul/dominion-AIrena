@@ -414,9 +414,9 @@ test('Fallback playValue function -> Basic treasures', () => {
   state.setUp([ai, ai]);
 
   // Base treasures
-  expect(ai.playValue(state, cards.Copper, state.current)).toBe(100);
-  expect(ai.playValue(state, cards.Silver, state.current)).toBe(100);
-  expect(ai.playValue(state, cards.Gold, state.current)).toBe(100);
+  expect(ai.playValue(state, cards.Copper, state.current)).toBe(101);
+  expect(ai.playValue(state, cards.Silver, state.current)).toBe(102);
+  expect(ai.playValue(state, cards.Gold, state.current)).toBe(103);
 });
 
 test('Fallback playValue function -> Menagerie', () => {
