@@ -821,7 +821,8 @@ export default class BasicAI {
     }
 
     if (card.isTreasure()) {
-      return 100;
+      // Adding coins generated to prefer Gold over Silver over Copper
+      return 100 + card.coins;
     }
 
     // Cantrips
@@ -839,11 +840,51 @@ export default class BasicAI {
     }
 
     // Other terminals
-    if (card.actions === 0) {
+    if (card.isAction() && card.actions === 0) {
       return state.rng() * 100 + 100;
     }
 
+    // What is this???
+    if (!card.isAction() && !card.isTreasure()) {
+      return -1;
+    }
+
     return null;
+  }
+
+  /**
+   * Priority list for putting cards back on deck.
+   * Only works well for putting back 1 card, and for 1 buy.
+   *
+   *  Make a priority order of:
+   *  1. Actions we can't or don't intende to play, from best to worst
+   *  2. Treasures we can afford to put back
+   *  3. Junk cards
+   *
+   * @param {State} state
+   * @param {Player} my
+   * @return {String[]}
+   */
+  topdeckPriority (state, my) {
+    const actions = [];
+    const priority = [];
+    let playableTerminals = my.actions;
+
+    my.hand.forEach(card => {
+      if (card.isAction()) {
+        actions.push(card);
+      }
+    });
+
+    priority.push(...actions.slice(playableTerminals).map(card => card.toString()));
+
+    // if (playableTerminals > 0) {
+    //   playableTerminals += my.hand.reduce((accum, card) => {
+    //     return accum + Math.max(0, card.actions - 1);
+    //   });
+    // }
+
+    return priority;
   }
 
   topdeckValue (state, card, my) {

@@ -49,5 +49,6 @@ export default class Sentry extends BasicAction {
 
     // Topdecks remaining cards
     state.current.draw.unshift(...toTopdeck);
+    state.log(`${state.current.agent} topdecks ${toTopdeck}`);
   }
 }

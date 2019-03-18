@@ -899,6 +899,21 @@ test('wantsToTrash returns the number of cards to trash', () => {
   expect(ai.wantsToTrash(state, player)).toBe(2);
 });
 
+test('topdeckPriority prefers actions that cannot be played', () => {
+  const state = new State();
+  const ai = new BasicAI();
+  const action = new BasicAction();
+  let priority;
+
+  state.setUp([ai, ai]);
+  state.current.actions = 1;
+  state.current.hand = [action, action, action];
+  action.name = 'An Action';
+
+  priority = ai.topdeckPriority(state, state.current);
+  expect(priority).toEqual(['An Action', 'An Action']);
+});
+
 test('topdeckValue forwards to discardValue', () => {
   const state = new State();
   const card = new Card();
