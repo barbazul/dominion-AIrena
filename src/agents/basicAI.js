@@ -19,23 +19,16 @@ export default class BasicAI {
    * Returns the Player state object associated to the AI making the choice.
    * state.current cannot be used since some decisions are made on other players turns
    *
-   * @param state
+   * @param {State} state
    */
   myPlayer (state) {
-    let found = -1;
-
     for (let i = 0; i < state.players.length; i++) {
       if (state.players[i].agent === this) {
-        found = i;
-        break;
+        return state.players[i];
       }
     }
 
-    if (found < 0) {
-      throw new Error(this.name + ' is being asked a decision but is not playing');
-    }
-
-    return state.players[found];
+    throw new Error(this.name + ' is being asked a decision but is not playing');
   }
 
   /**
