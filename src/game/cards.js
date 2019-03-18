@@ -18,6 +18,7 @@ import Moat from '../cards/moat';
 import Moneylender from '../cards/moneylender';
 import Poacher from '../cards/poacher';
 import Remodel from '../cards/remodel';
+import Sentry from '../cards/sentry';
 import Silver from '../cards/silver';
 import Gold from '../cards/gold';
 import Estate from '../cards/estate';
@@ -59,6 +60,7 @@ const cards = {
   Moneylender: new Moneylender(),
   Poacher: new Poacher(),
   Remodel: new Remodel(),
+  Sentry: new Sentry(),
   Smithy: new Smithy(),
   'Throne Room': new ThroneRoom(),
   Vassal: new Vassal(),
