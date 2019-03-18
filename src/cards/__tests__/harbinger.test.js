@@ -37,7 +37,7 @@ test('Calls for a choice with all cards in discard', () => {
   state.current.agent.choose = jest.fn((type, state, choices) => choices[0]);
   card.playEffect(state);
 
-  expect(state.current.agent.choose).toHaveBeenCalledWith('topdeck', state, expect.arrayContaining([card1, card2]));
+  expect(state.current.agent.choose).toHaveBeenCalledWith(BasicAI.CHOICE_PLAY, state, expect.arrayContaining([card1, card2]));
 });
 
 test('Topdeck choice allows for null option', () => {
@@ -52,7 +52,7 @@ test('Topdeck choice allows for null option', () => {
   state.current.agent.choose = jest.fn((type, state, choices) => choices[0]);
   card.playEffect(state);
 
-  expect(state.current.agent.choose).toHaveBeenCalledWith('topdeck', state, expect.arrayContaining([null]));
+  expect(state.current.agent.choose).toHaveBeenCalledWith(BasicAI.CHOICE_PLAY, state, expect.arrayContaining([null]));
 });
 
 test('Harbinger moves a card from discard to top of deck', () => {
@@ -69,7 +69,7 @@ test('Harbinger moves a card from discard to top of deck', () => {
   state.setUp([basicAI, basicAI], { log: () => {}, warn: () => {} });
   state.current.discard = [card1];
   state.current.draw = [card2, card3];
-  state.current.agent.topdeckPriority = () => ['Card 1'];
+  state.current.agent.playPriority = () => ['Card 1'];
   card.playEffect(state);
   expect(state.current.discard).toHaveLength(0);
   expect(state.current.draw).toEqual([card1, card2, card3]);
@@ -85,7 +85,7 @@ test('No effect when agent chooses null', () => {
   state.setUp([basicAI, basicAI], { log: () => {}, warn: () => {} });
   state.current.discard = [card1];
   state.current.draw = [];
-  state.current.agent.topdeckPriority = () => [null];
+  state.current.agent.playPriority = () => [null];
   state.doTopdeck = jest.fn(state.doTopdeck);
   card.playEffect(state);
   expect(state.current.discard).toHaveLength(1);
