@@ -49,6 +49,8 @@ export default class BasicAI {
    */
   choose (type, state, choices) {
     const my = this.myPlayer(state);
+
+    // Flatten all choices as strings for easy matching
     const flatChoices = choices.map(choice => choice === null ? null : choice.toString());
     let priority;
     let priorityFunc;
@@ -60,17 +62,22 @@ export default class BasicAI {
       return choices[0];
     }
 
-    // When there are no choices we follow the rule that makes the null choice available in that situation.
+    // When there are no choices we follow the rule that makes the null choice
+    // available in that situation, and choose it.
     if (choices.length === 0) {
       return null;
     }
 
-    // Check the priority list
+    // First, try the priority function. If we reach the end of the priority
+    // list, treat it as "none of the above".
     priorityFunc = this.getPriorityFunction(type);
 
     if (priorityFunc) {
+      // Get the priority list
       priority = priorityFunc.call(this, state, my);
 
+      // Now, look up all the preferences on that list.
+      // When we encounter a valid choice, return it
       for (let i = 0; i < priority.length; i++) {
         const preference = priority[i];
         const index = flatChoices.indexOf(preference);
@@ -82,7 +89,7 @@ export default class BasicAI {
     }
 
     // The priority list does not want any of the choices (or there  is no priority list)
-    // Evaluate each option to choose best
+    // Evaluate each choice value to choose best
     for (let i = 0; i < choices.length; i++) {
       const value = this.getChoiceValue(type, state, choices[i], my);
 
@@ -101,7 +108,7 @@ export default class BasicAI {
       return null;
     }
 
-    throw new Error(`${this.name} somehow failed to make a choice (${choices.join(',')})`);
+    throw new Error(`${this.name} somehow failed to make a choice (${type}::${choices.join(',')})`);
   }
 
   /**
