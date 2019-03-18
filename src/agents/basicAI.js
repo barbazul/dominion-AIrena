@@ -825,31 +825,27 @@ export default class BasicAI {
       return 100 + card.coins;
     }
 
-    // Cantrips
-    if (card.isAction() && card.actions === 1) {
-      return state.rng() * 100 + 700;
-    }
-
-    // Terminal draw
-    if (card.cards > 0 && card.actions === 0) {
-      if (my.actions > 1) {
-        return state.rng() * 100 + 600;
+    if (card.isAction()) {
+      // Cantrips
+      if (card.actions === 1) {
+        return state.rng() * 100 + 700;
       }
 
-      return state.rng() * 110 + 180;
-    }
+      // Terminal draw
+      if (card.cards > 0 && card.actions === 0) {
+        if (my.actions > 1) {
+          return state.rng() * 100 + 600;
+        }
 
-    // Other terminals
-    if (card.isAction() && card.actions === 0) {
+        return state.rng() * 110 + 180;
+      }
+
+      // Other terminals
       return state.rng() * 100 + 100;
     }
 
     // What is this???
-    if (!card.isAction() && !card.isTreasure()) {
-      return -1;
-    }
-
-    return null;
+    return -1;
   }
 
   /**
