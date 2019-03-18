@@ -112,48 +112,6 @@ export default class BasicAI {
   }
 
   /**
-   * Sometimes we need to compare choices in a strictly numeric way. This takes
-   * a particular choice for a particular choice type, and gets its numeric
-   * value.
-   * If the value comes from a priority list, it will be 100 * (distance from
-   * end of list).
-   *
-   * So, for example, the default choiceToValue of discarding a Colony is 999,
-   * while the choiceToValue of discarding an extra terminal is 1.
-   *
-   * @todo Revisit this after normalizing all value functions
-   * @todo This is not considering the fact that everything in priority after null should be negative
-   * @param {String} type
-   * @param {State} state
-   * @param {Card|String} choice
-   * @param {Player} my
-   * @return {number}
-   */
-  choiceToValue (type, state, choice, my) {
-    let priorityFunc;
-    let priority = [];
-    let priorityIndex;
-
-    if (choice === null) {
-      return 0;
-    }
-
-    priorityFunc = this.getPriorityFunction(type);
-
-    if (priorityFunc) {
-      priority = priorityFunc.call(this, state, my);
-    }
-
-    priorityIndex = priority.indexOf(choice.toString());
-
-    if (priorityIndex !== -1) {
-      return (priority.length - priorityIndex) * 100;
-    }
-
-    return this.getChoiceValue(type, state, choice, my);
-  }
-
-  /**
    * Get a priority list generator function for the type of decision if available
    *
    * @param {String} type
@@ -164,6 +122,22 @@ export default class BasicAI {
 
     if (priorityFunc) {
       return priorityFunc;
+    }
+
+    return null;
+  }
+
+  /**
+   * Get a choice evaluator function for the type of decision if available
+   *
+   * @param {String} type
+   * @return {function(State, any, Player):number}
+   */
+  getValueFunction (type) {
+    const valueFunc = this[type + 'Value'];
+
+    if (valueFunc) {
+      return valueFunc;
     }
 
     return null;
@@ -203,19 +177,45 @@ export default class BasicAI {
   }
 
   /**
-   * Get a choice evaluator function for the type of decision if available
+   * Sometimes we need to compare choices in a strictly numeric way. This takes
+   * a particular choice for a particular choice type, and gets its numeric
+   * value.
+   * If the value comes from a priority list, it will be 100 * (distance from
+   * end of list).
    *
+   * So, for example, the default choiceToValue of discarding a Colony is 999,
+   * while the choiceToValue of discarding an extra terminal is 1.
+   *
+   * @todo Revisit this after normalizing all value functions
+   * @todo This is not considering the fact that everything in priority after null should be negative
    * @param {String} type
-   * @return {Function}
+   * @param {State} state
+   * @param {Card|String} choice
+   * @param {Player} my
+   * @return {number}
    */
-  getValueFunction (type) {
-    const valueFunc = this[type + 'Value'];
+  choiceToValue (type, state, choice, my) {
+    let priorityFunc;
+    let priority = [];
+    let priorityIndex;
 
-    if (valueFunc) {
-      return valueFunc;
+    if (choice === null) {
+      return 0;
     }
 
-    return null;
+    priorityFunc = this.getPriorityFunction(type);
+
+    if (priorityFunc) {
+      priority = priorityFunc.call(this, state, my);
+    }
+
+    priorityIndex = priority.indexOf(choice.toString());
+
+    if (priorityIndex !== -1) {
+      return (priority.length - priorityIndex) * 100;
+    }
+
+    return this.getChoiceValue(type, state, choice, my);
   }
 
   /**
