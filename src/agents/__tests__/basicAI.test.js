@@ -899,19 +899,33 @@ test('wantsToTrash returns the number of cards to trash', () => {
   expect(ai.wantsToTrash(state, player)).toBe(2);
 });
 
-test('topdeckPriority prefers actions that cannot be played', () => {
+test('topdeckPriority prioritizes by play value', () => {
   const state = new State();
   const ai = new BasicAI();
-  const action = new BasicAction();
+  const action1 = new BasicAction();
+  const action2 = new BasicAction();
+  const action3 = new BasicAction();
   let priority;
 
   state.setUp([ai, ai]);
   state.current.actions = 1;
-  state.current.hand = [action, action, action];
-  action.name = 'An Action';
+  state.current.hand = [action1, action2, action3];
+  action1.name = 'Action 1';
+  action2.name = 'Action 2';
+  action3.name = 'Action 3';
+
+  ai.getChoiceValue = jest.fn((type, state, card) => {
+    const values = {
+      'Action 1': 0,
+      'Action 2': 0.5,
+      'Action 3': 1
+    };
+
+    return values[card.toString()];
+  });
 
   priority = ai.topdeckPriority(state, state.current);
-  expect(priority).toEqual(['An Action', 'An Action']);
+  expect(priority).toEqual(['Action 1', 'Action 2']);
 });
 
 test('topdeckValue forwards to discardValue', () => {
