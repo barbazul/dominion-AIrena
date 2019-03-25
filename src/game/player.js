@@ -144,6 +144,35 @@ export default class Player {
   }
 
   /**
+   * Counts the money the player might have upon playing all treasurein hand.
+   * Banks, Ventures and such are counted inaccurately for now.
+   *
+   * @return {number}
+   */
+  getAvailableMoney () {
+    return this.coins + this.getTreasureInHand();
+  }
+
+  /**
+   * Adds up the value of the treasure in the player's hand. Banks, Ventures
+   * and such are counted inaccurately for now.
+   *
+   * @todo Implement a getMoneyInHand(state) method that counts the playable action cards as well
+   * @return {number}
+   */
+  getTreasureInHand () {
+    let total = 0;
+
+    for (let card of this.hand) {
+      if (card.isTreasure()) {
+        total += card.coins;
+      }
+    }
+
+    return total;
+  }
+
+  /**
    * The size of the player's deck
    *
    * @return {Number}
