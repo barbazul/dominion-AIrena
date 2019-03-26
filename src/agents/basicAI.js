@@ -878,8 +878,7 @@ export default class BasicAI {
     });
 
     // Take the last elements of the playable ones
-    // Reversed them (compared to Dominiate) to actually fullfill the contract in the comment
-    priority.push(...actions.slice(playableTerminals).reverse().map(card => card.toString()));
+    priority.push(...actions.slice(playableTerminals).map(card => card.toString()));
 
     // if (playableTerminals > 0) {
     //   playableTerminals += my.hand.reduce((accum, card) => {

@@ -925,7 +925,7 @@ test('topdeckPriority prioritizes by play value', () => {
   });
 
   priority = ai.topdeckPriority(state, state.current);
-  expect(priority).toEqual(['Action 1', 'Action 2']);
+  expect(priority).toEqual(['Action 2', 'Action 1']);
 });
 
 test('topdeckValue forwards to discardValue', () => {
