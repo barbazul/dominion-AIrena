@@ -310,3 +310,25 @@ test('getAvailableMoney adds accumulated coins and treasures in hand', () => {
   player.coins = 2;
   expect(player.getAvailableMoney()).toBe(8);
 });
+
+test('countPlayableTerminals return the current actions when hand is empty', () => {
+  const player = new Player(new BasicAI(), () => {});
+
+  player.hand = [];
+  player.actions = 5;
+  expect(player.countPlayableTerminals()).toBe(5);
+});
+
+test('countPlayableTerminals accounts for villages in hand when available', () => {
+  const player = new Player(new BasicAI(), () => {});
+  const village = new Card();
+  const cantrip = new Card();
+  const terminal = new Card();
+
+  village.actions = 2;
+  cantrip.actions = 1;
+  terminal.actions = 0;
+  player.hand = [village, cantrip, terminal];
+  player.actions = 5;
+  expect(player.countPlayableTerminals()).toBe(6);
+});

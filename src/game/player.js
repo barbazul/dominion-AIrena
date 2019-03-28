@@ -173,6 +173,20 @@ export default class Player {
   }
 
   /**
+   * Count how many terminals will I be able to play given my current hand and
+   * the floating actions available
+   *
+   * @return {number}
+   */
+  countPlayableTerminals () {
+    if (this.actions === 0) {
+      return 0;
+    }
+
+    return this.actions + (this.hand.reduce((accum, card) => accum + Math.max(card.actions - 1, 0), 0));
+  }
+
+  /**
    * The size of the player's deck
    *
    * @return {Number}
