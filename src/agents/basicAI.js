@@ -863,14 +863,21 @@ export default class BasicAI {
    */
   topdeckPriority (state, my) {
     const actions = [];
+    const treasures = [];
     const priority = [];
-    let playableTerminals = my.actions;
+    let playableTerminals = my.countPlayableTerminals();
 
     my.hand.forEach(card => {
       if (card.isAction()) {
         actions.push(card);
       }
+
+      if (card.isTreasure()) {
+        treasures.push(card);
+      }
     });
+
+    // 1) Actions
 
     // Descending order
     actions.sort((cardA, cardB) => {
@@ -880,11 +887,8 @@ export default class BasicAI {
     // Take the last elements of the playable ones
     priority.push(...actions.slice(playableTerminals).map(card => card.toString()));
 
-    // if (playableTerminals > 0) {
-    //   playableTerminals += my.hand.reduce((accum, card) => {
-    //     return accum + Math.max(0, card.actions - 1);
-    //   });
-    // }
+    // 2) Put back as much money as you can
+    priority.push(...treasures.map(card => card.toString()));
 
     return priority;
   }

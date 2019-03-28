@@ -928,6 +928,20 @@ test('topdeckPriority prioritizes by play value', () => {
   expect(priority).toEqual(['Action 2', 'Action 1']);
 });
 
+test('topdeckPriority prefers treasures after actions', () => {
+  const state = new State();
+  const ai = new BasicAI();
+  const action = new BasicAction();
+  let priority;
+
+  action.name = 'Action';
+  state.setUp([ai, ai]);
+  state.current.actions = 0;
+  state.current.hand = [action, cards.Copper];
+  priority = ai.topdeckPriority(state, state.current);
+  expect(priority).toEqual(['Action', 'Copper']);
+});
+
 test('topdeckValue forwards to discardValue', () => {
   const state = new State();
   const card = new Card();
