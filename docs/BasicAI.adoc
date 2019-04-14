@@ -88,3 +88,27 @@ _Usage example_
 const my = this.myPlayer(state);
 console.log(`I have ${my.getDeck().length} cards in total.`);
 ----
+
+=== BasicAI.getPriorityFunction(String type): Function|null
+
+Retrieve priority function for a given type if it exists in the AI instance,
+`null` otherwise.
+
+_Usage example_
+
+----
+const discardPriorityFn = this.getPriorityFunction(CHOICE_DISCARD);
+const priorityList = discardPriorityFn(state, my);
+----
+
+=== BasicAI.getValueFunction(String type): Function|null
+
+Retrieve value function for a given type if it exists in the AI instance,
+`null` otherwise.
+
+_Usage example_
+
+----
+const discardValueFn = this.getValueFunction(CHOICE_DISCARD);
+let choiceValue = discardValueFn(state, choice, my);
+----
