@@ -1,0 +1,90 @@
+:toc: left
+= BasicAI
+
+This is the base class for all AI agents.
+
+It implements the core decision engine (through the 'choose' method) and has a 
+(rather simple) set of heuristic decisions for every existing scenario.
+
+All AI agents are expected to extend from this class.
+
+== Decision Engine
+
+=== BasicAI.myPlayer(String type, State state, Array choices): Player
+
+The core decision engine relies on the BasicAI.choose() method. It takes 3 arguments:
+
+* type: The type of choice being asked of the agent
+* state: The State object representing the game state
+* choices: An array of available options to choose from
+
+Type will be one of the following, currently implemented choice types:
+
+* CHOICE_DISCARD
+* CHOICE_GAIN
+* CHOICE_MULTIPLY
+* CHOICE_PLAY
+* CHOICE_TOPDECK
+* CHOICE_TRASH
+
+The choices array may contain different types of elements depending on the
+type of choice being asked of the agent. In all the cases, the null choice
+represents the "nothing" choice.
+
+For example, considering a hand of Estate, Estate, Copper, Copper, Copper and
+asked for an optional trash from hand, the choice() arguments might look
+something like this:
+
+* type: CHOICE_TRASH
+* state: instance of the state object
+* choices: [Estate, Copper, null]
+
+Where null, means "trash nothing".
+
+The core implementation of this decision is based on 2 heuristic functions per
+decision type:
+
+* Priority list function (optional)
+* Choice value function
+
+If the AI implements a priorityList function, it is consulted in order and the
+first entry that matches one of the available choices for the decision is used
+as the final choice.
+
+The priority list may contain the `null` value. When evaluating if the
+algorithm reaches `null` without having matched any previous choice, then
+`null` is used as a final choice if it is an available choice. Every entry
+after `null` is usually a non-desired choice prioritized for the case when the
+agent is forced to take a specific action, like trashing after playing a
+Remodel.
+
+If there is no match, or no priority function, the algorithm uses the
+corresponding value function for the decision type. Each available choice is
+then assigned a value and the one with the highest value is used.
+
+`null` is considered as a 0 value choice so any non-desired choice should
+evaluate to a negative value.
+
+NOTE: There is currently no defined scale for the possible value of a choice.
+Look at the definition of each particular value function to see current default
+implementations. This will chang in a future version.
+
+== Helper Methods
+
+These helper functions allow easy access to the player state or metrics of the
+current state.
+
+=== BasicAI.myPlayer(State state): Player
+
+Fetches the player state associated with this instance of the AI.
+
+IMPORTANT: This implies that a single instance of an AI should not be used for
+more than one player, otherwise this method
+risks returning the incorrect player state.
+
+_Usage example_
+
+----
+const my = this.myPlayer(state);
+console.log(`I have ${my.getDeck().length} cards in total.`);
+----
