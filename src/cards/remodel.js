@@ -16,6 +16,10 @@ export default class Remodel extends BasicAction {
    * @param {State} state
    */
   playEffect (state) {
+    if (state.current.hand.length === 0) {
+      return;
+    }
+
     const choice = state.current.agent.choose(
       BasicAI.CHOICE_UPGRADE,
       state,
