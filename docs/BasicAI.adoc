@@ -69,6 +69,8 @@ NOTE: There is currently no defined scale for the possible value of a choice.
 Look at the definition of each particular value function to see current default
 implementations. This will chang in a future version.
 
+=== getChoiceValue(String type, State state, any Choice, Player my):number
+
 == Helper Methods
 
 These helper functions allow easy access to the player state or metrics of the

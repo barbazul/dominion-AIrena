@@ -76,6 +76,8 @@ export default class BasicAI {
       // Get the priority list
       priority = priorityFunc.call(this, state, my);
 
+      // TODO Consider instead of getting a list fully rendered, iterating conditions fns and interrupting on 1st match
+
       // Now, look up all the preferences on that list.
       // When we encounter a valid choice, return it
       for (let i = 0; i < priority.length; i++) {
