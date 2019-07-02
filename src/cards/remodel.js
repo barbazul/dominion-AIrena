@@ -7,6 +7,7 @@ export default class Remodel extends BasicAction {
     super();
     this.cost = 4;
     this.exactCostUpgrade = false;
+    this.gainLocation = 'discard';
   }
 
   /**
@@ -16,18 +17,20 @@ export default class Remodel extends BasicAction {
    * @param {State} state
    */
   playEffect (state) {
-    if (state.current.hand.length === 0) {
+    const choices = this.upgradeChoices(state, state.current.hand);
+
+    if (choices.length === 0) {
       return;
     }
 
     const choice = state.current.agent.choose(
       BasicAI.CHOICE_UPGRADE,
       state,
-      this.upgradeChoices(state, state.current.hand)
+      choices
     );
 
     state.doTrash(state.current, choice.trash[0]);
-    state.gainCard(state.current, choice.gain[0]);
+    state.gainCard(state.current, choice.gain[0], this.gainLocation);
   }
 
   // Auxiliary functions for remodel-like effects

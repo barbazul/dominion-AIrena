@@ -93,7 +93,7 @@ test('Cards are trashed and gained as chosen', () => {
 
   expect(state.current.agent.choose).toHaveBeenCalled();
   expect(state.doTrash).toHaveBeenCalledWith(state.current, cards.Estate);
-  expect(state.gainCard).toHaveBeenCalledWith(state.current, cards.Curse);
+  expect(state.gainCard).toHaveBeenCalledWith(state.current, cards.Curse, 'discard');
 });
 
 test('Does nothing on empty hand', () => {

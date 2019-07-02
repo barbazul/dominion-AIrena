@@ -1,27 +1,16 @@
-import BasicAI from '../agents/basicAI';
 import Remodel from './remodel';
 
+/**
+ * You may trash a Treasure from your hand. Gain a Treasure to your hand
+ * costing up to $3 more than it.
+ *
+ * Implemented as a special case of Remodel.
+ */
 export default class Mine extends Remodel {
   constructor () {
     super();
     this.cost = 5;
-  }
-
-  /**
-   * You may trash a Treasure from your hand. Gain a Treasure to your hand
-   * costing up to $3 more than it.
-   *
-   * @param {State} state
-   */
-  playEffect (state) {
-    const choice = state.current.agent.choose(
-      BasicAI.CHOICE_UPGRADE,
-      state,
-      this.upgradeChoices(state, state.current.hand)
-    );
-
-    state.doTrash(state.current, choice.trash[0]);
-    state.gainCard(state.current, choice.gain[0], 'hand');
+    this.gainLocation = 'hand';
   }
 
   /**

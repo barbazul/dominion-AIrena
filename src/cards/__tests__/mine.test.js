@@ -123,3 +123,20 @@ test('Cards are trashed and gained as chosen', () => {
   expect(state.doTrash).toHaveBeenCalledWith(state.current, cards.Copper);
   expect(state.gainCard).toHaveBeenCalledWith(state.current, cards.Silver, 'hand');
 });
+
+test('Does nothing on empty hand', () => {
+  const card = new Mine();
+  const state = new State();
+
+  state.setUp([new BasicAI(), new BasicAI()]);
+
+  state.current.agent.choose = jest.fn(() => {});
+
+  state.current.hand = [];
+  state.current.discard = [];
+  card.playEffect(state);
+
+  expect(state.current.agent.choose).not.toHaveBeenCalled();
+  expect(state.current.hand).toHaveLength(0);
+  expect(state.current.discard).toHaveLength(0);
+});
