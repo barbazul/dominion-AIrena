@@ -1,3 +1,4 @@
+import Artisan from '../cards/artisan';
 import Bandit from '../cards/bandit';
 import Bureaucrat from '../cards/bureaucrat';
 import Cellar from '../cards/cellar';
@@ -42,6 +43,7 @@ const cards = {
   Province: new Province(),
 
   // Base set cards
+  Artisan: new Artisan(),
   Bandit: new Bandit(),
   Bureaucrat: new Bureaucrat(),
   Cellar: new Cellar(),

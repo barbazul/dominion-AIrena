@@ -35,7 +35,7 @@ test('Play effect calls for gain choice', () => {
   expect(state.current.agent.choose).toHaveBeenCalledWith(
     BasicAI.CHOICE_GAIN,
     state,
-    expect.arrayContaining(['Curse', 'Estate', 'Duchy', 'Copper', 'Silver'])
+    expect.arrayContaining([cards.Curse, cards.Estate, cards.Duchy, cards.Copper, cards.Silver])
   );
 });
 
@@ -51,7 +51,24 @@ test('Can only gain $5 or less', () => {
   expect(state.current.agent.choose).toHaveBeenCalledWith(
     BasicAI.CHOICE_GAIN,
     state,
-    expect.not.arrayContaining(['Province', 'Gold'])
+    expect.not.arrayContaining([cards.Province, cards.Gold])
+  );
+});
+
+test('Cannot gain form empty pile', () => {
+  const state = new State();
+  const card = new Artisan();
+
+  state.setUp([new BasicAI(), new BasicAI()]);
+  state.current.agent.choose = jest.fn(() => cards.Estate);
+  state.kingdom['Copper'] = 0;
+
+  card.playEffect(state);
+
+  expect(state.current.agent.choose).toHaveBeenCalledWith(
+    BasicAI.CHOICE_GAIN,
+    state,
+    expect.not.arrayContaining([cards.Copper])
   );
 });
 
