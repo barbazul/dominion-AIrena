@@ -7,6 +7,14 @@ import Card from '../card';
 import Gold from '../gold';
 import Silver from '../silver';
 
+const setUpState = function (state, card1, card2) {
+  state.setUp([new BasicAI(), new BasicAI()]);
+  state.current.getCardsFromDeck = jest.fn(() => [card1, card2]);
+  state.current.agent.choose = jest.fn(() => card2);
+  state.current.discard = [];
+  state.trash = [];
+};
+
 test('Bandit card definition', () => {
   const card = new Bandit();
 
@@ -74,11 +82,7 @@ test('banditAttack causes choice between multiple treasures', () => {
   const card1 = new Silver();
   const card2 = new Gold();
 
-  state.setUp([new BasicAI(), new BasicAI()]);
-  state.current.getCardsFromDeck = jest.fn(() => [card1, card2]);
-  state.current.agent.choose = jest.fn(() => card2);
-  state.current.discard = [];
-  state.trash = [];
+  setUpState(state, card1, card2);
   banditAttack(state.current, state);
 
   expect(state.current.getCardsFromDeck).toHaveBeenCalledWith(2);
@@ -92,11 +96,7 @@ test('banditAttack does not trash Copper', () => {
   const card1 = cards.Copper;
   const card2 = cards.Copper;
 
-  state.setUp([new BasicAI(), new BasicAI()]);
-  state.current.getCardsFromDeck = jest.fn(() => [card1, card2]);
-  state.current.agent.choose = jest.fn(() => null);
-  state.current.discard = [];
-  state.trash = [];
+  setUpState(state, card1, card2);
   banditAttack(state.current, state);
 
   expect(state.current.getCardsFromDeck).toHaveBeenCalledWith(2);
