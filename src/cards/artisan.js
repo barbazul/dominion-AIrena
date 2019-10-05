@@ -1,4 +1,4 @@
-import BasicAI from '../agents/basicAI';
+import BasicAI, { CHOICE_DISCARD, CHOICE_GAIN } from '../agents/basicAI';
 import cards from '../game/cards';
 import BasicAction from './basicAction';
 
@@ -21,7 +21,7 @@ export default class Artisan extends BasicAction {
 
   doTopdeckPart (state) {
     let chosenTopdeck;
-    chosenTopdeck = state.current.agent.choose(BasicAI.CHOICE_DISCARD, state, [...new Set(state.current.hand)]);
+    chosenTopdeck = state.current.agent.choose(CHOICE_DISCARD, state, [...new Set(state.current.hand)]);
     state.doTopdeck(state.current, chosenTopdeck);
   }
 
@@ -36,7 +36,7 @@ export default class Artisan extends BasicAction {
       }
     }
 
-    chosenGain = state.current.agent.choose(BasicAI.CHOICE_GAIN, state, choices);
+    chosenGain = state.current.agent.choose(CHOICE_GAIN, state, choices);
 
     if (chosenGain) {
       state.gainCard(state.current, chosenGain, 'hand');

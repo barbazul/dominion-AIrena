@@ -883,7 +883,7 @@ export default class BasicAI {
 
     // Descending order
     actions.sort((cardA, cardB) => {
-      return this.getChoiceValue(BasicAI.CHOICE_PLAY, state, cardB, my) - this.getChoiceValue(BasicAI.CHOICE_PLAY, state, cardA, my);
+      return this.getChoiceValue(CHOICE_PLAY, state, cardB, my) - this.getChoiceValue(CHOICE_PLAY, state, cardA, my);
     });
 
     // Take the last elements of the playable ones
@@ -923,7 +923,7 @@ export default class BasicAI {
     let trashableCards = 0;
 
     for (let card of my.hand) {
-      if (this.choose(BasicAI.CHOICE_TRASH, state, [card, null])) {
+      if (this.choose(CHOICE_TRASH, state, [card, null])) {
         trashableCards++;
       }
     }
@@ -949,12 +949,12 @@ export default class BasicAI {
       endGamePower = 3;
     }
 
-    return Math.pow(this.choiceToValue(BasicAI.CHOICE_GAIN, state, card, my), endGamePower) - this.choiceToValue(BasicAI.CHOICE_TRASH, state, card, my);
+    return Math.pow(this.choiceToValue(CHOICE_GAIN, state, card, my), endGamePower) - this.choiceToValue(CHOICE_TRASH, state, card, my);
   }
 }
 
-BasicAI.CHOICE_DISCARD = 'discard';
-BasicAI.CHOICE_GAIN = 'gain';
-BasicAI.CHOICE_PLAY = 'play';
-BasicAI.CHOICE_TRASH = 'trash';
-BasicAI.CHOICE_UPGRADE = 'upgrade';
+export const CHOICE_DISCARD = 'discard';
+export const CHOICE_GAIN = 'gain';
+export const CHOICE_PLAY = 'play';
+export const CHOICE_TRASH = 'trash';
+export const CHOICE_UPGRADE = 'upgrade';

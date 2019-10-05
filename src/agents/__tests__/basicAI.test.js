@@ -1,6 +1,6 @@
 import BasicAction from '../../cards/basicAction';
 import cards from '../../game/cards';
-import BasicAI from '../basicAI';
+import BasicAI, { CHOICE_DISCARD } from '../basicAI';
 import Card from '../../cards/card';
 import Player from '../../game/player';
 import State from '../../game/state';
@@ -43,7 +43,7 @@ test('Choose null when there are no choices', () => {
   const state = new State();
 
   state.setUp([ ai1, ai2 ]);
-  expect(ai1.choose(BasicAI.CHOICE_DISCARD, state, [])).toBeNull();
+  expect(ai1.choose(CHOICE_DISCARD, state, [])).toBeNull();
 });
 
 test('Choose only choice', () => {

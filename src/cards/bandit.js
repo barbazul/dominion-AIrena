@@ -1,4 +1,4 @@
-import BasicAI from '../agents/basicAI';
+import BasicAI, { CHOICE_TRASH } from '../agents/basicAI';
 import cards from '../game/cards';
 import BasicAttack from './basicAttack';
 
@@ -44,7 +44,7 @@ export function banditAttack (opp, state) {
 
   // Found at least 1 treasure...
   if (treasures.length > 0) {
-    toTrash = opp.agent.choose(BasicAI.CHOICE_TRASH, state, treasures);
+    toTrash = opp.agent.choose(CHOICE_TRASH, state, treasures);
 
     if (toTrash) {
       const discardedTreasures = treasures.slice();

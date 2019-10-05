@@ -1,4 +1,4 @@
-import BasicAI from '../agents/basicAI';
+import BasicAI, { CHOICE_DISCARD } from '../agents/basicAI';
 import shuffle from '../lib/shuffle';
 import cards from './cards';
 import Player from './player';
@@ -384,7 +384,7 @@ export default class State {
         return discarded;
       }
 
-      choice = player.agent.choose(BasicAI.CHOICE_DISCARD, this, player.hand);
+      choice = player.agent.choose(CHOICE_DISCARD, this, player.hand);
       discarded.push(choice);
       this.doDiscard(player, choice);
     }

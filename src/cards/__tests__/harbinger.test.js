@@ -1,4 +1,4 @@
-import BasicAI from '../../agents/basicAI';
+import BasicAI, { CHOICE_PLAY } from '../../agents/basicAI';
 import State from '../../game/state';
 import Card from '../card';
 import Harbinger from '../harbinger';
@@ -37,7 +37,7 @@ test('Calls for a choice with all cards in discard', () => {
   state.current.agent.choose = jest.fn((type, state, choices) => choices[0]);
   card.playEffect(state);
 
-  expect(state.current.agent.choose).toHaveBeenCalledWith(BasicAI.CHOICE_PLAY, state, expect.arrayContaining([card1, card2]));
+  expect(state.current.agent.choose).toHaveBeenCalledWith(CHOICE_PLAY, state, expect.arrayContaining([card1, card2]));
 });
 
 test('Topdeck choice allows for null option', () => {
@@ -52,7 +52,7 @@ test('Topdeck choice allows for null option', () => {
   state.current.agent.choose = jest.fn((type, state, choices) => choices[0]);
   card.playEffect(state);
 
-  expect(state.current.agent.choose).toHaveBeenCalledWith(BasicAI.CHOICE_PLAY, state, expect.arrayContaining([null]));
+  expect(state.current.agent.choose).toHaveBeenCalledWith(CHOICE_PLAY, state, expect.arrayContaining([null]));
 });
 
 test('Harbinger moves a card from discard to top of deck', () => {

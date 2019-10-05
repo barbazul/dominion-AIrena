@@ -1,4 +1,4 @@
-import BasicAI from '../agents/basicAI';
+import BasicAI, { CHOICE_PLAY } from '../agents/basicAI';
 import BasicAction from './basicAction';
 
 export default class ThroneRoom extends BasicAction {
@@ -25,7 +25,7 @@ export default class ThroneRoom extends BasicAction {
 
     if (choices.length > 0) {
       choices.push(null);
-      choice = state.current.agent.choose(BasicAI.CHOICE_PLAY, state, choices);
+      choice = state.current.agent.choose(CHOICE_PLAY, state, choices);
     }
 
     if (choice) {

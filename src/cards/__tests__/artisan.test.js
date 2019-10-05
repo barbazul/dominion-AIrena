@@ -1,4 +1,4 @@
-import BasicAI from '../../agents/basicAI';
+import BasicAI, { CHOICE_DISCARD, CHOICE_GAIN } from '../../agents/basicAI';
 import cards from '../../game/cards';
 import State from '../../game/state';
 import Artisan from '../artisan';
@@ -33,7 +33,7 @@ test('Play effect calls for gain choice', () => {
   card.playEffect(state);
 
   expect(state.current.agent.choose).toHaveBeenCalledWith(
-    BasicAI.CHOICE_GAIN,
+    CHOICE_GAIN,
     state,
     expect.arrayContaining([cards.Curse, cards.Estate, cards.Duchy, cards.Copper, cards.Silver])
   );
@@ -49,7 +49,7 @@ test('Can only gain $5 or less', () => {
   card.playEffect(state);
 
   expect(state.current.agent.choose).toHaveBeenCalledWith(
-    BasicAI.CHOICE_GAIN,
+    CHOICE_GAIN,
     state,
     expect.not.arrayContaining([cards.Province, cards.Gold])
   );
@@ -66,7 +66,7 @@ test('Cannot gain form empty pile', () => {
   card.playEffect(state);
 
   expect(state.current.agent.choose).toHaveBeenCalledWith(
-    BasicAI.CHOICE_GAIN,
+    CHOICE_GAIN,
     state,
     expect.not.arrayContaining([cards.Copper])
   );
@@ -96,7 +96,7 @@ test('Trigger a topdeck choice', () => {
 
   card.playEffect(state);
 
-  expect(state.current.agent.choose).toHaveBeenCalledWith(BasicAI.CHOICE_DISCARD, state, [cards.Estate, cards.Copper]);
+  expect(state.current.agent.choose).toHaveBeenCalledWith(CHOICE_DISCARD, state, [cards.Estate, cards.Copper]);
 });
 
 test('Topdeck chosen card', () => {

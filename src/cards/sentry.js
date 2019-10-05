@@ -1,4 +1,4 @@
-import BasicAI from '../agents/basicAI';
+import BasicAI, { CHOICE_DISCARD, CHOICE_TRASH } from '../agents/basicAI';
 import BasicAction from './basicAction';
 
 export default class Sentry extends BasicAction {
@@ -25,7 +25,7 @@ export default class Sentry extends BasicAction {
 
     // Choose what to trash
     lookingAt.forEach(card => {
-      choice = state.current.agent.choose(BasicAI.CHOICE_TRASH, state, [card, null]);
+      choice = state.current.agent.choose(CHOICE_TRASH, state, [card, null]);
 
       if (choice !== null) {
         state.trash.push(choice);
@@ -37,7 +37,7 @@ export default class Sentry extends BasicAction {
 
     // Choose what to discard
     remainder.forEach(card => {
-      choice = state.current.agent.choose(BasicAI.CHOICE_DISCARD, state, [card, null]);
+      choice = state.current.agent.choose(CHOICE_DISCARD, state, [card, null]);
 
       if (choice !== null) {
         state.current.discard.unshift(choice);

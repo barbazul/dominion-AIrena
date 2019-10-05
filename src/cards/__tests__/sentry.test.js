@@ -1,4 +1,4 @@
-import BasicAI from '../../agents/basicAI';
+import BasicAI, { CHOICE_DISCARD, CHOICE_TRASH } from '../../agents/basicAI';
 import cards from '../../game/cards';
 import State from '../../game/state';
 import Sentry from '../sentry';
@@ -23,8 +23,8 @@ test('Sentry looks at top 2 cards and asks to trash both of them', () => {
   state.current.draw = [cards.Copper, cards.Estate];
   card.playEffect(state);
 
-  expect(ai.choose).toHaveBeenCalledWith(BasicAI.CHOICE_TRASH, state, [cards.Copper, null]);
-  expect(ai.choose).toHaveBeenCalledWith(BasicAI.CHOICE_TRASH, state, [cards.Estate, null]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_TRASH, state, [cards.Copper, null]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_TRASH, state, [cards.Estate, null]);
 });
 
 test('Sentry trashes the chosen cards', () => {
@@ -37,8 +37,8 @@ test('Sentry trashes the chosen cards', () => {
   state.current.draw = [cards.Copper, cards.Estate];
   card.playEffect(state);
 
-  expect(ai.choose).toHaveBeenCalledWith(BasicAI.CHOICE_TRASH, state, [cards.Copper, null]);
-  expect(ai.choose).toHaveBeenCalledWith(BasicAI.CHOICE_TRASH, state, [cards.Estate, null]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_TRASH, state, [cards.Copper, null]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_TRASH, state, [cards.Estate, null]);
   expect(state.trash).toContain(cards.Copper);
   expect(state.trash).toContain(cards.Estate);
 });
@@ -53,10 +53,10 @@ test('Sentry asks to discard both cards if none is trashed', () => {
   state.current.draw = [cards.Copper, cards.Estate];
   card.playEffect(state);
 
-  expect(ai.choose).toHaveBeenCalledWith(BasicAI.CHOICE_TRASH, state, [cards.Copper, null]);
-  expect(ai.choose).toHaveBeenCalledWith(BasicAI.CHOICE_TRASH, state, [cards.Estate, null]);
-  expect(ai.choose).toHaveBeenCalledWith(BasicAI.CHOICE_DISCARD, state, [cards.Copper, null]);
-  expect(ai.choose).toHaveBeenCalledWith(BasicAI.CHOICE_DISCARD, state, [cards.Estate, null]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_TRASH, state, [cards.Copper, null]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_TRASH, state, [cards.Estate, null]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_DISCARD, state, [cards.Copper, null]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_DISCARD, state, [cards.Estate, null]);
 });
 
 test('Sentry discards the chosen cards', () => {
@@ -64,16 +64,16 @@ test('Sentry discards the chosen cards', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  ai.choose = jest.fn((type, state, choices) => type === BasicAI.CHOICE_TRASH ? null : choices[0]);
+  ai.choose = jest.fn((type, state, choices) => type === CHOICE_TRASH ? null : choices[0]);
   state.setUp([ai, ai]);
   state.current.draw = [cards.Copper, cards.Estate];
   state.current.discard = [];
   card.playEffect(state);
 
-  expect(ai.choose).toHaveBeenCalledWith(BasicAI.CHOICE_TRASH, state, [cards.Copper, null]);
-  expect(ai.choose).toHaveBeenCalledWith(BasicAI.CHOICE_TRASH, state, [cards.Estate, null]);
-  expect(ai.choose).toHaveBeenCalledWith(BasicAI.CHOICE_DISCARD, state, [cards.Copper, null]);
-  expect(ai.choose).toHaveBeenCalledWith(BasicAI.CHOICE_DISCARD, state, [cards.Estate, null]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_TRASH, state, [cards.Copper, null]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_TRASH, state, [cards.Estate, null]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_DISCARD, state, [cards.Copper, null]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_DISCARD, state, [cards.Estate, null]);
   expect(state.current.discard).toContain(cards.Copper);
   expect(state.current.discard).toContain(cards.Estate);
 });
@@ -89,10 +89,10 @@ test('Sentry topdecks the remaining cards', () => {
   state.current.discard = [];
   card.playEffect(state);
 
-  expect(ai.choose).toHaveBeenCalledWith(BasicAI.CHOICE_TRASH, state, [cards.Copper, null]);
-  expect(ai.choose).toHaveBeenCalledWith(BasicAI.CHOICE_TRASH, state, [cards.Estate, null]);
-  expect(ai.choose).toHaveBeenCalledWith(BasicAI.CHOICE_DISCARD, state, [cards.Copper, null]);
-  expect(ai.choose).toHaveBeenCalledWith(BasicAI.CHOICE_DISCARD, state, [cards.Estate, null]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_TRASH, state, [cards.Copper, null]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_TRASH, state, [cards.Estate, null]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_DISCARD, state, [cards.Copper, null]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_DISCARD, state, [cards.Estate, null]);
   expect(state.current.discard).not.toContain(cards.Copper);
   expect(state.current.discard).not.toContain(cards.Estate);
   expect(state.trash).not.toContain(cards.Copper);

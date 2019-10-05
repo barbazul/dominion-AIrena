@@ -1,4 +1,4 @@
-import BasicAI from '../agents/basicAI';
+import BasicAI, { CHOICE_PLAY } from '../agents/basicAI';
 import BasicAction from './basicAction';
 
 export default class Harbinger extends BasicAction {
@@ -21,7 +21,7 @@ export default class Harbinger extends BasicAction {
     if (choices.length > 0) {
       state.log(`${state.current.agent} looks at ${choices}`);
       choices.push(null);
-      chosen = state.current.agent.choose(BasicAI.CHOICE_PLAY, state, choices);
+      chosen = state.current.agent.choose(CHOICE_PLAY, state, choices);
 
       if (chosen === null) {
         return;

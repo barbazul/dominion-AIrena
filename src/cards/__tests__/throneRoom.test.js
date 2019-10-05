@@ -1,4 +1,4 @@
-import BasicAI from '../../agents/basicAI';
+import BasicAI, { CHOICE_PLAY } from '../../agents/basicAI';
 import State from '../../game/state';
 import BasicAction from '../basicAction';
 import Card from '../card';
@@ -23,7 +23,7 @@ test('playEffect calls for a play choice with the actions in hand', () => {
   state.current.agent.choose = jest.fn(() => {});
   card.playEffect(state);
 
-  expect(state.current.agent.choose).toHaveBeenCalledWith(BasicAI.CHOICE_PLAY, state, expect.arrayContaining([action1, action2, null]));
+  expect(state.current.agent.choose).toHaveBeenCalledWith(CHOICE_PLAY, state, expect.arrayContaining([action1, action2, null]));
 });
 
 test('playEffect does not call for a choice with no actions in hand', () => {

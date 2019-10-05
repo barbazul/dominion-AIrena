@@ -1,4 +1,4 @@
-import BasicAI from '../../agents/basicAI';
+import BasicAI, { CHOICE_TRASH } from '../../agents/basicAI';
 import cards from '../../game/cards';
 import Player from '../../game/player';
 import State from '../../game/state';
@@ -86,7 +86,7 @@ test('banditAttack causes choice between multiple treasures', () => {
   banditAttack(state.current, state);
 
   expect(state.current.getCardsFromDeck).toHaveBeenCalledWith(2);
-  expect(state.current.agent.choose).toHaveBeenCalledWith(BasicAI.CHOICE_TRASH, state, [card1, card2]);
+  expect(state.current.agent.choose).toHaveBeenCalledWith(CHOICE_TRASH, state, [card1, card2]);
   expect(state.current.discard).toEqual([card1]);
   expect(state.trash).toEqual([card2]);
 });

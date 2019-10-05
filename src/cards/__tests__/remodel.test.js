@@ -1,4 +1,4 @@
-import BasicAI from '../../agents/basicAI';
+import BasicAI, { CHOICE_UPGRADE } from '../../agents/basicAI';
 import cards from '../../game/cards';
 import State from '../../game/state';
 import Remodel from '../remodel';
@@ -39,8 +39,8 @@ test('playEffect calls for an upgrade choice', () => {
   state.current.hand = [cards.Copper, cards.Estate];
   card.playEffect(state);
 
-  expect(state.current.agent.choose).toHaveBeenCalledWith(BasicAI.CHOICE_UPGRADE, state, expect.arrayContaining(expectedChoices));
-  expect(state.current.agent.choose).toHaveBeenCalledWith(BasicAI.CHOICE_UPGRADE, state, expect.not.arrayContaining(unexpectedChoices));
+  expect(state.current.agent.choose).toHaveBeenCalledWith(CHOICE_UPGRADE, state, expect.arrayContaining(expectedChoices));
+  expect(state.current.agent.choose).toHaveBeenCalledWith(CHOICE_UPGRADE, state, expect.not.arrayContaining(unexpectedChoices));
 });
 
 test('Does not allow to gain from an empty pile', () => {
@@ -72,8 +72,8 @@ test('Does not allow to gain from an empty pile', () => {
   state.kingdom.Silver = 0;
   card.playEffect(state);
 
-  expect(state.current.agent.choose).toHaveBeenCalledWith(BasicAI.CHOICE_UPGRADE, state, expect.arrayContaining(expectedChoices));
-  expect(state.current.agent.choose).toHaveBeenCalledWith(BasicAI.CHOICE_UPGRADE, state, expect.not.arrayContaining(unexpectedChoices));
+  expect(state.current.agent.choose).toHaveBeenCalledWith(CHOICE_UPGRADE, state, expect.arrayContaining(expectedChoices));
+  expect(state.current.agent.choose).toHaveBeenCalledWith(CHOICE_UPGRADE, state, expect.not.arrayContaining(unexpectedChoices));
 });
 
 test('Cards are trashed and gained as chosen', () => {

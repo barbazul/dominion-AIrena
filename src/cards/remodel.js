@@ -1,4 +1,4 @@
-import BasicAI from '../agents/basicAI';
+import BasicAI, { CHOICE_UPGRADE } from '../agents/basicAI';
 import cards from '../game/cards';
 import BasicAction from './basicAction';
 
@@ -24,7 +24,7 @@ export default class Remodel extends BasicAction {
     }
 
     const choice = state.current.agent.choose(
-      BasicAI.CHOICE_UPGRADE,
+      CHOICE_UPGRADE,
       state,
       choices
     );
