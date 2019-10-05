@@ -1,4 +1,4 @@
-import BasicAI, { CHOICE_UPGRADE } from '../agents/basicAI';
+import { CHOICE_UPGRADE } from '../agents/basicAI';
 import cards from '../game/cards';
 import BasicAction from './basicAction';
 

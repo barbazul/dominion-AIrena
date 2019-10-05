@@ -1,4 +1,4 @@
-import BasicAI, { CHOICE_PLAY } from '../agents/basicAI';
+import { CHOICE_PLAY } from '../agents/basicAI';
 import BasicAction from './basicAction';
 
 export default class ThroneRoom extends BasicAction {

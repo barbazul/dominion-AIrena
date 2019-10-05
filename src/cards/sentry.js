@@ -1,4 +1,4 @@
-import BasicAI, { CHOICE_DISCARD, CHOICE_TRASH } from '../agents/basicAI';
+import { CHOICE_DISCARD, CHOICE_TRASH } from '../agents/basicAI';
 import BasicAction from './basicAction';
 
 export default class Sentry extends BasicAction {

@@ -1,4 +1,4 @@
-import BasicAI, { CHOICE_DISCARD } from '../agents/basicAI';
+import { CHOICE_DISCARD } from '../agents/basicAI';
 import shuffle from '../lib/shuffle';
 import cards from './cards';
 import Player from './player';

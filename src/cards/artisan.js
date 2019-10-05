@@ -1,4 +1,4 @@
-import BasicAI, { CHOICE_DISCARD, CHOICE_GAIN } from '../agents/basicAI';
+import { CHOICE_DISCARD, CHOICE_GAIN } from '../agents/basicAI';
 import cards from '../game/cards';
 import BasicAction from './basicAction';
 

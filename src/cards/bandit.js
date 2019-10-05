@@ -1,4 +1,4 @@
-import BasicAI, { CHOICE_TRASH } from '../agents/basicAI';
+import { CHOICE_TRASH } from '../agents/basicAI';
 import cards from '../game/cards';
 import BasicAttack from './basicAttack';
 
