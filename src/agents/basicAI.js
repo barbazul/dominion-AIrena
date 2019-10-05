@@ -1015,3 +1015,4 @@ export const CHOICE_GAIN = 'gain';
 export const CHOICE_PLAY = 'play';
 export const CHOICE_TRASH = 'trash';
 export const CHOICE_UPGRADE = 'upgrade';
+export const CHOICE_MULTIPLY = 'multiply';
