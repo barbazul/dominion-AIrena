@@ -851,6 +851,63 @@ export default class BasicAI {
   }
 
   /**
+   * Heuristic multiply vlaue.
+   *
+   * This is a migration of Dominiate ai_multipliedValue funciton in each card.
+   *
+   * @param {State} state
+   * @param {Card} card
+   * @param {Player} my
+   * @return {Number}
+   */
+  multiplyValue (state, card, my) {
+    /**
+     *
+     * @param {Number} valueWithActions
+     * @param {Number} valueAsTerminal
+     * @return {Number}
+     */
+    const terminalHelper = function (valueWithActions, valueAsTerminal) {
+      if (my.actions > 0) {
+        return valueWithActions;
+      }
+
+      return valueAsTerminal;
+    };
+
+    // Smithy
+    if (card === cards.Smithy) {
+      return terminalHelper(1540, -1);
+    }
+
+    // Mine
+    if (card === cards.Mine) {
+      return terminalHelper(1260, -1);
+    }
+
+    // Council Room
+    if (card === cards['Council Room']) {
+      return terminalHelper(1580, -1);
+    }
+
+    // Witch
+    if (card === cards.Witch) {
+      if (my.actions > 0 && state.countInSupply('Curse') >= 2) {
+        return 1860;
+      }
+
+      return -1;
+    }
+
+    // Throne Room
+    if (card === cards['Throne Room']) {
+      return 1900;
+    }
+
+    return this.playValue(state, card, my);
+  }
+
+  /**
    * Priority list for putting cards back on deck.
    * Only works well for putting back 1 card, and for 1 buy.
    *

@@ -1,9 +1,9 @@
 import BasicAction from '../../cards/basicAction';
-import cards from '../../game/cards';
-import BasicAI, { CHOICE_DISCARD } from '../basicAI';
 import Card from '../../cards/card';
+import cards from '../../game/cards';
 import Player from '../../game/player';
 import State from '../../game/state';
+import BasicAI, { CHOICE_DISCARD } from '../basicAI';
 
 test('toString returns agent name', () => {
   const ai = new BasicAI();
@@ -1064,4 +1064,71 @@ test('upgradeValue is the difference of between wanting the gained card and the 
 
   state.setUp([ai, ai]);
   expect(ai.upgradeValue(state, choice, state.current)).toBe(4);
+});
+
+test('Multiply value defaults to play value', () => {
+  const ai = new BasicAI();
+  const state = new State();
+  const card = new BasicAction();
+
+  card.name = 'Fake Card';
+  state.setUp([ai, ai]);
+  ai.playValue = jest.fn(() => 1);
+
+  ai.multiplyValue(state, card, state.current);
+
+  expect(ai.playValue).toHaveBeenCalledWith(state, card, state.current);
+});
+
+/**
+ *
+ * @param card
+ * @param extraActionsExpectedValue
+ * @param terminalExpectedValue
+ */
+const assertMultiplyValue = function (card, extraActionsExpectedValue, terminalExpectedValue) {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // With extra actions
+  state.current.actions = 2;
+  expect(ai.multiplyValue(state, card, state.current)).toBe(extraActionsExpectedValue);
+
+  // Without
+  state.current.actions = 0;
+  expect(ai.multiplyValue(state, card, state.current)).toBe(terminalExpectedValue);
+};
+
+test('Fallback multiplyValue function -> Smithy', () => {
+  assertMultiplyValue(cards.Smithy, 1540, -1);
+});
+
+test('Fallback multiplyValue function -> Mine', () => {
+  assertMultiplyValue(cards.Mine, 1260, -1);
+});
+
+test('Fallback multiplyValue function -> Witch', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  // With extra actions and curses left
+  state.current.actions = 2;
+  state.kingdom.Curse = 10;
+  expect(ai.multiplyValue(state, cards.Witch, state.current)).toBe(1860);
+
+  // Without
+  state.current.actions = 0;
+  expect(ai.multiplyValue(state, cards.Witch, state.current)).toBe(-1);
+});
+
+test('Fallback multiplyValue function -> Council Room', () => {
+  assertMultiplyValue(cards['Council Room'], 1580, -1);
+});
+
+test('Fallback multiplyValue function -> Throne Room', () => {
+  assertMultiplyValue(cards['Throne Room'], 1900, 1900);
 });
