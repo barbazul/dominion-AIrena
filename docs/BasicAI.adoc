@@ -10,7 +10,7 @@ All AI agents are expected to extend from this class.
 
 == Decision Engine
 
-=== BasicAI.myPlayer(String type, State state, Array choices): Player
+=== BasicAI.choose(String type, State state, Array choices): Player
 
 The core decision engine relies on the BasicAI.choose() method. It takes 3 arguments:
 
@@ -18,7 +18,7 @@ The core decision engine relies on the BasicAI.choose() method. It takes 3 argum
 * state: The State object representing the game state
 * choices: An array of available options to choose from
 
-Type will be one of the following, currently implemented choice types:
+Type will be one of the following, currently implemented, choice types:
 
 * CHOICE_DISCARD
 * CHOICE_GAIN
@@ -69,7 +69,18 @@ NOTE: There is currently no defined scale for the possible value of a choice.
 Look at the definition of each particular value function to see current default
 implementations. This will chang in a future version.
 
-=== getChoiceValue(String type, State state, any Choice, Player my):number
+=== getChoiceValue(String type, State state, Any choice, Player my):number
+
+Assigns a numerical value to a single choice.
+
+_Usage example_
+
+----
+function wantsToPlayBandit (state, my) {
+    const gainGoldValue = this.getChoiceValue(CHOICE_GAIN, state, cards.Gold, my);
+    return gainGoldValue > 0;
+}
+----
 
 == Helper Methods
 
