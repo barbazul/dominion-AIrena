@@ -181,31 +181,17 @@ export default class State {
   /**
    * The current player plays an action and performs the effects
    *
-   * @param {BasicAction} action
+   * @param {BasicAction} card
    * @param {String} from
    * @return void
    */
-  playAction (action, from = 'hand') {
-    let index;
+  playAction (card, from = 'hand') {
     const source = this.current[from];
+    const playedCard = this.doPlay(card, source, from);
 
-    this.log(`${this.current.agent} plays ${action}.`);
-
-    if (source === undefined) {
-      this.warn(`${this.current.agent.name} tried to play a card from invalid location ${from}`);
-      return;
+    if (playedCard) {
+      this.resolveAction(playedCard);
     }
-
-    index = source.indexOf(action);
-
-    if (index === -1) {
-      this.warn(`${this.current.agent.name} tried to play ${action} but has none in ${from}`);
-      return;
-    }
-
-    source.splice(index, 1);
-    this.current.inPlay.push(action);
-    this.resolveAction(action);
   }
 
   /**
@@ -223,31 +209,40 @@ export default class State {
   /**
    * The current player plays a treasure and performs its effects
    *
-   * @param {Card} treasure
+   * @param {Card} card
    * @param {String} from
    * @return void
    */
-  playTreasure (treasure, from = 'hand') {
+  playTreasure (card, from = 'hand') {
     const source = this.current[from];
+    const playedCard = this.doPlay(card, source, from);
+
+    if (playedCard) {
+      playedCard.onPlay(this);
+    }
+  }
+
+  doPlay (card, source, from) {
     let index;
 
-    this.log(`${this.current.agent} plays ${treasure}.`);
+    this.log(`${this.current.agent} plays ${card}.`);
 
     if (source === undefined) {
       this.warn(`${this.current.agent.name} tried to play a card from invalid location ${from}`);
-      return;
+      return null;
     }
 
-    index = source.indexOf(treasure);
+    index = source.indexOf(card);
 
     if (index === -1) {
-      this.warn(`${this.current.agent.name} tried to play ${treasure} but has none in ${from}`);
-      return;
+      this.warn(`${this.current.agent.name} tried to play ${card} but has none in ${from}`);
+      return null;
     }
 
     source.splice(index, 1);
-    this.current.inPlay.push(treasure);
-    treasure.onPlay(this);
+    this.current.inPlay.push(card);
+
+    return card;
   }
 
   /**
@@ -256,7 +251,7 @@ export default class State {
    * @param {Player} player
    * @param {Card} card
    * @param {String} from
-   * @return {Card|void}
+   * @return {Card|null}
    */
   doDiscard (player, card, from = 'hand') {
     let index;
