@@ -42,17 +42,14 @@ export function banditAttack (opp, state) {
     treasures.push(card);
   }
 
-  // Found at least 1 treasure...
+  // Found at least 1 trasheable treasure...
   if (treasures.length > 0) {
     toTrash = opp.agent.choose(CHOICE_TRASH, state, treasures);
-
-    if (toTrash) {
-      const discardedTreasures = treasures.slice();
-      discardedTreasures.splice(treasures.indexOf(toTrash), 1);
-      opp.log(`${opp.agent} trashes ${toTrash}.`);
-      state.trash.push(toTrash);
-      toDiscard.push(...discardedTreasures);
-    }
+    const discardedTreasures = treasures.slice();
+    discardedTreasures.splice(treasures.indexOf(toTrash), 1);
+    opp.log(`${opp.agent} trashes ${toTrash}.`);
+    state.trash.push(toTrash);
+    toDiscard.push(...discardedTreasures);
   }
 
   // Todo Actually doDiscard the cards (might trigger stuff)
