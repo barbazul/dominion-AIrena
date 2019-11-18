@@ -29,10 +29,8 @@ export default class Artisan extends BasicAction {
     const choices = [];
     let chosenGain;
     for (let card in state.kingdom) {
-      if (state.kingdom.hasOwnProperty(card)) {
-        if (cards[card].cost <= 5 && state.kingdom[card] > 0) {
-          choices.push(cards[card]);
-        }
+      if (cards[card].cost <= 5 && state.kingdom[card] > 0) {
+        choices.push(cards[card]);
       }
     }
 
