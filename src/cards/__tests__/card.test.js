@@ -98,6 +98,18 @@ test('onPlay draws cards', () => {
   expect(state.current.drawCards).toHaveBeenCalledWith(3);
 });
 
+test('onPlay does not draw cards when it shouldn\'t', () => {
+  const card = new Card();
+  const state = new State();
+
+  state.setUp([new BasicAI(), new BasicAI()]);
+  card.cards = 0;
+  state.current.drawCards = jest.fn(() => {});
+  card.onPlay(state);
+
+  expect(state.current.drawCards).not.toHaveBeenCalled();
+});
+
 test('onPlay triggers playEffect', () => {
   const card = new Card();
   const state = new State();
