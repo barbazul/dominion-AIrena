@@ -10,7 +10,7 @@ All AI agents are expected to extend from this class.
 
 == Decision Engine
 
-=== BasicAI.choose(String type, State state, Array choices): Player
+=== BasicAI.choose(String type, State state, Array choices): any|null
 
 The core decision engine relies on the BasicAI.choose() method. It takes 3 arguments:
 
