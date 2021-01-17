@@ -697,7 +697,7 @@ export default class State {
    * until it has no buys left or chooses to buy nothing.
    */
   doBuyPhase () {
-    console.log(`${this.current.buys} Buys and ${this.current.coins} coins.`);
+    this.log(`${this.current.buys} Buys and ${this.current.coins} coins.`);
     while (this.current.buys > 0) {
       const choice = this.getSingleBuyDecision();
 
