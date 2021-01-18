@@ -77,6 +77,10 @@ export default class State {
       selectedCards = selectedCards.concat(agent.requires);
     });
 
+    if (selectedCards.length > 10) {
+      throw new Error('Too many required cards');
+    }
+
     this.kingdom = this.buildKingdom(selectedCards);
     this.totalCards = this.countTotalCards();
 
