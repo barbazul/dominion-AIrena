@@ -81,7 +81,7 @@ export default class BasicAI {
       // Now, look up all the preferences on that list.
       // When we encounter a valid choice, return it
       for (let i = 0; i < priority.length; i++) {
-        const preference = priority[i];
+        const preference = priority[i] ? priority[i].toString() : null;
         const index = flatChoices.indexOf(preference);
 
         if (index > -1) {

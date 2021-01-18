@@ -16,6 +16,7 @@ import BureaucratGardens from "./src/agents/domsim/bureaucratGardens";
 import BurningSkullHTBD1 from "./src/agents/domsim/burningSkullHTBD1";
 import CouncilRoomMilitia from "./src/agents/domsim/councilRoomMilitia";
 import {DomPlayer} from "./src/agents/domsim/domPlayer";
+import LabMilitiaChapel from "./src/agents/domsim/labMilitiaChapel";
 
 const players = [
   new BasicAI(),
@@ -32,7 +33,8 @@ const players = [
   new BureaucratGardens(),
   new BurningSkullHTBD1(),
   new CouncilRoomMilitia(),
-  new DomPlayer()
+  new DomPlayer(),
+  new LabMilitiaChapel()
 ];
 
 let scoreBoard = Object.fromEntries(players.map(p => [ p.toString(), { plays: 0, wins: 0, rate: 0.0 } ]));

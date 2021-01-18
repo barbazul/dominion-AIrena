@@ -12,8 +12,8 @@ import BureaucratGardens from './src/agents/domsim/bureaucratGardens';
 import CouncilRoomMilitia from './src/agents/domsim/councilRoomMilitia';
 import FirstGame from './src/agents/domsim/firstGame';
 import BurningSkullHTBD1 from './src/agents/domsim/burningSkullHTBD1';
-
 import State, { PHASE_CLEANUP, PHASE_START } from './src/game/state';
+import LabMilitiaChapel from './src/agents/domsim/labMilitiaChapel';
 
 const players = [
   new SillyAI(),
@@ -28,22 +28,21 @@ const players = [
   new DoubleWitch(),
   new FirstGame(),
   new MoneylenderWitch(),
+  new LabMilitiaChapel()
 ];
 
 const start = new Date();
 
 const state = new State();
 // const player1 = players[Math.floor(Math.random() * players.length)];
-const player1 = players[5];
+const player1 = players[12];
 let player2 = players[Math.floor(Math.random() * players.length)];
 
 while (player1 === player2) {
   player2 = players[Math.floor(Math.random() * players.length)];
 }
 
-state.setUp([player1, player2], {
-  required: ['Moneylender', 'Bandit', 'Council Room', 'Cellar', 'Moat', 'Workshop']
-});
+state.setUp([player1, player2]);
 
 console.log(state.kingdom);
 
