@@ -14,6 +14,7 @@ import FirstGame from './src/agents/domsim/firstGame';
 import BurningSkullHTBD1 from './src/agents/domsim/burningSkullHTBD1';
 import State, { PHASE_CLEANUP, PHASE_START } from './src/game/state';
 import LabMilitiaChapel from './src/agents/domsim/labMilitiaChapel';
+import Festival from './src/agents/domsim/festival';
 
 const players = [
   new SillyAI(),
@@ -28,14 +29,15 @@ const players = [
   new DoubleWitch(),
   new FirstGame(),
   new MoneylenderWitch(),
-  new LabMilitiaChapel()
+  new LabMilitiaChapel(),
+  new Festival()
 ];
 
 const start = new Date();
 
 const state = new State();
 // const player1 = players[Math.floor(Math.random() * players.length)];
-const player1 = players[12];
+const player1 = players[13];
 let player2 = players[Math.floor(Math.random() * players.length)];
 
 while (player1 === player2) {

@@ -12,11 +12,12 @@ import SillyAI from './src/agents/dominiate/sillyAI';
 import SingleWitch from './src/agents/dominiate/singleWitch';
 import FirstGame from './src/agents/domsim/firstGame';
 import State from './src/game/state';
-import BureaucratGardens from "./src/agents/domsim/bureaucratGardens";
-import BurningSkullHTBD1 from "./src/agents/domsim/burningSkullHTBD1";
-import CouncilRoomMilitia from "./src/agents/domsim/councilRoomMilitia";
-import {DomPlayer} from "./src/agents/domsim/domPlayer";
-import LabMilitiaChapel from "./src/agents/domsim/labMilitiaChapel";
+import BureaucratGardens from './src/agents/domsim/bureaucratGardens';
+import BurningSkullHTBD1 from './src/agents/domsim/burningSkullHTBD1';
+import CouncilRoomMilitia from './src/agents/domsim/councilRoomMilitia';
+import { DomPlayer } from './src/agents/domsim/domPlayer';
+import LabMilitiaChapel from './src/agents/domsim/labMilitiaChapel';
+import Festival from './src/agents/domsim/festival';
 
 const players = [
   new BasicAI(),
@@ -34,7 +35,8 @@ const players = [
   new BurningSkullHTBD1(),
   new CouncilRoomMilitia(),
   new DomPlayer(),
-  new LabMilitiaChapel()
+  new LabMilitiaChapel(),
+  new Festival()
 ];
 
 let scoreBoard = Object.fromEntries(players.map(p => [ p.toString(), { plays: 0, wins: 0, rate: 0.0 } ]));
