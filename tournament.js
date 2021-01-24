@@ -18,6 +18,7 @@ import CouncilRoomMilitia from './src/agents/domsim/councilRoomMilitia';
 import { DomPlayer } from './src/agents/domsim/domPlayer';
 import LabMilitiaChapel from './src/agents/domsim/labMilitiaChapel';
 import Festival from './src/agents/domsim/festival';
+import CouncilRoom from './src/agents/domsim/councilRoom';
 
 const players = [
   new BasicAI(),
@@ -36,7 +37,8 @@ const players = [
   new CouncilRoomMilitia(),
   new DomPlayer(),
   new LabMilitiaChapel(),
-  new Festival()
+  new Festival(),
+  new CouncilRoom()
 ];
 
 let scoreBoard = Object.fromEntries(players.map(p => [ p.toString(), { plays: 0, wins: 0, rate: 0.0 } ]));
