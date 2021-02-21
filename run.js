@@ -16,7 +16,8 @@ import State, { PHASE_CLEANUP, PHASE_START } from './src/game/state';
 import LabMilitiaChapel from './src/agents/domsim/labMilitiaChapel';
 import Festival from './src/agents/domsim/festival';
 import CouncilRoom from './src/agents/domsim/councilRoom';
-import Bureaucrat from "./src/agents/domsim/bureaucrat";
+import Bureaucrat from './src/agents/domsim/bureaucrat';
+import BigMoneyUltimate from './src/agents/domsim/bigMoneyUltimate';
 
 const players = [
   new SillyAI(),
@@ -36,7 +37,8 @@ const players = [
   new Festival(),
   new SingleWitch(),
   new CouncilRoom(),
-  new Bureaucrat()
+  new Bureaucrat(),
+  new BigMoneyUltimate()
 ];
 
 const start = new Date();
