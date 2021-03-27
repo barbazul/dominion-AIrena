@@ -18,6 +18,7 @@ import Festival from './src/agents/domsim/festival';
 import CouncilRoom from './src/agents/domsim/councilRoom';
 import Bureaucrat from './src/agents/domsim/bureaucrat';
 import BigMoneyUltimate from './src/agents/domsim/bigMoneyUltimate';
+import WorkshopGardens from "./src/agents/domsim/workshopGardens";
 
 const players = [
   new SillyAI(),
@@ -38,7 +39,8 @@ const players = [
   new SingleWitch(),
   new CouncilRoom(),
   new Bureaucrat(),
-  new BigMoneyUltimate()
+  new BigMoneyUltimate(),
+  new WorkshopGardens()
 ];
 
 const start = new Date();

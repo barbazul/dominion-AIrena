@@ -21,6 +21,7 @@ import Festival from './src/agents/domsim/festival';
 import CouncilRoom from './src/agents/domsim/councilRoom';
 import Bureaucrat from './src/agents/domsim/bureaucrat';
 import BigMoneyUltimate from './src/agents/domsim/bigMoneyUltimate';
+import WorkshopGardens from "./src/agents/domsim/workshopGardens";
 
 const players = [
   new BasicAI(),
@@ -42,7 +43,8 @@ const players = [
   new Festival(),
   new CouncilRoom(),
   new Bureaucrat(),
-  new BigMoneyUltimate()
+  new BigMoneyUltimate(),
+  new WorkshopGardens()
 ];
 
 let scoreBoard = Object.fromEntries(players.map(p => [ p.toString(), { plays: 0, wins: 0, rate: 0.0 } ]));
