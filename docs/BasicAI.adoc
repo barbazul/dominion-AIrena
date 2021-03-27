@@ -125,3 +125,26 @@ _Usage example_
 const discardValueFn = this.getValueFunction(CHOICE_DISCARD);
 let choiceValue = discardValueFn(state, choice, my);
 ----
+
+=== BasicAI.choiceToValue(String type, State state, Card|String card, Player my): Number
+
+Sometimes we need to compare choices in a strictly numeric way. This takes a
+particular choice for a particular choice type, and gets its numeric value.
+
+If the value comes from a priority list, it will be 100 * (distance from end of
+list).
+
+So, for example, the default choiceToValue of discarding a Colony is 999, while
+the choiceToValue of discarding an extra terminal is 1.
+
+NOTE: Current implementation is very lacking and not able to discern context of
+the choice. Will be revisited when I do some normalization work on all the
+choice evaluations.
+
+_Usage example_
+
+----
+const gainValue = this.choiceToValue(CHOICE_GAIN, state, cards.Province, my);
+const trashValue = this.choiceToValue(CHOICE_GAIN, state, cards.Gol, my);
+const replaceValue = gainValue - trashValue;
+----
