@@ -20,6 +20,7 @@ import Bureaucrat from './src/agents/domsim/bureaucrat';
 import BigMoneyUltimate from './src/agents/domsim/bigMoneyUltimate';
 import WorkshopGardens from "./src/agents/domsim/workshopGardens";
 import BasicBigMoney from "./src/agents/domsim/basicBigMoney";
+import BigMoneyUltimateFor3or4 from "./src/agents/domsim/bigMoneyUltimateFor3or4";
 
 const players = [
   new SillyAI(),
@@ -42,14 +43,15 @@ const players = [
   new Bureaucrat(),
   new BigMoneyUltimate(),
   new WorkshopGardens(),
-  new BasicBigMoney()
+  new BasicBigMoney(),
+  new BigMoneyUltimateFor3or4()
 ];
 
 const start = new Date();
 const state = new State();
 const player1 = players[players.length - 1];
 const rivals = [ player1 ];
-const numPlayers = 2;
+const numPlayers = 3;
 
 while (rivals.length < numPlayers) {
   let rival = players[Math.floor(Math.random() * players.length)];
