@@ -22,6 +22,7 @@ import CouncilRoom from './src/agents/domsim/councilRoom';
 import Bureaucrat from './src/agents/domsim/bureaucrat';
 import BigMoneyUltimate from './src/agents/domsim/bigMoneyUltimate';
 import WorkshopGardens from "./src/agents/domsim/workshopGardens";
+import BasicBigMoney from "./src/agents/domsim/basicBigMoney";
 
 const players = [
   new BasicAI(),
@@ -44,7 +45,8 @@ const players = [
   new CouncilRoom(),
   new Bureaucrat(),
   new BigMoneyUltimate(),
-  new WorkshopGardens()
+  new WorkshopGardens(),
+  new BasicBigMoney()
 ];
 
 let scoreBoard = Object.fromEntries(players.map(p => [ p.toString(), { plays: 0, wins: 0, rate: 0.0 } ]));
@@ -96,11 +98,6 @@ for (let i = 0; i < players.length - 1; i++) {
     for (let game = 0; game < 10; game++) {
       let state = new State();
       let logFn = () => {};
-
-      // Enable log for SillyAI
-      if (i === 8 || j === 8) {
-        logFn = console.log;
-      }
 
       try {
         state.setUp([players[i], players[j]], { log: logFn });
