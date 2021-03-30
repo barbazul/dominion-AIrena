@@ -22,6 +22,7 @@ import WorkshopGardens from './src/agents/domsim/workshopGardens';
 import BasicBigMoney from './src/agents/domsim/basicBigMoney';
 import BigMoneyUltimateFor3or4 from './src/agents/domsim/bigMoneyUltimateFor3or4';
 import DoubleMoatFor3or4 from './src/agents/domsim/doubleMoatFor3or4';
+import Laboratory from './src/agents/domsim/laboratory';
 
 const players = [
   new SillyAI(),
@@ -46,14 +47,15 @@ const players = [
   new WorkshopGardens(),
   new BasicBigMoney(),
   new BigMoneyUltimateFor3or4(),
-  new DoubleMoatFor3or4()
+  new DoubleMoatFor3or4(),
+  new Laboratory()
 ];
 
 const start = new Date();
 const state = new State();
 const player1 = players[players.length - 1];
 const rivals = [ player1 ];
-const numPlayers = 3;
+const numPlayers = 2;
 
 while (rivals.length < numPlayers) {
   let rival = players[Math.floor(Math.random() * players.length)];

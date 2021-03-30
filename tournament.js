@@ -25,6 +25,7 @@ import WorkshopGardens from './src/agents/domsim/workshopGardens';
 import BasicBigMoney from './src/agents/domsim/basicBigMoney';
 import BigMoneyUltimateFor3or4 from './src/agents/domsim/bigMoneyUltimateFor3or4';
 import DoubleMoatFor3or4 from './src/agents/domsim/doubleMoatFor3or4';
+import Laboratory from './src/agents/domsim/laboratory';
 
 const players = [
   new BasicAI(),
@@ -50,7 +51,8 @@ const players = [
   new WorkshopGardens(),
   new BasicBigMoney(),
   new BigMoneyUltimateFor3or4(),
-  new DoubleMoatFor3or4()
+  new DoubleMoatFor3or4(),
+  new Laboratory()
 ];
 
 let scoreBoard = Object.fromEntries(players.map(p => [ p.toString(), { plays: 0, wins: 0, rate: 0.0 } ]));
@@ -94,6 +96,7 @@ function getWinner (state) {
 }
 
 const start = new Date();
+let gameCounter = 0;
 
 for (let i = 0; i < players.length - 1; i++) {
   for (let j = i + 1; j < players.length; j++) {
@@ -129,6 +132,8 @@ for (let i = 0; i < players.length - 1; i++) {
         console.log(`>>> Winner is ${winner}`);
         scoreBoard[winner].wins++;
       }
+
+      gameCounter++;
     }
 
     scoreBoard[players[i]].rate = scoreBoard[players[i]].wins / scoreBoard[players[i]].plays;
@@ -140,3 +145,4 @@ console.log(scoreBoard);
 
 const elapsed = new Date().getTime() - start.getTime();
 console.log(`Tournament took ${elapsed / 1000} seconds.`);
+console.log(`Played ${gameCounter} games (${elapsed / 1000 / gameCounter} seconds per game).`);
