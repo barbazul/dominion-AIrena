@@ -24,6 +24,7 @@ import BigMoneyUltimate from './src/agents/domsim/bigMoneyUltimate';
 import WorkshopGardens from './src/agents/domsim/workshopGardens';
 import BasicBigMoney from './src/agents/domsim/basicBigMoney';
 import BigMoneyUltimateFor3or4 from './src/agents/domsim/bigMoneyUltimateFor3or4';
+import DoubleMoatFor3or4 from './src/agents/domsim/doubleMoatFor3or4';
 
 const players = [
   new BasicAI(),
@@ -48,7 +49,8 @@ const players = [
   new BigMoneyUltimate(),
   new WorkshopGardens(),
   new BasicBigMoney(),
-  new BigMoneyUltimateFor3or4()
+  new BigMoneyUltimateFor3or4(),
+  new DoubleMoatFor3or4()
 ];
 
 let scoreBoard = Object.fromEntries(players.map(p => [ p.toString(), { plays: 0, wins: 0, rate: 0.0 } ]));

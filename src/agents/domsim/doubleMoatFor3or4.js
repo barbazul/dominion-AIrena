@@ -1,10 +1,11 @@
 import { DomPlayer } from './domPlayer';
 import cards from '../../game/cards';
 
-export default class BigMoneyUltimateFor3or4 extends DomPlayer {
+export default class DoubleMoatFor3or4 extends DomPlayer {
   constructor () {
     super();
-    this.name = 'Big Money Ultimate for 3 or 4';
+    this.name = 'Double Moat for 3 or 4';
+    this.requires = [ cards.Moat ];
   }
 
   gainPriority (state, my) {
@@ -23,6 +24,15 @@ export default class BigMoneyUltimateFor3or4 extends DomPlayer {
     }
 
     priority.push(cards.Gold);
+
+    if (my.countInDeck(cards.Silver) === 0) {
+      priority.push(cards.Silver);
+    }
+
+    if (my.countInDeck(cards.Moat) < 2) {
+      priority.push(cards.Moat);
+    }
+
     priority.push(cards.Silver);
 
     return priority;

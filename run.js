@@ -18,9 +18,10 @@ import Festival from './src/agents/domsim/festival';
 import CouncilRoom from './src/agents/domsim/councilRoom';
 import Bureaucrat from './src/agents/domsim/bureaucrat';
 import BigMoneyUltimate from './src/agents/domsim/bigMoneyUltimate';
-import WorkshopGardens from "./src/agents/domsim/workshopGardens";
-import BasicBigMoney from "./src/agents/domsim/basicBigMoney";
-import BigMoneyUltimateFor3or4 from "./src/agents/domsim/bigMoneyUltimateFor3or4";
+import WorkshopGardens from './src/agents/domsim/workshopGardens';
+import BasicBigMoney from './src/agents/domsim/basicBigMoney';
+import BigMoneyUltimateFor3or4 from './src/agents/domsim/bigMoneyUltimateFor3or4';
+import DoubleMoatFor3or4 from './src/agents/domsim/doubleMoatFor3or4';
 
 const players = [
   new SillyAI(),
@@ -44,7 +45,8 @@ const players = [
   new BigMoneyUltimate(),
   new WorkshopGardens(),
   new BasicBigMoney(),
-  new BigMoneyUltimateFor3or4()
+  new BigMoneyUltimateFor3or4(),
+  new DoubleMoatFor3or4()
 ];
 
 const start = new Date();
