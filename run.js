@@ -48,14 +48,18 @@ const players = [
 const start = new Date();
 const state = new State();
 const player1 = players[players.length - 1];
+const rivals = [ player1 ];
+const numPlayers = 2;
 
-let player2 = players[Math.floor(Math.random() * players.length)];
-
-while (player1 === player2) {
-  player2 = players[Math.floor(Math.random() * players.length)];
+while (rivals.length < numPlayers) {
+  let rival = players[Math.floor(Math.random() * players.length)];
+  while (rivals.map(p => p.toString()).indexOf(rival.toString()) > -1) {
+    rival = players[Math.floor(Math.random() * players.length)];
+  }
+  rivals.push(rival);
 }
 
-state.setUp([player1, player2]);
+state.setUp(rivals);
 
 console.log(state.kingdom);
 
