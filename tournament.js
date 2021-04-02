@@ -28,6 +28,7 @@ import DoubleMoatFor3or4 from './src/agents/domsim/doubleMoatFor3or4';
 import Laboratory from './src/agents/domsim/laboratory';
 import Militia from './src/agents/domsim/militia';
 import Moat from './src/agents/domsim/moat';
+import Smithy from './src/agents/domsim/smithy';
 
 const players = [
   new BasicAI(),
@@ -56,7 +57,8 @@ const players = [
   new DoubleMoatFor3or4(),
   new Laboratory(),
   new Militia(),
-  new Moat()
+  new Moat(),
+  new Smithy()
 ];
 
 let scoreBoard = Object.fromEntries(players.map(p => [ p.toString(), { plays: 0, wins: 0, rate: 0.0 } ]));

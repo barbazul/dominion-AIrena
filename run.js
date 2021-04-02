@@ -25,6 +25,7 @@ import DoubleMoatFor3or4 from './src/agents/domsim/doubleMoatFor3or4';
 import Laboratory from './src/agents/domsim/laboratory';
 import Militia from './src/agents/domsim/militia';
 import Moat from './src/agents/domsim/moat';
+import Smithy from './src/agents/domsim/smithy';
 
 const players = [
   new SillyAI(), // 0
@@ -52,7 +53,8 @@ const players = [
   new DoubleMoatFor3or4(),
   new Laboratory(),
   new Militia(),
-  new Moat()
+  new Moat(),
+  new Smithy()
 ];
 
 const start = new Date();
