@@ -159,6 +159,10 @@ export class DomPlayer extends BasicAI {
     let count = 0;
 
     for (let card of deck) {
+      // TODO take into account Estate Token to treat Estates as actions. Possibly not necessary
+      // if (theCardName==DomCardName.Estate && owner.isEstateTokenPlaced() && aCardType==DomCardType.Action)
+      //   theCount+= get( theCardName ).size();
+
       if (card.types.indexOf(type) > -1 || (this.heuristics[card] && this.heuristics[card].types.indexOf(type) > -1)) {
         count++;
       }

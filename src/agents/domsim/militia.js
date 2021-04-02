@@ -1,10 +1,10 @@
 import { DomPlayer } from './domPlayer';
 import cards from '../../game/cards';
 
-export default class Laboratory extends DomPlayer {
+export default class Militia extends DomPlayer {
   constructor () {
     super();
-    this.requires = [ cards.Laboratory ];
+    this.requires = [ cards.Militia ];
   }
 
   gainPriority (state, my) {
@@ -14,7 +14,7 @@ export default class Laboratory extends DomPlayer {
       priority.push(cards.Province);
     }
 
-    if (state.countInSupply(cards.Province) <= 4) {
+    if (state.countInSupply(cards.Province) <= 6) {
       priority.push(cards.Duchy);
     }
 
@@ -23,7 +23,11 @@ export default class Laboratory extends DomPlayer {
     }
 
     priority.push(cards.Gold);
-    priority.push(cards.Laboratory);
+
+    if (my.countInDeck(cards.Militia) < 3) {
+      priority.push(cards.Militia);
+    }
+
     priority.push(cards.Silver);
 
     return priority;

@@ -23,6 +23,8 @@ import BasicBigMoney from './src/agents/domsim/basicBigMoney';
 import BigMoneyUltimateFor3or4 from './src/agents/domsim/bigMoneyUltimateFor3or4';
 import DoubleMoatFor3or4 from './src/agents/domsim/doubleMoatFor3or4';
 import Laboratory from './src/agents/domsim/laboratory';
+import Militia from './src/agents/domsim/militia';
+import Moat from './src/agents/domsim/moat';
 
 const players = [
   new SillyAI(),
@@ -48,7 +50,9 @@ const players = [
   new BasicBigMoney(),
   new BigMoneyUltimateFor3or4(),
   new DoubleMoatFor3or4(),
-  new Laboratory()
+  new Laboratory(),
+  new Militia(),
+  new Moat()
 ];
 
 const start = new Date();
