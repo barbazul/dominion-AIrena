@@ -160,4 +160,4 @@ console.log(ranking);
 
 const elapsed = new Date().getTime() - start.getTime();
 console.log(`Tournament took ${elapsed / 1000} seconds.`);
-console.log(`Played ${gameCounter} games (${elapsed / 1000 / gameCounter} seconds per game).`);
+console.log(`Played ${gameCounter} games (${Math.round(elapsed / gameCounter)} ms per game).`);
