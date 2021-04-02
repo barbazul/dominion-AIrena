@@ -291,7 +291,7 @@ test('Default gainPriority', () => {
   state.countInSupply = jest.fn(() => 8);
   state.gainsToEndGame = jest.fn(() => 8);
 
-  expect(state.current.agent.gainPriority(state, state.current)).toEqual(
+  expect(state.current.agent.gainPriority(state, state.current).map(card => card.toString())).toEqual(
     [
       'Colony',
       'Platinum',
@@ -324,7 +324,8 @@ test('Prefer Province with less than 7 colonies', () => {
   state.countInSupply = jest.fn(() => 6);
   state.gainsToEndGame = jest.fn(() => 8);
 
-  expect(state.current.agent.gainPriority(state, state.current)).toContain('Province');
+  expect(state.current.agent.gainPriority(state, state.current).map(card => card.toString()))
+    .toContain('Province');
 });
 
 test('Prefer Duchy with less than 6 gains to end game', () => {
@@ -337,7 +338,8 @@ test('Prefer Duchy with less than 6 gains to end game', () => {
   state.countInSupply = jest.fn(() => 6);
   state.gainsToEndGame = jest.fn(() => 5);
 
-  expect(state.current.agent.gainPriority(state, state.current)).toContain('Duchy');
+  expect(state.current.agent.gainPriority(state, state.current).map(card => card.toString()))
+    .toContain('Duchy');
 });
 
 test('Prefer Estate with less than 3 gains to end game', () => {
@@ -350,7 +352,8 @@ test('Prefer Estate with less than 3 gains to end game', () => {
   state.countInSupply = jest.fn(() => 6);
   state.gainsToEndGame = jest.fn(() => 2);
 
-  expect(state.current.agent.gainPriority(state, state.current)).toContain('Estate');
+  expect(state.current.agent.gainPriority(state, state.current).map(card => card.toString()))
+    .toContain('Estate');
 });
 
 test('Prefer Copper with less than 4 gains to end game', () => {
@@ -363,7 +366,8 @@ test('Prefer Copper with less than 4 gains to end game', () => {
   state.countInSupply = jest.fn(() => 6);
   state.gainsToEndGame = jest.fn(() => 3);
 
-  expect(state.current.agent.gainPriority(state, state.current)).toContain('Copper');
+  expect(state.current.agent.gainPriority(state, state.current).map(card => card.toString()))
+    .toContain('Copper');
 });
 
 test('Fallback gainValue is negative.', () => {

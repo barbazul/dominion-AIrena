@@ -231,6 +231,7 @@ export default class BasicAI {
   /**
    * The default buying strategy is a form of Big Money.
    *
+   * @todo Replace strings with card references instead when Prosperity is implemented
    * @param {State} state
    * @param {Player} my
    * @return {String[]}
@@ -239,8 +240,8 @@ export default class BasicAI {
     const priority = [];
     const basePriority = [
       'Platinum',
-      'Gold',
-      'Silver'
+      cards.Gold,
+      cards.Silver
     ];
 
     if (my.countInDeck('Platinum') > 0) {
@@ -248,21 +249,21 @@ export default class BasicAI {
     }
 
     if (state.countInSupply('Colony') <= 6) {
-      priority.push('Province');
+      priority.push(cards.Province);
     }
 
     if (state.gainsToEndGame() <= 5) {
-      priority.push('Duchy');
+      priority.push(cards.Duchy);
     }
 
     if (state.gainsToEndGame() <= 2) {
-      priority.push('Estate');
+      priority.push(cards.Estate);
     }
 
     priority.splice(priority.length, 0, ...basePriority);
 
     if (state.gainsToEndGame() <= 3) {
-      priority.push('Copper');
+      priority.push(cards.Copper);
     }
 
     return priority;
@@ -1016,6 +1017,23 @@ export default class BasicAI {
 
     return Math.pow(this.choiceToValue(CHOICE_GAIN, state, card, my), endGamePower) - this.choiceToValue(CHOICE_TRASH, state, card, my);
   }
+
+  /**
+   * NOT IMPLEMENTED
+   *
+   * The following methods were not migrated from original Dominiate code.
+   *
+   * - getScoreDifference: This was only used in BasicAI.wantsToRebuid method
+   *   which in turn was only used by the Rebuild.playValue method which is a
+   *   card I have yet to implement.
+   * - countNotInHand: Another utility method only used in relation to Rebuild.
+   * - countInDraw: Another utility method only used in relation to Rebuild.
+   * - chooseAction: Was already deprecated in Dominiate
+   * - chooseTreasure: Was already deprecated in Dominiate
+   * - chooseGain: Was already deprecated in Dominiate
+   * - chooseDiscard: Was already deprecated in Dominiate
+   * - chooseTrash: Was already deprecated in Dominiate
+   */
 }
 
 export const CHOICE_DISCARD = 'discard';

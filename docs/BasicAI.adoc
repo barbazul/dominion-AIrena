@@ -82,26 +82,6 @@ function wantsToPlayBandit (state, my) {
 }
 ----
 
-== Helper Methods
-
-These helper functions allow easy access to the player state or metrics of the
-current state.
-
-=== BasicAI.myPlayer(State state): Player
-
-Fetches the player state associated with this instance of the AI.
-
-IMPORTANT: This implies that a single instance of an AI should not be used for
-more than one player, otherwise this method
-risks returning the incorrect player state.
-
-_Usage example_
-
-----
-const my = this.myPlayer(state);
-console.log(`I have ${my.getDeck().length} cards in total.`);
-----
-
 === BasicAI.getPriorityFunction(String type): Function|null
 
 Retrieve priority function for a given type if it exists in the AI instance,
@@ -147,4 +127,29 @@ _Usage example_
 const gainValue = this.choiceToValue(CHOICE_GAIN, state, cards.Province, my);
 const trashValue = this.choiceToValue(CHOICE_GAIN, state, cards.Gol, my);
 const replaceValue = gainValue - trashValue;
+----
+
+=== BasicAI.gainPriority(State state, Player my): String[]
+
+This is the fallback strategy implementation which is a very simple form of
+Big Money.
+
+== Helper Methods
+
+These helper functions allow easy access to the player state or metrics of the
+current state.
+
+=== BasicAI.myPlayer(State state): Player
+
+Fetches the player state associated with this instance of the AI.
+
+IMPORTANT: This implies that a single instance of an AI should not be used for
+more than one player, otherwise this method
+risks returning the incorrect player state.
+
+_Usage example_
+
+----
+const my = this.myPlayer(state);
+console.log(`I have ${my.getDeck().length} cards in total.`);
 ----
