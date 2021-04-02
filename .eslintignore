@@ -1,0 +1,3 @@
+src/agents/**
+!src/agents/basicAI.js
+!src/agents/__tests__/**

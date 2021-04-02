@@ -1,4 +1,4 @@
-import { DomPlayer} from './domPlayer';
+import { DomPlayer } from './domPlayer';
 import cards from '../../game/cards';
 
 export default class Moat extends DomPlayer {

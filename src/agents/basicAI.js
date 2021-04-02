@@ -55,7 +55,6 @@ export default class BasicAI {
     let priority;
     let priorityFunc;
     let bestChoice = null;
-    let bestValue = -Infinity;
 
     // No real choice
     if (choices.length === 1) {
@@ -91,15 +90,7 @@ export default class BasicAI {
     }
 
     // The priority list does not want any of the choices (or there  is no priority list)
-    // Evaluate each choice value to choose best
-    for (let i = 0; i < choices.length; i++) {
-      const value = this.getChoiceValue(type, state, choices[i], my);
-
-      if (value > bestValue) {
-        bestValue = value;
-        bestChoice = choices[i];
-      }
-    }
+    bestChoice = this.getBestChoiceByValue(choices, type, state, my);
 
     if (bestChoice !== null) {
       return bestChoice;
@@ -111,6 +102,23 @@ export default class BasicAI {
     }
 
     throw new Error(`${this.name} somehow failed to make a choice (${type}::${choices.join(',')})`);
+  }
+
+  getBestChoiceByValue (choices, type, state, my) {
+    let bestValue = -Infinity;
+    let bestChoice = null;
+
+    // Evaluate each choice value to choose best
+    for (let i = 0; i < choices.length; i++) {
+      const value = this.getChoiceValue(type, state, choices[i], my);
+
+      if (value > bestValue) {
+        bestValue = value;
+        bestChoice = choices[i];
+      }
+    }
+
+    return bestChoice;
   }
 
   /**

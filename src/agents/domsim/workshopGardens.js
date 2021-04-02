@@ -7,7 +7,7 @@ export default class WorkshopGardens extends DomPlayer {
     this.requires = [ cards.Gardens, cards.Workshop ];
   }
 
-  gainPriority(state, my) {
+  gainPriority (state, my) {
     const priority = [
       cards.Workshop,
       cards.Estate,

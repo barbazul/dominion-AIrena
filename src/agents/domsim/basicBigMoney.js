@@ -7,7 +7,7 @@ export default class BasicBigMoney extends DomPlayer {
     this.name = 'Basic Big Money';
   }
 
-  gainPriority(state, my) {
+  gainPriority (state, my) {
     return [
       cards.Province,
       cards.Gold,

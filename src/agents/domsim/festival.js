@@ -8,7 +8,7 @@ export default class Festival extends DomPlayer {
     this.requires = [ cards.Festival ];
   }
 
-  gainPriority(state, my) {
+  gainPriority (state, my) {
     const priority = [];
 
     if (my.countInDeck(cards.Gold) > 0) {

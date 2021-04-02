@@ -8,7 +8,7 @@ export default class CouncilRoom extends DomPlayer {
     this.requires = [ cards['Council Room'] ];
   }
 
-  gainPriority(state, my) {
+  gainPriority (state, my) {
     const priority = [];
 
     if (my.countInDeck(cards.Gold) > 0) {
