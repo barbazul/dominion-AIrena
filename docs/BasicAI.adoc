@@ -129,7 +129,7 @@ const trashValue = this.choiceToValue(CHOICE_GAIN, state, cards.Gol, my);
 const replaceValue = gainValue - trashValue;
 ----
 
-=== BasicAI.gainPriority(State state, Player my): String[]
+=== BasicAI.gainPriority(State state, Player my): String[]|Card[]
 
 This is the fallback strategy implementation which is a very simple form of
 Big Money.

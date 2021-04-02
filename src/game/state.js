@@ -1,4 +1,4 @@
-import { CHOICE_DISCARD } from '../agents/basicAI';
+import { CHOICE_DISCARD, CHOICE_TRASH } from '../agents/basicAI';
 import shuffle from '../lib/shuffle';
 import cards from './cards';
 import Player from './player';
@@ -409,7 +409,7 @@ export default class State {
       let choice;
 
       validTrashes.push(null);
-      choice = player.agent.choose('trash', this, validTrashes);
+      choice = player.agent.choose(CHOICE_TRASH, this, validTrashes);
 
       if (choice === null) {
         return trashed;

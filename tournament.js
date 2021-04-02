@@ -145,7 +145,18 @@ for (let i = 0; i < players.length - 1; i++) {
   }
 }
 
-console.log(scoreBoard);
+
+let ranking = [];
+for (let p in scoreBoard) {
+  ranking.push({
+    player: p,
+    score: scoreBoard[p].rate
+  });
+}
+
+ranking.sort((p1, p2) => p2.score - p1.score);
+
+console.log(ranking);
 
 const elapsed = new Date().getTime() - start.getTime();
 console.log(`Tournament took ${elapsed / 1000} seconds.`);

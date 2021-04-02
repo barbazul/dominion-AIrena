@@ -234,7 +234,7 @@ export default class BasicAI {
    * @todo Replace strings with card references instead when Prosperity is implemented
    * @param {State} state
    * @param {Player} my
-   * @return {String[]}
+   * @return {String[]|Card[]}
    */
   gainPriority (state, my) {
     const priority = [];

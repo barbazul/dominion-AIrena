@@ -1,4 +1,4 @@
-import { DomPlayer } from './domPlayer';
+import { DomPlayer, STRATEGY_AGGRESSIVE_TRASHING } from './domPlayer';
 import cards from '../../game/cards';
 
 /**
@@ -14,6 +14,7 @@ export default class LabMilitiaChapel extends DomPlayer {
     super();
     this.name = 'Lab/Militia/Chapel';
     this.requires = [ 'Festival', 'Market', 'Laboratory', 'Militia', 'Chapel' ];
+    this.playStrategies.Chapel = STRATEGY_AGGRESSIVE_TRASHING;
   }
 
   gainPriority (state, my) {

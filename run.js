@@ -27,25 +27,25 @@ import Militia from './src/agents/domsim/militia';
 import Moat from './src/agents/domsim/moat';
 
 const players = [
-  new SillyAI(),
+  new SillyAI(), // 0
   new BasicAI(),
   new BigMoney(),
   new BigSmithy(),
   new BMLibrary(),
   new BureaucratGardens(),
-  new BurningSkullHTBD1(),
+  new BurningSkullHTBD1(), // 6
   new ChapelWitch(),
-  new CouncilRoomMilitia(),
+  new CouncilRoomMilitia(), // 8
   new DoubleMilitia(),
   new DoubleWitch(),
   new FirstGame(),
   new MoneylenderWitch(),
-  new LabMilitiaChapel(),
+  new LabMilitiaChapel(), // 13
   new Festival(),
   new SingleWitch(),
   new CouncilRoom(),
   new Bureaucrat(),
-  new BigMoneyUltimate(),
+  new BigMoneyUltimate(), // 18
   new WorkshopGardens(),
   new BasicBigMoney(),
   new BigMoneyUltimateFor3or4(),
