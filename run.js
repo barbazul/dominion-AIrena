@@ -26,6 +26,7 @@ import Laboratory from './src/agents/domsim/laboratory';
 import Militia from './src/agents/domsim/militia';
 import Moat from './src/agents/domsim/moat';
 import Smithy from './src/agents/domsim/smithy';
+import Witch from './src/agents/domsim/witch';
 
 const players = [
   new SillyAI(), // 0
@@ -54,12 +55,14 @@ const players = [
   new Laboratory(),
   new Militia(),
   new Moat(),
-  new Smithy()
+  new Smithy(),
+  new Witch()
 ];
 
 const start = new Date();
 const state = new State();
-const player1 = players[players.length - 1];
+// const player1 = players[players.length - 1];
+const player1 = players[6];
 const rivals = [ player1 ];
 const numPlayers = 2;
 

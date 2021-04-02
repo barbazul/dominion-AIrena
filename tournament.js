@@ -29,6 +29,7 @@ import Laboratory from './src/agents/domsim/laboratory';
 import Militia from './src/agents/domsim/militia';
 import Moat from './src/agents/domsim/moat';
 import Smithy from './src/agents/domsim/smithy';
+import Witch from './src/agents/domsim/witch';
 
 const players = [
   new BasicAI(),
@@ -58,7 +59,8 @@ const players = [
   new Laboratory(),
   new Militia(),
   new Moat(),
-  new Smithy()
+  new Smithy(),
+  new Witch()
 ];
 
 let scoreBoard = Object.fromEntries(players.map(p => [ p.toString(), { plays: 0, wins: 0, rate: 0.0 } ]));
