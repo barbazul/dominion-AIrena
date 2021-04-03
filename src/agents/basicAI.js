@@ -280,7 +280,8 @@ export default class BasicAI {
    * @return {Number}
    */
   gainValue (state, card, my) {
-    return card.cost + (card.isTreasure() ? 1 : 0) + (card.isAction() ? 1 : 0) - 20;
+    // TODO Consider potion cost. + 2 * card.costPotion
+    return card.cost + Number(card.isTreasure()) + Number(card.isAction()) - 20;
   }
 
   /**

@@ -129,10 +129,19 @@ const trashValue = this.choiceToValue(CHOICE_GAIN, state, cards.Gol, my);
 const replaceValue = gainValue - trashValue;
 ----
 
+== Default Strategy
+
 === BasicAI.gainPriority(State state, Player my): String[]|Card[]
 
 This is the fallback strategy implementation which is a very simple form of
 Big Money.
+
+=== BasicAI.gainValue(State state, Card card, Player my): Number
+
+Assign a value when decision forces to gain a card not in priority list.
+All values returned are negative to prefer not gaining a card when available.
+Defaults to gaining the most expensive cards, with a bias in favor of actions
+and treasures.
 
 == Helper Methods
 
