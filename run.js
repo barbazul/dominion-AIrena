@@ -27,6 +27,7 @@ import Militia from './src/agents/domsim/militia';
 import Moat from './src/agents/domsim/moat';
 import Smithy from './src/agents/domsim/smithy';
 import Witch from './src/agents/domsim/witch';
+import WitchAndMoatFor3or4 from './src/agents/domsim/witchAndMoatFor3or4';
 
 const players = [
   new SillyAI(), // 0
@@ -56,15 +57,15 @@ const players = [
   new Militia(),
   new Moat(),
   new Smithy(),
-  new Witch()
+  new Witch(),
+  new WitchAndMoatFor3or4()
 ];
 
 const start = new Date();
 const state = new State();
-// const player1 = players[players.length - 1];
-const player1 = players[6];
+const player1 = players[players.length - 1];
 const rivals = [ player1 ];
-const numPlayers = 2;
+const numPlayers = 4;
 
 while (rivals.length < numPlayers) {
   let rival = players[Math.floor(Math.random() * players.length)];

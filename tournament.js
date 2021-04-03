@@ -30,6 +30,7 @@ import Militia from './src/agents/domsim/militia';
 import Moat from './src/agents/domsim/moat';
 import Smithy from './src/agents/domsim/smithy';
 import Witch from './src/agents/domsim/witch';
+import WitchAndMoatFor3or4 from './src/agents/domsim/witchAndMoatFor3or4';
 
 const players = [
   new BasicAI(),
@@ -60,7 +61,8 @@ const players = [
   new Militia(),
   new Moat(),
   new Smithy(),
-  new Witch()
+  new Witch(),
+  new WitchAndMoatFor3or4()
 ];
 
 let scoreBoard = Object.fromEntries(players.map(p => [ p.toString(), { plays: 0, wins: 0, rate: 0.0 } ]));
@@ -108,8 +110,6 @@ let gameCounter = 0;
 
 for (let i = 0; i < players.length - 1; i++) {
   for (let j = i + 1; j < players.length; j++) {
-    console.log(`\n`);
-    console.log(`${players[i]} vs ${players[j]}`);
     for (let game = 0; game < 10; game++) {
       let state = new State();
       let logFn = () => {};
@@ -118,10 +118,11 @@ for (let i = 0; i < players.length - 1; i++) {
         state.setUp([players[i], players[j]], { log: logFn });
       } catch (error) {
         if (error.message === 'Too many required cards') {
-          console.log('Impossible match');
+          console.log(`Impossible match ${players[i]} vs ${players[j]}`);
           break;
         }
       }
+
       state.startGame();
 
       while (!state.isGameOver()) {
@@ -133,11 +134,9 @@ for (let i = 0; i < players.length - 1; i++) {
       scoreBoard[players[j]].plays++;
 
       if (!winner) {
-        console.log(`>>> Game is a tie`);
         scoreBoard[players[i]].wins += 0.5;
         scoreBoard[players[j]].wins += 0.5;
       } else {
-        console.log(`>>> Winner is ${winner}`);
         scoreBoard[winner].wins++;
       }
 
@@ -148,7 +147,6 @@ for (let i = 0; i < players.length - 1; i++) {
     scoreBoard[players[j]].rate = scoreBoard[players[j]].wins / scoreBoard[players[j]].plays;
   }
 }
-
 
 let ranking = [];
 for (let p in scoreBoard) {
