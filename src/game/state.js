@@ -69,12 +69,18 @@ export default class State {
     this.players = shuffle(this.players, this.rng);
     this.current = this.players[0];
 
+    // TODO Check for colony and platinum.
     if (options.required) {
-      selectedCards = selectedCards.concat(options.required);
+      selectedCards = selectedCards.concat(options.required.map(c => cards[c]));
     }
 
     players.forEach(agent => {
-      selectedCards = selectedCards.concat(agent.requires);
+      agent.requires.forEach(c => {
+        let card = cards[c];
+        if (selectedCards.indexOf(card) === -1) {
+          selectedCards.push(card);
+        }
+      });
     });
 
     if (selectedCards.length > 10) {
@@ -95,14 +101,29 @@ export default class State {
   /**
    * Builds the kingdom configuration for a selection of required kingdom cards and the number of players
    *
-   * @param {Array} selection
+   * @param {Card[]} selection
    */
   buildKingdom (selection) {
     const baseCards = [cards.Curse, cards.Estate, cards.Duchy, cards.Province, cards.Copper, cards.Silver, cards.Gold];
     const kingdom = {};
+    let moreCards = Object.keys(cards);
+    let index = 0;
 
     if (this.players.length === 0) {
       throw new Error('Cannot build a kingdom without players');
+    }
+
+    shuffle(moreCards);
+
+    while (selection.length < 10) {
+      let candidate = cards[moreCards[index]];
+
+      // TODO Also filter special supplies and prizes
+      if (selection.indexOf(candidate) === -1 && baseCards.indexOf(candidate) === -1) {
+        selection.push(candidate);
+      }
+
+      index++;
     }
 
     baseCards.forEach(card => {
@@ -110,7 +131,6 @@ export default class State {
     });
 
     selection.forEach(card => {
-      card = cards[card];
       kingdom[card] = card.startingSupply(this);
     });
 

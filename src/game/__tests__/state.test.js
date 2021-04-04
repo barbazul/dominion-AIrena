@@ -106,7 +106,7 @@ test('Built kingdom has selected cards', () => {
   let kingdom;
 
   state.setUp(createPlayers(2));
-  kingdom = state.buildKingdom(['Village']);
+  kingdom = state.buildKingdom([ cards.Village ]);
   expect(kingdom).toMatchObject({ Village: 10 });
 });
 
@@ -1480,4 +1480,18 @@ test('requireDiscard discards the whole hand if player does not have enough', ()
   expect(state.current.hand.length).toBe(0);
   expect(state.current.discard.length).toBe(2);
   expect(state.current.discard).toEqual([card1, card2]);
+});
+
+test('Kingdom has the correct amount of cards', () => {
+  const state = new State();
+  const players = createPlayers(2);
+
+  players[0].requires = [ cards.Smithy, cards.Village ];
+  players[1].requires = [ cards.Smithy, cards.Festival ];
+  state.setUp(players, muteConfig);
+
+  console.log(state.kingdom);
+
+  // Curses + 3 Victory Piles + 3 Treasure Piles + 10 Kingdom Piles = 17
+  expect(Object.keys(state.kingdom).length).toBeGreaterThanOrEqual(17);
 });
