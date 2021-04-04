@@ -134,6 +134,9 @@ export default class State {
       kingdom[card] = card.startingSupply(this);
     });
 
+    // TODO Add Colonies and Platinum if necessary
+    // TODO Add Potions if necessary
+
     return kingdom;
   }
 
