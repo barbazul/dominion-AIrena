@@ -10,7 +10,7 @@ export default class BigMoneyUltimate extends DomPlayer {
   gainPriority (state, my) {
     const priority = [];
 
-    if (my.getTotalMoney() > 18) {
+    if (this.getTotalMoney(my) > 18) {
       priority.push(cards.Province);
     }
 

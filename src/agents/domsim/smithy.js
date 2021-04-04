@@ -10,7 +10,7 @@ export default class Smithy extends DomPlayer {
   gainPriority(state, my) {
     const priority = [];
 
-    if (my.getTotalMoney() > 15) {
+    if (this.getTotalMoney(my) > 15) {
       priority.push(cards.Province);
     }
 

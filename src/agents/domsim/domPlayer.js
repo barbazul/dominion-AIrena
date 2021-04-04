@@ -1,8 +1,8 @@
 import cards from '../../game/cards';
-import BasicAI, { CHOICE_TRASH, CHOICE_UPGRADE } from '../basicAI';
+import BasicAI, {CHOICE_TRASH, CHOICE_UPGRADE} from '../basicAI';
 
 export class DomPlayer extends BasicAI {
-  constructor () {
+  constructor() {
     super();
     this.playStrategies = {};
 
@@ -12,39 +12,39 @@ export class DomPlayer extends BasicAI {
      * @type {{{discardPriority: Number, playPriority: Number, types: String[]}}}
      */
     this.heuristics = {
-      Curse: { discardPriority: 10 },
-      Copper: { discardPriority: 15, playPriority: 55 },
-      Silver: { discardPriority: 20, playPriority: 25 },
-      Gold: { discardPriority: 24, playPriority: 30 },
-      Estate: { discardPriority: 9 },
-      Duchy: { discardPriority: 8 },
-      Province: { discardPriority: 7 },
-      Artisan: { discardPriority: 27, playPriority: 30 },
-      Bandit: { discardPriority: 23, playPriority: 23 },
-      Bureaucrat: { discardPriority: 20, playPriority: 29 },
-      Cellar: { types: ['Cycler'], discardPriority: 17, playPriority: 16 },
-      Chapel: { discardPriority: 18, playPriority: 37 },
-      'Council Room': { discardPriority: 27, playPriority: 25 },
-      Festival: { discardPriority: 26, playPriority: 3 },
-      Gardens: { discardPriority: 9 },
-      Harbinger: { types: ['Cycler'], discardPriority: 16, playPriority: 5 },
-      Laboratory: { types: ['Cycler', 'Card_Advantage'], discardPriority: 40, playPriority: 8 },
-      Library: { discardPriority: 30, playPriority: 20 },
-      Market: { types: ['Cycler'], discardPriority: 30, playPriority: 13 },
-      Merchant: { types: ['Cycler'], discardPriority: 19, playPriority: 7 },
-      Militia: { discardPriority: 25, playPriority: 30 },
-      Mine: { discardPriority: 22, playPriority: 24 },
-      Moat: { discardPriority: 23, playPriority: 33 },
-      Moneylender: { discardPriority: 21, playPriority: 23 },
-      Poacher: { types: ['Cycler'], discardPriority: 30, playPriority: 10 },
-      Remodel: { discardPriority: 18, playPriority: 24 },
-      Sentry: { types: ['Cycler'], discardPriority: 22, playPriority: 16 },
-      Smithy: { discardPriority: 24, playPriority: 25 },
+      Curse: {discardPriority: 10},
+      Copper: {discardPriority: 15, playPriority: 55},
+      Silver: {discardPriority: 20, playPriority: 25},
+      Gold: {discardPriority: 24, playPriority: 30},
+      Estate: {discardPriority: 9},
+      Duchy: {discardPriority: 8},
+      Province: { discardPriority: 7, trashPriority: 60 },
+      Artisan: { types: [ 'Terminal' ], discardPriority: 27, playPriority: 30 },
+      Bandit: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 23 },
+      Bureaucrat: { types: [ 'Terminal' ], discardPriority: 20, playPriority: 29 },
+      Cellar: {types: ['Cycler'], discardPriority: 17, playPriority: 16},
+      Chapel: { types: [ 'Terminal' ], discardPriority: 18, playPriority: 37 },
+      'Council Room': { types: [ 'Terminal' ], discardPriority: 27, playPriority: 25 },
+      Festival: {discardPriority: 26, playPriority: 3},
+      Gardens: {discardPriority: 9},
+      Harbinger: {types: ['Cycler'], discardPriority: 16, playPriority: 5},
+      Laboratory: {types: ['Cycler', 'Card_Advantage'], discardPriority: 40, playPriority: 8},
+      Library: { types: [ 'Terminal' ], discardPriority: 30, playPriority: 20 },
+      Market: {types: ['Cycler'], discardPriority: 30, playPriority: 13},
+      Merchant: {types: ['Cycler'], discardPriority: 19, playPriority: 7},
+      Militia: { types: [ 'Terminal' ], discardPriority: 25, playPriority: 30 },
+      Mine: { types: [ 'Terminal' ], discardPriority: 22, playPriority: 24 },
+      Moat: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 33 },
+      Moneylender: { types: [ 'Terminal' ], discardPriority: 21, playPriority: 23 },
+      Poacher: {types: ['Cycler'], discardPriority: 30, playPriority: 10},
+      Remodel: { types: [ 'Terminal' ], discardPriority: 18, playPriority: 24 },
+      Sentry: { types: ['Cycler'], discardPriority: 22, playPriority: 2 },
+      Smithy: { types: [ 'Terminal' ], discardPriority: 24, playPriority: 25 },
       'Throne Room': { discardPriority: 22, playPriority: 7 },
-      Vassal: { discardPriority: 23, playPriority: 25 },
-      Village: { types: ['Cycler', 'Village'], discardPriority: 21, playPriority: 5 },
-      Witch: { discardPriority: 40, playPriority: 18 },
-      Workshop: { discardPriority: 22, playPriority: 38 }
+      Vassal: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 25 },
+      Village: {types: ['Cycler', 'Village'], discardPriority: 21, playPriority: 5},
+      Witch: { types: [ 'Terminal' ], discardPriority: 40, playPriority: 18 },
+      Workshop: { types: [ 'Terminal' ], discardPriority: 22, playPriority: 38}
     };
   }
 
@@ -53,7 +53,7 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @return {number}
    */
-  countTerminalsInDeck (my) {
+  countTerminalsInDeck(my) {
     let count = 0;
     for (let card of my.getDeck()) {
       if (card.isAction() && card.actions === 0) {
@@ -69,7 +69,7 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @return {String[]|Card[]}
    */
-  playPriority (state, my) {
+  playPriority(state, my) {
     let choices = my.hand.slice(0).sort(
       (card1, card2) => this.playValue(state, cards[card2], my) -
         this.playValue(state, cards[card1], my)
@@ -83,12 +83,36 @@ export class DomPlayer extends BasicAI {
    *
    * Value is substracted from 100 as sorting in DomSim is ascending
    *
-   * @param state
-   * @param card
-   * @param my
+   * @param {State} state
+   * @param {Card} card
+   * @param {Player} my
    * @returns {Number|*}
    */
   playValue(state, card, my) {
+    let heuristics = this.heuristics;
+
+    // TODO Move this into heuristics
+    const specific = {
+      Vassal: (state, my) => {
+        if (
+          my.knownTopCards > 0 && my.draw[0].isAction() &&
+          !(heuristics[my.draw[0]].types && heuristics[my.draw[0]].types.indexOf('Terminal') > -1)
+        ) {
+            return 99;
+        }
+
+        if (my.knownTopCards > 0 && my.draw[0].isAction() && my.actions > 1) {
+          return 99;
+        }
+
+        return 100 - heuristics.Vassal.playPriority;
+      }
+    }
+
+    if (specific[card]) {
+      return specific[card](state, my);
+    }
+
     if (this.heuristics[card].playPriority !== undefined) {
       return 100 - this.heuristics[card].playPriority;
     }
@@ -103,7 +127,7 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @return {boolean}
    */
-  wantsToPlay (cardName, state, my) {
+  wantsToPlay(cardName, state, my) {
     // TODO Move into heuristics
     const specific = {
       Chapel: (state, my) => {
@@ -126,8 +150,8 @@ export class DomPlayer extends BasicAI {
 
         return this.trashValue(state, cardToTrash, my) > 0 ||
           this.removingReducesBuyingPower(my, state, cardToTrash) && trashCount < trashOverBuyThreshold ||
-          my.getTotalMoney() - this.getPotentialCoinValue(my, cardToTrash) < minMoneyInDeck
-          && my.getTotalMoney() >= minMoneyInDeck;
+          this.getTotalMoney(my) - this.getPotentialCoinValue(my, cardToTrash) < minMoneyInDeck
+          && this.getTotalMoney(my) >= minMoneyInDeck;
 
 
       },
@@ -154,7 +178,11 @@ export class DomPlayer extends BasicAI {
    * @param {Card} card
    * @param {Player} my
    */
-  trashValue (state, card, my) {
+  trashValue(state, card, my) {
+    if (this.heuristics[card].trashPriority) {
+      return 16 - this.heuristics[card].trashPriority;
+    }
+
     return this.fallbackDiscardValue(state, card, my);
   }
 
@@ -169,7 +197,7 @@ export class DomPlayer extends BasicAI {
    */
   discardValue(state, card, my) {
     if (my.actions < 1 && card.isAction()) {
-      return 16;
+      return 15;
     }
 
     return this.fallbackDiscardValue(state, card, my);
@@ -184,7 +212,7 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @returns {Number}
    */
-  fallbackDiscardValue (state, card, my) {
+  fallbackDiscardValue(state, card, my) {
     if (this.heuristics[card].discardPriority !== undefined) {
       return 16 - this.heuristics[card].discardPriority;
     }
@@ -197,13 +225,13 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @return {boolean}
    */
-  isGoingToBuyTopCardInBuyRules (state, my) {
+  isGoingToBuyTopCardInBuyRules(state, my) {
     // we don't want to mess with a hand if we're going to buy the top card this turn (although we could)
     // @todo cannot currently model this with just dynamic priority lists
     return my.getAvailableMoney() >= 8;
   }
 
-  getPlayStrategyFor (card) {
+  getPlayStrategyFor(card) {
     let theStrategy = this.playStrategies[card];
 
     if (card.toString() === 'Madman') {
@@ -218,12 +246,12 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @return {String[]}
    */
-  checkForCardToMine (state, my) {
+  checkForCardToMine(state, my) {
     let upgradeChoices = cards.Mine.upgradeChoices(state, my.hand);
     return this.choose(CHOICE_UPGRADE, state, upgradeChoices);
   }
 
-  countCardTypeInDeck (my, type) {
+  countCardTypeInDeck(my, type) {
     const deck = my.getDeck();
     let count = 0;
 
@@ -276,6 +304,22 @@ export class DomPlayer extends BasicAI {
     }
 
     return card.coins;
+  }
+
+  /**
+   * Counts total money in deck based on DomDeck.getTotalMoney which counts
+   * terminal money as well.
+   *
+   * @param {Player} my
+   */
+  getTotalMoney(my) {
+    let total = 0;
+
+    for (let card of my.getDeck()) {
+      total += card.coins;
+    }
+
+    return total;
   }
 }
 

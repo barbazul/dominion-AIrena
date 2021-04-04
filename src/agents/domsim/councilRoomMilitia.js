@@ -32,7 +32,7 @@ export default class CouncilRoomMilitia extends DomPlayer {
       priority.push('Estate');
     }
 
-    if (my.countInDeck('Gold') < my.countInDeck('Council Room') - 1 && my.getTotalMoney() < 16) {
+    if (my.countInDeck('Gold') < my.countInDeck('Council Room') - 1 && this.getTotalMoney(my) < 16) {
       priority.push('Gold');
     }
 

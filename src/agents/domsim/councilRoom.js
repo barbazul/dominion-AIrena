@@ -33,7 +33,7 @@ export default class CouncilRoom extends DomPlayer {
       priority.push(cards['Council Room']);
     }
 
-    if (my.countInDeck(cards['Council Room']) < my.getTotalMoney() / 13) {
+    if (my.countInDeck(cards['Council Room']) < this.getTotalMoney(my) / 13) {
       priority.push(cards['Council Room']);
     }
 

@@ -30,20 +30,20 @@ export default class BurningSkullHTBD1 extends DomPlayer {
       priority.push('Sentry');
     }
 
-    if (my.getTotalMoney() < 8) {
-      my.log(`I have ${my.getTotalMoney()} total moneys -> I want Gold`);
+    if (this.getTotalMoney(my) < 8) {
+      my.log(`I have ${this.getTotalMoney(my)} total moneys -> I want Gold`);
       priority.push('Gold');
     }
 
-    if (my.getTotalMoney() < 6) {
-      my.log(`I have ${my.getTotalMoney()} total moneys -> I want Vassal`);
+    if (this.getTotalMoney(my) < 6) {
+      my.log(`I have ${this.getTotalMoney(my)} total moneys -> I want Vassal`);
       priority.push('Vassal');
     }
 
     if (my.countInDeck('Sentry') > 1 &&
       my.countInDeck('Throne Room') < this.countCardTypeInDeck(my, 'Cycler') &&
       my.countInDeck('Throne Room') < 1) {
-      my.log(`I have ${my.countInDeck('Sentry')} Sentries, ${this.countCardTypeInDeck(my, 'Cycler')} cantrips and ${my.countInDeck('Throne Room')} -> I want TRs`);
+      my.log(`I have ${my.countInDeck('Sentry')} Sentries, ${this.countCardTypeInDeck(my, 'Cycler')} cantrips and ${my.countInDeck('Throne Room')} Throne Rooms -> I want TRs`);
       priority.push('Throne Room');
     }
 
@@ -52,7 +52,7 @@ export default class BurningSkullHTBD1 extends DomPlayer {
 
     if (my.countInDeck('Sentry') > 1 &&
       my.countInDeck('Throne Room') < this.countCardTypeInDeck(my, 'Cycler')) {
-      my.log(`I have ${my.countInDeck('Sentry')} Sentries, ${this.countCardTypeInDeck(my, 'Cycler')} cantrips and ${my.countInDeck('Throne Room')} -> I want TRs`);
+      my.log(`I have ${my.countInDeck('Sentry')} Sentries, ${this.countCardTypeInDeck(my, 'Cycler')} cantrips and ${my.countInDeck('Throne Room')} Throne Rooms -> I want TRs`);
       priority.push('Throne Room');
     }
 

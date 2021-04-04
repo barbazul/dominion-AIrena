@@ -10,7 +10,7 @@ export default class Moat extends DomPlayer {
   gainPriority (state, my) {
     const priority = [];
 
-    if (my.getTotalMoney() > 16) {
+    if (this.getTotalMoney(my) > 16) {
       priority.push(cards.Province);
     }
 
