@@ -50,7 +50,7 @@ const players = [
   new Bureaucrat(),
   new BigMoneyUltimate(), // 18
   new WorkshopGardens(),
-  new BasicBigMoney(),
+  new BasicBigMoney(), // 20
   new BigMoneyUltimateFor3or4(),
   new DoubleMoatFor3or4(),
   new Laboratory(),
@@ -75,42 +75,77 @@ while (rivals.length < numPlayers) {
   rivals.push(rival);
 }
 
-state.setUp(rivals);
+const numGames = 1;
+const config = {};
+let logFn = console.log;
 
-console.log(state.kingdom);
+if (numGames > 1) {
+  logFn = () => {};
+}
 
-state.startGame();
+config.log = logFn;
+const stats = { ties: 0 };
 
-while (!state.isGameOver()) {
-  if (state.phase === PHASE_START) {
-    console.log(`=== ${state.current.agent}'s turn ${state.current.turnsTaken + 1}`);
+rivals.forEach(player => {
+  stats[player] = 0;
+});
+
+for (let i = 0; i < numGames; i++) {
+  state.setUp(rivals, config);
+  state.startGame();
+
+  while (!state.isGameOver()) {
+    if (state.phase === PHASE_START) {
+      logFn(`=== ${state.current.agent}'s turn ${state.current.turnsTaken + 1}`);
+    }
+
+    logFn(`${state.phase} phase`);
+    state.doPhase();
+
+    if (state.phase === PHASE_CLEANUP) {
+      logFn(state.emptyPiles());
+    }
   }
 
-  console.log(`${state.phase} phase`);
-  state.doPhase();
+  let maxScore = -Infinity;
+  let winner = null;
 
-  if (state.phase === PHASE_CLEANUP) {
-    console.log(state.emptyPiles());
+  state.players.forEach(p => {
+    let score = 0;
+    const deck = {};
+
+    for (let card of p.getDeck()) {
+      if (!deck[card]) {
+        deck[card] = 0;
+      }
+
+      deck[card]++;
+      score += card.getVP(p);
+    }
+
+    if (score > maxScore) {
+      maxScore = score;
+      winner = p.agent;
+    } else if (score === maxScore) {
+      winner = null;
+    }
+
+    logFn(`${p.agent} score: ${score}`);
+    logFn(deck);
+  });
+
+  if (winner) {
+    stats[winner]++;
+  } else {
+    stats.ties++;
   }
 }
 
 const end = new Date();
 
-state.players.forEach(p => {
-  let score = 0;
-  const deck = {};
-
-  for (let card of p.getDeck()) {
-    if (!deck[card]) {
-      deck[card] = 0;
-    }
-
-    deck[card]++;
-    score += card.getVP(p);
-  }
-
-  console.log(`${p.agent} score: ${score}`);
-  console.log(deck);
-});
+if (numGames > 1) {
+  console.log(`Played ${numGames} games.`);
+  console.log(stats);
+}
 
 console.log(`Time elapsed ${(end - start) / 1000} seconds.`);
