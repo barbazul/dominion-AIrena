@@ -327,7 +327,7 @@ export default class State {
 
     this.log(`${player.agent.name} topdecks ${card}.`);
     source.splice(index, 1);
-    player.draw.unshift(card);
+    player.topdeck([card]);
   }
 
   /**

@@ -15,6 +15,7 @@ export default class Player {
     this.actions = 1;
     this.buys = 1;
     this.coins = 0;
+    this.knownTopCards = 0;
 
     /**
      * @type {Card[]}
@@ -221,7 +222,10 @@ export default class Player {
       this.shuffle();
     }
 
-    return this.draw.splice(0, num);
+    const drawnCards = this.draw.splice(0, num);
+    this.knownTopCards = Math.max(0, this.knownTopCards - drawnCards.length);
+
+    return drawnCards;
   }
 
   /**
@@ -231,5 +235,15 @@ export default class Player {
     this.log(`(${this.agent.name} shuffles.)`);
     this.draw = this.draw.concat(shuffle(this.discard, this.rng));
     this.discard = [];
+  }
+
+  /**
+   * Puts a card on top of draw pile.
+   *
+   * @param {Card[]} cards
+   */
+  topdeck (cards) {
+    this.knownTopCards += cards.length;
+    this.draw.unshift(...cards);
   }
 }

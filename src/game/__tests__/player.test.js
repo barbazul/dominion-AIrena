@@ -332,3 +332,29 @@ test('countPlayableTerminals accounts for villages in hand when available', () =
   player.actions = 5;
   expect(player.countPlayableTerminals()).toBe(6);
 });
+
+test('Topdeck cards puts cards at the begining of draw pile', () => {
+  const player = new Player(new BasicAI(), () => {});
+
+  player.draw = [ cards.Curse ];
+  player.topdeck([ cards.Copper, cards.Silver ]);
+
+  expect(player.draw).toEqual([ cards.Copper, cards.Silver, cards.Curse ]);
+});
+
+test('Topdecked cards are known', () => {
+  const player = new Player(new BasicAI(), () => {});
+
+  player.topdeck([ cards.Copper, cards.Silver ]);
+
+  expect(player.knownTopCards).toEqual(2);
+});
+
+test('getCardsFromDeck reduces knownTopCards', () => {
+  const player = new Player(new BasicAI(), () => {});
+
+  player.knownTopCards = 2;
+  player.getCardsFromDeck(1);
+
+  expect(player.knownTopCards).toEqual(1);
+});

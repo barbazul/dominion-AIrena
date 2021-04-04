@@ -85,14 +85,14 @@ test('Sentry topdecks the remaining cards', () => {
 
   ai.choose = jest.fn(() => null);
   state.setUp([ai, ai]);
-  state.current.draw = [cards.Copper, cards.Estate];
+  state.current.draw = [ cards.Copper, cards.Estate ];
   state.current.discard = [];
   card.playEffect(state);
 
-  expect(ai.choose).toHaveBeenCalledWith(CHOICE_TRASH, state, [cards.Copper, null]);
-  expect(ai.choose).toHaveBeenCalledWith(CHOICE_TRASH, state, [cards.Estate, null]);
-  expect(ai.choose).toHaveBeenCalledWith(CHOICE_DISCARD, state, [cards.Copper, null]);
-  expect(ai.choose).toHaveBeenCalledWith(CHOICE_DISCARD, state, [cards.Estate, null]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_TRASH, state, [ cards.Copper, null ]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_TRASH, state, [ cards.Estate, null ]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_DISCARD, state, [ cards.Copper, null ]);
+  expect(ai.choose).toHaveBeenCalledWith(CHOICE_DISCARD, state, [ cards.Estate, null ]);
   expect(state.current.discard).not.toContain(cards.Copper);
   expect(state.current.discard).not.toContain(cards.Estate);
   expect(state.trash).not.toContain(cards.Copper);
