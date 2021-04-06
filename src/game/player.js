@@ -5,7 +5,7 @@ import cards from './cards';
 export default class Player {
   /**
    * @param {BasicAI} agent
-   * @param {function(Any)} log
+   * @param {function(any)} log
    * @param {function():number} rng
    */
   constructor (agent, log, rng = null) {

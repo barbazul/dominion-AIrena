@@ -1,51 +1,11 @@
 import cards from '../../game/cards';
 import BasicAI, {CHOICE_TRASH, CHOICE_UPGRADE} from '../basicAI';
+import heuristics from './heuristics';
 
 export class DomPlayer extends BasicAI {
   constructor() {
     super();
     this.playStrategies = {};
-
-    /**
-     * This is taken from DomCardName
-     *
-     * @type {{{discardPriority: Number, playPriority: Number, types: String[]}}}
-     */
-    this.heuristics = {
-      Curse: {discardPriority: 10},
-      Copper: {discardPriority: 15, playPriority: 55},
-      Silver: {discardPriority: 20, playPriority: 25},
-      Gold: {discardPriority: 24, playPriority: 30},
-      Estate: {discardPriority: 9},
-      Duchy: {discardPriority: 8},
-      Province: { discardPriority: 7, trashPriority: 60 },
-      Artisan: { types: [ 'Terminal' ], discardPriority: 27, playPriority: 30 },
-      Bandit: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 23 },
-      Bureaucrat: { types: [ 'Terminal' ], discardPriority: 20, playPriority: 29 },
-      Cellar: {types: ['Cycler'], discardPriority: 17, playPriority: 16},
-      Chapel: { types: [ 'Terminal' ], discardPriority: 18, playPriority: 37 },
-      'Council Room': { types: [ 'Terminal' ], discardPriority: 27, playPriority: 25 },
-      Festival: {discardPriority: 26, playPriority: 3},
-      Gardens: {discardPriority: 9},
-      Harbinger: {types: ['Cycler'], discardPriority: 16, playPriority: 5},
-      Laboratory: {types: ['Cycler', 'Card_Advantage'], discardPriority: 40, playPriority: 8},
-      Library: { types: [ 'Terminal' ], discardPriority: 30, playPriority: 20 },
-      Market: {types: ['Cycler'], discardPriority: 30, playPriority: 13},
-      Merchant: {types: ['Cycler'], discardPriority: 19, playPriority: 7},
-      Militia: { types: [ 'Terminal' ], discardPriority: 25, playPriority: 30 },
-      Mine: { types: [ 'Terminal' ], discardPriority: 22, playPriority: 24 },
-      Moat: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 33 },
-      Moneylender: { types: [ 'Terminal' ], discardPriority: 21, playPriority: 23 },
-      Poacher: {types: ['Cycler'], discardPriority: 30, playPriority: 10},
-      Remodel: { types: [ 'Terminal' ], discardPriority: 18, playPriority: 24 },
-      Sentry: { types: ['Cycler'], discardPriority: 22, playPriority: 2 },
-      Smithy: { types: [ 'Terminal' ], discardPriority: 24, playPriority: 25 },
-      'Throne Room': { discardPriority: 22, playPriority: 7 },
-      Vassal: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 25 },
-      Village: {types: ['Cycler', 'Village'], discardPriority: 21, playPriority: 5},
-      Witch: { types: [ 'Terminal' ], discardPriority: 40, playPriority: 18 },
-      Workshop: { types: [ 'Terminal' ], discardPriority: 22, playPriority: 38}
-    };
   }
 
   /**
@@ -89,8 +49,6 @@ export class DomPlayer extends BasicAI {
    * @returns {Number|*}
    */
   playValue(state, card, my) {
-    let heuristics = this.heuristics;
-
     // TODO Move this into heuristics
     const specific = {
       Vassal: (state, my) => {
@@ -113,8 +71,8 @@ export class DomPlayer extends BasicAI {
       return specific[card](state, my);
     }
 
-    if (this.heuristics[card].playPriority !== undefined) {
-      return 100 - this.heuristics[card].playPriority;
+    if (heuristics[card].playPriority !== undefined) {
+      return 100 - heuristics[card].playPriority;
     }
 
     return super.playValue(state, card, my);
@@ -179,8 +137,8 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    */
   trashValue(state, card, my) {
-    if (this.heuristics[card].trashPriority) {
-      return 16 - this.heuristics[card].trashPriority;
+    if (heuristics[card].trashPriority) {
+      return 16 - heuristics[card].trashPriority;
     }
 
     return this.fallbackDiscardValue(state, card, my);
@@ -213,8 +171,8 @@ export class DomPlayer extends BasicAI {
    * @returns {Number}
    */
   fallbackDiscardValue(state, card, my) {
-    if (this.heuristics[card].discardPriority !== undefined) {
-      return 16 - this.heuristics[card].discardPriority;
+    if (heuristics[card].discardPriority !== undefined) {
+      return 16 - heuristics[card].discardPriority;
     }
 
     return super.discardValue(state, card, my);
@@ -262,7 +220,7 @@ export class DomPlayer extends BasicAI {
 
       if (
         card.types.indexOf(type) > -1 ||
-        (this.heuristics[card].types && this.heuristics[card].types.indexOf(type) > -1)
+        (heuristics[card].types && heuristics[card].types.indexOf(type) > -1)
       ) {
         count++;
       }

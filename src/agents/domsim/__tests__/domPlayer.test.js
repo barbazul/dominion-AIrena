@@ -1,4 +1,4 @@
-import { DomPlayer } from '../../domsim/domPlayer';
+import { DomPlayer } from '../domPlayer';
 import Player from '../../../game/player';
 import BasicAction from '../../../cards/basicAction';
 import cards from '../../../game/cards';
