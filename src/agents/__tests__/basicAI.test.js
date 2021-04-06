@@ -64,10 +64,6 @@ test('Default discardPriority', () => {
   const priority = ai.discardPriority(state, player);
 
   expect(priority.length).toBeGreaterThan(0);
-
-  priority.forEach(choice => {
-    expect(choice).toEqual(expect.any(String));
-  });
 });
 
 test('Missing priority function returns null', () => {

@@ -291,8 +291,8 @@ export default class BasicAI {
    * are obvious. But many strategies would probably prefer a different
    * priority list, especially one that knows about action cards.
    *
-   * It doesn't understand
-   * discarding cards to make Shanty Town or Menagerie work, for example.
+   * It doesn't understand discarding cards to make Shanty Town or Menagerie
+   * work, for example.
    *
    * @param {State} state
    * @param {Player} my
@@ -304,12 +304,12 @@ export default class BasicAI {
       'Vineyard',
       'Colony',
       'Duke',
-      'Duchy',
+      cards.Duchy,
       'Fairgrounds',
-      'Gardens',
-      'Province',
-      'Curse',
-      'Estate'
+      cards.Gardens,
+      cards.Province,
+      cards.Curse,
+      cards.Estate
     ];
   }
 
@@ -1034,6 +1034,9 @@ export default class BasicAI {
    * - chooseGain: Was already deprecated in Dominiate
    * - chooseDiscard: Was already deprecated in Dominiate
    * - chooseTrash: Was already deprecated in Dominiate
+   * - old_actionPriority: Was already deprecated in Dominiate
+   * - old_multipliedActionPriority: Was already deprecated in Dominiate
+   * - treasurePriority: Not being used in Dominiate
    */
 }
 

@@ -143,6 +143,12 @@ All values returned are negative to prefer not gaining a card when available.
 Defaults to gaining the most expensive cards, with a bias in favor of actions
 and treasures.
 
+=== BasicAI.discardPriority(State state, Player my): String[]|Card[]
+
+The default `discardPriority` is tuned for Big Money where the decisions are
+obvious. But many strategies would probably prefer a different priority list,
+especially one that knows about action cards.
+
 == Helper Methods
 
 These helper functions allow easy access to the player state or metrics of the

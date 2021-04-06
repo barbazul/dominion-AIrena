@@ -41,7 +41,7 @@ const players = [
   new CouncilRoomMilitia(), // 8
   new DoubleMilitia(),
   new DoubleWitch(),
-  new FirstGame(),
+  new FirstGame(), // 11
   new MoneylenderWitch(),
   new LabMilitiaChapel(), // 13
   new Festival(),
@@ -75,7 +75,7 @@ while (rivals.length < numPlayers) {
   rivals.push(rival);
 }
 
-const numGames = 1;
+const numGames = 1000;
 const config = {};
 let logFn = console.log;
 
