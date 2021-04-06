@@ -31,6 +31,7 @@ import Moat from './src/agents/domsim/moat';
 import Smithy from './src/agents/domsim/smithy';
 import Witch from './src/agents/domsim/witch';
 import WitchAndMoatFor3or4 from './src/agents/domsim/witchAndMoatFor3or4';
+import WitchFor3or4 from './src/agents/domsim/witchFor3or4';
 
 const players = [
   new BasicAI(),
@@ -62,7 +63,8 @@ const players = [
   new Moat(),
   new Smithy(),
   new Witch(),
-  new WitchAndMoatFor3or4()
+  new WitchAndMoatFor3or4(),
+  new WitchFor3or4()
 ];
 
 let scoreBoard = Object.fromEntries(players.map(p => [ p.toString(), { plays: 0, wins: 0, rate: 0.0 } ]));
