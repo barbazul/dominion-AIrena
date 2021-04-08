@@ -67,7 +67,7 @@ const start = new Date();
 const state = new State();
 const player1 = players[players.length - 1];
 const rivals = [ player1 ];
-const numPlayers = 4;
+const numPlayers = 2;
 
 while (rivals.length < numPlayers) {
   let rival = players[Math.floor(Math.random() * players.length)];

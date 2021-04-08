@@ -1490,8 +1490,6 @@ test('Kingdom has the correct amount of cards', () => {
   players[1].requires = [ cards.Smithy, cards.Festival ];
   state.setUp(players, muteConfig);
 
-  console.log(state.kingdom);
-
   // Curses + 3 Victory Piles + 3 Treasure Piles + 10 Kingdom Piles = 17
   expect(Object.keys(state.kingdom).length).toBeGreaterThanOrEqual(17);
 });

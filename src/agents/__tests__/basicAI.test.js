@@ -155,6 +155,7 @@ test('Action discard value is greater when no actions left', () => {
   state.setUp([ ai1, ai2 ]);
   player = ai1.myPlayer(state);
   player.actions = 0;
+  state.current = player;
   card.isAction = () => true;
   card.cost = 5;
   expect(ai1.discardValue(state, card, player)).toBeGreaterThanOrEqual(0);
@@ -1131,4 +1132,34 @@ test('Fallback multiplyValue function -> Council Room', () => {
 
 test('Fallback multiplyValue function -> Throne Room', () => {
   assertMultiplyValue(cards['Throne Room'], 1900, 1900);
+});
+
+test('discardValue wants to discard actions only in own turn', () => {
+  const ai1 = new BasicAI();
+  const ai2 = new BasicAI();
+  const state = new State();
+  let player1, player2;
+
+  state.setUp([ ai1, ai2 ]);
+  player1 = ai1.myPlayer(state);
+  player1.actions = 0;
+  player2 = ai2.myPlayer(state);
+  state.current = player2;
+  expect(ai1.discardValue(state, cards.Village, player1)).toBeLessThan(0);
+
+});
+
+test('discardValue tries not to draw dead actions', () => {
+  const ai1 = new BasicAI();
+  const ai2 = new BasicAI();
+  const state = new State();
+  let player1;
+
+  state.setUp([ ai1, ai2 ]);
+  player1 = ai1.myPlayer(state);
+  player1.actions = 1;
+  player1.actionBalance = () => -1;
+  state.current = player1;
+  expect(ai1.discardValue(state, cards.Smithy, player1)).toBeGreaterThan(0);
+
 });

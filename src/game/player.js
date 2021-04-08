@@ -94,6 +94,20 @@ export default class Player {
   }
 
   /**
+   * Counts the number of cards of a given type in the deck.
+   *
+   * @param {String} type
+   * @return {number}
+   */
+  countTypeInDeck (type) {
+    return this.getDeck()
+      .reduce(
+        (count, card) => count + Number(card.types.indexOf(type) > -1),
+        0
+      );
+  }
+
+  /**
    * Counts the number of copies of a card in hand.
    *
    * @param {Card|String} card
@@ -121,6 +135,65 @@ export default class Player {
    */
   countPlayed (card) {
     return this.countInStack(card, this.cardsPlayed);
+  }
+
+  /**
+   * The number of action cards in the player's entire deck.
+   *
+   * @return {number}
+   */
+  numActionsInDeck () {
+    return this.countTypeInDeck('Action');
+  }
+
+  /**
+   * A fractional value between 0.0 and 1.0, representing the proportion of
+   * actions in the deck.
+   *
+   * @return {number}
+   */
+  getActionDensity () {
+    return this.numActionsInDeck() / this.getDeck().length;
+  }
+
+  /**
+   * A complex method meant to be used by agents in deciding wether they want
+   * +actions or +cards, for example
+   *
+   * If the action balance is less than 0, you want +actions, because otherwise
+   * you will have dead action cards in hand or risk drawing them dead. If it
+   * is greater than 0, you want +cards, because you have a surplus of actions
+   * and need action cards to spend them on.
+   *
+   * @returns {number}
+   */
+  actionBalance () {
+    let balance = this.actions;
+
+    this.hand.forEach(
+      card => {
+        if (card.isAction()) {
+          balance += card.actions - 1;
+
+          // Estimate the risk of drawing an action card dead.
+          // *TODO*: do something better when there are variable card-drawers.
+          /**
+           * TODO I really dont like this part. If my deck consists of 10
+           * Festivals and 2 Smithies, a hand of 2xSmithy, 3xFestival should
+           * return a positive action balance (I would see 8 Festivals in
+           * total), however current logic would return a -3:
+           * +1 initial action
+           * +2 2xFestivals
+           * -6 2xSmithy (3 cards each with action density of 1)
+           */
+          if (card.actions === 0 && card.cards > 0) {
+            balance -= card.cards * this.getActionDensity();
+          }
+        }
+      }
+    );
+
+    return balance;
   }
 
   /**

@@ -7,7 +7,7 @@ let setUpState = function (choice) {
   const state = new State();
   const card = new Artisan();
 
-  state.setUp([new BasicAI(), new BasicAI()]);
+  state.setUp([new BasicAI(), new BasicAI()], { log: () => {} });
   state.current.hand = [cards.Copper, cards.Estate];
   state.current.agent.choose = jest.fn(() => choice);
   state.gainCard = jest.fn(state.gainCard);
@@ -27,7 +27,7 @@ test('Play effect calls for gain choice', () => {
   const state = new State();
   const card = new Artisan();
 
-  state.setUp([new BasicAI(), new BasicAI()]);
+  state.setUp([new BasicAI(), new BasicAI()], { log: () => {} });
   state.current.agent.choose = jest.fn(() => cards.Estate);
 
   card.playEffect(state);
@@ -43,7 +43,7 @@ test('Can only gain $5 or less', () => {
   const state = new State();
   const card = new Artisan();
 
-  state.setUp([new BasicAI(), new BasicAI()]);
+  state.setUp([new BasicAI(), new BasicAI()], { log: () => {} });
   state.current.agent.choose = jest.fn(() => cards.Estate);
 
   card.playEffect(state);
@@ -59,7 +59,7 @@ test('Cannot gain form empty pile', () => {
   const state = new State();
   const card = new Artisan();
 
-  state.setUp([new BasicAI(), new BasicAI()]);
+  state.setUp([new BasicAI(), new BasicAI()], { log: () => {} });
   state.current.agent.choose = jest.fn(() => cards.Estate);
   state.kingdom['Copper'] = 0;
 

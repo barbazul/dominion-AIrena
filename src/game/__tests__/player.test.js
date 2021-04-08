@@ -358,3 +358,53 @@ test('getCardsFromDeck reduces knownTopCards', () => {
 
   expect(player.knownTopCards).toEqual(1);
 });
+
+test('actionBalance returns remaining actions with empty hand', () => {
+  const player = new Player(new BasicAI(), () => {});
+
+  player.actions = 2;
+  player.hand = [];
+
+  expect(player.actionBalance()).toEqual(2);
+});
+
+test('actionBalance totals potential actions gained from cards in hand', () => {
+  const player = new Player(new BasicAI(), () => {});
+
+  player.actions = 1;
+  player.hand = [ cards.Village, cards.Village ];
+  expect(player.actionBalance()).toEqual(3);
+});
+
+test('actionBalance skips non-action cards', () => {
+  const player = new Player(new BasicAI(), () => {});
+  player.actions = 1;
+  player.hand = [ cards.Village, cards.Gold ];
+  expect(player.actionBalance()).toEqual(2);
+});
+
+test('countTypeInDeck counts correctly', () => {
+  const player = new Player(new BasicAI(), () => {});
+  player.draw = [ cards.Village, cards.Smithy ];
+  player.hand = [];
+  player.discard = [];
+  expect(player.countTypeInDeck('Action')).toEqual(2);
+});
+
+test('getActionDensity', () => {
+  const player = new Player(new BasicAI(), () => {});
+  player.draw = [ cards.Village, cards.Copper ];
+  player.hand = [];
+  player.discard = [];
+  expect(player.getActionDensity()).toEqual(0.5);
+});
+
+test('actionBalance considers dead draws from terminals', () => {
+  const player = new Player(new BasicAI(), () => {});
+
+  player.actions = 1;
+  player.draw = [ cards.Smithy, cards.Smithy, cards.Smithy ];
+  player.hand = [ cards.Village, cards.Smithy ];
+  player.discard = [];
+  expect(player.actionBalance()).toEqual(-2);
+});

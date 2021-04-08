@@ -16,7 +16,7 @@ test('playEffect gets cards one at a time up to 7', () => {
   const ai = new BasicAI();
   const card = new Library();
 
-  state.setUp([ai, ai]);
+  state.setUp([ ai, ai ], { log: () => {} });
   state.current.getCardsFromDeck = jest.fn(state.current.getCardsFromDeck);
   state.current.hand = [new Card(), new Card(), new Card(), new Card()];
   state.current.draw = [new Card(), new Card(), new Card(), new Card()];
@@ -33,7 +33,7 @@ test('Library stops drawing with no cards left', () => {
   const ai = new BasicAI();
   const card = new Library();
 
-  state.setUp([ai, ai]);
+  state.setUp([ ai, ai ], { log: () => {} });
   state.current.getCardsFromDeck = jest.fn(state.current.getCardsFromDeck);
   state.current.hand = [new Card(), new Card(), new Card(), new Card()];
   state.current.draw = [new Card()];
@@ -52,7 +52,7 @@ test('When drawing actions, call for a discard choice', () => {
   const card = new Library();
   const action = new BasicAction();
 
-  state.setUp([ai, ai]);
+  state.setUp([ ai, ai ], { log: () => {} });
   state.current.getCardsFromDeck = jest.fn(state.current.getCardsFromDeck);
   const aCard = new Card();
   state.current.hand = [aCard, aCard, aCard, aCard];

@@ -326,7 +326,13 @@ export default class BasicAI {
    * @return {Number}
    */
   discardValue (state, card, my) {
-    if (card.isAction() && my.actions === 0) {
+    // TODO Tunnel special case
+    const myTurn = state.current === my;
+
+    if (
+      card.isAction() && myTurn &&
+      (my.actions === 0 || (card.actions === 0 && my.actionBalance() <= 0))
+    ) {
       return 20 - card.cost;
     }
 

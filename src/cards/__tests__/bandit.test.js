@@ -8,7 +8,7 @@ import Gold from '../gold';
 import Silver from '../silver';
 
 const setUpState = function (state, card1, card2) {
-  state.setUp([new BasicAI(), new BasicAI()]);
+  state.setUp([ new BasicAI(), new BasicAI() ], { log: () => {} });
   state.current.getCardsFromDeck = jest.fn(() => [card1, card2]);
   state.current.agent.choose = jest.fn(() => card2);
   state.current.discard = [];

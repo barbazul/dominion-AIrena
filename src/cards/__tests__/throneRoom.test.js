@@ -18,7 +18,7 @@ test('playEffect calls for a play choice with the actions in hand', () => {
   const action2 = new BasicAction();
   const nonaction = new Card();
 
-  state.setUp([new BasicAI(), new BasicAI()]);
+  state.setUp([ new BasicAI(), new BasicAI() ], { log: () => {} });
   state.current.hand = [action1, action2, nonaction];
   state.current.agent.choose = jest.fn(() => {});
   card.playEffect(state);
@@ -31,7 +31,7 @@ test('playEffect does not call for a choice with no actions in hand', () => {
   const card = new ThroneRoom();
   const nonaction = new Card();
 
-  state.setUp([new BasicAI(), new BasicAI()]);
+  state.setUp([ new BasicAI(), new BasicAI() ], { log: () => {} });
   state.current.hand = [nonaction];
   state.current.agent.choose = jest.fn(() => {});
   card.playEffect(state);
@@ -44,7 +44,7 @@ test('playEffect plays the chosen action twice', () => {
   const card = new ThroneRoom();
   const action1 = new BasicAction();
 
-  state.setUp([new BasicAI(), new BasicAI()]);
+  state.setUp([ new BasicAI(), new BasicAI() ], { log: () => {} });
   state.current.hand = [action1];
   state.current.agent.choose = () => action1;
   state.playAction = jest.fn(() => {});
@@ -60,7 +60,7 @@ test('playEffect does nothing the the player chooses null', () => {
   const card = new ThroneRoom();
   const action1 = new BasicAction();
 
-  state.setUp([new BasicAI(), new BasicAI()]);
+  state.setUp([ new BasicAI(), new BasicAI() ], { log: () => {} });
   state.current.hand = [action1];
   state.current.agent.choose = () => null;
   state.playAction = jest.fn(() => {});
