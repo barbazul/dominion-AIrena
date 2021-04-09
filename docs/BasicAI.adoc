@@ -149,6 +149,12 @@ The default `discardPriority` is tuned for Big Money where the decisions are
 obvious. But many strategies would probably prefer a different priority list,
 especially one that knows about action cards.
 
+=== BasicAI.discardValue(State state, Card card, Player my): Number
+
+Evaluates whether it has excess actions and prioritizes actions if so.
+Otherwise discards the cheapest cards. Victory cards would already been
+discarded by discardPriority unless customized.
+
 == Helper Methods
 
 These helper functions allow easy access to the player state or metrics of the
