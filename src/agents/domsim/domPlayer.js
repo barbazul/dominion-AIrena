@@ -137,6 +137,9 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    */
   trashValue(state, card, my) {
+    // TODO Some cards have specific trashValue functions
+    // TODO Duchy if (owner!=null && owner.wantsToGainOrKeep(DomCardName.Duchy)) return 40;
+
     if (heuristics[card].trashPriority) {
       return 16 - heuristics[card].trashPriority;
     }
@@ -145,7 +148,7 @@ export class DomPlayer extends BasicAI {
   }
 
   /**
-   * Values are substrated from 100 due to the inverted priority logic between
+   * Values are substrated from 16 due to the inverted priority logic between
    * DomSim and Dominiate.
    *
    * @param {State} state
@@ -154,6 +157,9 @@ export class DomPlayer extends BasicAI {
    * @returns {Number}
    */
   discardValue(state, card, my) {
+    // TODO some cards have specific heuristics
+    // TODO Province heuristic regarding Tournament
+
     if (my.actions < 1 && card.isAction()) {
       return 15;
     }
