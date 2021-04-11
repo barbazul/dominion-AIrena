@@ -131,7 +131,7 @@ const replaceValue = gainValue - trashValue;
 
 == Default Strategy
 
-=== BasicAI.gainPriority(State state, Player my): String[]|Card[]
+=== BasicAI.gainPriority(State state, Player my): (String|Card)[]
 
 This is the fallback strategy implementation which is a very simple form of
 Big Money.
@@ -143,7 +143,7 @@ All values returned are negative to prefer not gaining a card when available.
 Defaults to gaining the most expensive cards, with a bias in favor of actions
 and treasures.
 
-=== BasicAI.discardPriority(State state, Player my): String[]|Card[]
+=== BasicAI.discardPriority(State state, Player my): (String|Card)[]
 
 The default `discardPriority` is tuned for Big Money where the decisions are
 obvious. But many strategies would probably prefer a different priority list,
@@ -154,6 +154,11 @@ especially one that knows about action cards.
 Evaluates whether it has excess actions and prioritizes actions if so.
 Otherwise discards the cheapest cards. Victory cards would already been
 discarded by discardPriority unless customized.
+
+=== BasicAi.trashPriority(State state, Card card, Player my):
+
+Pretty obvious trash choices: Curses, Estates, Coppers and also Potions in
+late game.
 
 == Helper Methods
 

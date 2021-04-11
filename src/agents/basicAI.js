@@ -346,14 +346,17 @@ export default class BasicAI {
    * @return {String[]}
    */
   trashPriority (state, my) {
-    const priority = ['Curse'];
+    /**
+     * @type {(String|Card)[]}
+     */
+    const priority = [ cards.Curse ];
 
     if (state.gainsToEndGame() > 4) {
-      priority.push('Estate');
+      priority.push(cards.Estate);
     }
 
     if (my.getTotalMoney() > 4) {
-      priority.push('Copper');
+      priority.push(cards.Copper);
     }
 
     if (my.turnsTaken >= 10) {
@@ -361,7 +364,7 @@ export default class BasicAI {
     }
 
     if (state.gainsToEndGame() > 2) {
-      priority.push('Estate');
+      priority.push(cards.Estate);
     }
 
     return priority;
