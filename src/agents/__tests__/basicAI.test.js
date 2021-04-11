@@ -844,10 +844,6 @@ test('Default trashPriority', () => {
   const priority = ai.trashPriority(state, player);
 
   expect(priority.length).toBeGreaterThan(0);
-
-  priority.forEach(choice => {
-    expect(choice).toEqual(expect.any(String));
-  });
 });
 
 test('wantsToTrash returns 0 with empty hand', () => {
