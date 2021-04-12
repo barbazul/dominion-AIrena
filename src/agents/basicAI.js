@@ -371,6 +371,9 @@ export default class BasicAI {
   }
 
   /**
+   * If we have to trash a card we don't want to, assign a value to each card.
+   * By default, we want to trash the card with the lowest (cost + VP).
+   *
    * @param {State} state
    * @param {Card} card
    * @param {Player} my
