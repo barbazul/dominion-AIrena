@@ -34,3 +34,20 @@ test('countTerminalsInDeck ignores villages and cantrips', () => {
   owner.getDeck = () => [ cards.Village, cards.Market, cards.Militia ];
   expect(ai.countTerminalsInDeck(owner)).toBe(1);
 });
+
+test('getTotalMoney returns 0 for empty deck', () => {
+  const ai = new DomPlayer();
+  const owner = new Player(ai, () => {});
+
+  owner.getDeck = () => [];
+  expect(ai.getTotalMoney(owner)).toBe(0);
+});
+
+test('getTotalMoney counts all coin producing cards', () => {
+  const ai = new DomPlayer();
+  const owner = new Player(ai, () => {});
+
+  owner.getDeck = () => [ cards.Gold, cards.Market, cards.Militia ];
+  expect(ai.getTotalMoney(owner)).toBe(6);
+});
+
