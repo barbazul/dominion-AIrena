@@ -16,10 +16,13 @@ first agent to make a decision. Before beginning the game it will look at the
 kingdom and choose the best bot to play the game. It will then forward all
 choices to the selected bot.
 
-Some learning can be added by updating the stats after every game. Also the
-selection policy could be altered to select a statistically suboptimal bot to
-gain more confidence in the stats. Something like UCB footnote:[UCB (Upper confidence Bound) is an algorithm used in Multi-armed bandit problems to balance exploration and exploitation.] can be used for this
-which, in my book at least, counts as learning.
+== Learning
+
+Some reinforced learning can be added by updating the stats after every game.
+Also different selection policies could be used as in a k-armed bandit
+problem.
+Some adjustment might be necessary as not every action (i.e. bot) is available
+on each game, depending on kingdom selection.
 
 === Steps needed to Implement
 
