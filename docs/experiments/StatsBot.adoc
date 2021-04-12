@@ -1,0 +1,28 @@
+= Experiment #1: StatsBot
+Matías Montes
+:toc:
+:icons: font
+
+This bot looks at the kingdom before starting the game and chooses the best bot from a list of scripted bots.
+
+== Idea
+
+Now that I have implemented all base game cards, mostly finished with Dominiate
+port and implemented all DominionSim bots that only require base cards I have a
+selection of 32 heavily scripted bots.
+
+These bots have no real learning or decision-making so StatsBot will be the
+first agent to make a decision. Before beginning the game it will look at the
+kingdom and choose the best bot to play the game. It will then forward all
+choices to the selected bot.
+
+Some learning can be added by updating the stats after every game. Also the
+selection policy could be altered to select a statistically suboptimal bot to
+gain more confidence in the stats. Something like UCB footnote:[UCB (Upper confidence Bound) is an algorithm used in Multi-armed bandit problems to balance exploration and exploitation.] can be used for this
+which, in my book at least, counts as learning.
+
+=== Steps needed to Implement
+
+* Create a bot with the ability to successfully forward all choices to another bot.
+* Add a step at the beginning of the game to analyse the board and set AI parameters.
+* Add the ability to store and load stats so bot can update its knowledge as it plays.
