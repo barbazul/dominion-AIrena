@@ -34,7 +34,7 @@ const createPlayers = (quantity = 2) => {
 
 test('Setup returns the same instance', () => {
   const state = new State();
-  const newState = state.setUp(createPlayers(2));
+  const newState = state.setUp(createPlayers(2), muteConfig);
 
   expect(newState === state).toBe(true);
 });
@@ -43,7 +43,7 @@ test('Cant create a game with less than 2 players', () => {
   const state = new State();
 
   expect(() => {
-    state.setUp(createPlayers(1));
+    state.setUp(createPlayers(1), muteConfig);
   }).toThrow();
 });
 
@@ -51,7 +51,7 @@ test('Cant create a game with more than 6 players', () => {
   const state = new State();
 
   expect(() => {
-    state.setUp(createPlayers(7));
+    state.setUp(createPlayers(7), muteConfig);
   }).toThrow();
 });
 
@@ -81,7 +81,7 @@ test('Built kingdom has basic cards', () => {
   const state = new State();
   let kingdom;
 
-  state.setUp(createPlayers(2));
+  state.setUp(createPlayers(2), muteConfig);
   kingdom = state.buildKingdom([]);
   expect(kingdom).toMatchObject(basic2PlayerKingdom);
 });
@@ -97,7 +97,7 @@ test('Cant build kingdom before setup', () => {
 test('Basic kingdom cards after setup', () => {
   const state = new State();
 
-  state.setUp(createPlayers(2));
+  state.setUp(createPlayers(2), muteConfig);
   expect(state.kingdom).toMatchObject(basic2PlayerKingdom);
 });
 
@@ -105,14 +105,14 @@ test('Built kingdom has selected cards', () => {
   const state = new State();
   let kingdom;
 
-  state.setUp(createPlayers(2));
+  state.setUp(createPlayers(2), muteConfig);
   kingdom = state.buildKingdom([ cards.Village ]);
   expect(kingdom).toMatchObject({ Village: 10 });
 });
 
 test('Kingdom contains required cards', () => {
   const state = new State();
-  const config = { required: ['Village'] };
+  const config = { required: [ 'Village' ], log: () => {} };
 
   state.setUp(createPlayers(2), config);
   expect(state.kingdom).toMatchObject({ Village: 10 });
@@ -123,7 +123,7 @@ test('Kingdom contains cards required by AI', () => {
   const players = createPlayers(2);
 
   players[0].requires = ['Village'];
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   expect(state.kingdom).toMatchObject({ Village: 10 });
 });
 
@@ -131,7 +131,7 @@ test('No empty piles at the start of the game', () => {
   const state = new State();
   const players = createPlayers(2);
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   expect(state.emptyPiles()).toHaveLength(0);
 });
 
@@ -140,7 +140,7 @@ test('emptyPiles returns the list of empty supply piles', () => {
   const players = createPlayers(2);
   let emptyPiles;
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   state.kingdom.Curse = 0;
   state.kingdom.Estate = 0;
   emptyPiles = state.emptyPiles();
@@ -154,7 +154,7 @@ test('Game is not over at the start of the game', () => {
   const state = new State();
   const players = createPlayers(2);
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
 
   expect(state.isGameOver()).toBe(false);
 });
@@ -163,7 +163,7 @@ test('Game is over when provinces are depleted', () => {
   const state = new State();
   const players = createPlayers(2);
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   state.kingdom.Province = 0;
 
   expect(state.isGameOver()).toBe(true);
@@ -173,7 +173,7 @@ test('Total piles to end game is 3 for 2-4 players', () => {
   const state = new State();
 
   for (let num = 2; num < 5; num++) {
-    state.setUp(createPlayers(num));
+    state.setUp(createPlayers(num), muteConfig);
     expect(state.totalPilesToEndGame()).toBe(3);
   }
 });
@@ -182,7 +182,7 @@ test('Total piles to end game is 4 for 5-6 players', () => {
   const state = new State();
 
   for (let num = 5; num < 7; num++) {
-    state.setUp(createPlayers(num));
+    state.setUp(createPlayers(num), muteConfig);
     expect(state.totalPilesToEndGame()).toBe(4);
   }
 });
@@ -191,7 +191,7 @@ test('Game is over when enough piles are depleted', () => {
   const state = new State();
   const players = createPlayers(2);
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   state.totalPilesToEndGame = jest.fn(() => 1);
   state.kingdom.Estate = 0;
 
@@ -202,7 +202,7 @@ test('Game can only be over at the end of the turn', () => {
   const state = new State();
   const players = createPlayers(2);
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   state.kingdom.Province = 0;
   state.phase = PHASE_BUY;
 
@@ -213,7 +213,7 @@ test('AllowDiscard returns empty array when allowing 0 cards', () => {
   const state = new State();
   const players = createPlayers(2);
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   expect(state.allowDiscard(state.current, 0)).toHaveLength(0);
 });
 
@@ -233,7 +233,7 @@ test('Warn uses the configured function', () => {
   const players = createPlayers(2);
   const warnFunction = jest.fn(() => {});
 
-  state.setUp(players, { warn: warnFunction });
+  state.setUp(players, { warn: warnFunction, log: () => {} });
   state.warn('Warning message');
   expect(warnFunction).toHaveBeenCalledWith('Warning message');
 });

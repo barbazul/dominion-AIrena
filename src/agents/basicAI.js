@@ -938,9 +938,14 @@ export default class BasicAI {
    *  2. Treasures we can afford to put back
    *  3. Junk cards
    *
+   * Renamed from original BasicAI.putOnDeckPriority
+   *
+   * IMPORTANT: Currently not being used. If we ever use it it would be for
+   * some hypootetical CHOICE_TOPDECK_FROM_HAND.
+   *
    * @param {State} state
    * @param {Player} my
-   * @return {String[]}
+   * @return {(String|Card)[]}
    */
   topdeckPriority (state, my) {
     const actions = [];
@@ -966,10 +971,13 @@ export default class BasicAI {
     });
 
     // Take the last elements of the playable ones
-    priority.push(...actions.slice(playableTerminals).map(card => card.toString()));
+    priority.push(...actions.slice(playableTerminals));
 
     // 2) Put back as much money as you can
-    priority.push(...treasures.map(card => card.toString()));
+    treasures.sort((cardA, cardB) => cardB.coins - cardA.coins);
+    priority.push(...treasures);
+
+    // TODO Finish this method
 
     return priority;
   }
@@ -1049,6 +1057,9 @@ export default class BasicAI {
    * - old_actionPriority: Was already deprecated in Dominiate
    * - old_multipliedActionPriority: Was already deprecated in Dominiate
    * - treasurePriority: Not being used in Dominiate
+   * - discardFromOpponentDeckValue: Not being used in Dominiate
+   * - discardHandValue: Not being used in Dominiate
+   * - gainOnDeckValue: Not being used in Dominiate
    */
 }
 

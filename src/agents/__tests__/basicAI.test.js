@@ -3,7 +3,7 @@ import Card from '../../cards/card';
 import cards from '../../game/cards';
 import Player from '../../game/player';
 import State from '../../game/state';
-import BasicAI, { CHOICE_DISCARD } from '../basicAI';
+import BasicAI, {CHOICE_DISCARD} from '../basicAI';
 
 test('toString returns agent name', () => {
   const ai = new BasicAI();
@@ -922,7 +922,7 @@ test('topdeckPriority prioritizes by play value', () => {
   });
 
   priority = ai.topdeckPriority(state, state.current);
-  expect(priority).toEqual(['Action 2', 'Action 1']);
+  expect(priority.map(card => card.toString())).toEqual(['Action 2', 'Action 1']);
 });
 
 test('topdeckPriority prefers treasures after actions', () => {
@@ -936,7 +936,7 @@ test('topdeckPriority prefers treasures after actions', () => {
   state.current.actions = 0;
   state.current.hand = [action, cards.Copper];
   priority = ai.topdeckPriority(state, state.current);
-  expect(priority).toEqual(['Action', 'Copper']);
+  expect(priority.map(card => card.toString())).toEqual(['Action', 'Copper']);
 });
 
 test('topdeckValue forwards to discardValue', () => {
@@ -1158,4 +1158,16 @@ test('discardValue tries not to draw dead actions', () => {
   state.current = player1;
   expect(ai1.discardValue(state, cards.Smithy, player1)).toBeGreaterThan(0);
 
+});
+
+test('topdeckPriority prioritizes treasures by coin value', () => {
+  const state = new State();
+  const ai = new BasicAI();
+  let priority;
+
+  state.setUp([ ai, ai ]);
+  state.current.hand = [ cards.Silver, cards.Gold, cards.Copper ];
+
+  priority = ai.topdeckPriority(state, state.current);
+  expect(priority.map(card => card.toString())).toEqual([ 'Gold', 'Silver', 'Copper' ]);
 });

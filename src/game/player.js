@@ -253,11 +253,13 @@ export default class Player {
    * @return {number}
    */
   countPlayableTerminals () {
+    const callbackfn = (accum, card) => accum + Math.max(card.actions - 1, 0);
+
     if (this.actions === 0) {
       return 0;
     }
 
-    return this.actions + (this.hand.reduce((accum, card) => accum + Math.max(card.actions - 1, 0), 0));
+    return this.actions + (this.hand.reduce(callbackfn, 0));
   }
 
   /**
