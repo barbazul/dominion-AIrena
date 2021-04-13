@@ -32,6 +32,23 @@ import Smithy from './src/agents/domsim/smithy';
 import Witch from './src/agents/domsim/witch';
 import WitchAndMoatFor3or4 from './src/agents/domsim/witchAndMoatFor3or4';
 import WitchFor3or4 from './src/agents/domsim/witchFor3or4';
+import ProxyAgent from './src/agents/proxyAgent';
+
+const proxyMilitia = new ProxyAgent();
+const proxySillyAI = new ProxyAgent();
+const proxyWitch = new ProxyAgent();
+
+proxyMilitia.setActualAgent(new Militia());
+proxyMilitia.name = 'Proxy Militia';
+proxyMilitia.requires = proxyMilitia.getActualAgent().requires
+
+proxySillyAI.setActualAgent(new SillyAI());
+proxySillyAI.name = 'Proxy SillyAI';
+proxySillyAI.requires = proxySillyAI.getActualAgent().requires
+
+proxyWitch.setActualAgent(new Witch());
+proxyWitch.name = 'Proxy Witch';
+proxyWitch.requires = proxyWitch.getActualAgent().requires
 
 const players = [
   new BasicAI(),
@@ -64,7 +81,10 @@ const players = [
   new Smithy(),
   new Witch(),
   new WitchAndMoatFor3or4(),
-  new WitchFor3or4()
+  new WitchFor3or4(),
+  proxyMilitia,
+  proxyWitch,
+  proxySillyAI
 ];
 
 let scoreBoard = Object.fromEntries(players.map(p => [ p.toString(), { plays: 0, wins: 0, rate: 0.0 } ]));
