@@ -1040,6 +1040,20 @@ export default class BasicAI {
   }
 
   /**
+   * coinLossMargin determines how much treasure the player can lose "for free"
+   * (because it won't change their buy decision). Intended to be more
+   * efficient than calling pessimisticCardsGained on a number of different
+   * states.
+   *
+   * @todo Do we need an equivalent for Potions?
+   * @param {State} state
+   * @return {number}
+   */
+  coinLossMargin (state) {
+    return 0;
+  }
+
+  /**
    * NOT IMPLEMENTED
    *
    * The following methods were not migrated from original Dominiate code.
@@ -1069,3 +1083,4 @@ export const CHOICE_PLAY = 'play';
 export const CHOICE_TRASH = 'trash';
 export const CHOICE_UPGRADE = 'upgrade';
 export const CHOICE_MULTIPLY = 'multiply';
+export const CHOICE_TOPDECK = 'topdeck';

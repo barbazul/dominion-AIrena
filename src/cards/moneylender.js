@@ -1,5 +1,6 @@
 import cards from '../game/cards';
 import basicAction from './basicAction';
+import { CHOICE_TRASH } from '../agents/basicAI';
 
 export default class Moneylender extends basicAction {
   constructor () {
@@ -21,7 +22,7 @@ export default class Moneylender extends basicAction {
     }
 
     // Trashing is optional (2nd Ed.)
-    choice = state.current.agent.choose('trash', state, [cards.Copper, null]);
+    choice = state.current.agent.choose(CHOICE_TRASH, state, [cards.Copper, null]);
 
     if (choice === null) {
       return;

@@ -1,5 +1,6 @@
 import cards from '../game/cards';
 import BasicAttack from './basicAttack';
+import { CHOICE_TOPDECK } from '../agents/basicAI';
 
 export default class Bureaucrat extends BasicAttack {
   constructor () {
@@ -39,7 +40,7 @@ export default class Bureaucrat extends BasicAttack {
       return;
     }
 
-    choice = opp.agent.choose('topdeck', state, victoryCards);
+    choice = opp.agent.choose(CHOICE_TOPDECK, state, victoryCards);
     state.doTopdeck(opp, choice);
   }
 }

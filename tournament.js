@@ -145,6 +145,7 @@ for (let i = 0; i < players.length - 1; i++) {
         }
       }
 
+      console.log(`${players[i]} vs ${players[j]}`);
       state.startGame();
 
       while (!state.isGameOver()) {

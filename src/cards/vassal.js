@@ -1,4 +1,5 @@
 import basicAction from './basicAction';
+import { CHOICE_PLAY } from '../agents/basicAI';
 
 export default class Vassal extends basicAction {
   constructor () {
@@ -22,7 +23,7 @@ export default class Vassal extends basicAction {
       state.log(`...discarding ${card}`);
 
       if (card.isAction()) {
-        choice = state.current.agent.choose('play', state, [null, card]);
+        choice = state.current.agent.choose(CHOICE_PLAY, state, [ null, card ]);
 
         if (choice !== null) {
           state.playAction(choice, 'discard');
