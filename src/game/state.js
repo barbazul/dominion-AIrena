@@ -509,6 +509,39 @@ export default class State {
   }
 
   /**
+   * Creates a copy of this state that can be safely mutated without affecting
+   * the original state.
+   *
+   * Ideally, the AI would be passed a copy of the state, with unknown
+   * information randomized, when it is asked to make a decision. This would
+   * allow it to try simulating the effects of various plays without actually
+   * breaking the game. But this isn't implemented yet, so make this a TODO.
+   *
+   * @return {State}
+   */
+  copy () {
+    const newState = new State();
+
+    newState.kingdom = { ...this.kingdom };
+
+    // TODO Special supplies
+
+    newState.log = this.log;
+
+    // TODO Copy player states
+    // TODO Copy card states
+
+    newState.trash = this.trash.slice(0);
+
+    // TODO Copy current player
+    // TODO Copy cost modifiers
+
+    newState.phase = this.phase;
+
+    return newState;
+  }
+
+  /**
    * Perform the effects of a player gaining a card
    *
    * Affects a particular player and also the overall state of the game.

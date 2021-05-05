@@ -321,4 +321,14 @@ export default class Player {
     this.knownTopCards += cards.length;
     this.draw.unshift(...cards);
   }
+
+  /**
+   * Creates a copy of the state for this player
+   *
+   * @return {Player}
+   */
+  copy () {
+    const newPlayer = new Player();
+    return newPlayer;
+  }
 }

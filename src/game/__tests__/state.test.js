@@ -1493,3 +1493,27 @@ test('Kingdom has the correct amount of cards', () => {
   // Curses + 3 Victory Piles + 3 Treasure Piles + 10 Kingdom Piles = 17
   expect(Object.keys(state.kingdom).length).toBeGreaterThanOrEqual(17);
 });
+
+test('Copy creates an State object', () => {
+  const state = new State();
+
+  expect(state.copy()).toBeInstanceOf(State);
+});
+
+test('Copied state has same stuff', () => {
+  const state = new State();
+  let newState;
+
+  state.setUp(createPlayers(2), muteConfig);
+  state.trash.push(cards.Copper);
+  state.phase = PHASE_BUY;
+
+  newState = state.copy();
+
+  expect(newState.kingdom).toEqual(state.kingdom);
+  expect(newState.kingdom).not.toBe(state.kingdom);
+  expect(newState.log).toBe(state.log);
+  expect(newState.trash).toEqual(state.trash);
+  expect(newState.trash).not.toBe(state.trash);
+  expect(newState.phase).toEqual(state.phase);
+});

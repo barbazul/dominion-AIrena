@@ -408,3 +408,19 @@ test('actionBalance considers dead draws from terminals', () => {
   player.discard = [];
   expect(player.actionBalance()).toEqual(-2);
 });
+
+test('copy creates a new Player instance', () => {
+  const player = new Player(new BasicAI(), () => {});
+
+  expect(player.copy()).toBeInstanceOf(Player);
+});
+
+test('Copied Player has same stuff', () => {
+  const player = new Player(new BasicAI(), () => {});
+  let newPlayer;
+
+  player.actions = 3;
+  newPlayer = player.copy();
+
+  expect(newPlayer.actions).toEqual(player.actions);
+});
