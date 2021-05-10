@@ -329,6 +329,11 @@ export default class Player {
    */
   copy () {
     const newPlayer = new Player();
+
+    newPlayer.actions = this.actions;
+    newPlayer.buys = this.buys;
+    newPlayer.coins = this.coins;
+
     return newPlayer;
   }
 }

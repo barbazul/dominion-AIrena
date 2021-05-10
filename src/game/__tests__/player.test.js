@@ -420,7 +420,11 @@ test('Copied Player has same stuff', () => {
   let newPlayer;
 
   player.actions = 3;
+  player.buys = 4;
+  player.coins = 5;
   newPlayer = player.copy();
 
   expect(newPlayer.actions).toEqual(player.actions);
+  expect(newPlayer.buys).toEqual(player.buys);
+  expect(newPlayer.coins).toEqual(player.coins);
 });

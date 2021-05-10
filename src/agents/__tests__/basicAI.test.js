@@ -5,6 +5,8 @@ import Player from '../../game/player';
 import State from '../../game/state';
 import BasicAI, {CHOICE_DISCARD} from '../basicAI';
 
+const muteConfig = { log: () => {}, warn: () => {} };
+
 test('toString returns agent name', () => {
   const ai = new BasicAI();
 
@@ -19,7 +21,7 @@ test('myPlayer throws error when agent is not playing', () => {
   const ai3 = new BasicAI();
   const state = new State();
 
-  state.setUp([ai1, ai2]);
+  state.setUp([ai1, ai2], muteConfig);
   expect(() => {
     ai3.myPlayer(state);
   }).toThrow();
@@ -30,7 +32,7 @@ test('myPlayer returns the correct player', () => {
   const ai2 = new BasicAI();
   const state = new State();
 
-  state.setUp([ai1, ai2]);
+  state.setUp([ai1, ai2], muteConfig);
   expect(ai1.myPlayer(state).agent).toBe(ai1);
   expect(ai1.myPlayer(state).agent).not.toBe(ai2);
   expect(ai2.myPlayer(state).agent).toBe(ai2);
@@ -42,7 +44,7 @@ test('Choose null when there are no choices', () => {
   const ai2 = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai1, ai2 ]);
+  state.setUp([ ai1, ai2 ], muteConfig);
   expect(ai1.choose(CHOICE_DISCARD, state, [])).toBeNull();
 });
 
@@ -52,7 +54,7 @@ test('Choose only choice', () => {
   const state = new State();
   const card1 = new Card();
 
-  state.setUp([ ai1, ai2 ]);
+  state.setUp([ ai1, ai2 ], muteConfig);
   ai1.fakeValue = () => -Infinity;
   expect(ai1.choose('fake', state, [card1])).toBe(card1);
 });
@@ -85,7 +87,7 @@ test('Priority list is considered when possible', () => {
   const card1 = new Card();
   const card2 = new Card();
 
-  state.setUp([ ai1, ai2 ]);
+  state.setUp([ ai1, ai2 ], muteConfig);
   ai1.discardPriority = () => [ 'Skip this', 'Choose this', 'Ignore this' ];
   card1.name = 'Ignore this';
   card2.name = 'Choose this';
@@ -97,7 +99,7 @@ test('Return null when its legal and preferable', () => {
   const ai2 = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai1, ai2 ]);
+  state.setUp([ ai1, ai2 ], muteConfig);
   ai1.discardPriority = () => [ 'Skip this', null, 'Ignore this' ];
   expect(ai1.choose('discard', state, [ 'Ignore this', null ])).toBeNull();
 });
@@ -107,7 +109,7 @@ test('Choice value of null is 0', () => {
   const ai2 = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai1, ai2 ]);
+  state.setUp([ ai1, ai2 ], muteConfig);
   const choiceValue = ai1.getChoiceValue('discard', state, null, ai1.myPlayer(state));
   expect(choiceValue).toBe(0);
 });
@@ -135,7 +137,7 @@ test('Fallback discard value is negative card cost', () => {
   const card = new Card();
   let player;
 
-  state.setUp([ ai1, ai2 ]);
+  state.setUp([ ai1, ai2 ], muteConfig);
   player = ai1.myPlayer(state);
   // Setting actions to 0 to validate the action case
   player.actions = 0;
@@ -152,7 +154,7 @@ test('Action discard value is greater when no actions left', () => {
   /** @var {Player} player */
   let player;
 
-  state.setUp([ ai1, ai2 ]);
+  state.setUp([ ai1, ai2 ], muteConfig);
   player = ai1.myPlayer(state);
   player.actions = 0;
   state.current = player;
@@ -174,7 +176,7 @@ test('Get choice value from specific function', () => {
   /** @var {Player} player */
   let player;
 
-  state.setUp([ ai1, ai2 ]);
+  state.setUp([ ai1, ai2 ], muteConfig);
   player = ai1.myPlayer(state);
   ai1.fakeValue = () => 123456;
   expect(ai1.getChoiceValue('fake', state, new Card(), player)).toBe(123456);
@@ -189,7 +191,7 @@ test('Specific function cant assign value to choice', () => {
   /** @var {Player} player */
   let player;
 
-  state.setUp([ ai1, ai2 ], { warn: warnFunction });
+  state.setUp([ ai1, ai2 ], { log: () => {}, warn: warnFunction });
   player = ai1.myPlayer(state);
   ai1.fakeValue = () => null;
   ai1.name = 'AIName';
@@ -205,7 +207,7 @@ test('Make choice based on value function when priority list fails', () => {
   const valueFunction = jest.fn(() => 1000);
   const card = new Card();
 
-  state.setUp([ ai1, ai2 ]);
+  state.setUp([ ai1, ai2 ], muteConfig);
   card.name = 'Fake Card';
   ai1.fakeValue = valueFunction;
   ai1.fakePriority = () => [ 'Other Card', 'Better Card' ];
@@ -220,7 +222,7 @@ test('Make choice based on value function when priority list is missing', () => 
   const valueFunction = jest.fn(() => 1000);
   const card = new Card();
 
-  state.setUp([ ai1, ai2 ]);
+  state.setUp([ ai1, ai2 ], muteConfig);
   card.name = 'Fake Card';
   ai1.fakeValue = valueFunction;
   ai1.choose('fake', state, [card, card]);
@@ -241,7 +243,7 @@ test('Choice by value returns the best choice', () => {
   const card1 = new Card();
   const card2 = new Card();
 
-  state.setUp([ ai1, ai2 ]);
+  state.setUp([ ai1, ai2 ], muteConfig);
   card1.name = 'Worst Choice';
   card2.name = 'Best Choice';
   ai1.fakeValue = valueFunction;
@@ -257,7 +259,7 @@ test('Throw an error when AI cant make a choice', () => {
   const card1 = new Card();
   const card2 = new Card();
 
-  state.setUp([ ai1, ai2 ]);
+  state.setUp([ ai1, ai2 ], muteConfig);
   ai1.fakeValue = () => -Infinity;
 
   expect(() => {
@@ -272,7 +274,7 @@ test('Choose null if available and AI cannot decide', () => {
   const card1 = new Card();
   const card2 = new Card();
 
-  state.setUp([ ai1, ai2 ]);
+  state.setUp([ ai1, ai2 ], muteConfig);
   ai1.fakeValue = () => -Infinity;
 
   expect(ai1.choose('fake', state, [card1, card2, null])).toBeNull();
@@ -283,7 +285,7 @@ test('Default gainPriority', () => {
   const ai2 = new BasicAI();
   const state = new State();
 
-  state.setUp([ai1, ai2]);
+  state.setUp([ai1, ai2], muteConfig);
   state.current.countInDeck = jest.fn(() => 1);
   state.countInSupply = jest.fn(() => 8);
   state.gainsToEndGame = jest.fn(() => 8);
@@ -303,7 +305,7 @@ test('Skip colony without Platinum', () => {
   const ai2 = new BasicAI();
   const state = new State();
 
-  state.setUp([ai1, ai2]);
+  state.setUp([ai1, ai2], muteConfig);
   state.current.countInDeck = jest.fn(() => 0);
   state.countInSupply = jest.fn(() => 8);
   state.gainsToEndGame = jest.fn(() => 8);
@@ -316,7 +318,7 @@ test('Prefer Province with less than 7 colonies', () => {
   const ai2 = new BasicAI();
   const state = new State();
 
-  state.setUp([ai1, ai2]);
+  state.setUp([ai1, ai2], muteConfig);
   state.current.countInDeck = jest.fn(() => 0);
   state.countInSupply = jest.fn(() => 6);
   state.gainsToEndGame = jest.fn(() => 8);
@@ -330,7 +332,7 @@ test('Prefer Duchy with less than 6 gains to end game', () => {
   const ai2 = new BasicAI();
   const state = new State();
 
-  state.setUp([ai1, ai2]);
+  state.setUp([ai1, ai2], muteConfig);
   state.current.countInDeck = jest.fn(() => 0);
   state.countInSupply = jest.fn(() => 6);
   state.gainsToEndGame = jest.fn(() => 5);
@@ -344,7 +346,7 @@ test('Prefer Estate with less than 3 gains to end game', () => {
   const ai2 = new BasicAI();
   const state = new State();
 
-  state.setUp([ai1, ai2]);
+  state.setUp([ai1, ai2], muteConfig);
   state.current.countInDeck = jest.fn(() => 0);
   state.countInSupply = jest.fn(() => 6);
   state.gainsToEndGame = jest.fn(() => 2);
@@ -358,7 +360,7 @@ test('Prefer Copper with less than 4 gains to end game', () => {
   const ai2 = new BasicAI();
   const state = new State();
 
-  state.setUp([ai1, ai2]);
+  state.setUp([ai1, ai2], muteConfig);
   state.current.countInDeck = jest.fn(() => 0);
   state.countInSupply = jest.fn(() => 6);
   state.gainsToEndGame = jest.fn(() => 3);
@@ -412,7 +414,7 @@ test('Fallback playValue function -> Basic treasures', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // Base treasures
   expect(ai.playValue(state, cards.Copper, state.current)).toBe(101);
@@ -424,7 +426,7 @@ test('Fallback playValue function -> Menagerie', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // No duplicates in hand
   state.current.hand = [cards.Copper, cards.Estate];
@@ -443,7 +445,7 @@ test('Fallback playValue function -> Shanty Town', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // No actions in hand
   state.current.hand = [cards.Copper, cards.Estate];
@@ -470,7 +472,7 @@ test('Fallback playValue function -> Tournament', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // No province in hand
   state.current.hand = [cards.Copper, cards.Estate];
@@ -485,7 +487,7 @@ test('Fallback playValue function -> Library', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // ... as a terminal
   state.current.actions = 1;
@@ -540,7 +542,7 @@ test('Fallback playValue function -> Throne Room', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // Another action in hand
   state.current.hand = [cards['Throne Room'], cards.Village];
@@ -555,7 +557,7 @@ test('Fallback playValue function -> King\'s Court', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // Another action in hand
   state.current.hand = [cards.KingsCourt, cards.Village];
@@ -570,7 +572,7 @@ test('Fallback playValue function -> Lookout', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // Not in endgame yet
   state.gainsToEndGame = jest.fn(() => 6);
@@ -592,7 +594,7 @@ test('Fallback playValue function -> Conspirator', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // It it activates
   state.current.inPlay = [new Card(), new Card()];
@@ -613,7 +615,7 @@ test('Fallback playValue function -> Great Hall', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // With Crossroads
   state.current.hand = [cards.Crossroads];
@@ -628,7 +630,7 @@ test('Fallback playValue function -> Watchtower', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // With extra actions
   state.current.hand = [cards.Copper, cards.Copper, cards.Copper];
@@ -657,7 +659,7 @@ test('Fallback playValue function -> Cantrips', () => {
   const hypothetical = new BasicAction();
 
   hypothetical.actions = 1;
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   const testCards = [
     hypothetical,
@@ -679,7 +681,7 @@ test('Fallback playValue function -> Terminal draw', () => {
   const hypothetical = new BasicAction();
 
   hypothetical.cards = 10;
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   const testCards = [
     hypothetical,
@@ -711,7 +713,7 @@ test('Fallback playValue function -> Other terminals', () => {
 
   hypothetical.cards = 0;
   hypothetical.actions = 0;
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   const testCards = [
     hypothetical,
@@ -731,7 +733,7 @@ test('Fallback playValue function -> Crossroads', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // With Crossroads in play
   state.current.inPlay = [cards.Crossroads];
@@ -746,7 +748,7 @@ test('Fallback playValue function -> Treasure Map', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // With 2+ Treasure Maps in hand
   state.current.hand = [cards.TreasureMap, cards.TreasureMap];
@@ -767,7 +769,7 @@ test('Fallback playValue function -> Explorer', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // With Province in hand
   state.current.hand = [cards.Province];
@@ -782,7 +784,7 @@ test('Fallback playValue function -> Coppersmith', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // With no Coppers
   state.current.hand = [];
@@ -805,7 +807,7 @@ test('Fallback playValue function -> Baron', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // With Estate in hand
   state.current.hand = [cards.Estate];
@@ -826,7 +828,7 @@ test('Fallback playValue function -> Chapel', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // Wants to trash
   ai.wantsToTrash = () => true;
@@ -904,7 +906,7 @@ test('topdeckPriority prioritizes by play value', () => {
   const action3 = new BasicAction();
   let priority;
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
   state.current.actions = 1;
   state.current.hand = [action1, action2, action3];
   action1.name = 'Action 1';
@@ -932,7 +934,7 @@ test('topdeckPriority prefers treasures after actions', () => {
   let priority;
 
   action.name = 'Action';
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
   state.current.actions = 0;
   state.current.hand = [action, cards.Copper];
   priority = ai.topdeckPriority(state, state.current);
@@ -955,7 +957,7 @@ test('ChoiceToValue of null choice is always 0', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
   expect(ai.choiceToValue('fake', state, null, state.current)).toBe(0);
 });
 
@@ -963,7 +965,7 @@ test('ChoiceToValue returns position in priority list times 100', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
   ai.fakePriority = () => [
     'Some card',
     'Another card',
@@ -978,7 +980,7 @@ test('ChoiceToValue forwards to choiceValue when choice is not on list', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
   ai.fakePriority = () => [
     'Some card',
     'Another card',
@@ -995,7 +997,7 @@ test('ChoiceToValue forwards to choiceValue when no priority list is available',
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   ai.getChoiceValue = jest.fn(() => 55);
 
@@ -1008,7 +1010,7 @@ test('CardInDeckValue returns gain value minus trash value', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   ai.choiceToValue = jest.fn((type) => {
     const values = {
@@ -1027,7 +1029,7 @@ test('CardInDeckValue powers the gain value on the endgame', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
   state.gainsToEndGame = () => 2;
 
   ai.choiceToValue = jest.fn((type) => {
@@ -1059,7 +1061,7 @@ test('upgradeValue is the difference of between wanting the gained card and the 
     return values[card.toString()];
   };
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
   expect(ai.upgradeValue(state, choice, state.current)).toBe(4);
 });
 
@@ -1069,7 +1071,7 @@ test('Multiply value defaults to play value', () => {
   const card = new BasicAction();
 
   card.name = 'Fake Card';
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
   ai.playValue = jest.fn(() => 1);
 
   ai.multiplyValue(state, card, state.current);
@@ -1087,7 +1089,7 @@ const assertMultiplyValue = function (card, extraActionsExpectedValue, terminalE
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // With extra actions
   state.current.actions = 2;
@@ -1110,7 +1112,7 @@ test('Fallback multiplyValue function -> Witch', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
 
   // With extra actions and curses left
   state.current.actions = 2;
@@ -1136,7 +1138,7 @@ test('discardValue wants to discard actions only in own turn', () => {
   const state = new State();
   let player1, player2;
 
-  state.setUp([ ai1, ai2 ]);
+  state.setUp([ ai1, ai2 ], muteConfig);
   player1 = ai1.myPlayer(state);
   player1.actions = 0;
   player2 = ai2.myPlayer(state);
@@ -1151,7 +1153,7 @@ test('discardValue tries not to draw dead actions', () => {
   const state = new State();
   let player1;
 
-  state.setUp([ ai1, ai2 ]);
+  state.setUp([ ai1, ai2 ], muteConfig);
   player1 = ai1.myPlayer(state);
   player1.actions = 1;
   player1.actionBalance = () => -1;
@@ -1165,7 +1167,7 @@ test('topdeckPriority prioritizes treasures by coin value', () => {
   const ai = new BasicAI();
   let priority;
 
-  state.setUp([ ai, ai ]);
+  state.setUp([ ai, ai ], muteConfig);
   state.current.hand = [ cards.Silver, cards.Gold, cards.Copper ];
 
   priority = ai.topdeckPriority(state, state.current);

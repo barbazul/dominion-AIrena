@@ -3,6 +3,8 @@ import cards from '../../game/cards';
 import State from '../../game/state';
 import Sentry from '../sentry';
 
+const muteConfig = { log: () => {}, warn: () => {} };
+
 test('Sentry card definition', () => {
   const card = new Sentry();
 
@@ -19,7 +21,7 @@ test('Sentry looks at top 2 cards and asks to trash both of them', () => {
   const state = new State();
 
   ai.choose = jest.fn(() => null);
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
   state.current.draw = [cards.Copper, cards.Estate];
   card.playEffect(state);
 
@@ -33,7 +35,7 @@ test('Sentry trashes the chosen cards', () => {
   const state = new State();
 
   ai.choose = jest.fn((type, state, choices) => choices[0]);
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
   state.current.draw = [cards.Copper, cards.Estate];
   card.playEffect(state);
 
@@ -49,7 +51,7 @@ test('Sentry asks to discard both cards if none is trashed', () => {
   const state = new State();
 
   ai.choose = jest.fn(() => null);
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
   state.current.draw = [cards.Copper, cards.Estate];
   card.playEffect(state);
 
@@ -65,7 +67,7 @@ test('Sentry discards the chosen cards', () => {
   const state = new State();
 
   ai.choose = jest.fn((type, state, choices) => type === CHOICE_TRASH ? null : choices[0]);
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
   state.current.draw = [cards.Copper, cards.Estate];
   state.current.discard = [];
   card.playEffect(state);
@@ -84,7 +86,7 @@ test('Sentry topdecks the remaining cards', () => {
   const state = new State();
 
   ai.choose = jest.fn(() => null);
-  state.setUp([ai, ai]);
+  state.setUp([ai, ai], muteConfig);
   state.current.draw = [ cards.Copper, cards.Estate ];
   state.current.discard = [];
   card.playEffect(state);

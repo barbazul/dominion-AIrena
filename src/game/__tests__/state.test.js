@@ -64,7 +64,7 @@ test('Empty kingdom on new instance', () => {
 test('Default log is console', () => {
   const state = new State();
 
-  state.setUp(createPlayers(2));
+  state.setUp(createPlayers(2), {});
   expect(state.log).toBe(console.log);
 });
 
@@ -222,7 +222,7 @@ test('Default warn is console', () => {
   const originalLog = console.log;
 
   console.log = jest.fn();
-  state.setUp(createPlayers(2));
+  state.setUp(createPlayers(2), { log: () => {} });
   state.warn('A warning');
   expect(console.log).toHaveBeenCalledWith('WARN: A warning');
   console.log = originalLog;
@@ -428,7 +428,7 @@ test('allowTrash returns empty array when allowing 0 cards', () => {
   const state = new State();
   const players = createPlayers(2);
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   expect(state.allowTrash(state.current, 0)).toHaveLength(0);
 });
 
@@ -947,7 +947,7 @@ test('doPhase increases the turn count and changes to action phase on start phas
   const state = new State();
   const players = createPlayers();
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   state.phase = PHASE_START;
   state.current.turnsTaken = 2;
   state.doPhase();
@@ -960,7 +960,7 @@ test('doPhase triggers action phase and moves into treasure phase on action phas
   const state = new State();
   const players = createPlayers();
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   state.phase = PHASE_ACTION;
   state.current.turnsTaken = 2;
   state.doActionPhase = jest.fn(() => {});
@@ -975,7 +975,7 @@ test('doPhase triggers treasure phase and moves into buy phase on treasure phase
   const state = new State();
   const players = createPlayers();
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   state.phase = PHASE_TREASURE;
   state.current.turnsTaken = 2;
   state.doTreasurePhase = jest.fn(() => {});
@@ -990,7 +990,7 @@ test('doPhase triggers buy phase and moves into cleanup phase on buy phase', () 
   const state = new State();
   const players = createPlayers();
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   state.phase = PHASE_BUY;
   state.current.turnsTaken = 2;
   state.doBuyPhase = jest.fn(() => {});
@@ -1005,7 +1005,7 @@ test('doPhase triggers cleanup phase, rotates players and moves into start phase
   const state = new State();
   const players = createPlayers();
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   state.phase = PHASE_CLEANUP;
   state.doCleanupPhase = jest.fn(() => {});
   state.rotatePlayer = jest.fn(() => {});
@@ -1023,7 +1023,7 @@ test('doActionPhase calls for an action decision.', () => {
   const action2 = new BasicAction();
   const nonaction = new Card();
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   state.current.agent.choose = jest.fn(() => action1);
   state.current.hand = [action1, action2, nonaction];
   state.doActionPhase();
@@ -1037,7 +1037,7 @@ test('doActionPhase plays the action card', () => {
   const players = createPlayers();
   const action1 = new BasicAction();
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   state.playAction = jest.fn(() => {});
   state.current.hand = [action1];
   state.current.agent.choose = () => action1;
@@ -1052,7 +1052,7 @@ test('doActionPhase keeps playing actions while there are actions available', ()
   const action1 = new BasicAction();
   const action2 = new BasicAction();
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   state.playAction = jest.fn(state.playAction);
   state.current.hand = [action1, action2];
   action1.name = 'Action 1';
@@ -1073,7 +1073,7 @@ test('doActionPhase allows for the null choice', () => {
   const action2 = new BasicAction();
   const nonaction = new Card();
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   state.current.agent.choose = jest.fn(() => action1);
   state.current.hand = [action1, action2, nonaction];
   state.doActionPhase();
@@ -1087,7 +1087,7 @@ test('doActionPhase stops playing actions when the agent chooses to', () => {
   const action1 = new BasicAction();
   const action2 = new BasicAction();
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   state.playAction = jest.fn(state.playAction);
   state.current.hand = [action1, action2];
   action1.name = 'Action 1';
@@ -1105,7 +1105,7 @@ test('doTreasurePhase calls for a play decision with only treasures', () => {
   const card1 = new Card();
   const card2 = new Card();
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   card1.isTreasure = () => true;
   state.current.agent.choose = jest.fn(() => card1);
   state.current.hand = [card1, card2];
@@ -1120,7 +1120,7 @@ test('doTreasurePhase plays the chosen treasures', () => {
   const players = createPlayers();
   const card = new Card();
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   card.isTreasure = () => true;
   card.name = 'Card 2';
   state.playTreasure = jest.fn(state.playTreasure);
@@ -1137,7 +1137,7 @@ test('doTreasurePhase does nothing with no treasures in hand', () => {
   const card1 = new Card();
   const card2 = new Card();
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   state.playTreasure = jest.fn(state.playTreasure);
   state.current.agent.choose = jest.fn(() => card1);
   state.current.hand = [card1, card2];
@@ -1153,7 +1153,7 @@ test('doTreasurePhase plays multiple treasures if available', () => {
   const card1 = new Card();
   const card2 = new Card();
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   card1.isTreasure = () => true;
   card1.name = 'Card 1';
   card2.isTreasure = () => true;
@@ -1173,7 +1173,7 @@ test('doTreasurePhase allows for the null choice', () => {
   const card1 = new Card();
   const card2 = new Card();
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   card1.isTreasure = () => true;
   state.current.agent.choose = jest.fn(() => card1);
   state.current.hand = [card1, card2];
@@ -1187,7 +1187,7 @@ test('doTreasurePhase stops playing treasures when agent chooses to', () => {
   const players = createPlayers();
   const card = new Card();
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   card.isTreasure = () => true;
   card.name = 'Card 2';
   state.playTreasure = jest.fn(state.playTreasure);
@@ -1323,7 +1323,7 @@ test('gainsToEndGame updates cache', () => {
 test('getSingleBuyDecision calls for a gain choice with the cards the player can afford', () => {
   const state = new State();
 
-  state.setUp(createPlayers());
+  state.setUp(createPlayers(), muteConfig);
   state.kingdom = {
     Copper: 10,
     Silver: 10,
@@ -1342,7 +1342,7 @@ test('getSingleBuyDecision calls for a gain choice with the cards the player can
 test('getSingleBuyDecision allows for the null choice', () => {
   const state = new State();
 
-  state.setUp(createPlayers());
+  state.setUp(createPlayers(), muteConfig);
   state.kingdom = {
     Copper: 10,
     Silver: 10,
@@ -1378,7 +1378,7 @@ test('doCleanupPhase cleans cards in play and hand', () => {
 test('doCleanupPhase resets player status', () => {
   const state = new State();
 
-  state.setUp(createPlayers());
+  state.setUp(createPlayers(), muteConfig);
   state.current.actions = 0;
   state.current.buys = 0;
   state.current.coins = 2;
@@ -1394,7 +1394,7 @@ test('doCleanupPhase resets player status', () => {
 test('doCleanupPhase throws an error when cards banished', () => {
   const state = new State();
 
-  state.setUp(createPlayers());
+  state.setUp(createPlayers(), muteConfig);
   state.totalCards = 100;
   state.countTotalCards = jest.fn(() => 50);
 
@@ -1406,7 +1406,7 @@ test('doCleanupPhase throws an error when cards banished', () => {
 test('countTotalCards counts supply + players decks + trash', () => {
   const state = new State();
 
-  state.setUp(createPlayers());
+  state.setUp(createPlayers(), muteConfig);
   state.kingdom = {
     'Copper': 60,
     'Curse': 10
@@ -1422,7 +1422,7 @@ test('rotatePLayer shifts player order and updates current player', () => {
   const state = new State();
   let player1, player2;
 
-  state.setUp(createPlayers());
+  state.setUp(createPlayers(), muteConfig);
   state.phase = PHASE_CLEANUP;
   player1 = state.players[0];
   player2 = state.players[1];
@@ -1437,7 +1437,7 @@ test('requireDiscard returns empty array when requiring 0 cards', () => {
   const state = new State();
   const players = createPlayers(2);
 
-  state.setUp(players);
+  state.setUp(players, muteConfig);
   expect(state.requireDiscard(state.current, 0)).toHaveLength(0);
 });
 

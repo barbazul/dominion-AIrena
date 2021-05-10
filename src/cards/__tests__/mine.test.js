@@ -6,6 +6,8 @@ import Estate from '../estate';
 import Mine from '../mine';
 import Silver from '../silver';
 
+const muteConfig = { log: () => {}, warn: () => {} };
+
 test('Mine card definition', () => {
   const card = new Mine();
 
@@ -53,7 +55,7 @@ test('playEffect calls for an upgrade choice', () => {
     { trash: [cards.Estate], gain: [cards.Gold] }
   ];
 
-  state.setUp([new BasicAI(), new BasicAI()]);
+  state.setUp([new BasicAI(), new BasicAI()], muteConfig);
   state.current.agent.choose = jest.fn(state.current.agent.choose);
   state.current.hand = [cards.Copper, cards.Estate];
   card.playEffect(state);
@@ -94,7 +96,7 @@ test('Does not allow to gain from an empty pile', () => {
     { trash: [cards.Estate], gain: [cards.Gold] }
   ];
 
-  state.setUp([new BasicAI(), new BasicAI()]);
+  state.setUp([new BasicAI(), new BasicAI()], muteConfig);
   state.current.agent.choose = jest.fn(state.current.agent.choose);
   state.current.hand = [cards.Copper, cards.Estate];
   state.kingdom.Silver = 0;
@@ -108,7 +110,7 @@ test('Cards are trashed and gained as chosen', () => {
   const card = new Mine();
   const state = new State();
 
-  state.setUp([new BasicAI(), new BasicAI()]);
+  state.setUp([new BasicAI(), new BasicAI()], muteConfig);
 
   state.current.agent.choose = jest.fn(() => {
     return { trash: [cards.Copper], gain: [cards.Silver] };
@@ -128,7 +130,7 @@ test('Does nothing on empty hand', () => {
   const card = new Mine();
   const state = new State();
 
-  state.setUp([new BasicAI(), new BasicAI()]);
+  state.setUp([new BasicAI(), new BasicAI()], muteConfig);
 
   state.current.agent.choose = jest.fn(() => {});
 
