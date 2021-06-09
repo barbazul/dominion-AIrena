@@ -8,11 +8,11 @@
     "static": "eslint src"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.12.11",
     "@stryker-mutator/core": "^2.3.0",
     "@stryker-mutator/html-reporter": "^2.3.0",
     "@stryker-mutator/javascript-mutator": "^2.3.0",
     "@stryker-mutator/jest-runner": "^2.3.0",
-    "@babel/preset-env": "^7.12.11",
     "eslint": "^5.9.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.14.0",
