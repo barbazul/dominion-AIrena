@@ -236,6 +236,22 @@ export class DomPlayer extends BasicAI {
   }
 
   /**
+   * Get the amount of coins if all cards in hand were played.
+   *
+   * @param {Player} my
+   * @return {Number}
+   */
+  getPotentialCoins(my) {
+    let value = my.coins;
+
+    for (let card of my.hand) {
+      value += card.coins;
+    }
+
+    return value;
+  }
+
+  /**
    * @param {Player} my
    * @param {State} state
    * @param {Card} cardToTrash
@@ -243,13 +259,25 @@ export class DomPlayer extends BasicAI {
    */
   removingReducesBuyingPower(my, state, cardToTrash) {
     const value = this.getPotentialCoinValue(my, cardToTrash);
+    const initialCoins = my.coins;
+    const initialHand = my.hand.slice();
+    let buyPreference;
+    let reducedCoinsBuyPreference;
 
     if (value > 0) {
-      const buyPreference = state.getSingleBuyDecision();
-      const index = my.hand.indexOf(cardToTrash);
-      my.hand.splice(index, 1);
-      const reducedCoinsBuyPreference = state.getSingleBuyDecision();
-      my.hand.push(cardToTrash);
+      // Check what would I buy with current money
+      my.coins = this.getPotentialCoins(my);
+      buyPreference = state.getSingleBuyDecision();
+
+      // Remove card from hand and check again
+      my.hand.splice(my.hand.indexOf(cardToTrash), 1);
+      my.coins = initialCoins;
+      my.coins = this.getPotentialCoins(my);
+      reducedCoinsBuyPreference = state.getSingleBuyDecision();
+
+      // Reset state
+      my.coins = initialCoins;
+      my.hand = initialHand;
 
       return buyPreference !== reducedCoinsBuyPreference;
     }
@@ -258,12 +286,15 @@ export class DomPlayer extends BasicAI {
   }
 
   /**
+   * This was originally implemented in DomCard
+   *
+   * @see https://github.com/Geronimoo/DominionSim/blob/master/src/main/java/be/aga/dominionSimulator/DomCard.java#L143
    * @param {Player} my
    * @param {Card} card
    * @returns {number}
    */
   getPotentialCoinValue(my, card) {
-    if (my.actions === 0 && card.isAction() && my.hand.indexOf(card) > -1) {
+    if (my.actions === 0 && card.isAction()) {
       return 0;
     }
 
