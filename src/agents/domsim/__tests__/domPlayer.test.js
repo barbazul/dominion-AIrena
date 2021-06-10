@@ -1,4 +1,4 @@
-import { DomPlayer } from '../domPlayer';
+import { DomPlayer, STRATEGY_STANDARD } from '../domPlayer';
 import Player from '../../../game/player';
 import BasicAction from '../../../cards/basicAction';
 import cards from '../../../game/cards';
@@ -116,4 +116,17 @@ test('getPotentialCoins sums value of all cards in hand and previous coins', () 
   owner.hand = [ cards.Copper, cards.Silver ];
   owner.coins = 2;
   expect(ai.getPotentialCoins(owner)).toBe(5)
+});
+
+test('countCardTypeInDeck counts cards that have a specific type', () => {
+  const ai = new DomPlayer();
+  const owner = new Player(ai, () => {});
+
+  expect(ai.countCardTypeInDeck(owner, 'Treasure')).toBe(7)
+});
+
+test('getPlayStrategyFor defaults to standard strategy', () => {
+  const ai = new DomPlayer();
+
+  expect(ai.getPlayStrategyFor(new BasicAction())).toBe(STRATEGY_STANDARD);
 });

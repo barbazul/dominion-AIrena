@@ -197,11 +197,6 @@ export class DomPlayer extends BasicAI {
 
   getPlayStrategyFor(card) {
     let theStrategy = this.playStrategies[card];
-
-    if (card.toString() === 'Madman') {
-      theStrategy = this.playStrategies['Hermit'];
-    }
-
     return theStrategy === undefined ? STRATEGY_STANDARD : theStrategy;
   }
 
