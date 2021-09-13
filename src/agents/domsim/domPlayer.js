@@ -88,6 +88,7 @@ export class DomPlayer extends BasicAI {
   wantsToPlay(cardName, state, my) {
     // TODO Move into heuristics
     const specific = {
+      // Base Set
       Chapel: (state, my) => {
         const minMoneyInDeck = this.getPlayStrategyFor('Chapel') === STRATEGY_AGGRESSIVE_TRASHING ? 4 : 6;
         const trashOverBuyThreshold = this.getPlayStrategyFor('Chapel') === STRATEGY_AGGRESSIVE_TRASHING ? 3 : 4;
@@ -119,6 +120,13 @@ export class DomPlayer extends BasicAI {
       Smithy: (state, my) => {
         return !(this.getPlayStrategyFor('Smithy') === STRATEGY_PLAY_IF_NOT_BUYING_TOP_CARD &&
           this.isGoingToBuyTopCardInBuyRules(state, my));
+      },
+
+      // Intrigue
+      Baron: (state, my) => {
+        return my.countInHand(cards.Estate) > 0
+          /* TODO || my.wants(cards.Estate) */
+          || state.countInSupply(cards.Estate) === 0;
       }
     };
 
@@ -159,7 +167,7 @@ export class DomPlayer extends BasicAI {
   }
 
   /**
-   * Values are substrated from 16 due to the inverted priority logic between
+   * Values are subtracted from 16 due to the inverted priority logic between
    * DomSim and Dominiate.
    *
    * @param {State} state
@@ -169,6 +177,14 @@ export class DomPlayer extends BasicAI {
    */
   discardValue(state, card, my) {
     // TODO some cards have specific heuristics
+    if (card === cards.Baron) {
+      if (my.actions > 0 && my.hand.indexOf(cards.Baron) > -1
+        && my.countInHand(cards.Baron) === 1
+        && my.hand.indexOf(cards.Estate) > -1) {
+        return 16 - 29;
+      }
+    }
+
     // TODO Province heuristic regarding Tournament
 
     if (my.actions < 1 && card.isAction()) {

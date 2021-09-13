@@ -1,7 +1,11 @@
 /**
  * This is taken from DomCardName
+ *
+ * Original constructor looks like:
+ *   DomCardName(int aCoinCost, int aPotionCost, int aCoinValue, int aVictoryValue, int aPlayPriority, int aDiscardPriority, DomCardType[] aTypes)
  */
 const heuristics = {
+  // Base Cards
   Curse: {discardPriority: 10},
   Copper: {discardPriority: 15, playPriority: 55},
   Silver: {discardPriority: 20, playPriority: 25},
@@ -9,6 +13,8 @@ const heuristics = {
   Estate: {discardPriority: 9},
   Duchy: { discardPriority: 8 },
   Province: { discardPriority: 7, trashPriority: 60 },
+
+  // Base Set
   Artisan: { types: [ 'Terminal' ], discardPriority: 27, playPriority: 30 },
   Bandit: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 23 },
   Bureaucrat: { types: [ 'Terminal' ], discardPriority: 20, playPriority: 29 },
@@ -34,7 +40,10 @@ const heuristics = {
   Vassal: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 25 },
   Village: {types: ['Cycler', 'Village'], discardPriority: 21, playPriority: 5},
   Witch: { types: [ 'Terminal' ], discardPriority: 40, playPriority: 18 },
-  Workshop: { types: [ 'Terminal' ], discardPriority: 22, playPriority: 38}
+  Workshop: { types: [ 'Terminal' ], discardPriority: 22, playPriority: 38 },
+
+  // Intrigue
+  Baron: { types: [ 'Terminal' ], discardPriority: 25, playPriority: 22 }
 };
 
 export default heuristics;
