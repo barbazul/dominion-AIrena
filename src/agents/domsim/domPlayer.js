@@ -140,11 +140,7 @@ export class DomPlayer extends BasicAI {
     // TODO Some cards have specific trashValue functions
     // TODO Duchy if (owner!=null && owner.wantsToGainOrKeep(DomCardName.Duchy)) return 40;
 
-    if (card === cards.Duchy && this.wantsToGainOrKeep(card)) {
-      return 16 - 40;
-    }
-
-    if (heuristics[card] && heuristics[card].trashPriority) {
+    if (heuristics[card] && heuristics[card].trashPriority !== undefined) {
       return 16 - heuristics[card].trashPriority;
     }
 
