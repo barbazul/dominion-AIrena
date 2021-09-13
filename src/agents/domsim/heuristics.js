@@ -29,7 +29,7 @@ const helpers = {
 };
 
 const heuristics = {
-  // common cards
+  // Base Cards
   Curse: { playPriority: 100, discardPriority: 10, trashPriority: 0 },
   Copper: { playPriority: 55, discardPriority: 15 },
   Silver: {
@@ -64,8 +64,6 @@ const heuristics = {
     }
   },
   Gold: { playPriority: 30, discardPriority: 24 },
-  Platinum: { playPriority: 23, discardPriority: 33 },
-  Potion: { playPriority: 40, discardPriority: 22 },
   Estate: {
     playPriority: 100,
     discardPriority: 9,
