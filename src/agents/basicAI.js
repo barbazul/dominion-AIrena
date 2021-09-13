@@ -782,8 +782,7 @@ export default class BasicAI {
           return 184;
         }
 
-        // @todo Should use choiceToValue
-        if (this.gainValue(state, cards.Estate, my) > 0) {
+        if (this.cardInDeckValue(state, cards.Estate, my) > 0) {
           return 5;
         }
 

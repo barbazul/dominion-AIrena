@@ -829,12 +829,12 @@ test.todo('Fallback playValue function -> Baron'/*, () => {
 
   // Without but wants to gain Estate
   state.current.hand = [];
-  ai.gainValue = () => 1;
+  ai.cardInDeckValue = () => 1;
   expect(ai.playValue(state, cards.Baron, state.current)).toBe(5);
 
   // Without and does not want to gain Estate
   state.current.hand = [];
-  ai.gainValue = () => -1;
+  ai.cardInDeckValue = () => -1;
   expect(ai.playValue(state, cards.Baron, state.current)).toBe(-5);
 } */);
 
