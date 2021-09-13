@@ -1,4 +1,4 @@
-import { DomPlayer, STRATEGY_STANDARD } from '../domPlayer';
+import {DomPlayer, STRATEGY_STANDARD} from '../domPlayer';
 import Player from '../../../game/player';
 import BasicAction from '../../../cards/basicAction';
 import cards from '../../../game/cards';
@@ -129,4 +129,19 @@ test('getPlayStrategyFor defaults to standard strategy', () => {
   const ai = new DomPlayer();
 
   expect(ai.getPlayStrategyFor(new BasicAction())).toBe(STRATEGY_STANDARD);
+});
+
+test('checkForCardToMine', () => {
+  const ai = new DomPlayer();
+  const state = new State();
+
+  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  const owner = state.current;
+  owner.hand = [cards.Copper];
+
+  ai.choose = (choice, state, choices) => {
+    return choices[0];
+  }
+
+  expect(ai.checkForCardToMine(state, owner).trash).toStrictEqual([cards.Copper]);
 });
