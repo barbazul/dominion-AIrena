@@ -1,37 +1,38 @@
 'use strict';
 
-import BasicAI from './src/agents/basicAI.js';
-import BigMoney from './src/agents/dominiate/bigMoney.js';
-import BigSmithy from './src/agents/dominiate/bigSmithy.js';
-import BMLibrary from './src/agents/dominiate/bmLibrary.js';
-import ChapelWitch from './src/agents/dominiate/chapelWitch.js';
-import DoubleMilitia from './src/agents/dominiate/doubleMilitia.js';
-import DoubleWitch from './src/agents/dominiate/doubleWitch.js';
-import MoneylenderWitch from './src/agents/dominiate/moneylenderWitch.js';
-import SillyAI from './src/agents/dominiate/sillyAI.js';
-import SingleWitch from './src/agents/dominiate/singleWitch.js';
-import FirstGame from './src/agents/domsim/firstGame.js';
-import State from './src/game/state.js';
-import BureaucratGardens from './src/agents/domsim/bureaucratGardens.js';
-import BurningSkullHTBD1 from './src/agents/domsim/burningSkullHTBD1.js';
-import CouncilRoomMilitia from './src/agents/domsim/councilRoomMilitia.js';
-import { DomPlayer } from './src/agents/domsim/domPlayer.js';
-import LabMilitiaChapel from './src/agents/domsim/labMilitiaChapel.js';
-import Festival from './src/agents/domsim/festival.js';
-import CouncilRoom from './src/agents/domsim/councilRoom.js';
-import Bureaucrat from './src/agents/domsim/bureaucrat.js';
-import BigMoneyUltimate from './src/agents/domsim/bigMoneyUltimate.js';
-import WorkshopGardens from './src/agents/domsim/workshopGardens.js';
-import BasicBigMoney from './src/agents/domsim/basicBigMoney.js';
-import BigMoneyUltimateFor3or4 from './src/agents/domsim/bigMoneyUltimateFor3or4.js';
-import DoubleMoatFor3or4 from './src/agents/domsim/doubleMoatFor3or4.js';
-import Laboratory from './src/agents/domsim/laboratory.js';
-import Militia from './src/agents/domsim/militia.js';
-import Moat from './src/agents/domsim/moat.js';
-import Smithy from './src/agents/domsim/smithy.js';
-import Witch from './src/agents/domsim/witch.js';
-import WitchAndMoatFor3or4 from './src/agents/domsim/witchAndMoatFor3or4.js';
-import WitchFor3or4 from './src/agents/domsim/witchFor3or4.js';
+import BasicAI from './src/agents/basicAI';
+import BigMoney from './src/agents/dominiate/bigMoney';
+import BigSmithy from './src/agents/dominiate/bigSmithy';
+import BMLibrary from './src/agents/dominiate/bmLibrary';
+import ChapelWitch from './src/agents/dominiate/chapelWitch';
+import DoubleMilitia from './src/agents/dominiate/doubleMilitia';
+import DoubleWitch from './src/agents/dominiate/doubleWitch';
+import MoneylenderWitch from './src/agents/dominiate/moneylenderWitch';
+import SillyAI from './src/agents/dominiate/sillyAI';
+import SingleWitch from './src/agents/dominiate/singleWitch';
+import FirstGame from './src/agents/domsim/firstGame';
+import State from './src/game/state';
+import BureaucratGardens from './src/agents/domsim/bureaucratGardens';
+import BurningSkullHTBD1 from './src/agents/domsim/burningSkullHTBD1';
+import CouncilRoomMilitia from './src/agents/domsim/councilRoomMilitia';
+import { DomPlayer } from './src/agents/domsim/domPlayer';
+import LabMilitiaChapel from './src/agents/domsim/labMilitiaChapel';
+import Festival from './src/agents/domsim/festival';
+import CouncilRoom from './src/agents/domsim/councilRoom';
+import Bureaucrat from './src/agents/domsim/bureaucrat';
+import BigMoneyUltimate from './src/agents/domsim/bigMoneyUltimate';
+import WorkshopGardens from './src/agents/domsim/workshopGardens';
+import BasicBigMoney from './src/agents/domsim/basicBigMoney';
+import BigMoneyUltimateFor3or4 from './src/agents/domsim/bigMoneyUltimateFor3or4';
+import DoubleMoatFor3or4 from './src/agents/domsim/doubleMoatFor3or4';
+import Laboratory from './src/agents/domsim/laboratory';
+import Militia from './src/agents/domsim/militia';
+import Moat from './src/agents/domsim/moat';
+import Smithy from './src/agents/domsim/smithy';
+import Witch from './src/agents/domsim/witch';
+import WitchAndMoatFor3or4 from './src/agents/domsim/witchAndMoatFor3or4';
+import WitchFor3or4 from './src/agents/domsim/witchFor3or4';
+import SingleBaron from "./src/agents/dominiate/singleBaron";
 import StatsBot from './src/agents/barbazul/statsBot.js';
 import Artisan from './src/agents/barbazul/artisan.js';
 import yargs from 'yargs';
@@ -83,7 +84,8 @@ const players = [
   new Witch(),
   new WitchAndMoatFor3or4(),
   new WitchFor3or4(),
-  new Artisan()
+  new Artisan(),
+  new SingleBaron()
 ];
 
 const statsBotAgent = new StatsBot(statsBotOptions);

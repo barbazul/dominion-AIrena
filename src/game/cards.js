@@ -32,6 +32,7 @@ import Village from '../cards/village.js';
 import Witch from '../cards/witch.js';
 import Workshop from '../cards/workshop.js';
 import Bridge from '../cards/bridge.js';
+import Baron from "../cards/baron";
 
 const cards = {
   // Basic cards
@@ -72,7 +73,23 @@ const cards = {
   Workshop: new Workshop(),
 
   // Intrigue
-  Bridge: new Bridge()
+  Baron: new Baron(),
+  Bridge: new Bridge(),
+
+  // Placeholder for later
+  Crossroads: { toString: () => 'Crossroads' },
+  Lookout: { toString: () => 'Lookout' },
+  Menagerie: { toString: () => 'Menagerie' },
+  ShantyTown: { toString: () => 'Shanty Town' },
+  Tournament: { toString: () => 'Tournament' },
+  KingsCourt: { toString: () => 'King\'s Court', isAction: () => true },
+  Conspirator: { toString: () => 'Conspirator' },
+  GreatHall: { toString: () => 'Great Hall' },
+  Oracle: { toString: () => 'Oracle', isAction: () => true },
+  TreasureMap: { toString: () => 'Treasure Map' },
+  Explorer: { toString: () => 'Explorer' },
+  Coppersmith: { toString: () => 'Coppersmith' },
+  Watchtower: { toString: () => 'Watchtower' }
 };
 
 export default cards;
