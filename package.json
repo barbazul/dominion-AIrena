@@ -24,11 +24,9 @@
   "jest": {
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "src/cards/*.js",
-      "src/game/*.js",
-      "src/lib/*.js",
-      "src/agents/basicAi.js",
-      "src/agents/domsim/domPlayer.js"
+      "src/**/*.js",
+      "!src/agents/dominiate/*.js",
+      "!src/agents/domsim/*.js"
     ],
     "coverageThreshold": {
       "global": {
