@@ -1,7 +1,7 @@
-import Baron from "../baron";
-import State from "../../game/state";
-import BasicAI, {CHOICE_DISCARD} from "../../agents/basicAI";
-import cards from "../../game/cards";
+import Baron from '../baron';
+import State from '../../game/state';
+import BasicAI, { CHOICE_DISCARD } from '../../agents/basicAI';
+import cards from '../../game/cards';
 
 const muteConfig = { log: () => {}, warn: () => {} };
 

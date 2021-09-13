@@ -1,9 +1,9 @@
-import BasicAction from "./basicAction";
-import { CHOICE_DISCARD } from "../agents/basicAI";
-import cards from "../game/cards";
+import BasicAction from './basicAction';
+import { CHOICE_DISCARD } from '../agents/basicAI';
+import cards from '../game/cards';
 
 export default class Baron extends BasicAction {
-  constructor() {
+  constructor () {
     super();
     this.cost = 4;
     this.buys = 1;
@@ -14,7 +14,7 @@ export default class Baron extends BasicAction {
    *
    * @param {State} state
    */
-  playEffect(state) {
+  playEffect (state) {
     let discardEstate = null;
 
     if (state.current.hand.indexOf(cards.Estate) > -1) {

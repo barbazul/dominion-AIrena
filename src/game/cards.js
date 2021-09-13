@@ -32,7 +32,7 @@ import Village from '../cards/village.js';
 import Witch from '../cards/witch.js';
 import Workshop from '../cards/workshop.js';
 import Bridge from '../cards/bridge.js';
-import Baron from "../cards/baron";
+import Baron from '../cards/baron';
 
 const cards = {
   // Basic cards
