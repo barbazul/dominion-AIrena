@@ -69,22 +69,6 @@ const cards = {
   Village: new Village(),
   Witch: new Witch(),
   Workshop: new Workshop(),
-
-  // Placeholder for later
-  Crossroads: { toString: () => 'Crossroads' },
-  Lookout: { toString: () => 'Lookout' },
-  Menagerie: { toString: () => 'Menagerie' },
-  ShantyTown: { toString: () => 'Shanty Town' },
-  Tournament: { toString: () => 'Tournament' },
-  KingsCourt: { toString: () => 'King\'s Court', isAction: () => true },
-  Conspirator: { toString: () => 'Conspirator' },
-  GreatHall: { toString: () => 'Great Hall' },
-  Oracle: { toString: () => 'Oracle', isAction: () => true },
-  TreasureMap: { toString: () => 'Treasure Map' },
-  Explorer: { toString: () => 'Explorer' },
-  Coppersmith: { toString: () => 'Coppersmith' },
-  Baron: { toString: () => 'Baron' },
-  Watchtower: { toString: () => 'Watchtower' }
 };
 
 export default cards;

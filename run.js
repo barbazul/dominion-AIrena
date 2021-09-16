@@ -29,6 +29,7 @@ import Smithy from './src/agents/domsim/smithy';
 import Witch from './src/agents/domsim/witch';
 import WitchAndMoatFor3or4 from './src/agents/domsim/witchAndMoatFor3or4';
 import WitchFor3or4 from './src/agents/domsim/witchFor3or4';
+import StatsBot from "./src/agents/barbazul/StatsBot";
 
 const players = [
   new SillyAI(), // 0
@@ -60,7 +61,8 @@ const players = [
   new Smithy(),
   new Witch(),
   new WitchAndMoatFor3or4(),
-  new WitchFor3or4()
+  new WitchFor3or4(),
+  new StatsBot()
 ];
 
 const start = new Date();
@@ -77,7 +79,7 @@ while (rivals.length < numPlayers) {
   rivals.push(rival);
 }
 
-const numGames = 1000;
+const numGames = 1;
 const config = {};
 let logFn = console.log;
 
@@ -95,6 +97,7 @@ rivals.forEach(player => {
 for (let i = 0; i < numGames; i++) {
   state.setUp(rivals, config);
   state.startGame();
+  state.doGameAnalysis();
 
   while (!state.isGameOver()) {
     if (state.phase === PHASE_START) {
@@ -135,6 +138,8 @@ for (let i = 0; i < numGames; i++) {
     logFn(`${p.agent} score: ${score}`);
     logFn(deck);
   });
+
+  logFn(`Trashed cards: ${state.trash}`);
 
   if (winner) {
     stats[winner]++;

@@ -32,23 +32,8 @@ import Smithy from './src/agents/domsim/smithy';
 import Witch from './src/agents/domsim/witch';
 import WitchAndMoatFor3or4 from './src/agents/domsim/witchAndMoatFor3or4';
 import WitchFor3or4 from './src/agents/domsim/witchFor3or4';
-import ProxyAgent from './src/agents/proxyAgent';
+import StatsBot from "./src/agents/barbazul/StatsBot";
 
-const proxyMilitia = new ProxyAgent();
-const proxySillyAI = new ProxyAgent();
-const proxyWitch = new ProxyAgent();
-
-proxyMilitia.setActualAgent(new Militia());
-proxyMilitia.name = 'Proxy Militia';
-proxyMilitia.requires = proxyMilitia.getActualAgent().requires
-
-proxySillyAI.setActualAgent(new SillyAI());
-proxySillyAI.name = 'Proxy SillyAI';
-proxySillyAI.requires = proxySillyAI.getActualAgent().requires
-
-proxyWitch.setActualAgent(new Witch());
-proxyWitch.name = 'Proxy Witch';
-proxyWitch.requires = proxyWitch.getActualAgent().requires
 
 const players = [
   new BasicAI(),
@@ -82,9 +67,7 @@ const players = [
   new Witch(),
   new WitchAndMoatFor3or4(),
   new WitchFor3or4(),
-  proxyMilitia,
-  proxyWitch,
-  proxySillyAI
+  new StatsBot()
 ];
 
 let scoreBoard = Object.fromEntries(players.map(p => [ p.toString(), { plays: 0, wins: 0, rate: 0.0 } ]));
@@ -128,13 +111,18 @@ function getWinner (state) {
 }
 
 const start = new Date();
+const gamesPerMatch = 10;
 let gameCounter = 0;
 
 for (let i = 0; i < players.length - 1; i++) {
   for (let j = i + 1; j < players.length; j++) {
-    for (let game = 0; game < 10; game++) {
+    for (let game = 0; game < gamesPerMatch; game++) {
       let state = new State();
       let logFn = () => {};
+
+      if (game === 0) {
+        console.log(`${players[i]} vs ${players[j]}`);
+      }
 
       try {
         state.setUp([players[i], players[j]], { log: logFn });
@@ -145,8 +133,8 @@ for (let i = 0; i < players.length - 1; i++) {
         }
       }
 
-      console.log(`${players[i]} vs ${players[j]}`);
       state.startGame();
+      state.doGameAnalysis();
 
       while (!state.isGameOver()) {
         state.doPhase();
@@ -181,6 +169,7 @@ for (let p in scoreBoard) {
 
 ranking.sort((p1, p2) => p2.score - p1.score);
 
+console.log(scoreBoard);
 console.log(ranking);
 
 const elapsed = new Date().getTime() - start.getTime();

@@ -1054,6 +1054,16 @@ export default class BasicAI {
   }
 
   /**
+   * Analyse the kingdom and initial situation before turn 1.
+   *
+   * @param {State} state
+   * @param {Player} my
+   */
+  doGameAnalysis (state, my) {
+
+  }
+
+  /**
    * NOT IMPLEMENTED
    *
    * The following methods were not migrated from original Dominiate code.

@@ -113,7 +113,7 @@ export default class State {
       throw new Error('Cannot build a kingdom without players');
     }
 
-    shuffle(moreCards);
+    moreCards = shuffle(moreCards);
 
     while (selection.length < 10) {
       let candidate = cards[moreCards[index]];
@@ -136,6 +136,8 @@ export default class State {
 
     // TODO Add Colonies and Platinum if necessary
     // TODO Add Potions if necessary
+
+    this.log(kingdom);
 
     return kingdom;
   }
@@ -815,5 +817,9 @@ export default class State {
     this.players.splice(0, 0, this.players.pop());
     this.current = this.players[0];
     this.phase = PHASE_START;
+  }
+
+  doGameAnalysis () {
+    this.players.forEach(player => player.agent.doGameAnalysis(this, player));
   }
 }
