@@ -1,6 +1,6 @@
-import { CHOICE_TRASH } from '../agents/basicAI';
-import cards from '../game/cards';
-import BasicAttack from './basicAttack';
+import { CHOICE_TRASH } from '../agents/basicAI.js';
+import cards from '../game/cards.js';
+import BasicAttack from './basicAttack.js';
 
 export default class Bandit extends BasicAttack {
   constructor () {

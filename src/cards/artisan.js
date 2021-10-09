@@ -1,6 +1,6 @@
-import { CHOICE_DISCARD, CHOICE_GAIN } from '../agents/basicAI';
-import cards from '../game/cards';
-import BasicAction from './basicAction';
+import { CHOICE_DISCARD, CHOICE_GAIN } from '../agents/basicAI.js';
+import cards from '../game/cards.js';
+import BasicAction from './basicAction.js';
 
 export default class Artisan extends BasicAction {
   constructor () {

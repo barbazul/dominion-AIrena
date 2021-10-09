@@ -1,5 +1,5 @@
-import { DomPlayer } from './domPlayer';
-import cards from '../../game/cards';
+import { DomPlayer } from './domPlayer.js';
+import cards from '../../game/cards.js';
 
 export default class DoubleMoatFor3or4 extends DomPlayer {
   constructor () {

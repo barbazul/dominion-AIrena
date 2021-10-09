@@ -1,5 +1,5 @@
-import BasicAction from './basicAction';
-import { CHOICE_DISCARD } from '../agents/basicAI';
+import BasicAction from './basicAction.js';
+import { CHOICE_DISCARD } from '../agents/basicAI.js';
 
 export default class Library extends BasicAction {
   constructor () {

@@ -1,6 +1,6 @@
-import cards from '../game/cards';
-import basicAction from './basicAction';
-import { CHOICE_TRASH } from '../agents/basicAI';
+import cards from '../game/cards.js';
+import basicAction from './basicAction.js';
+import { CHOICE_TRASH } from '../agents/basicAI.js';
 
 export default class Moneylender extends basicAction {
   constructor () {

@@ -1,4 +1,4 @@
-import BasicAI from '../basicAI';
+import BasicAI from '../basicAI.js';
 
 /**
  * This is an implementation of the pure Big Money strategy, updated

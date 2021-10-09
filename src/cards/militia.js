@@ -1,4 +1,4 @@
-import BasicAttack from './basicAttack';
+import BasicAttack from './basicAttack.js';
 
 export default class Militia extends BasicAttack {
   constructor () {

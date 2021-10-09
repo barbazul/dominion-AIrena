@@ -1,5 +1,5 @@
-import { PHASE_ACTION } from '../../game/state';
-import { DomPlayer } from './domPlayer';
+import { PHASE_ACTION } from '../../game/state.js';
+import { DomPlayer } from './domPlayer.js';
 
 /**
  * This is a bot built for the First Game suggested set of 10. It utilizes 8 of the 10 available kingdom cards, and was

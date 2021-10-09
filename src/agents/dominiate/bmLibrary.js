@@ -1,4 +1,4 @@
-import BasicAI from '../basicAI';
+import BasicAI from '../basicAI.js';
 
 export default class BMLibrary extends BasicAI {
   constructor () {

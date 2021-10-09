@@ -1,5 +1,5 @@
-import basicAction from './basicAction';
-import { CHOICE_PLAY } from '../agents/basicAI';
+import basicAction from './basicAction.js';
+import { CHOICE_PLAY } from '../agents/basicAI.js';
 
 export default class Vassal extends basicAction {
   constructor () {

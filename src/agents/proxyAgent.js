@@ -1,4 +1,4 @@
-import BasicAI from './basicAI';
+import BasicAI from './basicAI.js';
 
 export default class ProxyAgent extends BasicAI {
   constructor () {

@@ -1,4 +1,4 @@
-import Estate from './estate';
+import Estate from './estate.js';
 
 export default class Duchy extends Estate {
   constructor () {

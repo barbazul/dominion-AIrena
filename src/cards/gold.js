@@ -1,4 +1,4 @@
-import Silver from './silver';
+import Silver from './silver.js';
 
 export default class Gold extends Silver {
   constructor () {

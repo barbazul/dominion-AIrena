@@ -1,4 +1,4 @@
-import basicAction from './basicAction';
+import basicAction from './basicAction.js';
 
 export default class Moat extends basicAction {
   constructor () {

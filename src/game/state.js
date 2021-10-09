@@ -1,7 +1,8 @@
-import { CHOICE_DISCARD, CHOICE_TRASH } from '../agents/basicAI';
-import shuffle from '../lib/shuffle';
-import cards from './cards';
-import Player from './player';
+import { CHOICE_DISCARD, CHOICE_TRASH } from '../agents/basicAI.js';
+import shuffle from '../lib/shuffle.js';
+import cards from './cards.js';
+import Player from './player.js';
+import seedrandom from 'seedrandom';
 
 export const PHASE_START = 'start';
 export const PHASE_ACTION = 'action';
@@ -9,7 +10,7 @@ export const PHASE_TREASURE = 'treasure';
 export const PHASE_BUY = 'buy';
 export const PHASE_CLEANUP = 'cleanup';
 
-const seedrandom = require('seedrandom');
+//const seedrandom = require('seedrandom');
 
 export default class State {
   constructor () {
@@ -136,8 +137,6 @@ export default class State {
 
     // TODO Add Colonies and Platinum if necessary
     // TODO Add Potions if necessary
-
-    this.log(kingdom);
 
     return kingdom;
   }

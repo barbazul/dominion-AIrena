@@ -1,5 +1,5 @@
-import { CHOICE_PLAY } from '../agents/basicAI';
-import BasicAction from './basicAction';
+import { CHOICE_PLAY } from '../agents/basicAI.js';
+import BasicAction from './basicAction.js';
 
 export default class Harbinger extends BasicAction {
   constructor () {

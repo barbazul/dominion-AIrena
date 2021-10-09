@@ -1,5 +1,5 @@
-import { DomPlayer, STRATEGY_AGGRESSIVE_TRASHING } from './domPlayer';
-import cards from '../../game/cards';
+import { DomPlayer, STRATEGY_AGGRESSIVE_TRASHING } from './domPlayer.js';
+import cards from '../../game/cards.js';
 
 /**
  * A Base game strategy

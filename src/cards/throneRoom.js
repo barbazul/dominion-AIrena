@@ -1,5 +1,5 @@
-import { CHOICE_MULTIPLY } from '../agents/basicAI';
-import BasicAction from './basicAction';
+import { CHOICE_MULTIPLY } from '../agents/basicAI.js';
+import BasicAction from './basicAction.js';
 
 export default class ThroneRoom extends BasicAction {
   constructor () {

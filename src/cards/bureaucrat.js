@@ -1,6 +1,6 @@
-import cards from '../game/cards';
-import BasicAttack from './basicAttack';
-import { CHOICE_TOPDECK } from '../agents/basicAI';
+import cards from '../game/cards.js';
+import BasicAttack from './basicAttack.js';
+import { CHOICE_TOPDECK } from '../agents/basicAI.js';
 
 export default class Bureaucrat extends BasicAttack {
   constructor () {

@@ -1,4 +1,4 @@
-import BasicAction from './basicAction';
+import BasicAction from './basicAction.js';
 
 export default class Cellar extends BasicAction {
   constructor () {

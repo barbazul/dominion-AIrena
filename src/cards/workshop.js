@@ -1,5 +1,5 @@
-import BasicAction from './basicAction';
-import cards from '../game/cards';
+import BasicAction from './basicAction.js';
+import cards from '../game/cards.js';
 
 export default class Workshop extends BasicAction {
   constructor () {

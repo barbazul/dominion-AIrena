@@ -1,4 +1,4 @@
-import { DomPlayer } from './domPlayer';
+import { DomPlayer } from './domPlayer.js';
 
 export default class BureaucratGardens extends DomPlayer {
   constructor () {

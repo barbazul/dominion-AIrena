@@ -422,7 +422,7 @@ test('Fallback playValue function -> Basic treasures', () => {
   expect(ai.playValue(state, cards.Gold, state.current)).toBe(103);
 });
 
-test('Fallback playValue function -> Menagerie', () => {
+test.todo('Fallback playValue function -> Menagerie'/*, () => {
   const ai = new BasicAI();
   const state = new State();
 
@@ -439,9 +439,9 @@ test('Fallback playValue function -> Menagerie', () => {
   // 2 Menageries still trigger as one will leave hand
   state.current.hand = [cards.Menagerie, cards.Menagerie];
   expect(ai.playValue(state, cards.Menagerie, state.current)).toBe(980);
-});
+}*/);
 
-test('Fallback playValue function -> Shanty Town', () => {
+test.todo('Fallback playValue function -> Shanty Town'/*, () => {
   const ai = new BasicAI();
   const state = new State();
 
@@ -466,9 +466,9 @@ test('Fallback playValue function -> Shanty Town', () => {
   state.current.hand = [cards.Copper, cards.ShantyTown, cards.Copper];
   state.current.actions = 2;
   expect(ai.playValue(state, cards.ShantyTown, state.current)).toBe(970);
-});
+}*/);
 
-test('Fallback playValue function -> Tournament', () => {
+test.todo('Fallback playValue function -> Tournament'/*, () => {
   const ai = new BasicAI();
   const state = new State();
 
@@ -481,7 +481,7 @@ test('Fallback playValue function -> Tournament', () => {
   // 3 provinces in hand
   state.current.hand = [cards.Province, cards.Province, cards.Province];
   expect(ai.playValue(state, cards.Tournament, state.current)).toBe(960);
-});
+}*/);
 
 test('Fallback playValue function -> Library', () => {
   const ai = new BasicAI();
@@ -553,7 +553,7 @@ test('Fallback playValue function -> Throne Room', () => {
   expect(ai.playValue(state, cards['Throne Room'], state.current)).toBe(-50);
 });
 
-test('Fallback playValue function -> King\'s Court', () => {
+test.todo('Fallback playValue function -> King\'s Court'/*, () => {
   const ai = new BasicAI();
   const state = new State();
 
@@ -566,9 +566,9 @@ test('Fallback playValue function -> King\'s Court', () => {
   // No other action in hand
   state.current.hand = [cards.KingsCourt, cards.Province, cards.Province];
   expect(ai.playValue(state, cards.KingsCourt, state.current)).toBe(390);
-});
+}*/);
 
-test('Fallback playValue function -> Lookout', () => {
+test.todo('Fallback playValue function -> Lookout'/*, () => {
   const ai = new BasicAI();
   const state = new State();
 
@@ -588,9 +588,9 @@ test('Fallback playValue function -> Lookout', () => {
   state.gainsToEndGame = jest.fn(() => 1);
   state.current.draw = [];
   expect(ai.playValue(state, cards.Lookout, state.current)).toBe(-5);
-});
+}*/);
 
-test('Fallback playValue function -> Conspirator', () => {
+test.todo('Fallback playValue function -> Conspirator'/*, () => {
   const ai = new BasicAI();
   const state = new State();
 
@@ -609,9 +609,9 @@ test('Fallback playValue function -> Conspirator', () => {
   state.current.inPlay = [];
   state.current.actions = 1;
   expect(ai.playValue(state, cards.Conspirator, state.current)).toBe(124);
-});
+}*/);
 
-test('Fallback playValue function -> Great Hall', () => {
+test.todo('Fallback playValue function -> Great Hall'/*, () => {
   const ai = new BasicAI();
   const state = new State();
 
@@ -624,9 +624,9 @@ test('Fallback playValue function -> Great Hall', () => {
   // Without
   state.current.hand = [];
   expect(ai.playValue(state, cards.GreatHall, state.current)).toBe(742);
-});
+}*/);
 
-test('Fallback playValue function -> Watchtower', () => {
+test.todo('Fallback playValue function -> Watchtower'/*, () => {
   const ai = new BasicAI();
   const state = new State();
 
@@ -651,7 +651,7 @@ test('Fallback playValue function -> Watchtower', () => {
   state.current.hand = [cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper];
   state.current.actions = 1;
   expect(ai.playValue(state, cards.Watchtower, state.current)).toBe(-1);
-});
+}*/);
 
 test('Fallback playValue function -> Cantrips', () => {
   const ai = new BasicAI();
@@ -685,7 +685,7 @@ test('Fallback playValue function -> Terminal draw', () => {
 
   const testCards = [
     hypothetical,
-    cards.Oracle
+    cards.Smithy
   ];
 
   for (let i = 0; i < testCards.length; i++) {
@@ -729,7 +729,7 @@ test('Fallback playValue function -> Other terminals', () => {
   }
 });
 
-test('Fallback playValue function -> Crossroads', () => {
+test.todo('Fallback playValue function -> Crossroads'/*, () => {
   const ai = new BasicAI();
   const state = new State();
 
@@ -742,9 +742,9 @@ test('Fallback playValue function -> Crossroads', () => {
   // Without
   state.current.inPlay = [];
   expect(ai.playValue(state, cards.Crossroads, state.current)).toBe(580);
-});
+}*/);
 
-test('Fallback playValue function -> Treasure Map', () => {
+test.todo('Fallback playValue function -> Treasure Map'/*, () => {
   const ai = new BasicAI();
   const state = new State();
 
@@ -763,9 +763,9 @@ test('Fallback playValue function -> Treasure Map', () => {
   state.current.draw = [cards.TreasureMap];
   state.current.hand = [cards.TreasureMap];
   expect(ai.playValue(state, cards.TreasureMap, state.current)).toBe(-40);
-});
+}*/);
 
-test('Fallback playValue function -> Explorer', () => {
+test.todo('Fallback playValue function -> Explorer'/*, () => {
   const ai = new BasicAI();
   const state = new State();
 
@@ -778,9 +778,9 @@ test('Fallback playValue function -> Explorer', () => {
   // Getting rid of unnecesary TM
   state.current.hand = [];
   expect(ai.playValue(state, cards.Explorer, state.current)).toBe(166);
-});
+}*/);
 
-test('Fallback playValue function -> Coppersmith', () => {
+test.todo('Fallback playValue function -> Coppersmith'/*, () => {
   const ai = new BasicAI();
   const state = new State();
 
@@ -801,9 +801,9 @@ test('Fallback playValue function -> Coppersmith', () => {
   // With more Coppers
   state.current.hand = [cards.Copper, cards.Copper, cards.Copper, cards.Copper];
   expect(ai.playValue(state, cards.Coppersmith, state.current)).toBe(213);
-});
+}*/);
 
-test('Fallback playValue function -> Baron', () => {
+test.todo('Fallback playValue function -> Baron'/*, () => {
   const ai = new BasicAI();
   const state = new State();
 
@@ -822,7 +822,7 @@ test('Fallback playValue function -> Baron', () => {
   state.current.hand = [];
   ai.gainValue = () => -1;
   expect(ai.playValue(state, cards.Baron, state.current)).toBe(-5);
-});
+}*/);
 
 test('Fallback playValue function -> Chapel', () => {
   const ai = new BasicAI();

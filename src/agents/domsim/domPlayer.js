@@ -1,6 +1,6 @@
-import cards from '../../game/cards';
-import BasicAI, {CHOICE_TRASH, CHOICE_UPGRADE} from '../basicAI';
-import heuristics from './heuristics';
+import cards from '../../game/cards.js';
+import BasicAI, {CHOICE_TRASH, CHOICE_UPGRADE} from '../basicAI.js';
+import heuristics from './heuristics.js';
 
 export class DomPlayer extends BasicAI {
   constructor() {

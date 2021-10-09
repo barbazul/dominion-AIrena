@@ -1,4 +1,4 @@
-import cards from '../game/cards';
+import cards from '../game/cards.js';
 
 /**
  * This defines the base for an AI agent.

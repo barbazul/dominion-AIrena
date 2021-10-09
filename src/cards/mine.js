@@ -1,4 +1,4 @@
-import Remodel from './remodel';
+import Remodel from './remodel.js';
 
 /**
  * You may trash a Treasure from your hand. Gain a Treasure to your hand

@@ -1,6 +1,6 @@
-import { CHOICE_UPGRADE } from '../agents/basicAI';
-import cards from '../game/cards';
-import BasicAction from './basicAction';
+import { CHOICE_UPGRADE } from '../agents/basicAI.js';
+import cards from '../game/cards.js';
+import BasicAction from './basicAction.js';
 
 export default class Remodel extends BasicAction {
   constructor () {

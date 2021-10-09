@@ -1,4 +1,4 @@
-import BasicAction from './basicAction';
+import BasicAction from './basicAction.js';
 
 /**
  * Most common attack case is an action that is also an attack.

@@ -1,5 +1,5 @@
-import { CHOICE_DISCARD, CHOICE_TRASH } from '../agents/basicAI';
-import BasicAction from './basicAction';
+import { CHOICE_DISCARD, CHOICE_TRASH } from '../agents/basicAI.js';
+import BasicAction from './basicAction.js';
 
 export default class Sentry extends BasicAction {
   constructor () {

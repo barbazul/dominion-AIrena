@@ -1,6 +1,6 @@
 import seedrandom from 'seedrandom';
-import shuffle from '../lib/shuffle';
-import cards from './cards';
+import shuffle from '../lib/shuffle.js';
+import cards from './cards.js';
 
 export default class Player {
   /**

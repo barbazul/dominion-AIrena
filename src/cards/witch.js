@@ -1,5 +1,5 @@
-import cards from '../game/cards';
-import BasicAttack from './basicAttack';
+import cards from '../game/cards.js';
+import BasicAttack from './basicAttack.js';
 
 export default class Witch extends BasicAttack {
   constructor () {
