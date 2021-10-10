@@ -261,11 +261,10 @@ const heuristics = {
   },
 
   Sentry: { types: ['Cycler'], discardPriority: 22, playPriority: 2 },
-  Smithy: { types: ['Terminal'], discardPriority: 24, playPriority: 25 },
+  Smithy: { types: [ 'Terminal' ], discardPriority: 24, playPriority: 25 },
   'Throne Room': {
     discardPriority: 22,
     playPriority: 7,
-
     /**
      * Prefer to discard Throne Room with no actions to multiply
      *
@@ -281,10 +280,7 @@ const heuristics = {
       return false;
     }
   },
-  Vassal: {
-    types: ['Terminal'],
-    discardPriority: 23,
-    playPriority: 25,
+  Vassal: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 25 ,
 
     /**
      * Prefer to play Vassal when top card is known and non-terminal or with
@@ -306,12 +302,10 @@ const heuristics = {
 
       return 100 - heuristics[card].playPriority;
     }
-  },
-  Village: { types: ['Cycler', 'Village'], discardPriority: 21, playPriority: 5 },
+  },  Village: {types: ['Cycler', 'Village'], discardPriority: 21, playPriority: 5},
   Witch: {
-    types: ['Terminal'],
+    types: [ 'Terminal' ],
     discardPriority: 40,
-
     /**
      * Treat Witch as Moat when no Curses left
      *
@@ -327,6 +321,7 @@ const heuristics = {
       return false;
     },
     playPriority: 18
+
   },
   Workshop: { types: ['Terminal'], discardPriority: 22, playPriority: 38 },
 

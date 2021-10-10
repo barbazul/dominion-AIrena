@@ -291,13 +291,8 @@ describe('Heuristics for Domsim', () => {
       const state = new State();
       const card = cards.Moneylender;
 
-      state.setUp([ai, ai], {
-        log: () => {
-        },
-        warn: () => {
-        }
-      });
-      state.current.hand = [card];
+      state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.current.hand = [ card ];
 
       expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(16);
     });
@@ -307,13 +302,8 @@ describe('Heuristics for Domsim', () => {
       const state = new State();
       const card = cards.Moneylender;
 
-      state.setUp([ai, ai], {
-        log: () => {
-        },
-        warn: () => {
-        }
-      });
-      state.current.hand = [card, cards.Copper];
+      state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.current.hand = [ card, cards.Copper ];
 
       expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(false);
     });
@@ -365,13 +355,8 @@ describe('Heuristics for Domsim', () => {
       const state = new State();
       const card = cards['Throne Room'];
 
-      state.setUp([ai, ai], {
-        log: () => {
-        },
-        warn: () => {
-        }
-      });
-      state.current.hand = [card];
+      state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.current.hand = [ card ];
 
       expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(15);
     });
@@ -381,13 +366,8 @@ describe('Heuristics for Domsim', () => {
       const state = new State();
       const card = cards['Throne Room'];
 
-      state.setUp([ai, ai], {
-        log: () => {
-        },
-        warn: () => {
-        }
-      });
-      state.current.hand = [card, cards.Smithy];
+      state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.current.hand = [ card, cards.Smithy ];
 
       expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(false);
     });
@@ -451,14 +431,12 @@ describe('Heuristics for Domsim', () => {
       const state = new State();
       const card = cards.Witch;
 
-      state.setUp([ai, ai], {
-        log: () => {
-        },
-        warn: () => {
-        }
-      });
+      state.setUp([ai, ai], {log: () => {}, warn: () => {}});
       state.kingdom.Curse = 0;
       const moatDiscardValue = ai.discardValue(state, cards.Moat, state.current);
+  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.kingdom.Curse = 0;
+  moatDiscardValue = ai.discardValue(state, cards.Moat, state.current);
 
       expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(moatDiscardValue);
     });
@@ -468,13 +446,7 @@ describe('Heuristics for Domsim', () => {
       const state = new State();
       const card = cards.Witch;
 
-      state.setUp([ai, ai], {
-        log: () => {
-        },
-        warn: () => {
-        }
-      });
-      expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(false);
-    });
+      state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(false);});
   });
 });
