@@ -426,13 +426,8 @@ test('Prefer discard Throne Room with no actions to copy', () => {
       const state = new State();
       const card = cards.Moneylender;
 
-      state.setUp([ai, ai], {
-        log: () => {
-        },
-        warn: () => {
-        }
-      });
-      state.current.hand = [card];
+      state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.current.hand = [ card ];
 
       expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(16);
     });
@@ -442,13 +437,8 @@ test('Prefer discard Throne Room with no actions to copy', () => {
       const state = new State();
       const card = cards.Moneylender;
 
-      state.setUp([ai, ai], {
-        log: () => {
-        },
-        warn: () => {
-        }
-      });
-      state.current.hand = [card, cards.Copper];
+      state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.current.hand = [ card, cards.Copper ];
 
       expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(false);});
     });});
@@ -501,13 +491,8 @@ test('Prefer discard Throne Room with no actions to copy', () => {
       const state = new State();
       const card = cards['Throne Room'];
 
-      state.setUp([ai, ai], {
-        log: () => {
-        },
-        warn: () => {
-        }
-      });
-      state.current.hand = [card];
+      state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.current.hand = [ card ];
 
       expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(15);
     });
@@ -517,13 +502,8 @@ test('Prefer discard Throne Room with no actions to copy', () => {
       const state = new State();
       const card = cards['Throne Room'];
 
-      state.setUp([ai, ai], {
-        log: () => {
-        },
-        warn: () => {
-        }
-      });
-      state.current.hand = [card, cards.Smithy];
+      state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.current.hand = [ card, cards.Smithy ];
 
       expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(false);
     });
@@ -720,14 +700,9 @@ test('Prefer discard Throne Room with no actions to copy', () => {
       const card = cards.Witch;
       let moatDiscardValue;
 
-      state.setUp([ai, ai], {
-        log: () => {
-        },
-        warn: () => {
-        }
-      });
-      state.kingdom.Curse = 0;
-      moatDiscardValue = ai.discardValue(state, cards.Moat, state.current);
+      state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.kingdom.Curse = 0;
+  moatDiscardValue = ai.discardValue(state, cards.Moat, state.current);
 
       expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(moatDiscardValue);
     });
@@ -737,13 +712,7 @@ test('Prefer discard Throne Room with no actions to copy', () => {
       const state = new State();
       const card = cards.Witch;
 
-      state.setUp([ai, ai], {
-        log: () => {
-        },
-        warn: () => {
-        }
-      });
-      expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(false);
-    });
+      state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(false);});
   });
 });

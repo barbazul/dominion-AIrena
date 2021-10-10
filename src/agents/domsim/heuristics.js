@@ -213,7 +213,22 @@ const heuristics = {
   Moneylender: {
     types: ['Terminal'],
     discardPriority: 21,
-    playPriority: 23,
+    /**
+     * Prefer to discard Moneylender with no Coppers on hand
+     *
+     * @param {State} state
+     * @param {Card} card
+     * @param {Player} my
+     */
+    calculatedDiscardPriority: (state, card, my) => {
+      if (my.countInHand(cards.Copper) === 0) {
+        return 16;
+      }
+
+      return false;
+    },
+    playPriority: 23
+ ,
 
     /**
      * Prefer to discard Moneylender with no Coppers on hand
