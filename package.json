@@ -24,7 +24,7 @@
     "collectCoverage": true,
     "collectCoverageFrom": [
       "src/**/*.js",
-      "!src/agents/domsim/*.js"
+      "!src/agents/dominiate/*.js"
     ],
     "coverageThreshold": {
       "global": {

@@ -4,6 +4,8 @@ import BasicAction from '../../../cards/basicAction';
 import cards from '../../../game/cards';
 import State from "../../../game/state";
 import BasicAI from "../../basicAI";
+import heuristics from "../heuristics";
+import Card from "../../../cards/card";
 
 test('countTerminalsInDeck returns 0 with empty deck', () => {
   const ai = new DomPlayer();
@@ -144,4 +146,90 @@ test('checkForCardToMine', () => {
   }
 
   expect(ai.checkForCardToMine(state, owner).trash).toStrictEqual([cards.Copper]);
+});
+
+test('Fallback discard value from heuristics', () => {
+  const card = cards.Curse;
+  const originalValue = heuristics[card].discardPriority;
+  const ai = new DomPlayer();
+  const state = new State();
+
+  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+
+  heuristics[card].discardPriority = 0;
+  expect(ai.fallbackDiscardValue(state, card, state.current)).toBe(16);
+
+  heuristics[card].discardPriority = 16;
+  expect(ai.fallbackDiscardValue(state, card, state.current)).toBe(0);
+
+  heuristics[card].discardPriority = 20;
+  expect(ai.fallbackDiscardValue(state, card, state.current)).toBe(-4);
+
+  heuristics[card].discardPriority = originalValue;
+});
+
+test('Fallback discard value without heuristics', () => {
+  const card = new Card();
+  const ai = new DomPlayer();
+  const state = new State();
+
+  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+
+  // This expectations assumes current basicAI implementation. Adjust expected value if method changes
+  expect(ai.fallbackDiscardValue(state, card, state.current)).toBe(0);
+});
+
+test('Discard actions when no actions left', () => {
+  const card = cards.Smithy;
+  const ai = new DomPlayer();
+  const state = new State();
+
+  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.current.actions = 0;
+
+  expect(ai.discardValue(state, card, state.current)).toBe(15);
+});
+
+test('Check heuristics when actions left', () => {
+  const card = cards.Smithy;
+  const ai = new DomPlayer();
+  const state = new State();
+
+  ai.fallbackDiscardValue = () => -1;
+  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.current.actions = 2;
+
+  expect(ai.discardValue(state, card, state.current)).toBe(-1);
+});
+
+test('Check specific heuristic function first for discardValue', () => {
+  const card = new BasicAction();
+  const ai = new DomPlayer();
+  const state = new State();
+
+  card.name = 'Fake Action';
+  heuristics[card] = {
+    discardPriority: 10,
+    calculatedDiscardPriority: () => -1
+  };
+
+  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  expect(ai.discardValue(state, card, state.current)).toBe(-1);
+  delete heuristics[card];
+});
+
+test('Skip calculated discardValue if not a number', () => {
+  const card = new BasicAction();
+  const ai = new DomPlayer();
+  const state = new State();
+
+  card.name = 'Fake Action';
+  heuristics[card] = {
+    discardPriority: 10,
+    calculatedDiscardPriority: () => false
+  };
+
+  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  expect(ai.discardValue(state, card, state.current)).toBe(6);
+  delete heuristics[card];
 });

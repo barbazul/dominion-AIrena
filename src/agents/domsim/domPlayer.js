@@ -176,6 +176,7 @@ export class DomPlayer extends BasicAI {
    * @returns {Number}
    */
   discardValue(state, card, my) {
+    let calculatedValue;
     // TODO some cards have specific heuristics
     if (card === cards.Baron) {
       if (my.actions > 0 && my.hand.indexOf(cards.Baron) > -1
@@ -186,6 +187,17 @@ export class DomPlayer extends BasicAI {
     }
 
     // TODO Province heuristic regarding Tournament
+    // TODO Estate heuristics regarding Estate Token
+    // TODO Estate heuristics regarding Baron
+
+    // Check if there is a specific heuristic function and it returns a numeric value
+    if (heuristics[card] && typeof heuristics[card].calculatedDiscardPriority === 'function') {
+      calculatedValue = heuristics[card].calculatedDiscardPriority(state, card, my);
+
+      if (typeof calculatedValue === 'number') {
+        return calculatedValue;
+      }
+    }
 
     if (my.actions < 1 && card.isAction()) {
       return 15;
@@ -195,7 +207,7 @@ export class DomPlayer extends BasicAI {
   }
 
   /**
-   * This is the falback to heuristics discard evaluation.
+   * This is the fallback to heuristics discard evaluation.
    * Also used as trashValue function
    *
    * @param {State} state
