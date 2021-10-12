@@ -182,6 +182,41 @@ test('getCost returns 0 on negative modified value', () => {
   expect(card.getCost(state)).toBe(0);
 });
 
+test('getCost returns the coin cost when no modifiers are active', () => {
+  const card = new Card();
+  const state = new State();
+
+  state.setUp([new BasicAI(), new BasicAI()]);
+  card.cost = 5;
+
+  expect(card.getCost(state)).toBe(5);
+});
+
+test('getCost applies modifiers', () => {
+  const card = new Card();
+  const state = new State();
+
+  state.setUp([new BasicAI(), new BasicAI()]);
+
+  card.cost = 6;
+  state.costModifiers.push(new CostModifier(() => -3, card));
+  state.costModifiers.push(new CostModifier(() => -2, card));
+
+  expect(card.getCost(state)).toBe(1);
+});
+
+test('getCost returns 0 on negative modified value', () => {
+  const card = new Card();
+  const state = new State();
+
+  state.setUp([new BasicAI(), new BasicAI()]);
+
+  card.cost = 6;
+  state.costModifiers.push(new CostModifier(() => -40, card));
+
+  expect(card.getCost(state)).toBe(0);
+});
+
 test('default getActions reads the value defined in the card', () => {
   const card = new Card();
   const state = new State();

@@ -1653,3 +1653,14 @@ test('Hypothetical game state randomizes the hidden information', () => {
   expect(newState.players[0].draw).not.toEqual(player.draw);
   expect(newState.players[0].draw.length).toEqual(player.draw.length);
 });
+
+test('Cleanup clears costModifiers', () => {
+  const state = new State();
+  const card = new Card();
+
+  state.setUp(createPlayers(), muteConfig);
+  state.costModifiers = [new CostModifier(() => {}, card)];
+  state.doCleanupPhase();
+
+  expect(state.costModifiers).toHaveLength(0);
+});
