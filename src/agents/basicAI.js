@@ -281,7 +281,7 @@ export default class BasicAI {
    */
   gainValue (state, card, my) {
     // TODO Consider potion cost. + 2 * card.costPotion
-    return card.cost + Number(card.isTreasure()) + Number(card.isAction()) - 20;
+    return card.getCost(state) + Number(card.isTreasure()) + Number(card.isAction()) - 20;
   }
 
   /**
@@ -333,10 +333,10 @@ export default class BasicAI {
       card.isAction() && myTurn &&
       (my.actions === 0 || (card.actions === 0 && my.actionBalance() <= 0))
     ) {
-      return 20 - card.cost;
+      return 20 - card.getCost(state);
     }
 
-    return 0 - card.cost;
+    return 0 - card.getCost(state);
   }
 
   /**
@@ -380,7 +380,7 @@ export default class BasicAI {
    * @return {number}
    */
   trashValue (state, card, my) {
-    return 0 - card.getVP(my) - card.cost;
+    return 0 - card.getVP(my) - card.getCost(state);
   }
 
   /**
@@ -875,7 +875,7 @@ export default class BasicAI {
   /**
    * Heuristic multiply vlaue.
    *
-   * This is a migration of Dominiate ai_multipliedValue funciton in each card.
+   * This is a migration of Dominiate ai_multipliedValue function in each card.
    *
    * @param {State} state
    * @param {Card} card
@@ -924,6 +924,10 @@ export default class BasicAI {
     // Throne Room
     if (card === cards['Throne Room']) {
       return 1900;
+    }
+
+    if (card === cards.Bridge) {
+      return terminalHelper(1720, -1);
     }
 
     return this.playValue(state, card, my);

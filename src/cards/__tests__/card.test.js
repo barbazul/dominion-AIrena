@@ -2,6 +2,7 @@ import BasicAI from '../../agents/basicAI';
 import Player from '../../game/player';
 import Card from '../card';
 import State from '../../game/state';
+import CostModifier from '../../game/costModifier';
 
 test('Basic card has no types', () => {
   const card = new Card();
@@ -144,4 +145,39 @@ test('getVP returns the vp value by default', () => {
   card.vp = 5;
 
   expect(card.getVP(player)).toBe(5);
+});
+
+test('getCost returns the coin cost when no modifiers are active', () => {
+  const card = new Card();
+  const state = new State();
+
+  state.setUp([new BasicAI(), new BasicAI()]);
+  card.cost = 5;
+
+  expect(card.getCost(state)).toBe(5);
+});
+
+test('getCost applies modifiers', () => {
+  const card = new Card();
+  const state = new State();
+
+  state.setUp([new BasicAI(), new BasicAI()]);
+
+  card.cost = 6;
+  state.costModifiers.push(new CostModifier(() => -3, card));
+  state.costModifiers.push(new CostModifier(() => -2, card));
+
+  expect(card.getCost(state)).toBe(1);
+});
+
+test('getCost returns 0 on negative modified value', () => {
+  const card = new Card();
+  const state = new State();
+
+  state.setUp([new BasicAI(), new BasicAI()]);
+
+  card.cost = 6;
+  state.costModifiers.push(new CostModifier(() => -40, card));
+
+  expect(card.getCost(state)).toBe(0);
 });

@@ -17,6 +17,6 @@ export default class SillyAI extends BasicAI {
       return -1;
     }
 
-    return card.cost + state.rng();
+    return card.getCost(state) + state.rng();
   }
 }

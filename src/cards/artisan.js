@@ -32,7 +32,7 @@ export default class Artisan extends BasicAction {
     let chosenGain;
 
     for (let card of Object.keys(state.kingdom)) {
-      if (cards[card].cost <= 5 && state.kingdom[card] > 0) {
+      if (cards[card].getCost(state) <= 5 && state.kingdom[card] > 0) {
         choices.push(cards[card]);
       }
     }

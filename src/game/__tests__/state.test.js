@@ -4,6 +4,7 @@ import Card from '../../cards/card';
 import cards from '../cards';
 import Player from '../player';
 import State, { PHASE_ACTION, PHASE_BUY, PHASE_CLEANUP, PHASE_START, PHASE_TREASURE } from '../state';
+import CostModifier from '../costModifier';
 
 const basic2PlayerKingdom = {
   Curse: 10,

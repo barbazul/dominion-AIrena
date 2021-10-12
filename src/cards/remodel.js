@@ -89,6 +89,6 @@ export default class Remodel extends BasicAction {
    * @return boolean
    */
   upgradeFilter (state, oldCard, newCard) {
-    return this.costFunction(oldCard.cost) >= newCard.cost;
+    return this.costFunction(oldCard.getCost(state)) >= newCard.getCost(state);
   }
 }

@@ -21,7 +21,7 @@ export default class Workshop extends BasicAction {
       if (state.kingdom.hasOwnProperty(cardName)) {
         card = cards[cardName];
 
-        if (card.cost <= 4) {
+        if (card.getCost(state) <= 4) {
           choices.push(card);
         }
       }

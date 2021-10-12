@@ -22,6 +22,15 @@ export default class State {
     this.trash = [];
 
     /**
+     * A list of CostModifier objects which have a "modify" method that takes a card and returns
+     * a modification to its cost.  Objects must also have a "source" property that
+     * specifies which card caused the cost modification.
+     *
+     * @type {CostModifier[]}
+     */
+    this.costModifiers = [];
+
+    /**
      * @type {Array<function(State, Card):void>}
      */
     this.onPlayHandlers = [];
@@ -743,7 +752,7 @@ export default class State {
       if (this.kingdom.hasOwnProperty(cardName)) {
         card = cards[cardName];
 
-        if (this.kingdom[cardName] > 0 && card.cost <= this.current.coins) {
+        if (this.kingdom[cardName] > 0 && card.getCost(this) <= this.current.coins) {
           buyable.push(card);
         }
       }
@@ -768,7 +777,7 @@ export default class State {
       this.log(`${this.current.agent} buys ${choice}`);
 
       // Update money and buys
-      this.current.coins -= choice.cost;
+      this.current.coins -= choice.getCost(this);
       this.current.buys--;
 
       // Gain the card.
@@ -793,6 +802,9 @@ export default class State {
 
     // Clean event observers
     this.onPlayHandlers = [];
+
+    // Clean costModifiers
+    this.costModifiers = [];
 
     // Draw new hand
     this.current.drawCards(5);

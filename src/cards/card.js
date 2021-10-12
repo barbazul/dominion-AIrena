@@ -31,6 +31,29 @@ export default class Card {
   }
 
   /**
+   * Card costs can change according to things external to the card, such as
+   * bridges and quarries in play. Therefore, any code that wants to know the
+   * actual cost of a card in a state should call `card.getCost(state)`.
+   *
+   * @todo Currently returns coin cost. Should later change to complex costs.
+   * @param {State} state
+   * @return int
+   */
+  getCost (state) {
+    let cost = this.cost;
+
+    state.costModifiers.forEach(modifier => {
+      cost += modifier.modify(this);
+    });
+
+    if (cost < 0) {
+      cost = 0;
+    }
+
+    return cost;
+  }
+
+  /**
    * Override this method for victory cards that need to calculate their vp value based on the state
    *
    * @param {Player} player
