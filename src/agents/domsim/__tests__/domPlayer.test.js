@@ -233,3 +233,78 @@ test('Skip calculated discardValue if not a number', () => {
   expect(ai.discardValue(state, card, state.current)).toBe(6);
   delete heuristics[card];
 });
+
+test('Get Trash value from heuristics', () => {
+  const card = cards.Province;
+  const originalValue = heuristics[card].trashPriority;
+  const ai = new DomPlayer();
+  const state = new State();
+
+  state.setUp([ai, ai]);
+
+  heuristics[card].trashPriority = 0;
+  expect(ai.trashValue(state, card, state.current)).toBe(16);
+
+  heuristics[card].trashPriority = 16;
+  expect(ai.trashValue(state, card, state.current)).toBe(0);
+
+  heuristics[card].trashPriority = 20;
+  expect(ai.trashValue(state, card, state.current)).toBe(-4);
+
+  heuristics[card].trashPriority = originalValue;
+});
+
+test('Trash value falls back to discardValue without heuristics', () => {
+  const card = cards.Curse;
+  const originalTrashValue = heuristics[card].trashPriority;
+  const originalDiscardValue = heuristics[card].discardPriority;
+  const ai = new DomPlayer();
+  const state = new State();
+
+  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  delete heuristics[card].trashPriority;
+
+  heuristics[card].discardPriority = 0;
+  expect(ai.trashValue(state, card, state.current)).toBe(16);
+
+  heuristics[card].discardPriority = 16;
+  expect(ai.trashValue(state, card, state.current)).toBe(0);
+
+  heuristics[card].discardPriority = 10;
+  expect(ai.trashValue(state, card, state.current)).toBe(6);
+
+  heuristics[card].trashPriority = originalTrashValue;
+  heuristics[card].discardPriority = originalDiscardValue;
+});
+
+test('Check specific heuristic function first for trashValue', () => {
+  const card = new BasicAction();
+  const ai = new DomPlayer();
+  const state = new State();
+
+  card.name = 'Fake Action';
+  heuristics[card] = {
+    trashPriority: 10,
+    calculatedTrashPriority: () => -1
+  };
+
+  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  expect(ai.trashValue(state, card, state.current)).toBe(-1);
+  delete heuristics[card];
+});
+
+test('Skip calculated trashValue if not a number', () => {
+  const card = new BasicAction();
+  const ai = new DomPlayer();
+  const state = new State();
+
+  card.name = 'Fake Action';
+  heuristics[card] = {
+    trashPriority: 10,
+    calculatedTrashPriority: () => false
+  };
+
+  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  expect(ai.trashValue(state, card, state.current)).toBe(6);
+  delete heuristics[card];
+});
