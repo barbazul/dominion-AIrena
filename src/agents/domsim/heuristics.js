@@ -306,6 +306,7 @@ const heuristics = {
   Witch: {
     types: [ 'Terminal' ],
     discardPriority: 40,
+
     /**
      * Treat Witch as Moat when no Curses left
      *
