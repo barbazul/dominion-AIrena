@@ -2,14 +2,85 @@
  * This is taken from DomCardName
  */
 import cards from '../../game/cards.js';
+import { STRATEGY_TRASH_WHEN_OBSOLETE } from './domPlayer.js';
 
 const heuristics = {
-  Curse: {discardPriority: 10},
+  Curse: { discardPriority: 10, trashPriority: 0 },
   Copper: {discardPriority: 15, playPriority: 55},
-  Silver: {discardPriority: 20, playPriority: 25},
+  Silver: {
+    discardPriority: 20,
+    playPriority: 25,
+
+    /**
+     * Consider the trashWhenObsolete strategy.
+     *
+     * Basically consider Silver obsolete when one of the following:
+     *
+     * - King's Courts and Golds are owned
+     * - 10+ actions are owned
+     * - 4+ Silvers are owned
+     *
+     * @param {State} state
+     * @param {Card} card
+     * @param {Player} my
+     */
+    calculatedTrashPriority: (state, card, my) => {
+      let strategy;
+
+      if (typeof my.agent.getPlayStrategyFor === 'function') {
+        strategy = my.agent.getPlayStrategyFor(card);
+        if (strategy === STRATEGY_TRASH_WHEN_OBSOLETE) {
+          // TODO Kings Court check to be implemented later
+
+          if (my.countTypeInDeck('Action') > 9 || my.countInDeck(cards.Silver) > 3) {
+            return 1;
+          }
+        }
+      }
+
+      return false;
+    }
+  },
   Gold: {discardPriority: 24, playPriority: 30},
-  Estate: { types: [ 'Base', 'Junk' ], discardPriority: 9},
-  Duchy: { discardPriority: 8 },
+  Estate: {
+    types: [ 'Base', 'Junk' ],
+    discardPriority: 9,
+    trashPriority: 100,
+
+    /**
+     * Avoid trashing when collecting estates
+     *
+     * @param {State} state
+     * @param {Card} card
+     * @param {Player} my
+     */
+    calculatedTrashPriority: (state, card, my) => {
+      if (my.agent.wantsToGainOrKeep && my.agent.wantsToGainOrKeep(card, state, my)) {
+        return -19;
+      }
+
+      return false;
+    }
+  },
+  Duchy: {
+    discardPriority: 8,
+    trashPriority: 100,
+
+    /**
+     * Avoid trashing when collecting duchies
+     *
+     * @param {State} state
+     * @param {Card} card
+     * @param {Player} my
+     */
+    calculatedTrashPriority: (state, card, my) => {
+      if (my.agent.wantsToGainOrKeep && my.agent.wantsToGainOrKeep(card, state, my)) {
+        return -24;
+      }
+
+      return false;
+    }
+  },
   Province: { discardPriority: 7, trashPriority: 60 },
   Artisan: { types: [ 'Terminal' ], discardPriority: 27, playPriority: 30 },
   Bandit: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 23 },
@@ -17,8 +88,26 @@ const heuristics = {
   Cellar: {types: ['Cycler'], discardPriority: 17, playPriority: 16},
   Chapel: { types: [ 'Terminal' ], discardPriority: 18, playPriority: 37 },
   'Council Room': { types: [ 'Terminal' ], discardPriority: 27, playPriority: 25 },
-  Festival: {discardPriority: 26, playPriority: 3},
-  Gardens: {discardPriority: 9},
+  Festival: { discardPriority: 26, playPriority: 3 },
+  Gardens: {
+    discardPriority: 9,
+    playPriority: 100,
+
+    /**
+     * Avoid trashing when collecting gardens
+     *
+     * @param {State} state
+     * @param {Card} card
+     * @param {Player} my
+     */
+    calculatedTrashPriority: (state, card, my) => {
+      if (my.agent.wantsToGainOrKeep && my.agent.wantsToGainOrKeep(card, state, my)) {
+        return -49;
+      }
+
+      return false;
+    }
+  },
   Harbinger: {types: ['Cycler'], discardPriority: 16, playPriority: 5},
   Laboratory: {types: ['Cycler', 'Card_Advantage'], discardPriority: 40, playPriority: 8},
   Library: { types: [ 'Terminal' ], discardPriority: 30, playPriority: 20 },
@@ -30,6 +119,8 @@ const heuristics = {
   Moneylender: {
     types: [ 'Terminal' ],
     discardPriority: 21,
+    playPriority: 23,
+
     /**
      * Prefer to discard Moneylender with no Coppers on hand
      *
@@ -44,7 +135,21 @@ const heuristics = {
 
       return false;
     },
-    playPriority: 23
+
+    /**
+     * When there are no more Coppers in Deck, Moneylender is slightly better than Curse
+     *
+     * @param {State} state
+     * @param {Card} card
+     * @param {Player} my
+     */
+    calculatedTrashPriority: (state, card, my) => {
+      if (my.countInDeck(cards.Copper) === 0) {
+        return 16 - heuristics[cards.Curse].trashPriority - 1;
+      }
+
+      return false;
+    }
   },
   Poacher: {types: ['Cycler'], discardPriority: 30, playPriority: 10},
   Remodel: { types: [ 'Terminal' ], discardPriority: 18, playPriority: 24 },
@@ -73,6 +178,7 @@ const heuristics = {
   Witch: {
     types: [ 'Terminal' ],
     discardPriority: 40,
+
     /**
      * Treat Witch as Moat when no Curses left
      *

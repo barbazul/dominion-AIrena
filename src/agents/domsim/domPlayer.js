@@ -137,17 +137,25 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    */
   trashValue(state, card, my) {
+    let calculatedValue;
     // TODO Some cards have specific trashValue functions
     // TODO Duchy if (owner!=null && owner.wantsToGainOrKeep(DomCardName.Duchy)) return 40;
+    // TODO Estate if (owner.wantsToGainOrKeep(DomCardName.Estate)) return 35;
+    // TODO Gardens if (owner.wantsToGainOrKeep(DomCardName.Gardens)) return 65;
+    if (heuristics[card] && typeof heuristics[card].calculatedTrashPriority === 'function') {
+      calculatedValue = heuristics[card].calculatedTrashPriority(state, card, my);
 
-    if (card === cards.Duchy && this.wantsToGainOrKeep(card)) {
-      return 16 - 40;
+      if (typeof calculatedValue === 'number') {
+        return calculatedValue;
+      }
     }
 
-    if (heuristics[card] && heuristics[card].trashPriority) {
+    if (heuristics[card] && typeof heuristics[card].trashPriority !== "undefined") {
       return 16 - heuristics[card].trashPriority;
     }
 
+    // TODO Original would call discardValue forcing actions to 1.
+    // TODO change this to passing my.copy() when method is finished
     return this.fallbackDiscardValue(state, card, my);
   }
 
@@ -163,7 +171,7 @@ export class DomPlayer extends BasicAI {
   }
 
   /**
-   * Values are substrated from 16 due to the inverted priority logic between
+   * Values are subtracted from 16 due to the inverted priority logic between
    * DomSim and Dominiate.
    *
    * @param {State} state
@@ -173,7 +181,6 @@ export class DomPlayer extends BasicAI {
    */
   discardValue(state, card, my) {
     let calculatedValue;
-    // TODO some cards have specific heuristics
     // TODO Province heuristic regarding Tournament
     // TODO Estate heuristics regarding Estate Token
     // TODO Estate heuristics regarding Baron
@@ -338,8 +345,22 @@ export class DomPlayer extends BasicAI {
 
     return total;
   }
+
+  /**
+   * Check if buy rules indicate player wants the card
+   *
+   * @param {Card} card
+   * @param {State} state
+   * @param {Player} my
+   * @return {boolean}
+   */
+  wantsToGainOrKeep(card, state, my) {
+    // TODO Missing implementation
+    return true;
+  }
 }
 
 export const STRATEGY_STANDARD = 'standard';
 export const STRATEGY_PLAY_IF_NOT_BUYING_TOP_CARD = 'playIfNotBuyingTopCard ';
 export const STRATEGY_AGGRESSIVE_TRASHING = 'aggressiveTrashing';
+export const STRATEGY_TRASH_WHEN_OBSOLETE = 'trashWhenObsolete';
