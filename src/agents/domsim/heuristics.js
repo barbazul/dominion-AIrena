@@ -213,6 +213,8 @@ const heuristics = {
   Moneylender: {
     types: ['Terminal'],
     discardPriority: 21,
+    playPriority: 23,
+
     /**
      * Prefer to discard Moneylender with no Coppers on hand
      *

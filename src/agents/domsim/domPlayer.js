@@ -440,6 +440,19 @@ export class DomPlayer extends BasicAI {
 
     return total;
   }
+
+  /**
+   * Check if buy rules indicate player wants the card
+   *
+   * @param {Card} card
+   * @param {State} state
+   * @param {Player} my
+   * @return {boolean}
+   */
+  wantsToGainOrKeep(card, state, my) {
+    // TODO Missing implementation
+    return true;
+  }
 }
 
 export const STRATEGY_STANDARD = 'standard';
