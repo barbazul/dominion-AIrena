@@ -1173,3 +1173,19 @@ test('topdeckPriority prioritizes treasures by coin value', () => {
   priority = ai.topdeckPriority(state, state.current);
   expect(priority.map(card => card.toString())).toEqual([ 'Gold', 'Silver', 'Copper' ]);
 });
+
+test('goingGreen', () => {
+  const state = new State();
+  const ai = new BasicAI();
+
+  state.setUp([ ai, ai ], muteConfig);
+
+  state.current.draw = [ cards.Duchy, cards.Province, cards.Province ];
+  expect(ai.goingGreen(state, state.current)).toBe(3);
+
+  state.current.draw = [ cards.Duchy, cards.Duchy, cards.Province, cards.Province ];
+  expect(ai.goingGreen(state, state.current)).toBe(4);
+
+  state.current.draw = [ cards.Estate, cards.Estate, cards.Estate ];
+  expect(ai.goingGreen(state, state.current)).toBe(0);
+});

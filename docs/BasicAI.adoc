@@ -186,3 +186,24 @@ _Usage example_
 const my = this.myPlayer(state);
 console.log(`I have ${my.getDeck().length} cards in total.`);
 ----
+
+== Informational Methods
+
+Returns whether the agent is greening. Any positive value is affirmative.
+
+=== BasicAI.goingGreen(State state, Player my): int
+
+_Usage example_
+
+----
+function gainPriority(state, my) {
+  const priority = [];
+
+  if (this.goingGreen(state, my) > 3) {
+    priority.push(cards.Province);
+    priority.push(cards.Duchy);
+    priority.push(cards.Estate);
+  }
+}
+
+----

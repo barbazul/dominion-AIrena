@@ -1000,6 +1000,25 @@ export default class BasicAI {
   }
 
   /**
+   * Informational Methods
+   */
+
+  /**
+   * Determine when we're playing for victory points. By default it's if there
+   * are any Colonies, Provinces, or Duchies in the deck.
+   *
+   * The bigger the number, the greener the deck, but a positive value is a
+   * good indication in itself that we want victory cards.
+   *
+   * @param {State} state
+   * @param {Player} my
+   */
+  goingGreen (state, my) {
+    // TODO: + my.countInDeck(cards.Colony)
+    return my.countInDeck(cards.Duchy) + my.countInDeck(cards.Province);
+  }
+
+  /**
    *
    * @param {State} state
    * @param {Player} my
