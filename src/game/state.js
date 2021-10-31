@@ -527,17 +527,16 @@ export default class State {
 
     // TODO Special supplies
 
+    // If something overrode the log function, make sure that's preserved.
     newState.log = this.log;
 
     // TODO Copy player states
     // TODO Copy card states
 
     newState.trash = this.trash.slice(0);
-
-    // TODO Copy current player
-    // TODO Copy cost modifiers
-
+    newState.costModifiers = this.costModifiers.concat([]);
     newState.phase = this.phase;
+    newState.cache = {};
 
     return newState;
   }

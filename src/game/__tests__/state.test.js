@@ -1507,6 +1507,9 @@ test('Copied state has same stuff', () => {
   state.setUp(createPlayers(2), muteConfig);
   state.trash.push(cards.Copper);
   state.phase = PHASE_BUY;
+  state.costModifiers = [
+    new CostModifier(() => {}, cards.Bridge)
+  ];
 
   newState = state.copy();
 
@@ -1516,4 +1519,18 @@ test('Copied state has same stuff', () => {
   expect(newState.trash).toEqual(state.trash);
   expect(newState.trash).not.toBe(state.trash);
   expect(newState.phase).toEqual(state.phase);
+  expect(newState.cache).toEqual({});
+  expect(newState.costModifiers).toEqual(state.costModifiers);
 });
+
+test('Cleanup clears costModifiers', () => {
+  const state = new State();
+  const card = new Card();
+
+  state.setUp(createPlayers(), muteConfig);
+  state.costModifiers = [new CostModifier(() => {}, card)];
+  state.doCleanupPhase();
+
+  expect(state.costModifiers).toHaveLength(0);
+});
+
