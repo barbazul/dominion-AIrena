@@ -10,8 +10,6 @@ export const PHASE_TREASURE = 'treasure';
 export const PHASE_BUY = 'buy';
 export const PHASE_CLEANUP = 'cleanup';
 
-//const seedrandom = require('seedrandom');
-
 export default class State {
   constructor () {
     this.phase = PHASE_START;
