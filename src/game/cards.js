@@ -31,7 +31,6 @@ import Vassal from '../cards/vassal.js';
 import Village from '../cards/village.js';
 import Witch from '../cards/witch.js';
 import Workshop from '../cards/workshop.js';
-import Baron from '../cards/baron.js';
 import Bridge from '../cards/bridge.js';
 
 const cards = {
@@ -73,7 +72,6 @@ const cards = {
   Workshop: new Workshop(),
 
   // Intrigue
-  Baron: new Baron(),
   Bridge: new Bridge()
 };
 
