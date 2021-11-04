@@ -32,7 +32,7 @@ import Smithy from './src/agents/domsim/smithy.js';
 import Witch from './src/agents/domsim/witch.js';
 import WitchAndMoatFor3or4 from './src/agents/domsim/witchAndMoatFor3or4.js';
 import WitchFor3or4 from './src/agents/domsim/witchFor3or4.js';
-import StatsBot from "./src/agents/barbazul/StatsBot.js";
+import StatsBot from "./src/agents/barbazul/statsBot.js";
 
 
 const players = [
