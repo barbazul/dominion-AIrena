@@ -49,7 +49,7 @@ export default class Remodel extends BasicAction {
       if (used.indexOf(card) === -1) {
         used.push(card);
 
-        for (let cardName in state.kingdom) {
+        for (const [ cardName, qty ] of Object.entries(state.kingdom)) {
           if (state.kingdom.hasOwnProperty(cardName)) {
             let card2;
 

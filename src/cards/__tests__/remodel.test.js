@@ -114,3 +114,76 @@ test('Does nothing on empty hand', () => {
   expect(state.current.hand).toHaveLength(0);
   expect(state.current.discard).toHaveLength(0);
 });
+
+test('costFunction', () => {
+  const card = new Remodel();
+
+  expect(card.costFunction(0)).toBe(2);
+  expect(card.costFunction(1)).toBe(3);
+  expect(card.costFunction(2)).toBe(4);
+});
+
+test('upgradeChoices returns emptyList without cardList', () => {
+  const card = new Remodel();
+  const state = new State();
+
+  state.setUp([new BasicAI(), new BasicAI()], muteConfig);
+
+  expect(card.upgradeChoices(state, []).length).toBe(0);
+});
+
+test('upgradeChoices returns valid cards', () => {
+  const card = new Remodel();
+  const state = new State();
+
+  state.setUp([new BasicAI(), new BasicAI()], muteConfig);
+  state.kingdom = {
+    'Estate': 8, 'Duchy': 8, 'Province': 8,
+    'Copper': 100, 'Silver': 100, 'Gold': 100
+  };
+
+  const trashables = [ cards.Estate ];
+  const choices = card.upgradeChoices(state, trashables);
+
+  expect(choices).toContainEqual({ gain: [ cards.Silver ], trash: [ cards.Estate ] });
+  expect(choices).toContainEqual({ gain: [ cards.Copper ], trash: [ cards.Estate ] });
+  expect(choices).not.toContainEqual({ gain: [ cards.Gold ], trash: [ cards.Estate ] });
+});
+
+test('upgradeChoices ignores duplicates', () => {
+  const card = new Remodel();
+  const state = new State();
+
+  state.setUp([new BasicAI(), new BasicAI()], muteConfig);
+  state.kingdom = {
+    'Estate': 8, 'Duchy': 8, 'Province': 8,
+    'Copper': 100, 'Silver': 100, 'Gold': 100
+  };
+
+  const trashables = [cards.Estate, cards.Estate];
+  const choices = card.upgradeChoices(state, trashables);
+
+  expect(
+    choices.filter(
+      choice => choice.gain[0] === cards.Silver
+        && choice.trash[0] === cards.Estate
+    ).length
+  )
+    .toBe(1);
+});
+
+test('upgradeChoices ignores empty piles', () => {
+  const card = new Remodel();
+  const state = new State();
+
+  state.setUp([new BasicAI(), new BasicAI()], muteConfig);
+  state.kingdom = {
+    'Estate': 0, 'Duchy': 8, 'Province': 8,
+    'Copper': 100, 'Silver': 100, 'Gold': 100
+  };
+
+  const trashables = [cards.Estate];
+  const choices = card.upgradeChoices(state, trashables);
+
+  expect(choices).not.toContainEqual({ gain: [ cards.Estate ], trash: [ cards.Estate ] });
+});

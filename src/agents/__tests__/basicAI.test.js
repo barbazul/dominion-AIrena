@@ -410,6 +410,20 @@ test('Fallback gainValue prefers treasures and actions', () => {
   expect(card4Value).toBeGreaterThan(card3Value);
 });
 
+test('Fallback playValue function -> Static values', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai], muteConfig);
+
+  // Base treasures
+  expect(ai.playValue(state, cards.Festival, state.current)).toBe(845);
+  expect(ai.playValue(state, cards.Village, state.current)).toBe(820);
+  expect(ai.playValue(state, cards.Laboratory, state.current)).toBe(782);
+  expect(ai.playValue(state, cards.Market, state.current)).toBe(775);
+  expect(ai.playValue(state, cards.Cellar, state.current)).toBe(450);
+});
+
 test('Fallback playValue function -> Basic treasures', () => {
   const ai = new BasicAI();
   const state = new State();
@@ -839,6 +853,16 @@ test('Fallback playValue function -> Chapel', () => {
   expect(ai.playValue(state, cards.Chapel, state.current)).toBe(30);
 });
 
+test('playValue -> Edge Cases', () => {
+  const ai = new BasicAI();
+  const state = new State();
+  const card = new Card();
+
+  card.types = [];
+  state.setUp([ai, ai], muteConfig);
+  expect(ai.playValue(state, card, state.current)).toBe(-1);
+});
+
 test('Default trashPriority', () => {
   const ai = new BasicAI();
   const state = new State();
@@ -1130,6 +1154,10 @@ test('Fallback multiplyValue function -> Council Room', () => {
 
 test('Fallback multiplyValue function -> Throne Room', () => {
   assertMultiplyValue(cards['Throne Room'], 1900, 1900);
+});
+
+test('Fallback multiplyValue function -> Bridge', () => {
+  assertMultiplyValue(cards.Bridge, 1720, -1);
 });
 
 test('discardValue wants to discard actions only in own turn', () => {
