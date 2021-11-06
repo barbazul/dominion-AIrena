@@ -12,7 +12,7 @@ export default class MiningVillage extends Village {
    *
    * @param {State} state
    */
-  playEffect(state) {
+  playEffect (state) {
     /**
      *
      if state.current.ai.choose('miningVillageTrash', state, [yes, no])
