@@ -359,9 +359,11 @@ export default class BasicAI {
       priority.push(cards.Copper);
     }
 
-    /*if (my.turnsTaken >= 10) {
+    /*
+    if (my.turnsTaken >= 10) {
       priority.push('Potion');
-    }*/
+    }
+    */
 
     if (state.gainsToEndGame() > 2) {
       priority.push(cards.Estate);
@@ -404,7 +406,8 @@ export default class BasicAI {
        * @param {Player} my
        * @return {number}
        */
-      /*'Menagerie': (state, my) => {
+      /*
+      'Menagerie': (state, my) => {
         // @todo This calculation should be a helper method in the card itself
         const cardsInHand = my.hand.map(c => c.toString());
         const indexOfMenagerie = cardsInHand.indexOf('Menagerie');
@@ -426,7 +429,8 @@ export default class BasicAI {
         }
 
         return 980;
-      },*/
+      },
+      */
 
       /**
        * Evaluates whether it would trigger or not
@@ -435,7 +439,8 @@ export default class BasicAI {
        * @param {Player} my
        * @return {number}
        */
-      /*'Shanty Town': (state, my) => {
+      /*
+      'Shanty Town': (state, my) => {
         const cardsInHand = my.hand.slice();
         const indexOfShanty = cardsInHand.indexOf(cards.ShantyTown);
 
@@ -453,7 +458,8 @@ export default class BasicAI {
         }
 
         return 970;
-      },*/
+      },
+      */
 
       /**
        * Cares if you have exactly 3 provinces in hand (why 3?)
@@ -462,9 +468,11 @@ export default class BasicAI {
        * @param {Player} my
        * @return {number}
        */
-      /*'Tournament': (state, my) => {
+      /*
+      'Tournament': (state, my) => {
         return my.countInHand('Province') === 3 ? 960 : 360;
-      },*/
+      },
+      */
 
       /**
        * @param {State} state
@@ -515,7 +523,8 @@ export default class BasicAI {
        * @param {Player} my
        * @return {number}
        */
-      /*'King\'s Court': (state, my) => {
+      /*
+      'King\'s Court': (state, my) => {
         for (const card of my.hand) {
           if (card.isAction() && card !== cards['King\'s Court']) {
             return 910;
@@ -523,7 +532,8 @@ export default class BasicAI {
         }
 
         return 390;
-      },*/
+      },
+      */
 
       // 3: cards that stack the deck. (850-899)
       /**
@@ -531,9 +541,11 @@ export default class BasicAI {
        * @param {Player} my
        * @return {number}
        */
-      /*'Lookout': (state, my) => {
+      /*
+      'Lookout': (state, my) => {
         return state.gainsToEndGame() >= 5 || my.draw.indexOf(cards.Curse) > -1 ? 895 : -5;
-      },*/
+      },
+      */
       'Cartographer': 890,
       'Bag of Gold': 885,
       'Apothecary': 880,
@@ -572,7 +584,8 @@ export default class BasicAI {
        * @param {Player} my
        * @return {number}
        */
-      /*'Conspirator': (state, my) => {
+      /*
+      'Conspirator': (state, my) => {
         if (my.inPlay.length >= 2) {
           return 760;
         }
@@ -582,7 +595,8 @@ export default class BasicAI {
         }
 
         return 10;
-      },*/
+      },
+      */
 
       'Familiar': 755,
       'Highway': 750,
@@ -595,9 +609,11 @@ export default class BasicAI {
        * @param {Player} my
        * @return {number}
        */
-      /*'Great Hall': (state, my) => {
+      /*
+      'Great Hall': (state, my) => {
         return my.hand.indexOf(cards.Crossroads) > -1 ? 520 : 742;
-      },*/
+      },
+      */
 
       // 'Spice Merchant': (state, my) => my.hand.indexOf(cards.Copper) > -1 ? 740 : (spiceMerchantWantsToTrash ? 410 : 80),
       // 'Stables': stablesDiscardChoice ? 735 :  50,
@@ -614,7 +630,8 @@ export default class BasicAI {
        * @param {Player} my
        * @return {number}
        */
-      /*'Watchtower': (state, my) => {
+      /*
+      'Watchtower': (state, my) => {
         if (my.actions > 1) {
           if (my.hand.length < 5) {
             return 650;
@@ -630,16 +647,19 @@ export default class BasicAI {
         }
 
         return -1;
-      },*/
+      },
+      */
 
       /**
        * @param {State} state
        * @param {Player} my
        * @return {number}
        */
-      /*'Courtyard': (state, my) => {
+      /*
+      'Courtyard': (state, my) => {
         return my.actions > 1 && (my.discard.length + my.draw.length) <= 3 ? 615 : 188;
-      },*/
+      },
+      */
 
       // Unified Torturer, Margrave, Rabble, Witch, Ghost Ship, Smithy, Embassy and Council Room in a single terminal
       // draw logic (see below)
@@ -654,11 +674,13 @@ export default class BasicAI {
        * @param {Player} my
        * @return {number}
        */
-      /*'Crossroads': (state, my) => {
+      /*
+      'Crossroads': (state, my) => {
         // This represents a particularly dumb strategy. It doesn't even take into account whether it has any
         // victory cards, or whether it could draw more.
         return my.countInPlay('Crossroads') > 0 ? 298 : 580;
-      },*/
+      },
+      */
 
       // 8: card-cycling that might improve the hand. (400-499)
       // 'Upgrade': wantsToTrash >= multiplayer ? 490 : -30,
@@ -676,7 +698,8 @@ export default class BasicAI {
        * @param {Player} my
        * @return {number}
        */
-      /*'Treasure Map': (state, my) => {
+      /*
+      'Treasure Map': (state, my) => {
         if (my.countInHand('Treasure Map') >= 2) {
           return 294;
         }
@@ -686,7 +709,8 @@ export default class BasicAI {
         }
 
         return -40;
-      },*/
+      },
+      */
       'Followers': 292,
       'Mountebank': 290,
       'Sea Hag': 286,
@@ -704,9 +728,11 @@ export default class BasicAI {
        * @param {Player} my
        * @return {number}
        */
-      /*'Explorer': (state, my) => {
+      /*
+      'Explorer': (state, my) => {
         return my.countInHand('Province') > 0 ? 282 : 166;
-      },*/
+      },
+      */
       'Jester': 258,
       'Militia': 254,
       'Cutpurse': 250,
@@ -726,7 +752,8 @@ export default class BasicAI {
        * @param {Player} my
        * @return {number}
        */
-      /*'Coppersmith': (state, my) => {
+      /*
+      'Coppersmith': (state, my) => {
         switch (my.countInHand('Copper')) {
           case 0:
           case 1:
@@ -736,7 +763,8 @@ export default class BasicAI {
           default:
             return 213;
         }
-      },*/
+      },
+      */
       'Envoy': 203,
       'Merchant Ship': 186,
 
@@ -747,7 +775,8 @@ export default class BasicAI {
        * @param {Player} my
        * @return {number}
        */
-      /*'Baron': (state, my) => {
+      /*
+      'Baron': (state, my) => {
         if (my.hand.indexOf(cards.Estate) > -1) {
           return 184;
         }
@@ -758,7 +787,8 @@ export default class BasicAI {
         }
 
         return -5;
-      },*/
+      },
+      */
       'Monument': 182,
       // 'Remake': wantsToTrash >= multiplayer * 2 ? 178 : -35,
       'Adventurer': 176,

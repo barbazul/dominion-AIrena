@@ -15,16 +15,14 @@ export default class Workshop extends BasicAction {
   playEffect (state) {
     const choices = [];
 
-    for (const [ cardName, qty ] of Object.entries(state.kingdom)) {
+    for (const cardName of Object.keys(state.kingdom)) {
       let card;
 
-      // if (state.kingdom.hasOwnProperty(cardName)) {
-        card = cards[cardName];
+      card = cards[cardName];
 
-        if (card.getCost(state) <= 4) {
-          choices.push(card);
-        }
-      // }
+      if (card.getCost(state) <= 4) {
+        choices.push(card);
+      }
     }
 
     state.gainOneOf(state.current, choices);

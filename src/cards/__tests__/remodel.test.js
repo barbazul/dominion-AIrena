@@ -138,8 +138,10 @@ test('upgradeChoices returns valid cards', () => {
 
   state.setUp([new BasicAI(), new BasicAI()], muteConfig);
   state.kingdom = {
-    'Estate': 8, 'Duchy': 8, 'Province': 8,
-    'Copper': 100, 'Silver': 100, 'Gold': 100
+    'Estate': 8,
+    'Copper': 100,
+    'Silver': 100,
+    'Gold': 100
   };
 
   const trashables = [ cards.Estate ];
@@ -156,8 +158,8 @@ test('upgradeChoices ignores duplicates', () => {
 
   state.setUp([new BasicAI(), new BasicAI()], muteConfig);
   state.kingdom = {
-    'Estate': 8, 'Duchy': 8, 'Province': 8,
-    'Copper': 100, 'Silver': 100, 'Gold': 100
+    'Estate': 8,
+    'Silver': 100
   };
 
   const trashables = [cards.Estate, cards.Estate];
@@ -165,8 +167,8 @@ test('upgradeChoices ignores duplicates', () => {
 
   expect(
     choices.filter(
-      choice => choice.gain[0] === cards.Silver
-        && choice.trash[0] === cards.Estate
+      choice => choice.gain[0] === cards.Silver &&
+        choice.trash[0] === cards.Estate
     ).length
   )
     .toBe(1);
@@ -178,8 +180,8 @@ test('upgradeChoices ignores empty piles', () => {
 
   state.setUp([new BasicAI(), new BasicAI()], muteConfig);
   state.kingdom = {
-    'Estate': 0, 'Duchy': 8, 'Province': 8,
-    'Copper': 100, 'Silver': 100, 'Gold': 100
+    'Estate': 0,
+    'Copper': 100
   };
 
   const trashables = [cards.Estate];
