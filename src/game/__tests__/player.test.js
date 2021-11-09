@@ -422,9 +422,31 @@ test('Copied Player has same stuff', () => {
   player.actions = 3;
   player.buys = 4;
   player.coins = 5;
+  player.hand = [
+    cards.Estate, cards.Estate, cards.Copper, cards.Copper,
+    cards.Silver
+  ];
+
+  player.draw = [
+    cards.Estate, cards.Copper, cards.Copper, cards.Copper,
+    cards.Copper, cards.Copper
+  ];
+
+  player.discard = [ cards.Smithy ];
+  player.inPlay = [ cards.Village ];
+  player.turnsTaken = 5;
+
   newPlayer = player.copy();
 
   expect(newPlayer.actions).toEqual(player.actions);
   expect(newPlayer.buys).toEqual(player.buys);
   expect(newPlayer.coins).toEqual(player.coins);
+  expect(newPlayer.hand).toEqual(player.hand);
+  expect(newPlayer.draw).toEqual(player.draw);
+  expect(newPlayer.discard).toEqual(player.discard);
+  expect(newPlayer.inPlay).toEqual(player.inPlay);
+  expect(newPlayer.cardsPlayed).toEqual(player.cardsPlayed);
+  expect(newPlayer.agent).toEqual(player.agent);
+  expect(newPlayer.log).toEqual(player.log);
+  expect(newPlayer.turnsTaken).toEqual(player.turnsTaken);
 });

@@ -328,11 +328,26 @@ export default class Player {
    * @return {Player}
    */
   copy () {
-    const newPlayer = new Player();
+    const newPlayer = new Player(this.agent, this.log);
 
     newPlayer.actions = this.actions;
     newPlayer.buys = this.buys;
     newPlayer.coins = this.coins;
+    // TODO potions, coin tokens, multiplied durations
+    // TODO mats
+    // TODO chips
+
+    // piles
+    newPlayer.hand = this.hand.slice(0);
+    newPlayer.draw = this.draw.slice(0);
+    newPlayer.discard = this.discard.slice(0);
+    newPlayer.inPlay = this.inPlay.slice(0);
+
+    // TODO durations, set aside, gained this turn, play location, gain location, action stack, actionsPlayed
+
+    newPlayer.turnsTaken = this.turnsTaken;
+
+    // TODO coin tokens spend this turn
 
     return newPlayer;
   }
