@@ -1,5 +1,5 @@
 import BasicAction from './basicAction.js';
-import CostModifier from '../game/costModifier';
+import CostModifier from '../game/costModifier.js';
 
 export default class Bridge extends BasicAction {
   constructor () {
