@@ -140,11 +140,26 @@ export class DomPlayer extends BasicAI {
     // TODO Some cards have specific trashValue functions
     // TODO Duchy if (owner!=null && owner.wantsToGainOrKeep(DomCardName.Duchy)) return 40;
 
-    if (heuristics[card].trashPriority) {
+    if (card === cards.Duchy && this.wantsToGainOrKeep(card)) {
+      return 16 - 40;
+    }
+
+    if (heuristics[card] && heuristics[card].trashPriority) {
       return 16 - heuristics[card].trashPriority;
     }
 
     return this.fallbackDiscardValue(state, card, my);
+  }
+
+  /**
+   * Check if buy rules indicate player wants the card
+   *
+   * @param {Card} card
+   * @return {boolean}
+   */
+  wantsToGainOrKeep(card) {
+    // TODO This is a placeholder. This will be implemented after redoing decision engine.
+    return card === cards.Duchy || card === cards.Province;
   }
 
   /**
@@ -177,7 +192,7 @@ export class DomPlayer extends BasicAI {
    * @returns {Number}
    */
   fallbackDiscardValue(state, card, my) {
-    if (heuristics[card].discardPriority !== undefined) {
+    if (heuristics[card] && heuristics[card].discardPriority !== undefined) {
       return 16 - heuristics[card].discardPriority;
     }
 
