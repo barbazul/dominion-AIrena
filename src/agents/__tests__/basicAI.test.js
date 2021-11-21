@@ -1217,3 +1217,12 @@ test('goingGreen', () => {
   state.current.draw = [ cards.Estate, cards.Estate, cards.Estate ];
   expect(ai.goingGreen(state, state.current)).toBe(0);
 });
+
+test('copy returns a different instance with a different name', () => {
+  const ai = new BasicAI();
+  const theClone = ai.copy();
+
+  expect(theClone).toBeInstanceOf(BasicAI);
+  expect(theClone).not.toBe(ai);
+  expect(theClone.toString()).not.toBe(ai.toString());
+});

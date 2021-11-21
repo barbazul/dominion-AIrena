@@ -189,9 +189,9 @@ console.log(`I have ${my.getDeck().length} cards in total.`);
 
 == Informational Methods
 
-Returns whether the agent is greening. Any positive value is affirmative.
-
 === BasicAI.goingGreen(State state, Player my): int
+
+Returns whether the agent is greening. Any positive value is affirmative.
 
 _Usage example_
 
@@ -207,3 +207,29 @@ function gainPriority(state, my) {
 }
 
 ----
+
+== Utility Methods
+
+=== BasicAI.copy(): static
+
+Create a copy of the current agent.
+A new name will be generated for the copy to avoid confusion.
+
+_Usage example_
+
+----
+/**
+ * @param {State} state
+ */
+function tryStuff (state) {
+    const newState = state.copy();
+    const newAgent = this.copy();
+
+    newAgent.changeStrategy();
+    newState.current.agent = newAgent;
+}
+
+----
+
+IMPORTANT: Agents that are status based are expected to extend this method to
+prevent the copies from affecting the original instance.

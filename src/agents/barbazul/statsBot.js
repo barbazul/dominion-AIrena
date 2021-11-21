@@ -171,5 +171,6 @@ export default class StatsBot extends ProxyAgent {
     });
 
     this.setActualAgent(winner);
+    console.log(winner.toString());
   }
 }

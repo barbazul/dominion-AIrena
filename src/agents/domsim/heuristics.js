@@ -7,7 +7,7 @@ const heuristics = {
   Silver: {discardPriority: 20, playPriority: 25},
   Gold: {discardPriority: 24, playPriority: 30},
   Estate: {discardPriority: 9},
-  Duchy: {discardPriority: 8},
+  Duchy: { discardPriority: 8 },
   Province: { discardPriority: 7, trashPriority: 60 },
   Artisan: { types: [ 'Terminal' ], discardPriority: 27, playPriority: 30 },
   Bandit: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 23 },

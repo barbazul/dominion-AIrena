@@ -218,7 +218,7 @@ export default class Player {
   }
 
   /**
-   * Counts the money the player might have upon playing all treasurein hand.
+   * Counts the money the player might have upon playing all treasure in hand.
    * Banks, Ventures and such are counted inaccurately for now.
    *
    * @return {number}

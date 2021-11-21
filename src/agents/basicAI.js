@@ -1116,6 +1116,21 @@ export default class BasicAI {
 
   }
 
+  // UTILITY METHODS
+
+  /**
+   * Makes a copy of the agent. It will have the same behavior but a different
+   * name, and will not be equal to this agent.
+   *
+   * @return {BasicAI}
+   */
+  copy () {
+    const newAgent = new this.constructor();
+
+    newAgent.name = this.name + '*';
+    return newAgent;
+  }
+
   /**
    * NOT IMPLEMENTED
    *
