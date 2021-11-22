@@ -42,6 +42,14 @@ export default class State {
      * @type {Object}
      */
     this.cache = {};
+
+    /**
+     * The `depth` indicates how deep into hypothetical situations we are. A
+     * depth of 0 indicates the state of the actual game.
+     *
+     * @type {number}
+     */
+    this.depth = 0;
   }
 
   /**
@@ -537,15 +545,83 @@ export default class State {
     // If something overrode the log function, make sure that's preserved.
     newState.log = this.log;
 
-    // TODO Copy player states
+    const newPlayers = [];
+
+    this.players.forEach(
+      player => {
+        const newPlayer = player.copy();
+        newPlayer.log = () => {};
+        newPlayers.push(newPlayer);
+      }
+    );
+
     // TODO Copy card states
 
+    newState.players = newPlayers;
     newState.trash = this.trash.slice(0);
+    newState.current = newPlayers[0];
     newState.costModifiers = this.costModifiers.concat([]);
     newState.phase = this.phase;
     newState.cache = {};
 
     return newState;
+  }
+
+  /**
+   * Returns a State and Player that an agent can change without affecting the
+   * real state.
+   *
+   * - Modifying the state will not affect the game (it is a copy, after all).
+   * - The hidden information in the state is randomized.
+   * - All the other agents will be replaced by copies of the given agent.
+   *
+   * An AI that wants to test a hypothesis should do this:
+   *   [state, my] = state.hypothetical(this)
+   *
+   * @param {BasicAI} agent
+   */
+  hypothetical (agent) {
+    const state = this.copy();
+    let my;
+
+    // Rotate through players until this agent is the current player.
+    let counter = 0;
+
+    while (state.players[0].agent !== agent) {
+      counter++;
+
+      if (counter > state.players.length) {
+        throw new Error('Can\'t find this agent in the player list');
+      }
+
+      // TODO This rotation is duplicated in rotatePlayer()
+      state.players.splice(0, 0, state.players.pop());
+    }
+
+    state.depth = this.depth + 1;
+
+    state.players.forEach(
+      player => {
+        if (player.agent !== agent) {
+          // We don't know what's in their hand or their deck, so shuffle them
+          // together randomly, preserving the number of cards.
+          const handSize = player.hand.length;
+
+          const combined = shuffle(
+            [ ...player.hand, ...player.draw ],
+            this.rng
+          );
+
+          player.hand = combined.slice(0, handSize);
+          player.draw = combined.slice(handSize);
+        } else {
+          player.draw = shuffle(player.draw, this.rng);
+          my = player;
+        }
+      }
+    );
+
+    return [state, my];
   }
 
   /**

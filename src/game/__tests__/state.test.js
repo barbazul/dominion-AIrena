@@ -5,6 +5,8 @@ import cards from '../cards';
 import Player from '../player';
 import State, { PHASE_ACTION, PHASE_BUY, PHASE_CLEANUP, PHASE_START, PHASE_TREASURE } from '../state';
 import CostModifier from '../costModifier';
+import BigMoney from '../../agents/dominiate/bigMoney';
+import BMLibrary from '../../agents/dominiate/bmLibrary';
 
 const basic2PlayerKingdom = {
   Curse: 10,
@@ -1524,6 +1526,17 @@ test('Copied state has same stuff', () => {
   expect(newState.costModifiers).toEqual(state.costModifiers);
 });
 
+test('Copied state has new players', () => {
+  const state = new State();
+  let newState;
+
+  state.setUp(createPlayers(2), muteConfig);
+  newState = state.copy();
+
+  expect(newState.current).not.toBe(state.current);
+  expect(newState.current.agent).toBe(state.current.agent);
+});
+
 test('Cleanup clears costModifiers', () => {
   const state = new State();
   const card = new Card();
@@ -1533,4 +1546,73 @@ test('Cleanup clears costModifiers', () => {
   state.doCleanupPhase();
 
   expect(state.costModifiers).toHaveLength(0);
+});
+
+test('Hypothetical game state returns a new game state and a player state', () => {
+  const state = new State();
+  const basicAI = new BasicAI();
+  const agents = [
+    basicAI,
+    new BigMoney()
+  ];
+
+  state.setUp(agents, muteConfig);
+  const player = basicAI.myPlayer(state);
+
+  const [ newState, newPlayer ] = state.hypothetical(basicAI);
+
+  expect(newState).toBeInstanceOf(State);
+  expect(newState).not.toBe(state);
+  expect(newState.depth).toBe(1);
+  expect(newPlayer).toBeInstanceOf(Player);
+  expect(newPlayer).not.toBe(player);
+  expect(newPlayer.agent).toBe(basicAI);
+});
+
+test('Hypothetical game state throws an exception if can \'t find agent', () => {
+  const state = new State();
+  const basicAI = new BasicAI();
+  const agents = [
+    new BMLibrary(),
+    new BigMoney()
+  ];
+
+  state.setUp(agents, muteConfig);
+
+  const test = () => {
+    state.hypothetical(basicAI);
+  };
+
+  expect(test).toThrow(Error);
+  expect(test).toThrow('Can\'t find this agent in the player list');
+});
+
+test('Hypothetical game state randomizes the hidden information', () => {
+  const state = new State();
+  const basicAI = new BasicAI();
+  const bigMoney = new BigMoney();
+  const agents = [ basicAI, bigMoney ];
+
+  state.setUp(agents, muteConfig);
+
+  const opponent = state.players.find(p => p.agent === bigMoney);
+  opponent.hand = [ cards.Copper, cards.Estate, cards.Silver ];
+  opponent.draw = [
+    cards.Gold, cards.Duchy, cards.Province, cards.Curse
+  ];
+
+  const player = state.players.find(p => p.agent === basicAI);
+  player.draw = [
+    cards.Copper, cards.Estate, cards.Silver, cards.Gold, cards.Duchy,
+    cards.Province, cards.Curse
+  ];
+
+  const [ newState ] = state.hypothetical(basicAI);
+
+  expect(newState.players[1].hand).not.toEqual(opponent.hand);
+  expect(newState.players[1].hand.length).toEqual(opponent.hand.length);
+  expect(newState.players[1].draw).not.toEqual(opponent.draw);
+  expect(newState.players[1].draw.length).toEqual(opponent.draw.length);
+  expect(newState.players[0].draw).not.toEqual(player.draw);
+  expect(newState.players[0].draw.length).toEqual(player.draw.length);
 });
