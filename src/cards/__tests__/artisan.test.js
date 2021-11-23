@@ -31,14 +31,24 @@ test('Play effect calls for gain choice', () => {
 
   state.setUp([new BasicAI(), new BasicAI()], muteConfig);
   state.current.agent.choose = jest.fn(() => cards.Estate);
+  state.kingdom = {
+    Curse: 10,
+    Estate: 8,
+    Duchy: 8,
+    Province: 8,
+    Copper: 30,
+    Silver: 30,
+    Gold: 30
+  };
 
   card.playEffect(state);
 
   expect(state.current.agent.choose).toHaveBeenCalledWith(
     CHOICE_GAIN,
     state,
-    expect.arrayContaining([cards.Curse, cards.Estate, cards.Duchy, cards.Copper, cards.Silver])
+    [cards.Curse, cards.Estate, cards.Duchy, cards.Copper, cards.Silver]
   );
+
 });
 
 test('Can only gain $5 or less', () => {
