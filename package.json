@@ -34,11 +34,7 @@
         "lines": 95,
         "statements": 95
       }
-    },
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/.stryker-tmp/"
-    ]
+    }
   },
   "dependencies": {
     "esm": "^3.0.84",
