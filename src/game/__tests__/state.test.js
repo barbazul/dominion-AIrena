@@ -1587,7 +1587,6 @@ test('Hypothetical game state throws an exception if can \'t find agent', () => 
   expect(test).toThrow('Can\'t find this agent in the player list');
 });
 
-
 test('Hypothetical game state rotates players to make agent the current player', () => {
   const state = new State();
   const basicAI = new BasicAI();

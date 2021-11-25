@@ -48,7 +48,6 @@ test('Play effect calls for gain choice', () => {
     state,
     [cards.Curse, cards.Estate, cards.Duchy, cards.Copper, cards.Silver]
   );
-
 });
 
 test('Can only gain $5 or less', () => {
