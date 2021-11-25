@@ -1,4 +1,5 @@
 import BasicAI from '../basicAI.js';
+import cards from '../../game/cards.js';
 
 /**
  * This is an implementation of the pure Big Money strategy, updated
@@ -16,35 +17,37 @@ export default class BigMoney extends BasicAI {
   gainPriority (state, my) {
     const priority = [];
 
-    if (state.kingdom.Colony) {
-      return this.colonyBoardPriority(state, my);
-    }
+    // TODO Uncomment when we have Colonies implemented
+    // if (state.kingdom.Colony) {
+    //   return this.colonyBoardPriority(state, my);
+    // }
 
     if (my.getTotalMoney() > 18) {
-      priority.push('Province');
+      priority.push(cards.Province);
     }
 
     if (state.gainsToEndGame() <= 4) {
-      priority.push('Duchy');
+      priority.push(cards.Duchy);
     }
 
     if (state.gainsToEndGame() <= 2) {
-      priority.push('Estate');
+      priority.push(cards.Estate);
     }
 
-    priority.push('Gold');
+    priority.push(cards.Gold);
 
     if (state.gainsToEndGame() <= 6) {
-      priority.push('Duchy');
+      priority.push(cards.Duchy);
     }
 
-    priority.push('Silver');
+    priority.push(cards.Silver);
 
     return priority;
   }
 
   colonyBoardPriority (state, my) {
     const priority = [];
+
     if (my.getTotalMoney() > 32) {
       priority.push('Colony');
     }
