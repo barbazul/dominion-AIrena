@@ -42,4 +42,15 @@ export default class ProxyAgent extends BasicAI {
      */
     ai.myPlayer = (state) => this.myPlayer(state);
   }
+
+  /**
+   * @return {ProxyAgent|BasicAI}
+   */
+  copy () {
+    const newAgent = super.copy();
+
+    newAgent.setActualAgent(this.actualAgent.copy());
+
+    return newAgent;
+  }
 }

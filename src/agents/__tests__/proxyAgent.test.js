@@ -28,3 +28,16 @@ test('setActualAgent hacks the agent to keep track of the player', () => {
 
   expect(actualAgent.myPlayer(state)).toBe(proxyAgent.myPlayer(state));
 });
+
+test('Copy assigns a copy of the current actual agent', () => {
+  const proxyAgent = new ProxyAgent();
+  const actualAgent = new SillyAI();
+
+  proxyAgent.setActualAgent(actualAgent);
+
+  /** @var {ProxyAgent} */
+  const copy = proxyAgent.copy();
+
+  expect(copy.actualAgent).not.toBe(actualAgent);
+  expect(copy.actualAgent).toBeInstanceOf(SillyAI);
+});
