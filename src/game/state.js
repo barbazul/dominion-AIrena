@@ -590,7 +590,7 @@ export default class State {
     while (state.players[0].agent !== agent) {
       counter++;
 
-      if (counter > state.players.length) {
+      if (counter >= state.players.length) {
         throw new Error('Can\'t find this agent in the player list');
       }
 

@@ -1587,6 +1587,36 @@ test('Hypothetical game state throws an exception if can \'t find agent', () => 
   expect(test).toThrow('Can\'t find this agent in the player list');
 });
 
+
+test('Hypothetical game state rotates players to make agent the current player', () => {
+  const state = new State();
+  const basicAI = new BasicAI();
+  const bigMoney = new BigMoney();
+  const agents = [ basicAI, bigMoney ];
+
+  state.setUp(agents, muteConfig);
+
+  const opponent = state.players.find(p => p.agent === bigMoney);
+  opponent.hand = [ cards.Copper, cards.Estate, cards.Silver ];
+  opponent.draw = [
+    cards.Gold, cards.Duchy, cards.Province, cards.Curse
+  ];
+
+  const player = state.players.find(p => p.agent === basicAI);
+  player.draw = [
+    cards.Copper, cards.Estate, cards.Silver, cards.Gold, cards.Duchy,
+    cards.Province, cards.Curse
+  ];
+
+  // Force the opponent (big money) to be p0 and the player (basic ai) to be p1
+  state.players = [ opponent, player ];
+
+  const [ newState ] = state.hypothetical(basicAI);
+
+  expect(newState.players[0].agent).toBeInstanceOf(BasicAI);
+  expect(newState.players[1].agent).toBeInstanceOf(BigMoney);
+});
+
 test('Hypothetical game state randomizes the hidden information', () => {
   const state = new State();
   const basicAI = new BasicAI();
