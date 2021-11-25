@@ -8,6 +8,9 @@
   "packageManager": "yarn",
   "reporters": ["html", "clear-text", "progress"],
   "testRunner": "jest",
-  "coverageAnalysis": "off",
-  "tempDirName": "stryker-tmp"
+  "coverageAnalysis": "perTest",
+  "tempDirName": "stryker-tmp",
+  "mutator": {
+    "excludedMutations": ["StringLiteral"]
+  }
 }
