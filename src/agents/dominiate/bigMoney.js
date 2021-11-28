@@ -45,7 +45,8 @@ export default class BigMoney extends BasicAI {
     return priority;
   }
 
-  colonyBoardPriority (state, my) {
+  // TODO Uncomment when we have Colonies implemented
+  /*colonyBoardPriority (state, my) {
     const priority = [];
 
     if (my.getTotalMoney() > 32) {
@@ -53,15 +54,15 @@ export default class BigMoney extends BasicAI {
     }
 
     if (state.gainsToEndGame() <= 6) {
-      priority.push('Province');
+      priority.push(cards.Province);
     }
 
     if (state.gainsToEndGame() <= 5) {
-      priority.push('Duchy');
+      priority.push(cards.Duchy);
     }
 
     if (state.gainsToEndGame() <= 2) {
-      priority.push('Estate');
+      priority.push(cards.Estate);
     }
 
     priority.push('Platinum');
@@ -83,5 +84,5 @@ export default class BigMoney extends BasicAI {
     }
 
     return priority;
-  }
+  }*/
 }
