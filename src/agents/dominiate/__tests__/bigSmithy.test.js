@@ -19,7 +19,11 @@ test('gainPriority at game start', () => {
 
   const priority = agent.gainPriority(state, state.current);
 
-  expect(priority).toEqual([cards.Gold, cards.Smithy, cards.Silver]);
+  expect(priority).toEqual(
+    [
+      cards.Province, cards.Gold, cards.Smithy, cards.Silver
+    ]
+  );
 });
 
 test('gainPriority wants Province when there are few left', () => {
@@ -52,6 +56,7 @@ test('gainPriority wants Duchies when Duchy-dancing', () => {
 
   expect(priority).toEqual(
     [
+      cards.Province,
       cards.Duchy,
       cards.Gold,
       cards.Smithy,
@@ -71,6 +76,7 @@ test('gainPriority wants Coppers on end game', () => {
 
   expect(priority).toEqual(
     [
+      cards.Province,
       cards.Duchy,
       cards.Gold,
       cards.Smithy,
@@ -91,6 +97,7 @@ test('gainPriority wants Estates on end game', () => {
 
   expect(priority).toEqual(
     [
+      cards.Province,
       cards.Duchy,
       cards.Estate,
       cards.Gold,
@@ -117,6 +124,7 @@ test('gainPriority wants 2nd Smith when deck is thick', () => {
 
   expect(priority).toEqual(
     [
+      cards.Province,
       cards.Gold,
       cards.Smithy,
       cards.Silver

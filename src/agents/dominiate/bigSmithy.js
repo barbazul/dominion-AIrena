@@ -23,9 +23,9 @@ export default class BigSmithy extends BasicAI {
     // }
 
     // TODO Uncomment after Colony and Platinum
-    if (/*state.countInSupply('Colony') <= 6 ||*/ state.countInSupply(cards.Province) <= 6) {
-      priority.push(cards.Province);
-    }
+    // if (state.countInSupply('Colony') <= 6 state.countInSupply(cards.Province) <= 6) {
+    priority.push(cards.Province);
+    //}
 
     if (state.gainsToEndGame() <= 5) {
       priority.push(cards.Duchy);
