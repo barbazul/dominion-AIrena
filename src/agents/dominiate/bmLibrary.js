@@ -1,11 +1,12 @@
 import BasicAI from '../basicAI.js';
+import cards from '../../game/cards.js';
 
 export default class BMLibrary extends BasicAI {
   constructor () {
     super();
 
     this.name = 'BM Library';
-    this.requires = ['Library'];
+    this.requires = [cards.Library];
   }
 
   /**
@@ -16,26 +17,29 @@ export default class BMLibrary extends BasicAI {
   gainPriority (state, my) {
     const priority = [];
     const basePriority = [
-      'Platinum',
-      'Gold',
-      'Library',
-      'Silver'
+      // TODO Pending Prosperity
+      // 'Platinum',
+      cards.Gold,
+      cards.Library,
+      cards.Silver
     ];
 
-    if (my.countInDeck('Platinum') > 0) {
-      priority.push('colony');
-    }
+    // TODO Pending Prosperity
+    // if (my.countInDeck('Platinum') > 0) {
+    //   priority.push('colony');
+    // }
 
-    if (state.countInSupply('Colony') <= 6) {
-      priority.push('Province');
-    }
+    // Pending Prosperity
+    // if (state.countInSupply('Colony') <= 6) {
+      priority.push(cards.Province);
+    // }
 
     if (state.gainsToEndGame() > 0 && state.gainsToEndGame() <= 5) {
-      priority.push('Duchy');
+      priority.push(cards.Duchy);
     }
 
     if (state.gainsToEndGame() > 0 && state.gainsToEndGame() <= 2) {
-      priority.push('Estate');
+      priority.push(cards.Estate);
     }
 
     priority.push(...basePriority);
