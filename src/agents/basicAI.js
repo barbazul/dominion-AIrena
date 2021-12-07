@@ -296,7 +296,7 @@ export default class BasicAI {
    *
    * @param {State} state
    * @param {Player} my
-   * @return {String[]} array
+   * @return {String[]|Card[]}
    */
   discardPriority (state, my) {
     return [
@@ -343,7 +343,7 @@ export default class BasicAI {
    *
    * @param {State} state
    * @param {Player} my
-   * @return {String[]}
+   * @return {String[]|Card[]}
    */
   trashPriority (state, my) {
     /**

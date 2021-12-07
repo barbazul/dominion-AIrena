@@ -1,11 +1,12 @@
 import BasicAI from '../basicAI.js';
+import cards from '../../game/cards.js';
 
 export default class ChapelWitch extends BasicAI {
   constructor () {
     super();
 
     this.name = 'Chapel Witch';
-    this.requires = ['Chapel', 'Witch'];
+    this.requires = [cards.Chapel, cards.Witch];
   }
 
   /**
@@ -16,39 +17,42 @@ export default class ChapelWitch extends BasicAI {
   gainPriority (state, my) {
     const priority = [];
 
-    if (my.countInDeck('Platinum') > 0) {
-      priority.push('Colony');
-    }
+    // TODO Uncomment after Prosperity
+    // if (my.countInDeck('Platinum') > 0) {
+    //   priority.push('Colony');
+    // }
 
-    if (state.countInSupply('Colony') <= 6) {
-      priority.push('Province');
-    }
+    // TODO Uncomment after Prosperity
+    // if (state.countInSupply('Colony') <= 6) {
+    priority.push(cards.Province);
+    // }
 
-    if (my.countInDeck('Witch') === 0) {
-      priority.push('Witch');
+    if (my.countInDeck(cards.Witch) === 0) {
+      priority.push(cards.Witch);
     }
 
     if (state.gainsToEndGame() <= 5) {
-      priority.push('Duchy');
+      priority.push(cards.Duchy);
     }
 
     if (state.gainsToEndGame() <= 2) {
-      priority.push('Estate');
+      priority.push(cards.Estate);
     }
 
-    priority.push('Platinum');
-    priority.push('Gold');
+    // TODO Uncomment after Prosperity
+    // priority.push('Platinum');
+    priority.push(cards.Gold);
 
     // If this bot somehow gets rid of its chapel later in the game,
     // it won't try to acquire another one.
-    if (my.coins <= 3 && my.countInDeck('Chapel') === 0 && my.turnsTaken <= 2) {
-      priority.push('Chapel');
+    if (my.coins <= 3 && my.countInDeck(cards.Chapel) === 0 && my.turnsTaken <= 2) {
+      priority.push(cards.Chapel);
     }
 
-    priority.push('Silver');
+    priority.push(cards.Silver);
 
     if (state.gainsToEndGame() <= 3) {
-      priority.push('Copper');
+      priority.push(cards.Copper);
     }
 
     return priority;
@@ -58,23 +62,26 @@ export default class ChapelWitch extends BasicAI {
    *
    * @param {State} state
    * @param {Player} my
-   * @return {String[]}
+   * @return {Card[]}
    */
   trashPriority (state, my) {
+    /**
+     * @type {Card[]}
+     */
     const priority = [
-      'Curse'
+      cards.Curse
     ];
 
     if (state.gainsToEndGame() > 4) {
-      priority.push('Estate');
+      priority.push(cards.Estate);
     }
 
-    if (my.getTotalMoney() > 4 && !(my.countInDeck('Witch'))) {
-      priority.push('Copper');
+    if (my.getTotalMoney() > 4 && !(my.countInDeck(cards.Witch))) {
+      priority.push(cards.Copper);
     }
 
     if (state.gainsToEndGame() > 2) {
-      priority.push('Estate');
+      priority.push(cards.Estate);
     }
 
     return priority;
