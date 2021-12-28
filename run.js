@@ -155,4 +155,9 @@ if (numGames > 1) {
   console.log(stats);
 }
 
-console.log(`Time elapsed ${(end - start) / 1000} seconds.`);
+const totalTime = (end - start);
+console.log(`Time elapsed ${totalTime} ms.`);
+
+if (numGames === 1) {
+  console.log(`Time per round; ${Math.round(totalTime / state.current.turnsTaken)} ms.`);
+}
