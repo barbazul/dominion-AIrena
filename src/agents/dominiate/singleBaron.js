@@ -17,13 +17,15 @@ export default class SingleBaron extends BasicAI {
   gainPriority(state, my) {
     const priority = [];
 
-    if (my.countInDeck('Platinum')) {
-      priority.push('Colony');
-    }
+    // TODO Uncomment after Prosperity
+    // if (my.countInDeck('Platinum')) {
+    //   priority.push('Colony');
+    // }
 
-    if (state.countInSupply('Colony') <= 6) {
-      priority.push(cards.Province);
-    }
+    // TODO Uncomment after Prosperity
+    // if (state.countInSupply('Colony') <= 6) {
+    priority.push(cards.Province);
+    // }
 
     if (state.gainsToEndGame() <= 5) {
       priority.push(cards.Duchy);
@@ -33,7 +35,9 @@ export default class SingleBaron extends BasicAI {
       priority.push(cards.Estate);
     }
 
-    priority.push('Platinum', cards.Gold);
+    // TODO Uncomment after Prosperity
+    // priority.push('Platinum', cards.Gold);
+    priority.push(cards.Gold);
 
     if (my.countInDeck(cards.Baron) === 0) {
       priority.push(cards.Baron);
@@ -51,7 +55,9 @@ export default class SingleBaron extends BasicAI {
   discardPriority(state, my) {
     const priority = [];
 
-    priority.push('Colony', cards.Province, cards.Duchy, cards.Curse);
+    // TODO Uncomment after Prosperity
+    // priority.push('Colony', cards.Province, cards.Duchy, cards.Curse);
+    priority.push(cards.Province, cards.Duchy, cards.Curse);
 
     if (my.countInHand(cards.Baron) === 0 || my.countInHand(cards.Estate) > 1) {
       priority.push(cards.Estate);
