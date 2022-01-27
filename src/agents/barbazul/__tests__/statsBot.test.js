@@ -63,3 +63,29 @@ test('doGameAnalysis skips better bots that don\'t match the requirements', () =
 
   expect(statsBot.setActualAgent).toHaveBeenCalledWith(expect.any(BigSmithy));
 });
+
+test('doGameAnalysis skips bots with no stats', () => {
+  const statsBot = new StatsBot();
+  const state = new State();
+
+  state.setUp(
+    [ statsBot, statsBot ],
+    {
+      log: () => {},
+      warn: () => {},
+      required: sampleKingdomFull
+    }
+  );
+
+  statsBot.setActualAgent = jest.fn(statsBot.setActualAgent);
+  statsBot.agents = [ new BigMoney(), new BasicAI() ];
+
+  statsBot.stats = {
+    // Worst always available as it has no requirements
+    BasicAI: { plays: 10, wins: 0, rate: 0 },
+  }
+
+  statsBot.doGameAnalysis(state, state.current)
+
+  expect(statsBot.setActualAgent).toHaveBeenCalledWith(expect.any(BasicAI));
+});

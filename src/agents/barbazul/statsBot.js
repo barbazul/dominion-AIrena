@@ -93,10 +93,12 @@ export default class StatsBot extends ProxyAgent {
     });
 
     let winner = candidates[0];
-    let score = this.stats[winner].rate;
+    let score = this.stats[winner] === undefined ? 0 : this.stats[winner].rate;
 
     candidates.forEach(candidate => {
-      const candidateScore = this.stats[candidate].rate;
+      // Skip candidates for which we have no stats
+      const candidateScore = this.stats[candidate] === undefined ?
+        0 : this.stats[candidate].rate;
 
       if (candidateScore > score) {
         winner = candidate;
