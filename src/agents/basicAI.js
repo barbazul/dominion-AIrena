@@ -1,4 +1,5 @@
 import cards from '../game/cards.js';
+import { PHASE_BUY } from '../game/state.js';
 
 /**
  * This defines the base for an AI agent.
@@ -1090,6 +1091,37 @@ export default class BasicAI {
     }
 
     return Math.pow(this.choiceToValue(CHOICE_GAIN, state, card, my), endGamePower) - this.choiceToValue(CHOICE_TRASH, state, card, my);
+  }
+
+  /**
+   * Play a hypothetical round as if there where no more cards to draw up to
+   * the buy phase.
+   *
+   * @param {State} state
+   * @param {Player} my
+   * @return {State}
+   */
+  fastForwardToBuy (state, my) {
+    if (state.depth === 0) {
+      throw new Error('Can only fast-forward in a hypothetical state');
+    }
+
+    // We need to save draw and discard before emptying and restore them before
+    // buyPhase, to be able to choose the right buys in actionPriority(state)
+    const oldDraws = my.draw.slice(0);
+    const oldDiscard = my.discard.slice(0);
+
+    my.draw = [];
+    my.discard = [];
+
+    while (state.phase !== PHASE_BUY) {
+      state.doPhase();
+    }
+
+    my.draw = oldDraws;
+    my.discard = oldDiscard;
+
+    return state;
   }
 
   /**

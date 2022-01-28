@@ -2,7 +2,7 @@ import BasicAction from '../../cards/basicAction';
 import Card from '../../cards/card';
 import cards from '../../game/cards';
 import Player from '../../game/player';
-import State from '../../game/state';
+import State, {PHASE_ACTION, PHASE_BUY} from '../../game/state';
 import BasicAI, {CHOICE_DISCARD} from '../basicAI';
 
 const muteConfig = { log: () => {}, warn: () => {} };
@@ -1225,4 +1225,53 @@ test('copy returns a different instance with a different name', () => {
   expect(theClone).toBeInstanceOf(BasicAI);
   expect(theClone).not.toBe(ai);
   expect(theClone.toString()).not.toBe(ai.toString());
+});
+
+test('fastForwardToBuy requires a hypothetical state', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+  state.phase = PHASE_ACTION;
+
+  expect(
+    () => {
+      ai.fastForwardToBuy(state, state.current)
+    }
+  ).toThrow()
+});
+
+test('fastForwardToBuy returns the state in buy phase', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+  state.phase = PHASE_ACTION;
+  state.depth = 1;
+
+  expect(ai.fastForwardToBuy(state, state.current).phase).toBe(PHASE_BUY);
+});
+
+test('fastForwardToBuy keeps same cards in draw and discard', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+  state.phase = PHASE_ACTION;
+  state.depth = 1;
+
+  // agent will play smithy and still not draw
+  ai.playValue = () => 1;
+  ai.playPriority = undefined;
+  state.current.hand = [ cards.Smithy ];
+  state.current.draw = [ cards.Copper, cards.Copper, cards.Copper ];
+  state.current.discard = [ cards.Estate, cards.Estate, cards.Estate ];
+
+  const drawBackup = state.current.draw.slice(0);
+  const discardBackup = state.current.discard.slice(0);
+
+  ai.fastForwardToBuy(state, state.current);
+
+  expect(state.current.draw).toEqual(drawBackup);
+  expect(state.current.discard).toEqual(discardBackup);
 });

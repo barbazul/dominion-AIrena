@@ -205,7 +205,23 @@ function gainPriority(state, my) {
     priority.push(cards.Estate);
   }
 }
+----
 
+=== BasicAI.fastForwardToBuy(State state, Player my): State
+
+Given a hypothetical State and Player, will play the turn up to the buy phase
+assuming no cards are drawn.
+
+_Usage example_
+
+----
+function whatWouldIBuyThisTurn(state, action) {
+    const [ hyp, player ] = state.hypothetical(this);
+
+    // FF to buy and check buy choice
+    this.fastForwardToBuy(hyp, player);
+    return hyp.doSingleBuyDecision();
+}
 ----
 
 == Utility Methods
