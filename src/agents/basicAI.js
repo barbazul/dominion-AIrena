@@ -1,5 +1,5 @@
 import cards from '../game/cards.js';
-import { PHASE_BUY } from '../game/state.js';
+import { PHASE_ACTION, PHASE_BUY, PHASE_TREASURE } from '../game/state.js';
 
 /**
  * This defines the base for an AI agent.
@@ -1094,12 +1094,36 @@ export default class BasicAI {
   }
 
   /**
+   * Look ahead to the buy phase, assuming we draw no money from the deck.
+   *
+   * @todo when we can handle known cards on top of the deck, take them into account.
+   * @param {State} state
+   * @return {State}
+   */
+  pessimisticBuyPhase (state) {
+    if (state.depth > 0) {
+      // A last-ditch effort to avoid recursion, by simply fast-forwarding to
+      // the next phase.
+      if (state.phase === PHASE_ACTION) {
+        state.phase = PHASE_TREASURE;
+      } else if (state.phase === PHASE_TREASURE) {
+        state.phase = PHASE_BUY;
+      }
+    }
+
+    const [ hypothesis, hypotheticallyMy ] = state.hypothetical(this);
+
+    return this.fastForwardToBuy(hypothesis, hypotheticallyMy);
+  }
+
+  /**
    * Play a hypothetical round as if there where no more cards to draw up to
    * the buy phase.
    *
    * @param {State} state
    * @param {Player} my
    * @return {State}
+   * @private
    */
   fastForwardToBuy (state, my) {
     if (state.depth === 0) {

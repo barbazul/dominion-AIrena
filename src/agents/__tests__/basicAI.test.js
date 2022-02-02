@@ -1275,3 +1275,44 @@ test('fastForwardToBuy keeps same cards in draw and discard', () => {
   expect(state.current.draw).toEqual(drawBackup);
   expect(state.current.discard).toEqual(discardBackup);
 });
+
+test('pessimisticBuyPhase returns a hypothetical state', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+
+  const actual = ai.pessimisticBuyPhase(state);
+
+  expect(actual).not.toBe(state);
+  expect(actual.depth).toBeGreaterThan(state.depth);
+});
+
+test('pessimisticBuyPhase returns a state in buy phase', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+  state.phase = PHASE_ACTION;
+
+  const actual = ai.pessimisticBuyPhase(state);
+
+  expect(actual.phase).toBe(PHASE_BUY);
+});
+
+test('pessimisticBuyPhase prevents recursion', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+  state.phase = PHASE_ACTION;
+  state.current.hand = [ cards.Copper, cards.Smithy ];
+
+  ai.playValue = (state, card, my) => {
+    ai.pessimisticBuyPhase(state);
+    return 1;
+  };
+
+  const actual = ai.pessimisticBuyPhase(state);
+  expect(actual.phase).toBe(PHASE_BUY);
+});

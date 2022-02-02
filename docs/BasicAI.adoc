@@ -207,22 +207,30 @@ function gainPriority(state, my) {
 }
 ----
 
-=== BasicAI.fastForwardToBuy(State state, Player my): State
+=== BasicAI.pessimisticBuyPhase(State state): State
 
-Given a hypothetical State and Player, will play the turn up to the buy phase
-assuming no cards are drawn.
+Look ahead to the buy phase, assuming we draw no money from the deck.
 
 _Usage example_
 
 ----
 function whatWouldIBuyThisTurn(state, action) {
-    const [ hyp, player ] = state.hypothetical(this);
-
     // FF to buy and check buy choice
-    this.fastForwardToBuy(hyp, player);
-    return hyp.doSingleBuyDecision();
+    const hypothetical = this.fastForwardToBuy(state);
+    return hypothetical.doSingleBuyDecision();
 }
 ----
+
+NOTE: This method is a wrapper around `BasicAI.fastForwardToBuy()` with
+recurrency protection and should always be used instead of it.
+
+=== BasicAI.fastForwardToBuy(State state, Player my): State
+
+Given a hypothetical State and Player, will play the turn up to the buy phase
+assuming no cards are drawn.
+
+IMPORTANT: This method is not meant for public use. Use
+`BasicAI.pessimisticBuyPhase()` instead.
 
 == Utility Methods
 
