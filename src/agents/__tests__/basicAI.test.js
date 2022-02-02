@@ -1294,10 +1294,13 @@ test('pessimisticBuyPhase returns a state in buy phase', () => {
 
   state.setUp([ ai, ai ], muteConfig);
   state.phase = PHASE_ACTION;
+  state.current.hand = [ cards.Copper ];
 
   const actual = ai.pessimisticBuyPhase(state);
 
   expect(actual.phase).toBe(PHASE_BUY);
+  expect(state.phase).toBe(PHASE_ACTION);
+  expect(actual.current.coins).toBe(1);
 });
 
 test('pessimisticBuyPhase prevents recursion', () => {
