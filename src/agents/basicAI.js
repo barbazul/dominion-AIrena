@@ -1186,9 +1186,7 @@ export default class BasicAI {
     const baseCard = newState.getSingleBuyDecision();
 
     for (let increment of [1, 2, 3, 4, 5, 6, 7, 8]) {
-
       newState.current.coins = coins + increment;
-      console.log(newState.current.coins);
       let cardToBuy = newState.getSingleBuyDecision();
 
       if (cardToBuy !== baseCard) {

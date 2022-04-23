@@ -1356,6 +1356,6 @@ test('coinGainMargin the missing coins for the next card in the list', () => {
 
   state.setUp([ ai, ai ], muteConfig);
   state.current.coins = 3;
-  ai.gainPriority = () => [ cards.Silver, cards.Gold ];
+  ai.gainPriority = () => [ cards.Gold, cards.Silver ];
   expect(ai.coinGainMargin(state)).toBe(3);
 });
