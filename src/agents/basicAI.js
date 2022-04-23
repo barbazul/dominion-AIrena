@@ -1033,6 +1033,22 @@ export default class BasicAI {
   }
 
   /**
+   * Checks if Agent wants to trash Mining Village after playing it.
+   *
+   * Checks if the agent is already greening and trashing would allow it to
+   * gain a card higher in its priority.
+   *
+   * Note: This replaces miningVillageTrashValue
+   *
+   * @param {State} state
+   * @param {Player} my
+   * @return {boolean}
+   */
+  wantsToTrashMiningVillage (state, my) {
+    return this.goingGreen(state, my) && this.coinGainMargin(state) <= 2;
+  }
+
+  /**
    * upgradeValue measures the benefit of choices on Remodel, Upgrade,
    * and so on, where you exchange one card for a better one.
    *

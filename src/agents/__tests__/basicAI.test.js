@@ -1400,3 +1400,34 @@ test('coinGainMargin the missing coins for the next card in the list', () => {
   ai.gainPriority = () => [ cards.Gold, cards.Silver ];
   expect(ai.coinGainMargin(state)).toBe(3);
 });
+
+test('wantsToTrashMining village is true when greening and can buy a better card|', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+  ai.goingGreen = () => true;
+  ai.coinGainMargin = () => 2;
+  expect(ai.wantsToTrashMiningVillage(state, state.current)).toBeTruthy();
+});
+
+test('wantsToTrashMining village is false when not greening', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+  ai.goingGreen = () => false;
+  ai.coinGainMargin = () => 2;
+  expect(ai.wantsToTrashMiningVillage(state, state.current)).toBeFalsy();
+});
+
+test('wantsToTrashMining village is false when won\t gain a better card', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+  ai.goingGreen = () => true;
+  ai.coinGainMargin = () => 3;
+  expect(ai.wantsToTrashMiningVillage(state, state.current)).toBeFalsy();
+});
+

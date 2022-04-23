@@ -13,6 +13,12 @@ export default class MiningVillage extends Village {
    * @param {State} state
    */
   playEffect (state) {
+    // PSEUDO-CODE
+    // 1. Check if trashing is allowed (card was played on the table and was not removed by other effect)
+    // 2. Check if agent wants to trash
+    // 3. Move card from play to trash
+    // 4. Increase coins
+
     /**
      * Dominiate
      if state.current.ai.choose('miningVillageTrash', state, [yes, no])
