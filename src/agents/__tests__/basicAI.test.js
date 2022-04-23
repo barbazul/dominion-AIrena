@@ -1319,3 +1319,43 @@ test('pessimisticBuyPhase prevents recursion', () => {
   const actual = ai.pessimisticBuyPhase(state);
   expect(actual.phase).toBe(PHASE_BUY);
 });
+
+test('coinLossMargin is 0 when no card is wanted', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+  state.current.coins = 5;
+  ai.gainPriority = () => [ null ];
+  expect(ai.coinLossMargin(state)).toBe(0);
+});
+
+test('coinLossMargin is the difference between current coins and wished card cost', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+  state.current.coins = 5;
+  ai.gainPriority = () => [ cards.Silver, null ];
+  expect(ai.coinLossMargin(state)).toBe(2);
+});
+
+test('coinGainMargin returns Infinity when no better card is wanted', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+  state.current.coins = 3;
+  ai.gainPriority = () => [ cards.Silver ];
+  expect(ai.coinGainMargin(state)).toBe(Infinity);
+});
+
+test('coinGainMargin the missing coins for the next card in the list', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+  state.current.coins = 3;
+  ai.gainPriority = () => [ cards.Silver, cards.Gold ];
+  expect(ai.coinGainMargin(state)).toBe(3);
+});

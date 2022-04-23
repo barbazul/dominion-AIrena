@@ -1159,7 +1159,44 @@ export default class BasicAI {
    * @return {number}
    */
   coinLossMargin (state) {
-    return 0;
+    const newState = this.pessimisticBuyPhase(state);
+    const coins = newState.current.coins;
+    const cardToBuy = newState.getSingleBuyDecision();
+
+    if (cardToBuy === null) {
+      return 0;
+    }
+
+    const cost = cardToBuy.getCost(newState);
+
+    return coins - cost;
+  }
+
+  /**
+   * coinGainMargin determines how much treasure the player wants to gain,
+   * in order to get a better card. Tries up to +$8, then returns Infinity
+   * if nothing changes.
+   *
+   * @param {State} state
+   * @return {number}
+   */
+  coinGainMargin (state) {
+    const newState = this.pessimisticBuyPhase(state);
+    const coins = newState.current.coins;
+    const baseCard = newState.getSingleBuyDecision();
+
+    for (let increment of [1, 2, 3, 4, 5, 6, 7, 8]) {
+
+      newState.current.coins = coins + increment;
+      console.log(newState.current.coins);
+      let cardToBuy = newState.getSingleBuyDecision();
+
+      if (cardToBuy !== baseCard) {
+        return increment;
+      }
+    }
+
+    return Infinity;
   }
 
   /**
