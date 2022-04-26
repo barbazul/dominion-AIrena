@@ -1,7 +1,7 @@
 import BasicAI from '../../agents/basicAI';
 import Card from '../../cards/card';
 import cards from '../cards';
-import Player from '../player';
+import Player, { LOCATION_HAND, LOCATION_TRASH } from '../player';
 
 test('Initial state', () => {
   const basicAI = new BasicAI();
@@ -434,6 +434,8 @@ test('Copied Player has same stuff', () => {
 
   player.discard = [ cards.Smithy ];
   player.inPlay = [ cards.Village ];
+  player.playLocation = LOCATION_TRASH;
+  player.gainLocation = LOCATION_HAND;
   player.turnsTaken = 5;
 
   newPlayer = player.copy();
@@ -445,6 +447,8 @@ test('Copied Player has same stuff', () => {
   expect(newPlayer.draw).toEqual(player.draw);
   expect(newPlayer.discard).toEqual(player.discard);
   expect(newPlayer.inPlay).toEqual(player.inPlay);
+  expect(newPlayer.playLocation).toEqual(player.playLocation);
+  expect(newPlayer.gainLocation).toEqual(player.gainLocation);
   expect(newPlayer.cardsPlayed).toEqual(player.cardsPlayed);
   expect(newPlayer.agent).toEqual(player.agent);
   expect(newPlayer.log).toEqual(player.log);

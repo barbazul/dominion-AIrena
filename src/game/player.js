@@ -2,6 +2,11 @@ import seedrandom from 'seedrandom';
 import shuffle from '../lib/shuffle.js';
 import cards from './cards.js';
 
+export const LOCATION_DISCARD = 'discard';
+export const LOCATION_HAND = 'hand';
+export const LOCATION_IN_PLAY = 'inPlay';
+export const LOCATION_TRASH = 'trash';
+
 export default class Player {
   /**
    * @param {BasicAI} agent
@@ -46,6 +51,15 @@ export default class Player {
      */
     this.inPlay = [];
     this.turnsTaken = 0;
+
+    /**
+     * To stack various card effects, we'll have to keep track of the location
+     * of the card we're playing and the card we're gaining.
+     *
+     * @type {string}
+     */
+    this.playLocation = LOCATION_IN_PLAY;
+    this.gainLocation = LOCATION_DISCARD;
 
     /**
      * History of cards played (also virtual cards)
@@ -343,7 +357,13 @@ export default class Player {
     newPlayer.discard = this.discard.slice(0);
     newPlayer.inPlay = this.inPlay.slice(0);
 
-    // TODO durations, set aside, gained this turn, play location, gain location, action stack, actionsPlayed
+    // TODO durations, set aside, gained this turn
+
+    // play location, gain location
+    newPlayer.playLocation = this.playLocation;
+    newPlayer.gainLocation = this.gainLocation;
+
+    // TODO action stack, actionsPlayed
 
     newPlayer.turnsTaken = this.turnsTaken;
 

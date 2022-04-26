@@ -1,7 +1,7 @@
 import { CHOICE_DISCARD, CHOICE_TRASH } from '../agents/basicAI.js';
 import shuffle from '../lib/shuffle.js';
 import cards from './cards.js';
-import Player from './player.js';
+import Player, { LOCATION_HAND, LOCATION_IN_PLAY } from './player.js';
 import seedrandom from 'seedrandom';
 
 export const PHASE_START = 'start';
@@ -228,7 +228,7 @@ export default class State {
    * @param {String} from
    * @return void
    */
-  playAction (card, from = 'hand') {
+  playAction (card, from = LOCATION_HAND) {
     const source = this.current[from];
     const playedCard = this.doPlay(card, source, from);
 
@@ -284,6 +284,7 @@ export default class State {
 
     source.splice(index, 1);
     this.current.inPlay.push(card);
+    this.current.playLocation = LOCATION_IN_PLAY;
 
     return card;
   }
@@ -773,6 +774,7 @@ export default class State {
       }
 
       this.current.actions--;
+      this.current.playLocation = LOCATION_IN_PLAY;
       this.playAction(choice);
     }
   }
