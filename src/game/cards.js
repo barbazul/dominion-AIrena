@@ -33,6 +33,7 @@ import Witch from '../cards/witch.js';
 import Workshop from '../cards/workshop.js';
 import Baron from '../cards/baron.js';
 import Bridge from '../cards/bridge.js';
+import MiningVillage from '../cards/miningVillage.js';
 
 const cards = {
   // Basic cards
@@ -74,7 +75,8 @@ const cards = {
 
   // Intrigue
   Baron: new Baron(),
-  Bridge: new Bridge()
+  Bridge: new Bridge(),
+  'Mining Village': new MiningVillage()
 };
 
 export default cards;

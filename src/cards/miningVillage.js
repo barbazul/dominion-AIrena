@@ -1,4 +1,5 @@
 import Village from './village.js';
+import { LOCATION_IN_PLAY, LOCATION_TRASH } from '../game/player.js';
 
 export default class MiningVillage extends Village {
   constructor () {
@@ -13,45 +14,19 @@ export default class MiningVillage extends Village {
    * @param {State} state
    */
   playEffect (state) {
-    // PSEUDO-CODE
     // 1. Check if trashing is allowed (card was played on the table and was not removed by other effect)
-    // 2. Check if agent wants to trash
-    // 3. Move card from play to trash
-    // 4. Increase coins
-
-    /**
-     * Dominiate
-     if state.current.ai.choose('miningVillageTrash', state, [yes, no])
-       if state.current.playLocation != 'trash'
-         transferCard(c['Mining Village'], state.current[state.current.playLocation], state.trash)
-         state.current.playLocation = 'trash'
-         state.log("...trashing the Mining Village for +$2.")
-         state.current.coins += 2
-     */
-
-    /**
-     * Dominion sim
-    public void play() {
-      owner.addActions(2);
-      owner.drawCards(1);
-      if (!owner.getCurrentGame().getBoard().getTrashedCards().contains(this))
-        posibblyTrashThis();
-    }
-
-    private final void posibblyTrashThis() {
-      if (owner.isHumanOrPossessedByHuman()) {
-        handleHuman();
-        return;
-      }
-      if (owner.getPlayStrategyFor(this)==DomPlayStrategy.forEngines && owner.getCurrentGame().getGainsNeededToEndGame()>3)
-        return;
-      if (owner.addingThisIncreasesBuyingPower( new DomCost( 2,0 )) || owner.getCurrentGame().getGainsNeededToEndGame()<=3) {
-        DomPlayer theOwner = owner;
-        owner.trash(owner.removeCardFromPlay( this ));
-        //owner has now become null... so we use theOwner
-        theOwner.addAvailableCoins( 2 );
+    if (state.current.playLocation === LOCATION_IN_PLAY) {
+      // 2. Check if agent wants to trash
+      if (state.current.agent.wantsToTrashMiningVillage(state, state.current)) {
+        // 3. Move card from play to trash
+        const index = state.current.inPlay.indexOf(this);
+        state.current.inPlay.splice(index, 1);
+        state.trash.push(this);
+        state.current.playLocation = LOCATION_TRASH;
+        state.log('...trashing the Mining Village for +$2.');
+        // 4. Increase coins
+        state.current.coins += 2;
       }
     }
-     */
   }
 }

@@ -32,8 +32,8 @@ import Smithy from './src/agents/domsim/smithy.js';
 import Witch from './src/agents/domsim/witch.js';
 import WitchAndMoatFor3or4 from './src/agents/domsim/witchAndMoatFor3or4.js';
 import WitchFor3or4 from './src/agents/domsim/witchFor3or4.js';
-import SingleBaron from "./src/agents/dominiate/singleBaron.js";
-import StatsBot from "./src/agents/barbazul/StatsBot.js";
+import SingleBaron from './src/agents/dominiate/singleBaron.js';
+import StatsBot from './src/agents/barbazul/StatsBot.js';
 import ObmBridge from './src/agents/dominiate/obmBridge.js';
 import Artisan from './src/agents/barbazul/artisan.js';
 import yargs from 'yargs';
@@ -135,7 +135,7 @@ function getWinner (state) {
 }
 
 const start = new Date();
-const gamesPerMatch = 100;
+const gamesPerMatch = 10;
 let gameCounter = 0;
 
 for (let i = 0; i < players.length - 1; i++) {

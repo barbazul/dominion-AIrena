@@ -565,6 +565,7 @@ export default class State {
     newState.costModifiers = this.costModifiers.concat([]);
     newState.phase = this.phase;
     newState.cache = {};
+    newState.rng = this.rng;
 
     // Addition to Dominiate: Also copy the RNG
     newState.rng = this.rng;
