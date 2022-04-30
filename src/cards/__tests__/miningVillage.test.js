@@ -1,5 +1,5 @@
-import MiningVillage from '../miningVillage.js';
 import State from '../../game/state.js';
+import MiningVillage from '../miningVillage.js';
 import BasicAI from '../../agents/basicAI.js';
 import { LOCATION_IN_PLAY, LOCATION_TRASH } from '../../game/player.js';
 
