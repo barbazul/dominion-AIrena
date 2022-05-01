@@ -71,7 +71,7 @@ export class DomPlayer extends BasicAI {
       return specific[card](state, my);
     }
 
-    if (heuristics[card].playPriority !== undefined) {
+    if (heuristics[card] && heuristics[card].playPriority !== undefined) {
       return 100 - heuristics[card].playPriority;
     }
 

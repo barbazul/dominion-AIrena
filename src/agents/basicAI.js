@@ -1045,6 +1045,7 @@ export default class BasicAI {
    * @return {boolean}
    */
   wantsToTrashMiningVillage (state, my) {
+    my.log('Considering to trash Mining village...');
     return this.goingGreen(state, my) && this.coinGainMargin(state) <= 2;
   }
 

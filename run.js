@@ -33,6 +33,7 @@ import StatsBot from './src/agents/barbazul/StatsBot.js';
 import SingleBaron from './src/agents/dominiate/singleBaron.js';
 import ObmBridge from './src/agents/dominiate/obmBridge.js';
 import Artisan from './src/agents/barbazul/artisan.js';
+import CouncilRoomMilitiaMiningVillage from "./src/agents/barbazul/councilRoomMilitiaMiningVillage.js";
 import yargs from 'yargs';
 
 const argv = yargs(process.argv.slice(2))
@@ -79,7 +80,8 @@ const players = [
   new WitchFor3or4(),
   new Artisan(),
   new SingleBaron(),
-  new ObmBridge()
+  new ObmBridge(),
+  new CouncilRoomMilitiaMiningVillage()
 ];
 
 const statsBotAgent = new StatsBot(statsBotOptions);

@@ -269,7 +269,7 @@ export default class State {
   doPlay (card, source, from) {
     let index;
 
-    this.log(`${this.current.agent} plays ${card}.`);
+    this.current.log(`${this.current.agent} plays ${card}.`);
 
     if (source === undefined) {
       this.warn(`${this.current.agent.name} tried to play a card from invalid location ${from}`);
@@ -314,7 +314,7 @@ export default class State {
       return null;
     }
 
-    this.log(`${player.agent.name} discards ${card}.`);
+    player.log(`${player.agent.name} discards ${card}.`);
     source.splice(index, 1);
     player.discard.unshift(card);
     return card;
