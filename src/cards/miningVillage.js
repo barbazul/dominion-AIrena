@@ -23,9 +23,11 @@ export default class MiningVillage extends Village {
         state.current.inPlay.splice(index, 1);
         state.trash.push(this);
         state.current.playLocation = LOCATION_TRASH;
-        state.log('...trashing the Mining Village for +$2.');
+        state.current.log('...trashing the Mining Village for +$2.');
         // 4. Increase coins
         state.current.coins += 2;
+      } else {
+        state.current.log('...decides to keep it');
       }
     }
   }
