@@ -30,8 +30,8 @@ const helpers = {
 
 const heuristics = {
   // Base Cards
-  Curse: { playPriority: 100, discardPriority: 10, trashPriority: 0 },
-  Copper: { playPriority: 55, discardPriority: 15 },
+  Curse: { playPriority: 100,discardPriority: 10, trashPriority: 0 },
+  Copper: {  playPriority: 55 , discardPriority: 15 },
   Silver: {
     playPriority: 25,
     discardPriority: 20,
@@ -61,7 +61,7 @@ const heuristics = {
       return false;
     }
   },
-  Gold: { playPriority: 30, discardPriority: 24 },
+  Gold: {  playPriority: 30 , discardPriority: 24 },
   Estate: {
     playPriority: 100,
     discardPriority: 9,
@@ -259,7 +259,6 @@ const heuristics = {
       return my.agent.findCardToRemodel(my, state, cards.Remodel, 2, true) !== null;
     }
   },
-
   Sentry: { types: ['Cycler'], discardPriority: 22, playPriority: 2 },
   Smithy: { types: [ 'Terminal' ], discardPriority: 24, playPriority: 25 },
   'Throne Room': {
@@ -302,7 +301,7 @@ const heuristics = {
 
       return 100 - heuristics[card].playPriority;
     }
-  },  Village: {types: ['Cycler', 'Village'], discardPriority: 21, playPriority: 5},
+  },  Village: { types: ['Cycler', 'Village'], discardPriority: 21, playPriority: 5 },
   Witch: {
     types: [ 'Terminal' ],
     discardPriority: 40,

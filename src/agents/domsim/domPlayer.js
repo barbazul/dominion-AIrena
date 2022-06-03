@@ -1,5 +1,5 @@
 import cards from '../../game/cards.js';
-import BasicAI, { CHOICE_TRASH, CHOICE_UPGRADE } from '../basicAI.js';
+import BasicAI, {  CHOICE_UPGRADE } from '../basicAI.js';
 import heuristics from './heuristics.js';
 
 export class DomPlayer extends BasicAI {
@@ -193,30 +193,6 @@ export class DomPlayer extends BasicAI {
   wantsToPlay (cardName, state, my) {
     // TODO Move into heuristics
     const specific = {
-      // Base Set
-      Chapel: (state, my) => {
-        const minMoneyInDeck = this.getPlayStrategyFor('Chapel') === STRATEGY_AGGRESSIVE_TRASHING ? 4 : 6;
-        const trashOverBuyThreshold = this.getPlayStrategyFor('Chapel') === STRATEGY_AGGRESSIVE_TRASHING ? 3 : 4;
-        let trashCount = 0;
-        const cardsInHand = my.hand.slice(0);
-
-        if (my.hand.length === 0) {
-          return false;
-        }
-
-        for (const card of cardsInHand) {
-          if (this.trashValue(state, card, my) > 0) {
-            trashCount++;
-          }
-        }
-
-        const cardToTrash = this.choose(CHOICE_TRASH, state, my.hand);
-
-        return this.trashValue(state, cardToTrash, my) > 0 ||
-          (this.removingReducesBuyingPower(my, state, cardToTrash) && trashCount < trashOverBuyThreshold) ||
-          (this.getTotalMoney(my) - this.getPotentialCoinValue(my, cardToTrash) < minMoneyInDeck &&
-          this.getTotalMoney(my) >= minMoneyInDeck);
-      },
       Mine: (state, my) => {
         return this.checkForCardToMine(state, my) !== null;
       },
@@ -457,19 +433,6 @@ export class DomPlayer extends BasicAI {
     }
 
     return total;
-  }
-
-  /**
-   * Check if buy rules indicate player wants the card
-   *
-   * @param {Card} card
-   * @param {State} state
-   * @param {Player} my
-   * @return {boolean}
-   */
-  wantsToGainOrKeep(card, state, my) {
-    // TODO Missing implementation
-    return true;
   }
 }
 
