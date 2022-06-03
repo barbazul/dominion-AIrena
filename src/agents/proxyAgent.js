@@ -1,5 +1,6 @@
 import BasicAI from './basicAI.js';
 
+// TODO Use https://gist.github.com/loilo/4d385d64e2b8552dcc12a0f5126b6df8 to have magic methods
 export default class ProxyAgent extends BasicAI {
   constructor () {
     super();
