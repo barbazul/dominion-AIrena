@@ -230,7 +230,7 @@ import Card from "../../../cards/card";
     });
   });
 
-  describe('with getPotentialCoins', () => {
+describe('with getPotentialCoins', () => {
     test('getPotentialCoins returns 0 on empty hand and no previous coins', () => {
       const ai = new DomPlayer();
       const owner = new Player(ai, () => {});
@@ -555,7 +555,7 @@ test('Fallback discard value from heuristics', () => {
   const ai = new DomPlayer();
   const state = new State();
 
-  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.setUp([ai, ai], muteConfig);
 
   heuristics[card].discardPriority = 0;
   expect(ai.fallbackDiscardValue(state, card, state.current)).toBe(16);
@@ -574,7 +574,7 @@ test('Fallback discard value without heuristics', () => {
   const ai = new DomPlayer();
   const state = new State();
 
-  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.setUp([ai, ai], muteConfig);
 
   // This expectations assumes current basicAI implementation. Adjust expected value if method changes
   expect(ai.fallbackDiscardValue(state, card, state.current)).toBe(0);
@@ -585,7 +585,7 @@ test('Discard actions when no actions left', () => {
   const ai = new DomPlayer();
   const state = new State();
 
-  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.setUp([ai, ai], muteConfig);
   state.current.actions = 0;
 
   expect(ai.discardValue(state, card, state.current)).toBe(15);
@@ -597,7 +597,7 @@ test('Check heuristics when actions left', () => {
   const state = new State();
 
   ai.fallbackDiscardValue = () => -1;
-  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.setUp([ai, ai], muteConfig);
   state.current.actions = 2;
 
   expect(ai.discardValue(state, card, state.current)).toBe(-1);
@@ -614,7 +614,7 @@ test('Check specific heuristic function first for discardValue', () => {
     calculatedDiscardPriority: () => -1
   };
 
-  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.setUp([ai, ai], muteConfig);
   expect(ai.discardValue(state, card, state.current)).toBe(-1);
   delete heuristics[card];
 });
@@ -630,7 +630,7 @@ test('Skip calculated discardValue if not a number', () => {
     calculatedDiscardPriority: () => false
   };
 
-  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.setUp([ai, ai], muteConfig);
   expect(ai.discardValue(state, card, state.current)).toBe(6);
   delete heuristics[card];
 });
@@ -662,7 +662,7 @@ test('Trash value falls back to discardValue without heuristics', () => {
   const ai = new DomPlayer();
   const state = new State();
 
-  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.setUp([ai, ai], muteConfig);
   delete heuristics[card].trashPriority;
 
   heuristics[card].discardPriority = 0;
@@ -689,7 +689,7 @@ test('Check specific heuristic function first for trashValue', () => {
     calculatedTrashPriority: () => -1
   };
 
-  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.setUp([ai, ai], muteConfig);
   expect(ai.trashValue(state, card, state.current)).toBe(-1);
   delete heuristics[card];
 });
@@ -705,7 +705,32 @@ test('Skip calculated trashValue if not a number', () => {
     calculatedTrashPriority: () => false
   };
 
-  state.setUp([ai, ai], {log: () => {}, warn: () => {}});
+  state.setUp([ai, ai], muteConfig);
   expect(ai.trashValue(state, card, state.current)).toBe(6);
+  delete heuristics[card];
+});
+
+test('Always wants to play without heuristic', () => {
+  const card = new BasicAction();
+  const ai = new DomPlayer();
+  const state = new State();
+
+  card.name = 'Fake Action';
+  state.setUp([ai, ai], muteConfig);
+  expect(ai.wantsToPlay(card, state, state.current)).toBe(true);
+});
+
+test('Check specific heuristic function first for wantsToPlay', () => {
+  const card = new BasicAction();
+  const ai = new DomPlayer();
+  const state = new State();
+
+  card.name = 'Fake Action';
+  heuristics[card] = {
+    wantsToBePlayed: () => false
+  };
+
+  state.setUp([ai, ai], muteConfig);
+  expect(ai.wantsToPlay(card, state, state.current)).toBe(false);
   delete heuristics[card];
 });

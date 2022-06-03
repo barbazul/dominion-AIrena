@@ -264,7 +264,7 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @returns {Number}
    */
-  discardValue(state, card, my) {
+  discardValue (state, card, my) {
     let calculatedValue;
     // TODO some cards have specific heuristics
     if (card === cards.Baron) {
@@ -439,19 +439,6 @@ export class DomPlayer extends BasicAI {
     }
 
     return total;
-  }
-
-  /**
-   * Check if buy rules indicate player wants the card
-   *
-   * @param {Card} card
-   * @param {State} state
-   * @param {Player} my
-   * @return {boolean}
-   */
-  wantsToGainOrKeep(card, state, my) {
-    // TODO Missing implementation
-    return true;
   }
 }
 
