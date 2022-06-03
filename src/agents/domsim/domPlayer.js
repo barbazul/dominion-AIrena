@@ -1,9 +1,9 @@
 import cards from '../../game/cards.js';
-import BasicAI, {CHOICE_TRASH, CHOICE_UPGRADE} from '../basicAI.js';
+import BasicAI, { CHOICE_UPGRADE } from '../basicAI.js';
 import heuristics from './heuristics.js';
 
 export class DomPlayer extends BasicAI {
-  constructor() {
+  constructor () {
     super();
     this.playStrategies = {};
   }
@@ -13,7 +13,7 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @return {number}
    */
-  countTerminalsInDeck(my) {
+  countTerminalsInDeck (my) {
     let count = 0;
     for (let card of my.getDeck()) {
       if (card.isAction() && card.actions === 0) {
@@ -29,7 +29,7 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @return {String[]|Card[]}
    */
-  playPriority(state, my) {
+  playPriority (state, my) {
     let choices = my.hand.slice(0).sort(
       (card1, card2) => this.playValue(state, cards[card2], my) -
         this.playValue(state, cards[card1], my)
@@ -41,14 +41,14 @@ export class DomPlayer extends BasicAI {
   /**
    * Play value mapped from aPlayPriority argument in DomCardName
    *
-   * Value is substracted from 100 as sorting in DomSim is ascending
+   * Value is subtracted from 100 as sorting in DomSim is ascending
    *
    * @param {State} state
    * @param {Card} card
    * @param {Player} my
    * @returns {Number|*}
    */
-  playValue(state, card, my) {
+  playValue (state, card, my) {
     // TODO Move this into heuristics
     const specific = {
       Vassal: (state, my) => {
@@ -56,7 +56,7 @@ export class DomPlayer extends BasicAI {
           my.knownTopCards > 0 && my.draw[0].isAction() &&
           !(heuristics[my.draw[0]].types && heuristics[my.draw[0]].types.indexOf('Terminal') > -1)
         ) {
-            return 99;
+          return 99;
         }
 
         if (my.knownTopCards > 0 && my.draw[0].isAction() && my.actions > 1) {
@@ -65,7 +65,7 @@ export class DomPlayer extends BasicAI {
 
         return 100 - heuristics.Vassal.playPriority;
       }
-    }
+    };
 
     if (specific[card]) {
       return specific[card](state, my);
@@ -85,34 +85,9 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @return {boolean}
    */
-  wantsToPlay(cardName, state, my) {
+  wantsToPlay (cardName, state, my) {
     // TODO Move into heuristics
     const specific = {
-      Chapel: (state, my) => {
-        const minMoneyInDeck = this.getPlayStrategyFor('Chapel') === STRATEGY_AGGRESSIVE_TRASHING ? 4 : 6;
-        const trashOverBuyThreshold = this.getPlayStrategyFor('Chapel') === STRATEGY_AGGRESSIVE_TRASHING ? 3 : 4;
-        let trashCount = 0;
-        const cardsInHand = my.hand.slice(0);
-
-        if (my.hand.length === 0) {
-          return false;
-        }
-
-        for (let card of cardsInHand) {
-          if (this.trashValue(state, card, my) > 0) {
-            trashCount++;
-          }
-        }
-
-        let cardToTrash = this.choose(CHOICE_TRASH, state, my.hand);
-
-        return this.trashValue(state, cardToTrash, my) > 0 ||
-          this.removingReducesBuyingPower(my, state, cardToTrash) && trashCount < trashOverBuyThreshold ||
-          this.getTotalMoney(my) - this.getPotentialCoinValue(my, cardToTrash) < minMoneyInDeck
-          && this.getTotalMoney(my) >= minMoneyInDeck;
-
-
-      },
       Mine: (state, my) => {
         return this.checkForCardToMine(state, my) !== null;
       },
@@ -126,6 +101,10 @@ export class DomPlayer extends BasicAI {
       return specific[cardName](state, my);
     }
 
+    if (heuristics[cardName] && typeof heuristics[cardName].wantsToBePlayed === 'function') {
+      return heuristics[cardName].wantsToBePlayed(state, my);
+    }
+
     return true;
   }
 
@@ -136,7 +115,7 @@ export class DomPlayer extends BasicAI {
    * @param {Card} card
    * @param {Player} my
    */
-  trashValue(state, card, my) {
+  trashValue (state, card, my) {
     let calculatedValue;
     // TODO Some cards have specific trashValue functions
     // TODO Duchy if (owner!=null && owner.wantsToGainOrKeep(DomCardName.Duchy)) return 40;
@@ -165,7 +144,7 @@ export class DomPlayer extends BasicAI {
    * @param {Card} card
    * @return {boolean}
    */
-  wantsToGainOrKeep(card) {
+  wantsToGainOrKeep (card) {
     // TODO This is a placeholder. This will be implemented after redoing decision engine.
     return card === cards.Duchy || card === cards.Province;
   }
@@ -179,7 +158,7 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @returns {Number}
    */
-  discardValue(state, card, my) {
+  discardValue (state, card, my) {
     let calculatedValue;
     // TODO Province heuristic regarding Tournament
     // TODO Estate heuristics regarding Estate Token
@@ -210,7 +189,7 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @returns {Number}
    */
-  fallbackDiscardValue(state, card, my) {
+  fallbackDiscardValue (state, card, my) {
     if (heuristics[card] && heuristics[card].discardPriority !== undefined) {
       return 16 - heuristics[card].discardPriority;
     }
@@ -223,13 +202,13 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @return {boolean}
    */
-  isGoingToBuyTopCardInBuyRules(state, my) {
+  isGoingToBuyTopCardInBuyRules (state, my) {
     // we don't want to mess with a hand if we're going to buy the top card this turn (although we could)
     // @todo cannot currently model this with just dynamic priority lists
     return my.getAvailableMoney() >= 8;
   }
 
-  getPlayStrategyFor(card) {
+  getPlayStrategyFor (card) {
     let theStrategy = this.playStrategies[card];
     return theStrategy === undefined ? STRATEGY_STANDARD : theStrategy;
   }
@@ -239,12 +218,12 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @return {String[]}
    */
-  checkForCardToMine(state, my) {
+  checkForCardToMine (state, my) {
     let upgradeChoices = cards.Mine.upgradeChoices(state, my.hand);
     return this.choose(CHOICE_UPGRADE, state, upgradeChoices);
   }
 
-  countCardTypeInDeck(my, type) {
+  countCardTypeInDeck (my, type) {
     const deck = my.getDeck();
     let count = 0;
 
@@ -270,7 +249,7 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @return {Number}
    */
-  getPotentialCoins(my) {
+  getPotentialCoins (my) {
     let value = my.coins;
 
     for (let card of my.hand) {
@@ -286,7 +265,7 @@ export class DomPlayer extends BasicAI {
    * @param {Card} cardToTrash
    * @returns {boolean}
    */
-  removingReducesBuyingPower(my, state, cardToTrash) {
+  removingReducesBuyingPower (my, state, cardToTrash) {
     const value = this.getPotentialCoinValue(my, cardToTrash);
     const initialCoins = my.coins;
     const initialHand = my.hand.slice();
@@ -322,7 +301,7 @@ export class DomPlayer extends BasicAI {
    * @param {Card} card
    * @returns {number}
    */
-  getPotentialCoinValue(my, card) {
+  getPotentialCoinValue (my, card) {
     if (my.actions === 0 && card.isAction()) {
       return 0;
     }
@@ -336,7 +315,7 @@ export class DomPlayer extends BasicAI {
    *
    * @param {Player} my
    */
-  getTotalMoney(my) {
+  getTotalMoney (my) {
     let total = 0;
 
     for (let card of my.getDeck()) {
@@ -344,19 +323,6 @@ export class DomPlayer extends BasicAI {
     }
 
     return total;
-  }
-
-  /**
-   * Check if buy rules indicate player wants the card
-   *
-   * @param {Card} card
-   * @param {State} state
-   * @param {Player} my
-   * @return {boolean}
-   */
-  wantsToGainOrKeep(card, state, my) {
-    // TODO Missing implementation
-    return true;
   }
 }
 

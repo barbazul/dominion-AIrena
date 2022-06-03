@@ -2,11 +2,30 @@
  * This is taken from DomCardName
  */
 import cards from '../../game/cards.js';
-import { STRATEGY_TRASH_WHEN_OBSOLETE } from './domPlayer.js';
+import { STRATEGY_AGGRESSIVE_TRASHING, STRATEGY_STANDARD, STRATEGY_TRASH_WHEN_OBSOLETE } from './domPlayer.js';
+import { CHOICE_TRASH } from '../basicAI.js';
+
+const helpers = {
+  /**
+   * Safely check agent play strategy for card.
+   *
+   * Allow for agents that don't implement `getPlayStrategyFor`.
+   *
+   * @param {BasicAI} agent
+   * @param {Card} card
+   */
+  getPlayStrategyFor: (agent, card) => {
+    if (typeof agent.getPlayStrategyFor === 'function') {
+      return agent.getPlayStrategyFor(card);
+    }
+
+    return STRATEGY_STANDARD;
+  }
+};
 
 const heuristics = {
   Curse: { discardPriority: 10, trashPriority: 0 },
-  Copper: {discardPriority: 15, playPriority: 55},
+  Copper: { discardPriority: 15, playPriority: 55 },
   Silver: {
     discardPriority: 20,
     playPriority: 25,
@@ -27,21 +46,19 @@ const heuristics = {
     calculatedTrashPriority: (state, card, my) => {
       let strategy;
 
-      if (typeof my.agent.getPlayStrategyFor === 'function') {
-        strategy = my.agent.getPlayStrategyFor(card);
-        if (strategy === STRATEGY_TRASH_WHEN_OBSOLETE) {
-          // TODO Kings Court check to be implemented later
+      strategy = helpers.getPlayStrategyFor(my.agent, card);
+      if (strategy === STRATEGY_TRASH_WHEN_OBSOLETE) {
+        // TODO Kings Court check to be implemented later
 
-          if (my.countTypeInDeck('Action') > 9 || my.countInDeck(cards.Silver) > 3) {
-            return 1;
-          }
+        if (my.countTypeInDeck('Action') > 9 || my.countInDeck(cards.Silver) > 3) {
+          return 1;
         }
       }
 
       return false;
     }
   },
-  Gold: {discardPriority: 24, playPriority: 30},
+  Gold: { discardPriority: 24, playPriority: 30 },
   Estate: {
     types: [ 'Base', 'Junk' ],
     discardPriority: 9,
@@ -85,8 +102,46 @@ const heuristics = {
   Artisan: { types: [ 'Terminal' ], discardPriority: 27, playPriority: 30 },
   Bandit: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 23 },
   Bureaucrat: { types: [ 'Terminal' ], discardPriority: 20, playPriority: 29 },
-  Cellar: {types: ['Cycler'], discardPriority: 17, playPriority: 16},
-  Chapel: { types: [ 'Terminal' ], discardPriority: 18, playPriority: 37 },
+  Cellar: { types: ['Cycler'], discardPriority: 17, playPriority: 16 },
+  Chapel: {
+    types: [ 'Terminal' ],
+    discardPriority: 18,
+    playPriority: 37,
+
+    /**
+     * Will avoid trashing if it loses money below a threshold
+     *
+     * @param {State} state
+     * @param {Player} my
+     * @return {boolean}
+     */
+    wantsToBePlayed: (state, my) => {
+      if (my.hand.length === 0) {
+        return false;
+      }
+
+      const isAggressive = helpers.getPlayStrategyFor(my.agent, cards.Chapel) === STRATEGY_AGGRESSIVE_TRASHING;
+      const minMoneyInDeck = isAggressive ? 4 : 6;
+      const trashOverBuyThreshold = isAggressive ? 3 : 4;
+      const cardsInHand = my.hand.slice(0);
+      let trashCount = 0;
+
+      for (let card of cardsInHand) {
+        if (my.agent.trashValue(state, card, my) > 0) {
+          trashCount++;
+        }
+      }
+
+      let cardToTrash = my.agent.choose(CHOICE_TRASH, state, my.hand);
+
+      return my.agent.trashValue(state, cardToTrash, my) > 0 &&
+        (!my.agent.removingReducesBuyingPower(my, state, cardToTrash) || trashCount >= trashOverBuyThreshold) &&
+        (
+          my.agent.getTotalMoney(my) - my.agent.getPotentialCoinValue(my, cardToTrash) >= minMoneyInDeck ||
+          my.agent.getTotalMoney(my) < minMoneyInDeck
+        );
+    }
+  },
   'Council Room': { types: [ 'Terminal' ], discardPriority: 27, playPriority: 25 },
   Festival: { discardPriority: 26, playPriority: 3 },
   Gardens: {
@@ -108,11 +163,11 @@ const heuristics = {
       return false;
     }
   },
-  Harbinger: {types: ['Cycler'], discardPriority: 16, playPriority: 5},
-  Laboratory: {types: ['Cycler', 'Card_Advantage'], discardPriority: 40, playPriority: 8},
+  Harbinger: { types: ['Cycler'], discardPriority: 16, playPriority: 5 },
+  Laboratory: { types: ['Cycler', 'Card_Advantage'], discardPriority: 40, playPriority: 8 },
   Library: { types: [ 'Terminal' ], discardPriority: 30, playPriority: 20 },
-  Market: {types: ['Cycler'], discardPriority: 30, playPriority: 13},
-  Merchant: {types: ['Cycler'], discardPriority: 19, playPriority: 7},
+  Market: { types: ['Cycler'], discardPriority: 30, playPriority: 13 },
+  Merchant: { types: ['Cycler'], discardPriority: 19, playPriority: 7 },
   Militia: { types: [ 'Terminal' ], discardPriority: 25, playPriority: 30 },
   Mine: { types: [ 'Terminal' ], discardPriority: 22, playPriority: 24 },
   Moat: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 33 },
@@ -151,7 +206,7 @@ const heuristics = {
       return false;
     }
   },
-  Poacher: {types: ['Cycler'], discardPriority: 30, playPriority: 10},
+  Poacher: { types: ['Cycler'], discardPriority: 30, playPriority: 10 },
   Remodel: { types: [ 'Terminal' ], discardPriority: 18, playPriority: 24 },
   Sentry: { types: ['Cycler'], discardPriority: 22, playPriority: 2 },
   Smithy: { types: [ 'Terminal' ], discardPriority: 24, playPriority: 25 },
@@ -174,7 +229,7 @@ const heuristics = {
     }
   },
   Vassal: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 25 },
-  Village: {types: ['Cycler', 'Village'], discardPriority: 21, playPriority: 5},
+  Village: { types: ['Cycler', 'Village'], discardPriority: 21, playPriority: 5 },
   Witch: {
     types: [ 'Terminal' ],
     discardPriority: 40,
@@ -195,7 +250,7 @@ const heuristics = {
     },
     playPriority: 18
   },
-  Workshop: { types: [ 'Terminal' ], discardPriority: 22, playPriority: 38}
+  Workshop: { types: [ 'Terminal' ], discardPriority: 22, playPriority: 38 }
 };
 
 export default heuristics;

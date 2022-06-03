@@ -113,7 +113,7 @@ export default class StatsBot extends ProxyAgent {
     });
 
     this.setActualAgent(winner);
-    console.log(winner.toString());
+    // console.log(winner.toString());
   }
 
   getCandidatesForCurrentKingdom (state) {
