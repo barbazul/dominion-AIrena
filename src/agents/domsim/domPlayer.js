@@ -356,6 +356,7 @@ export class DomPlayer extends BasicAI {
    * terminal money as well.
    *
    * @param {Player} my
+   * @return {int}
    */
   getTotalMoney (my) {
     let total = 0;
