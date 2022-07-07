@@ -124,6 +124,7 @@ const heuristics = {
       const minMoneyInDeck = isAggressive ? 4 : 6;
       const trashOverBuyThreshold = isAggressive ? 3 : 4;
       const cardsInHand = my.hand.slice(0);
+      const totalMoney = my.agent.getTotalMoney(my);
       let trashCount = 0;
 
       for (let card of cardsInHand) {
@@ -134,11 +135,16 @@ const heuristics = {
 
       let cardToTrash = my.agent.choose(CHOICE_TRASH, state, my.hand);
 
-      return my.agent.trashValue(state, cardToTrash, my) > 0 &&
-        (!my.agent.removingReducesBuyingPower(my, state, cardToTrash) || trashCount >= trashOverBuyThreshold) &&
+      // Optimization: Avoid recalculating value
+      // my.agent.trashValue(state, cardToTrash, my) > 0 &&
+      return trashCount > 0 &&
         (
-          my.agent.getTotalMoney(my) - my.agent.getPotentialCoinValue(my, cardToTrash) >= minMoneyInDeck ||
-          my.agent.getTotalMoney(my) < minMoneyInDeck
+          !my.agent.removingReducesBuyingPower(my, state, cardToTrash) ||
+          trashCount >= trashOverBuyThreshold
+        ) &&
+        (
+          totalMoney - my.agent.getPotentialCoinValue(my, cardToTrash) >= minMoneyInDeck ||
+          totalMoney < minMoneyInDeck
         );
     }
   },

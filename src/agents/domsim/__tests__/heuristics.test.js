@@ -308,19 +308,26 @@ test('Chapel does not want to be played with empty hand', () => {
 
 it.each(
   [
-    [2, -1, true, STRATEGY_AGGRESSIVE_TRASHING, 5, 2, false],
-    [2, 1, true, STRATEGY_AGGRESSIVE_TRASHING, 5, 2, false],
-    [2, 1, false, STRATEGY_AGGRESSIVE_TRASHING, 5, 2, false],
-    [2, 1, false, STRATEGY_AGGRESSIVE_TRASHING, 5, 0, true],
-    [4, 1, true, STRATEGY_AGGRESSIVE_TRASHING, 5, 0, true],
-    [2, 1, false, STRATEGY_AGGRESSIVE_TRASHING, 3, 0, true]
+    [2, () => 0, true, STRATEGY_AGGRESSIVE_TRASHING, 5, 2, false],
+    [2, () => 1, true, STRATEGY_AGGRESSIVE_TRASHING, 5, 2, false],
+    [2, () => 1, false, STRATEGY_AGGRESSIVE_TRASHING, 5, 2, false],
+    [2, () => 1, false, STRATEGY_AGGRESSIVE_TRASHING, 5, 0, true],
+    [3, () => 1, true, STRATEGY_AGGRESSIVE_TRASHING, 5, 0, true],
+    [3, () => 1, false, STRATEGY_AGGRESSIVE_TRASHING, 5, 0, true],
+    [2, () => 1, false, STRATEGY_AGGRESSIVE_TRASHING, 3, 0, true],
+    [3, () => 1, true, STRATEGY_AGGRESSIVE_TRASHING, 3, 0, true],
+    [3, () => 1, false, STRATEGY_AGGRESSIVE_TRASHING, 3, 0, true],
+    [3, () => 0, true, STRATEGY_STANDARD, 7, 2, false],
+    [3, () => 1, true, STRATEGY_STANDARD, 7, 2, false],
+    [3, () => 1, false, STRATEGY_STANDARD, 7, 2, false]
   ]
 )(
   'Chapel wantsToBePlayed #%#',
   (
     cardsInHand,
     trashValue,
-    loseMoney, strategy,
+    loseMoney,
+    strategy,
     totalMoney,
     potentialCoin,
     expected
@@ -333,7 +340,7 @@ it.each(
     // Has cards in hand
     state.current.hand = Array(cardsInHand).fill(cards.Estate);
     // Cards have trash value (1st condition)
-    ai.trashValue = () => trashValue;
+    ai.trashValue = trashValue;
     // Trashing would lose money (2nd condition)
     ai.removingReducesBuyingPower = () => loseMoney;
     // Aggressive trash strategy (2 cards < threshold=3, 3rd condition)
