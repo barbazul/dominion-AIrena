@@ -32,8 +32,23 @@ import Smithy from './src/agents/domsim/smithy.js';
 import Witch from './src/agents/domsim/witch.js';
 import WitchAndMoatFor3or4 from './src/agents/domsim/witchAndMoatFor3or4.js';
 import WitchFor3or4 from './src/agents/domsim/witchFor3or4.js';
-import StatsBot from "./src/agents/barbazul/statsBot.js";
+import StatsBot from './src/agents/barbazul/statsBot.js';
+import yargs from 'yargs';
+import * as fs from 'fs';
 
+const argv = yargs(process.argv.slice(2))
+  .option('statsbot-stats-file', {
+    type: 'string'
+  })
+  .option('update-stats-file', {
+    type: 'string'
+  }).argv;
+
+const statsBotOptions = {};
+
+if (argv['statsbot-stats-file']) {
+  statsBotOptions.statsFile = argv['statsbot-stats-file'];
+}
 
 const players = [
   new BasicAI(),
@@ -66,9 +81,10 @@ const players = [
   new Smithy(),
   new Witch(),
   new WitchAndMoatFor3or4(),
-  new WitchFor3or4(),
-  new StatsBot()
+  new WitchFor3or4()
 ];
+
+players.push(new StatsBot(statsBotOptions));
 
 let scoreBoard = Object.fromEntries(players.map(p => [ p.toString(), { plays: 0, wins: 0, rate: 0.0 } ]));
 
@@ -131,6 +147,8 @@ for (let i = 0; i < players.length - 1; i++) {
           console.log(`Impossible match ${players[i]} vs ${players[j]}`);
           break;
         }
+
+        console.log(error);
       }
 
       state.startGame();
@@ -159,6 +177,8 @@ for (let i = 0; i < players.length - 1; i++) {
   }
 }
 
+const elapsed = new Date().getTime() - start.getTime();
+
 let ranking = [];
 for (let p in scoreBoard) {
   ranking.push({
@@ -172,6 +192,26 @@ ranking.sort((p1, p2) => p2.score - p1.score);
 console.log(scoreBoard);
 console.log(ranking);
 
-const elapsed = new Date().getTime() - start.getTime();
 console.log(`Tournament took ${elapsed / 1000} seconds.`);
 console.log(`Played ${gameCounter} games (${Math.round(elapsed / gameCounter)} ms per game).`);
+
+if (argv['update-stats-file']) {
+  console.log(`Saving stats to ${argv['update-stats-file']}`);
+  let stats = {};
+
+  if (fs.existsSync(argv['update-stats-file'])) {
+    stats = JSON.parse(fs.readFileSync(argv['update-stats-file'], { encoding: 'utf8' }));
+  }
+
+  for (let p in scoreBoard) {
+    if (!stats[p]) {
+      stats[p] = scoreBoard[p];
+    } else {
+      stats[p].wins += scoreBoard[p].wins;
+      stats[p].plays += scoreBoard[p].plays;
+      stats[p].rate = stats[p].wins / stats[p].plays;
+    }
+  }
+
+  fs.writeFileSync(argv['update-stats-file'], JSON.stringify(stats), { encoding: 'utf8' });
+}

@@ -29,7 +29,19 @@ import Smithy from './src/agents/domsim/smithy.js';
 import Witch from './src/agents/domsim/witch.js';
 import WitchAndMoatFor3or4 from './src/agents/domsim/witchAndMoatFor3or4.js';
 import WitchFor3or4 from './src/agents/domsim/witchFor3or4.js';
-import StatsBot from "./src/agents/barbazul/statsBot.js";
+import StatsBot from './src/agents/barbazul/statsBot.js';
+import yargs from 'yargs';
+
+const argv = yargs(process.argv.slice(2))
+  .option('statsbot-stats-file', {
+    type: 'string'
+  }).argv;
+
+const statsBotOptions = {};
+
+if (argv['statsbot-stats-file']) {
+  statsBotOptions.statsFile = argv['statsbot-stats-file'];
+}
 
 const players = [
   new SillyAI(), // 0
@@ -62,7 +74,7 @@ const players = [
   new Witch(),
   new WitchAndMoatFor3or4(),
   new WitchFor3or4(),
-  new StatsBot()
+  new StatsBot(statsBotOptions)
 ];
 
 const start = new Date();
