@@ -181,3 +181,14 @@ test('getCost returns 0 on negative modified value', () => {
 
   expect(card.getCost(state)).toBe(0);
 });
+
+test('default getActions reads the value defined in the card', () => {
+  const card = new Card();
+  const state = new State();
+
+  state.setUp([new BasicAI(), new BasicAI()]);
+
+  card.actions = 9;
+
+  expect(card.getActions(state)).toBe(9);
+});

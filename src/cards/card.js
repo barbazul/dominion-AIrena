@@ -21,6 +21,18 @@ export default class Card {
   }
 
   /**
+   * Default getActions returns the value in this.actions.
+   * This is meant to be an extension point for cards that change the number of
+   * actions depending on the state of the game.
+   *
+   * @param {State} state
+   * @return {number}
+   */
+  getActions (state) {
+    return this.actions;
+  }
+
+  /**
    * This method returns the number of cards in the starting supply pile for a given game
    * Usually 10 but some cards are dependant in the number of players.
    *
