@@ -246,6 +246,7 @@ export default class State {
    */
   resolveAction (action) {
     this.current.cardsPlayed.push(action);
+    this.current.actionsPlayed++;
     action.onPlay(this);
   }
 
@@ -875,6 +876,7 @@ export default class State {
     this.current.buys = 1;
     this.current.coins = 0;
     this.current.cardsPlayed = [];
+    this.current.actionsPlayed = 0;
 
     // Clean event observers
     this.onPlayHandlers = [];

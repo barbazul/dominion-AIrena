@@ -436,6 +436,7 @@ test('Copied Player has same stuff', () => {
   player.inPlay = [ cards.Village ];
   player.playLocation = LOCATION_TRASH;
   player.gainLocation = LOCATION_HAND;
+  player.actionsPlayed = 48;
   player.turnsTaken = 5;
 
   newPlayer = player.copy();
@@ -449,6 +450,7 @@ test('Copied Player has same stuff', () => {
   expect(newPlayer.inPlay).toEqual(player.inPlay);
   expect(newPlayer.playLocation).toEqual(player.playLocation);
   expect(newPlayer.gainLocation).toEqual(player.gainLocation);
+  expect(newPlayer.actionsPlayed).toEqual(player.actionsPlayed);
   expect(newPlayer.cardsPlayed).toEqual(player.cardsPlayed);
   expect(newPlayer.agent).toEqual(player.agent);
   expect(newPlayer.log).toEqual(player.log);

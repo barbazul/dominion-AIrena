@@ -1207,9 +1207,12 @@ test('resolveAction updates history and triggers card onPlay', () => {
 
   state.setUp(createPlayers(), muteConfig);
   action.onPlay = jest.fn(() => {});
+  state.current.actionsPlayed = 5;
+
   state.resolveAction(action);
 
   expect(state.current.cardsPlayed).toContain(action);
+  expect(state.current.actionsPlayed).toBe(6);
   expect(action.onPlay).toHaveBeenCalledWith(state);
 });
 
@@ -1370,12 +1373,16 @@ test('doCleanupPhase cleans cards in play and hand', () => {
   state.current.inPlay = [card1];
   state.current.hand = [card2];
   state.current.draw = [card1, card1, card1, card1, card1, card1];
+  state.current.cardsPlayed = [card1, card1, card1];
+  state.current.actionsPlayed = 3;
   state.doCleanupPhase();
 
   expect(state.current.inPlay).toHaveLength(0);
   expect(state.current.hand).toHaveLength(5);
   expect(state.current.discard).toContain(card1);
   expect(state.current.discard).toContain(card2);
+  expect(state.current.cardsPlayed).toHaveLength(0);
+  expect(state.current.actionsPlayed).toBe(0);
 });
 
 test('doCleanupPhase resets player status', () => {

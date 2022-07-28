@@ -363,8 +363,9 @@ export default class Player {
     newPlayer.playLocation = this.playLocation;
     newPlayer.gainLocation = this.gainLocation;
 
-    // TODO action stack, actionsPlayed
+    // TODO action stack
 
+    newPlayer.actionsPlayed = this.actionsPlayed;
     newPlayer.turnsTaken = this.turnsTaken;
 
     // TODO coin tokens spend this turn
