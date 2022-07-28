@@ -15,6 +15,10 @@ export default class Conspirator extends BasicAction {
    * @return {number}
    */
   getActions (state) {
-    return 0;
+    return state.current.actionsPlayed >= 3 ? 1 : 0;
+  }
+
+  getCards (state) {
+    return state.current.actionsPlayed >= 3 ? 1 : 0;
   }
 }
