@@ -127,7 +127,7 @@ export default class Card {
    * @param {State} state
    */
   onPlay (state) {
-    state.current.actions += this.actions;
+    state.current.actions += this.getActions(state);
     state.current.coins += this.coins;
     state.current.buys += this.buys;
 

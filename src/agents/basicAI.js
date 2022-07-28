@@ -332,7 +332,7 @@ export default class BasicAI {
 
     if (
       card.isAction() && myTurn &&
-      (my.actions === 0 || (card.actions === 0 && my.actionBalance() <= 0))
+      (my.actions === 0 || (card.getActions(state) === 0 && my.actionBalance() <= 0))
     ) {
       return 20 - card.getCost(state);
     }
@@ -882,12 +882,12 @@ export default class BasicAI {
 
     if (card.isAction()) {
       // Cantrips
-      if (card.actions === 1) {
+      if (card.getActions(state) === 1) {
         return state.rng() * 100 + 700;
       }
 
       // Terminal draw
-      if (card.cards > 0 && card.actions === 0) {
+      if (card.cards > 0 && card.getActions(state) === 0) {
         if (my.actions > 1) {
           return state.rng() * 100 + 600;
         }

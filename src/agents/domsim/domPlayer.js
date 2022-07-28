@@ -59,7 +59,7 @@ export class DomPlayer extends BasicAI {
             return 99;
         }
 
-        if (my.knownTopCards > 0 && my.draw[0].isAction() && my.actions > 1) {
+        if (my.knownTopCards > 0 && my.draw[0].isAction() && my.getActions(state) > 1) {
           return 99;
         }
 
