@@ -192,3 +192,14 @@ test('default getActions reads the value defined in the card', () => {
 
   expect(card.getActions(state)).toBe(9);
 });
+
+test('default getCards reads the value defined in the card', () => {
+  const card = new Card();
+  const state = new State();
+
+  state.setUp([new BasicAI(), new BasicAI()]);
+
+  card.cards = 9;
+
+  expect(card.getCards(state)).toBe(9);
+});

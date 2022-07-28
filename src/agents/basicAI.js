@@ -887,7 +887,7 @@ export default class BasicAI {
       }
 
       // Terminal draw
-      if (card.cards > 0 && card.getActions(state) === 0) {
+      if (card.getCards(state) > 0 && card.getActions(state) === 0) {
         if (my.actions > 1) {
           return state.rng() * 100 + 600;
         }

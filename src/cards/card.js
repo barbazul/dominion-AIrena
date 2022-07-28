@@ -33,6 +33,18 @@ export default class Card {
   }
 
   /**
+   * Default getCards returns the value in this.cards.
+   * This is meant to be an extension point for cards that change the number of
+   * cards drawn depending on the state of the game.
+   *
+   * @param {State} state
+   * @return {number}
+   */
+  getCards (state) {
+    return this.cards;
+  }
+
+  /**
    * This method returns the number of cards in the starting supply pile for a given game
    * Usually 10 but some cards are dependant in the number of players.
    *
@@ -131,8 +143,10 @@ export default class Card {
     state.current.coins += this.coins;
     state.current.buys += this.buys;
 
-    if (this.cards > 0) {
-      state.current.drawCards(this.cards);
+    const cardsToDraw = this.getCards(state);
+
+    if (cardsToDraw > 0) {
+      state.current.drawCards(cardsToDraw);
     }
 
     this.playEffect(state);
