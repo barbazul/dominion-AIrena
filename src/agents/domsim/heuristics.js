@@ -219,6 +219,7 @@ const heuristics = {
   'Throne Room': {
     discardPriority: 22,
     playPriority: 7,
+
     /**
      * Prefer to discard Throne Room with no actions to multiply
      *
@@ -234,7 +235,32 @@ const heuristics = {
       return false;
     }
   },
-  Vassal: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 25 },
+  Vassal: {
+    types: [ 'Terminal' ],
+    discardPriority: 23,
+    playPriority: 25,
+
+    /**
+     * Prefer to play Vassal when top card is known and non-terminal or with
+     * multiple actions.
+     *
+     * @param {State} state
+     * @param {Card} card
+     * @param {Player} my
+     */
+    calculatedPlayPriority: (state, card, my) => {
+      const knowTopCardIsAction = my.knownTopCards > 0 && my.draw[0].isAction();
+      const topCardIsTerminal = knowTopCardIsAction &&
+        heuristics[my.draw[0]].types &&
+        heuristics[my.draw[0]].types.indexOf('Terminal') > -1;
+
+      if (knowTopCardIsAction && (my.actions > 1 || !topCardIsTerminal)) {
+        return 99;
+      }
+
+      return 100 - heuristics[card].playPriority;
+    }
+  },
   Village: { types: ['Cycler', 'Village'], discardPriority: 21, playPriority: 5 },
   Witch: {
     types: [ 'Terminal' ],
