@@ -354,3 +354,53 @@ it.each(
     expect(heuristics[cards.Chapel].wantsToBePlayed(state, state.current)).toBe(expected);
   }
 );
+
+test('Vassal default priority when top card is not known.', () => {
+  const ai = new DomPlayer();
+  const state = new State();
+
+  state.setUp([ai, ai], muteConfig);
+
+  state.current.knownTopCards = 0;
+  state.current.actions = 2;
+  const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
+  expect(calculated).toEqual(75);
+});
+
+test('Vassal prioritize with top card known action and actions left.', () => {
+  const ai = new DomPlayer();
+  const state = new State();
+
+  state.setUp([ai, ai], muteConfig);
+
+  state.current.knownTopCards = 1;
+  state.current.actions = 2;
+  state.current.draw[0] = cards.Smithy;
+  const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
+  expect(calculated).toEqual(99);
+});
+
+test('Vassal default priority when top card is not known and single action.', () => {
+  const ai = new DomPlayer();
+  const state = new State();
+
+  state.setUp([ai, ai], muteConfig);
+
+  state.current.knownTopCards = 0;
+  state.current.actions = 1;
+  const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
+  expect(calculated).toEqual(75);
+});
+
+test('Vassal prioritize with top card known non-terminal action.', () => {
+  const ai = new DomPlayer();
+  const state = new State();
+
+  state.setUp([ai, ai], muteConfig);
+
+  state.current.knownTopCards = 1;
+  state.current.actions = 1;
+  state.current.draw[0] = cards.Market;
+  const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
+  expect(calculated).toEqual(99);
+});
