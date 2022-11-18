@@ -334,3 +334,41 @@ test('Check specific heuristic function first for wantsToPlay', () => {
   expect(ai.wantsToPlay(card, state, state.current)).toBe(false);
   delete heuristics[card];
 });
+
+test('Fallback playValue without heuristics', () => {
+  const card = new Card();
+  const ai = new DomPlayer();
+  const state = new State();
+
+  state.setUp([ai, ai], muteConfig);
+
+  // This expectations assumes current basicAI implementation. Adjust expected value if method changes
+  expect(ai.playValue(state, card, state.current)).toBe(-1);
+});
+
+test('playValue from heuristics', () => {
+  const card = new Card();
+  const ai = new DomPlayer();
+  const state = new State();
+
+  state.setUp([ai, ai], muteConfig);
+  heuristics[card] = {playPriority: 5};
+
+  // This expectations assumes current basicAI implementation. Adjust expected value if method changes
+  expect(ai.playValue(state, card, state.current)).toBe(95);
+});
+
+test('playValue from calculated priority', () => {
+  const card = new Card();
+  const ai = new DomPlayer();
+  const state = new State();
+
+  state.setUp([ai, ai], muteConfig);
+  heuristics[card] = {
+    playPriority: 5,
+    calculatedPlayPriority: () => 77
+  };
+
+  // This expectations assumes current basicAI implementation. Adjust expected value if method changes
+  expect(ai.playValue(state, card, state.current)).toBe(77);
+});
