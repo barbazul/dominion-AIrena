@@ -49,29 +49,17 @@ export class DomPlayer extends BasicAI {
    * @returns {Number|*}
    */
   playValue (state, card, my) {
-    // TODO Move this into heuristics
-    const specific = {
-      Vassal: (state, my) => {
-        if (
-          my.knownTopCards > 0 && my.draw[0].isAction() &&
-          !(heuristics[my.draw[0]].types && heuristics[my.draw[0]].types.indexOf('Terminal') > -1)
-        ) {
-          return 99;
-        }
+    let calculatedValue;
 
-        if (my.knownTopCards > 0 && my.draw[0].isAction() && my.actions > 1) {
-          return 99;
-        }
+    if (heuristics[card] && typeof heuristics[card].calculatedPlayPriority === 'function') {
+      calculatedValue = heuristics[card].calculatedPlayPriority(state, card, my);
 
-        return 100 - heuristics.Vassal.playPriority;
+      if (typeof calculatedValue === 'number') {
+        return calculatedValue;
       }
-    };
-
-    if (specific[card]) {
-      return specific[card](state, my);
     }
 
-    if (heuristics[card].playPriority !== undefined) {
+    if (heuristics[card] && heuristics[card].playPriority !== undefined) {
       return 100 - heuristics[card].playPriority;
     }
 
