@@ -1,6 +1,6 @@
-import BasicAction from './basicAction';
-import { CHOICE_DISCARD } from '../agents/basicAI';
-import cards from '../game/cards';
+import BasicAction from './basicAction.js';
+import { CHOICE_DISCARD } from '../agents/basicAI.js';
+import cards from '../game/cards.js';
 
 export default class Baron extends BasicAction {
   constructor () {

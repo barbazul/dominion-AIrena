@@ -1,6 +1,6 @@
-import CouncilRoomMilitiaMiningVillage from "../councilRoomMilitiaMiningVillage.js";
-import State from "../../../game/state.js";
-import cards from "../../../game/cards.js";
+import CouncilRoomMilitiaMiningVillage from '../councilRoomMilitiaMiningVillage.js';
+import State from '../../../game/state.js';
+import cards from '../../../game/cards.js';
 
 const muteConfig = { log: () => {} };
 
@@ -16,7 +16,7 @@ test('gainPriority at game start', () => {
     [
       cards['Council Room'],
       cards.Militia,
-      cards["Mining Village"]
+      cards['Mining Village']
     ]
   );
 });
@@ -37,7 +37,7 @@ test('Wants Province with 13 coins', () => {
       cards.Province,
       cards['Council Room'],
       cards.Militia,
-      cards["Mining Village"]
+      cards['Mining Village']
     ]
   );
 });
@@ -56,7 +56,7 @@ test('Wants Province after 1st Province', () => {
       cards.Province,
       cards['Council Room'],
       cards.Militia,
-      cards["Mining Village"]
+      cards['Mining Village']
     ]
   );
 });
@@ -75,7 +75,7 @@ test('Duchy dancing', () => {
       cards.Duchy,
       cards['Council Room'],
       cards.Militia,
-      cards["Mining Village"]
+      cards['Mining Village']
     ]
   );
 });
@@ -95,7 +95,7 @@ test('Endgame Estates', () => {
       cards.Estate,
       cards['Council Room'],
       cards.Militia,
-      cards["Mining Village"]
+      cards['Mining Village']
     ]
   );
 });
@@ -105,7 +105,7 @@ test('More riches after Council Room!', () => {
   const state = new State();
 
   state.setUp([agent, agent], muteConfig);
-  state.current.discard.push(cards["Council Room"], cards["Council Room"]);
+  state.current.discard.push(cards['Council Room'], cards['Council Room']);
 
   const priority = agent.gainPriority(state, state.current);
 
@@ -113,7 +113,7 @@ test('More riches after Council Room!', () => {
     [
       cards.Gold,
       cards.Militia,
-      cards["Mining Village"]
+      cards['Mining Village']
     ]
   );
 });
@@ -124,11 +124,11 @@ test('Enough riches', () => {
 
   state.setUp([agent, agent], muteConfig);
   state.current.discard.push(
-    cards["Council Room"],
-    cards["Council Room"],
-    cards["Council Room"],
-    cards["Council Room"],
-    cards["Council Room"],
+    cards['Council Room'],
+    cards['Council Room'],
+    cards['Council Room'],
+    cards['Council Room'],
+    cards['Council Room'],
     cards.Gold,
     cards.Gold,
     cards.Gold
@@ -140,7 +140,7 @@ test('Enough riches', () => {
   expect(priority).toEqual(
     [
       cards.Militia,
-      cards["Mining Village"]
+      cards['Mining Village']
     ]
   );
 });
@@ -151,8 +151,8 @@ test('More draw', () => {
 
   state.setUp([agent, agent], muteConfig);
   state.current.discard.push(
-    cards["Mining Village"],
-    cards["Mining Village"]
+    cards['Mining Village'],
+    cards['Mining Village']
   );
 
   const priority = agent.gainPriority(state, state.current);
@@ -162,7 +162,7 @@ test('More draw', () => {
       cards['Council Room'],
       cards['Council Room'],
       cards.Militia,
-      cards["Mining Village"]
+      cards['Mining Village']
     ]
   );
 });

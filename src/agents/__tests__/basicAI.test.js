@@ -1430,4 +1430,3 @@ test('wantsToTrashMining village is false when won\t gain a better card', () => 
   ai.coinGainMargin = () => 3;
   expect(ai.wantsToTrashMiningVillage(state, state.current)).toBeFalsy();
 });
-

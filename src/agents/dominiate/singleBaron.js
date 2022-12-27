@@ -1,5 +1,5 @@
-import BasicAI from '../basicAI';
-import cards from '../../game/cards';
+import BasicAI from '../basicAI.js';
+import cards from '../../game/cards.js';
 
 export default class SingleBaron extends BasicAI {
   constructor() {

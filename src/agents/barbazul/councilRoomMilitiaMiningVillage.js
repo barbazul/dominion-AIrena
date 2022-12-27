@@ -1,11 +1,11 @@
 import { DomPlayer } from '../domsim/domPlayer.js';
-import cards from "../../game/cards.js";
+import cards from '../../game/cards.js';
 
 export default class CouncilRoomMilitiaMiningVillage extends DomPlayer {
   constructor () {
     super();
     this.name = 'Mining Council Militia';
-    this.requires = [cards["Council Room"], cards.Militia, cards["Mining Village"]];
+    this.requires = [cards['Council Room'], cards.Militia, cards['Mining Village']];
   }
 
   /**
@@ -42,15 +42,15 @@ export default class CouncilRoomMilitiaMiningVillage extends DomPlayer {
       priority.push(cards['Council Room']);
     }
 
-    if (my.countInDeck(cards["Council Room"]) < my.countInDeck(cards["Mining Village"]) - 1) {
-      priority.push(cards["Council Room"]);
+    if (my.countInDeck(cards['Council Room']) < my.countInDeck(cards['Mining Village']) - 1) {
+      priority.push(cards['Council Room']);
     }
 
     if (my.countInDeck(cards.Militia) === 0) {
       priority.push(cards.Militia);
     }
 
-    priority.push(cards["Mining Village"]);
+    priority.push(cards['Mining Village']);
 
     return priority;
   }

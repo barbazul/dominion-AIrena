@@ -1664,4 +1664,3 @@ test('Cleanup clears costModifiers', () => {
 
   expect(state.costModifiers).toHaveLength(0);
 });
-
