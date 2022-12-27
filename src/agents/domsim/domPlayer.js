@@ -147,7 +147,7 @@ export class DomPlayer extends BasicAI {
       }
     }
 
-    if (heuristics[card] && typeof heuristics[card].trashPriority !== "undefined") {
+    if (heuristics[card] && typeof heuristics[card].trashPriority !== 'undefined') {
       return 16 - heuristics[card].trashPriority;
     }
 
