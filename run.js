@@ -73,9 +73,11 @@ const players = [
   new Smithy(),
   new Witch(),
   new WitchAndMoatFor3or4(),
-  new WitchFor3or4(),
-  new StatsBot(statsBotOptions)
+  new WitchFor3or4()
 ];
+
+const statsBotAgent = new StatsBot(statsBotOptions);
+players.push(statsBotAgent);
 
 const start = new Date();
 const state = new State();
@@ -108,6 +110,7 @@ rivals.forEach(player => {
 
 for (let i = 0; i < numGames; i++) {
   state.setUp(rivals, config);
+  console.log(state.kingdom);
   state.startGame();
   state.doGameAnalysis();
 
@@ -158,8 +161,19 @@ for (let i = 0; i < numGames; i++) {
   } else {
     stats.ties++;
   }
+
+  state.players.forEach(p => {
+    if (p.agent === statsBotAgent) {
+      if (!winner) {
+        statsBotAgent.recordResult(0.5);
+      } else {
+        statsBotAgent.recordResult(Number(winner === statsBotAgent));
+      }
+    }
+  });
 }
 
+statsBotAgent.saveStats();
 const end = new Date();
 
 if (numGames > 1) {

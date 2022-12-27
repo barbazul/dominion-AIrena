@@ -36,10 +36,13 @@ export default class StatsBot extends ProxyAgent {
   constructor (options = {}) {
     super();
 
-    const statsFile = options.statsFile ?? './config/statsBot.json';
+    const defaultConfig = './config/statsBot.json';
+    const statsFile = './var/statsBot.json';
+    const readFile = fs.existsSync(statsFile) ? statsFile : defaultConfig;
+    this.writeFile = statsFile;
 
     this.stats = JSON.parse(fs.readFileSync(
-      statsFile,
+      readFile,
       {
         encoding: 'utf8',
         flags: 'r'
@@ -81,16 +84,17 @@ export default class StatsBot extends ProxyAgent {
     ];
   }
 
-  doGameAnalysis(state, my) {
-    const candidates = this.agents.filter(bot => {
-      for (let requirement of bot.requires) {
-        if (state.kingdom[requirement] === undefined) {
-          return false;
-        }
-      }
+  doGameAnalysis (state, my) {
+    const candidates = this.getCandidatesForCurrentKingdom(state);
 
-      return true;
-    });
+    // TODO Currently agent with best average is selected. Implement other selection policies.
+    // Epsilon-Greedy https://www.geeksforgeeks.org/epsilon-greedy-algorithm-in-reinforcement-learning/
+    // Epsilon-Decreasing/Decaying
+    // Adaptive Epsilon-Greedy http://www.tokic.com/www/tokicm/publikationen/papers/AdaptiveEpsilonGreedyExploration.pdf
+    // Optimistic-Greedy https://towardsdatascience.com/bandit-algorithms-34fd7890cb18#1519
+    // UCB https://towardsdatascience.com/the-upper-confidence-bound-ucb-bandit-algorithm-c05c2bf4c13f
+    // LinUCB
+    // LinRel
 
     let winner = candidates[0];
     let score = this.stats[winner] === undefined ? 0 : this.stats[winner].rate;
@@ -108,5 +112,27 @@ export default class StatsBot extends ProxyAgent {
 
     this.setActualAgent(winner);
     console.log(winner.toString());
+  }
+
+  getCandidatesForCurrentKingdom (state) {
+    return this.agents.filter(bot => {
+      for (let requirement of bot.requires) {
+        if (state.kingdom[requirement] === undefined) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }
+
+  recordResult (result) {
+    this.stats[this.actualAgent].plays++;
+    this.stats[this.actualAgent].wins += result;
+    this.stats[this.actualAgent].rate = this.stats[this.actualAgent].wins / this.stats[this.actualAgent].plays;
+  }
+
+  saveStats() {
+    fs.writeFileSync(this.writeFile, JSON.stringify(this.stats), { encoding: 'utf8' });
   }
 }

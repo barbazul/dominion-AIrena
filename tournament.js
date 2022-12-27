@@ -84,7 +84,9 @@ const players = [
   new WitchFor3or4()
 ];
 
-players.push(new StatsBot(statsBotOptions));
+const statsBotAgent = new StatsBot(statsBotOptions);
+
+players.push(statsBotAgent);
 
 let scoreBoard = Object.fromEntries(players.map(p => [ p.toString(), { plays: 0, wins: 0, rate: 0.0 } ]));
 
@@ -165,8 +167,14 @@ for (let i = 0; i < players.length - 1; i++) {
       if (!winner) {
         scoreBoard[players[i]].wins += 0.5;
         scoreBoard[players[j]].wins += 0.5;
+        if (players[i] === statsBotAgent || players[j] === statsBotAgent) {
+          statsBotAgent.recordResult(0.5);
+        }
       } else {
         scoreBoard[winner].wins++;
+        if (players[i] === statsBotAgent || players[j] === statsBotAgent) {
+          statsBotAgent.recordResult(Number(winner === statsBotAgent));
+        }
       }
 
       gameCounter++;
@@ -186,6 +194,8 @@ for (let p in scoreBoard) {
     score: scoreBoard[p].rate
   });
 }
+
+statsBotAgent.saveStats();
 
 ranking.sort((p1, p2) => p2.score - p1.score);
 
