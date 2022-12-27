@@ -2,8 +2,8 @@ import BasicAction from '../../cards/basicAction';
 import Card from '../../cards/card';
 import cards from '../../game/cards';
 import Player from '../../game/player';
-import State, {PHASE_ACTION, PHASE_BUY} from '../../game/state';
-import BasicAI, {CHOICE_DISCARD} from '../basicAI';
+import State, { PHASE_ACTION, PHASE_BUY } from '../../game/state';
+import BasicAI, { CHOICE_DISCARD } from '../basicAI';
 
 const muteConfig = { log: () => {}, warn: () => {} };
 
@@ -453,7 +453,7 @@ test.todo('Fallback playValue function -> Menagerie'/*, () => {
   // 2 Menageries still trigger as one will leave hand
   state.current.hand = [cards.Menagerie, cards.Menagerie];
   expect(ai.playValue(state, cards.Menagerie, state.current)).toBe(980);
-}*/);
+} */);
 
 test.todo('Fallback playValue function -> Shanty Town'/*, () => {
   const ai = new BasicAI();
@@ -480,7 +480,7 @@ test.todo('Fallback playValue function -> Shanty Town'/*, () => {
   state.current.hand = [cards.Copper, cards.ShantyTown, cards.Copper];
   state.current.actions = 2;
   expect(ai.playValue(state, cards.ShantyTown, state.current)).toBe(970);
-}*/);
+} */);
 
 test.todo('Fallback playValue function -> Tournament'/*, () => {
   const ai = new BasicAI();
@@ -495,7 +495,7 @@ test.todo('Fallback playValue function -> Tournament'/*, () => {
   // 3 provinces in hand
   state.current.hand = [cards.Province, cards.Province, cards.Province];
   expect(ai.playValue(state, cards.Tournament, state.current)).toBe(960);
-}*/);
+} */);
 
 test('Fallback playValue function -> Library', () => {
   const ai = new BasicAI();
@@ -580,7 +580,7 @@ test.todo('Fallback playValue function -> King\'s Court'/*, () => {
   // No other action in hand
   state.current.hand = [cards.KingsCourt, cards.Province, cards.Province];
   expect(ai.playValue(state, cards.KingsCourt, state.current)).toBe(390);
-}*/);
+} */);
 
 test.todo('Fallback playValue function -> Lookout'/*, () => {
   const ai = new BasicAI();
@@ -602,7 +602,7 @@ test.todo('Fallback playValue function -> Lookout'/*, () => {
   state.gainsToEndGame = jest.fn(() => 1);
   state.current.draw = [];
   expect(ai.playValue(state, cards.Lookout, state.current)).toBe(-5);
-}*/);
+} */);
 
 test.todo('Fallback playValue function -> Conspirator'/*, () => {
   const ai = new BasicAI();
@@ -623,7 +623,7 @@ test.todo('Fallback playValue function -> Conspirator'/*, () => {
   state.current.inPlay = [];
   state.current.actions = 1;
   expect(ai.playValue(state, cards.Conspirator, state.current)).toBe(124);
-}*/);
+} */);
 
 test.todo('Fallback playValue function -> Great Hall'/*, () => {
   const ai = new BasicAI();
@@ -638,7 +638,7 @@ test.todo('Fallback playValue function -> Great Hall'/*, () => {
   // Without
   state.current.hand = [];
   expect(ai.playValue(state, cards.GreatHall, state.current)).toBe(742);
-}*/);
+} */);
 
 test.todo('Fallback playValue function -> Watchtower'/*, () => {
   const ai = new BasicAI();
@@ -665,7 +665,7 @@ test.todo('Fallback playValue function -> Watchtower'/*, () => {
   state.current.hand = [cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper];
   state.current.actions = 1;
   expect(ai.playValue(state, cards.Watchtower, state.current)).toBe(-1);
-}*/);
+} */);
 
 test('Fallback playValue function -> Cantrips', () => {
   const ai = new BasicAI();
@@ -756,7 +756,7 @@ test.todo('Fallback playValue function -> Crossroads'/*, () => {
   // Without
   state.current.inPlay = [];
   expect(ai.playValue(state, cards.Crossroads, state.current)).toBe(580);
-}*/);
+} */);
 
 test.todo('Fallback playValue function -> Treasure Map'/*, () => {
   const ai = new BasicAI();
@@ -777,7 +777,7 @@ test.todo('Fallback playValue function -> Treasure Map'/*, () => {
   state.current.draw = [cards.TreasureMap];
   state.current.hand = [cards.TreasureMap];
   expect(ai.playValue(state, cards.TreasureMap, state.current)).toBe(-40);
-}*/);
+} */);
 
 test.todo('Fallback playValue function -> Explorer'/*, () => {
   const ai = new BasicAI();
@@ -792,7 +792,7 @@ test.todo('Fallback playValue function -> Explorer'/*, () => {
   // Getting rid of unnecesary TM
   state.current.hand = [];
   expect(ai.playValue(state, cards.Explorer, state.current)).toBe(166);
-}*/);
+} */);
 
 test.todo('Fallback playValue function -> Coppersmith'/*, () => {
   const ai = new BasicAI();
@@ -815,7 +815,7 @@ test.todo('Fallback playValue function -> Coppersmith'/*, () => {
   // With more Coppers
   state.current.hand = [cards.Copper, cards.Copper, cards.Copper, cards.Copper];
   expect(ai.playValue(state, cards.Coppersmith, state.current)).toBe(213);
-}*/);
+} */);
 
 test.todo('Fallback playValue function -> Baron'/*, () => {
   const ai = new BasicAI();
@@ -836,7 +836,7 @@ test.todo('Fallback playValue function -> Baron'/*, () => {
   state.current.hand = [];
   ai.gainValue = () => -1;
   expect(ai.playValue(state, cards.Baron, state.current)).toBe(-5);
-}*/);
+} */);
 
 test('Fallback playValue function -> Chapel', () => {
   const ai = new BasicAI();
@@ -1172,7 +1172,6 @@ test('discardValue wants to discard actions only in own turn', () => {
   player2 = ai2.myPlayer(state);
   state.current = player2;
   expect(ai1.discardValue(state, cards.Village, player1)).toBeLessThan(0);
-
 });
 
 test('discardValue tries not to draw dead actions', () => {
@@ -1187,7 +1186,6 @@ test('discardValue tries not to draw dead actions', () => {
   player1.actionBalance = () => -1;
   state.current = player1;
   expect(ai1.discardValue(state, cards.Smithy, player1)).toBeGreaterThan(0);
-
 });
 
 test('topdeckPriority prioritizes treasures by coin value', () => {
@@ -1236,9 +1234,9 @@ test('fastForwardToBuy requires a hypothetical state', () => {
 
   expect(
     () => {
-      ai.fastForwardToBuy(state, state.current)
+      ai.fastForwardToBuy(state, state.current);
     }
-  ).toThrow()
+  ).toThrow();
 });
 
 test('fastForwardToBuy returns the state in buy phase', () => {

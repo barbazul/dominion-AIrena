@@ -1,3 +1,2 @@
-src/agents/**
-!src/agents/basicAI.js
-!src/agents/__tests__/**
+src/agents/dominiate/**
+src/agents/domsim/**
