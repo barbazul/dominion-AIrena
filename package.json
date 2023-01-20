@@ -23,8 +23,7 @@
   "jest": {
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "src/**/*.js",
-      "!src/agents/dominiate/*.js"
+      "src/**/*.js"
     ],
     "coverageThreshold": {
       "global": {
