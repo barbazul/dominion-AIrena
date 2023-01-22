@@ -1,7 +1,7 @@
+import cards from '../../game/cards.js';
 import Courtyard from '../courtyard.js';
 import State from '../../game/state.js';
 import BasicAI, { CHOICE_TOPDECK } from '../../agents/basicAI.js';
-import cards from '../../game/cards.js';
 
 test('Courtyard card definition', () => {
   const card = new Courtyard();

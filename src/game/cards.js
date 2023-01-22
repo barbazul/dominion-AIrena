@@ -35,6 +35,7 @@ import Baron from '../cards/baron.js';
 import Bridge from '../cards/bridge.js';
 import MiningVillage from '../cards/miningVillage.js';
 import Conspirator from '../cards/conspirator.js';
+import Courtyard from '../cards/courtyard.js';
 
 const cards = {
   // Basic cards
@@ -78,6 +79,7 @@ const cards = {
   Baron: new Baron(),
   Bridge: new Bridge(),
   Conspirator: new Conspirator(),
+  Courtyard: new Courtyard(),
   'Mining Village': new MiningVillage()
 };
 

@@ -656,11 +656,9 @@ export default class BasicAI {
        * @param {Player} my
        * @return {number}
        */
-      /*
       'Courtyard': (state, my) => {
         return my.actions > 1 && (my.discard.length + my.draw.length) <= 3 ? 615 : 188;
       },
-      */
 
       // Unified Torturer, Margrave, Rabble, Witch, Ghost Ship, Smithy, Embassy and Council Room in a single terminal
       // draw logic (see below)

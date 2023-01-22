@@ -1430,3 +1430,34 @@ test('wantsToTrashMining village is false when won\t gain a better card', () => 
   ai.coinGainMargin = () => 3;
   expect(ai.wantsToTrashMiningVillage(state, state.current)).toBeFalsy();
 });
+
+test('Fallback playValue function -> Courtyard', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai], muteConfig);
+
+  // No extra actions + too many cards in deck
+  state.current.actions = 1;
+  state.current.draw = [cards.Copper, cards.Copper];
+  state.current.discard = [cards.Copper, cards.Copper];
+  expect(ai.playValue(state, cards.Courtyard, state.current)).toBe(188);
+
+  // No extra actions + few cards in deck
+  state.current.actions = 1;
+  state.current.draw = [cards.Copper];
+  state.current.discard = [cards.Copper, cards.Copper];
+  expect(ai.playValue(state, cards.Courtyard, state.current)).toBe(188);
+
+  // Extra actions + too many cards in deck
+  state.current.actions = 2;
+  state.current.draw = [cards.Copper, cards.Copper];
+  state.current.discard = [cards.Copper, cards.Copper];
+  expect(ai.playValue(state, cards.Courtyard, state.current)).toBe(188);
+
+  // Extra actions + few cards in deck
+  state.current.actions = 2;
+  state.current.draw = [cards.Copper];
+  state.current.discard = [cards.Copper, cards.Copper];
+  expect(ai.playValue(state, cards.Courtyard, state.current)).toBe(615);
+});
