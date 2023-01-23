@@ -922,7 +922,7 @@ test('wantsToTrash returns the number of cards to trash', () => {
   expect(ai.wantsToTrash(state, player)).toBe(2);
 });
 
-test('topdeckPriority prioritizes by play value', () => {
+test('topdeckPriority prioritizes actions thant won\'t be played by play value', () => {
   const state = new State();
   const ai = new BasicAI();
   const action1 = new BasicAction();
@@ -931,12 +931,15 @@ test('topdeckPriority prioritizes by play value', () => {
   let priority;
 
   state.setUp([ai, ai], muteConfig);
+
+  // Only 1 action left and 3 terminals in hand
   state.current.actions = 1;
   state.current.hand = [action1, action2, action3];
   action1.name = 'Action 1';
-  action2.name = 'Action 2';
-  action3.name = 'Action 3';
+  action2.name = 'Action 2'; // Second best, save for next turn
+  action3.name = 'Action 3'; // Best card, I want to keep it
 
+  ai.coinLossMargin = () => 99;
   ai.getChoiceValue = jest.fn((type, state, card) => {
     const values = {
       'Action 1': 0,
@@ -951,18 +954,70 @@ test('topdeckPriority prioritizes by play value', () => {
   expect(priority.map(card => card.toString())).toEqual(['Action 2', 'Action 1']);
 });
 
-test('topdeckPriority prefers treasures after actions', () => {
+test('topdeckPriority prefers most valuable treasures', () => {
   const state = new State();
   const ai = new BasicAI();
-  const action = new BasicAction();
   let priority;
 
-  action.name = 'Action';
   state.setUp([ai, ai], muteConfig);
   state.current.actions = 0;
-  state.current.hand = [action, cards.Copper];
+  state.current.hand = [cards.Copper, cards.Silver];
+  ai.coinLossMargin = () => 99;
   priority = ai.topdeckPriority(state, state.current);
-  expect(priority.map(card => card.toString())).toEqual(['Action', 'Copper']);
+  expect(priority).toEqual([cards.Silver, cards.Copper]);
+});
+
+test('topdeckPriority skips duplicate treasures', () => {
+  const state = new State();
+  const ai = new BasicAI();
+  let priority;
+
+  state.setUp([ai, ai], muteConfig);
+  state.current.actions = 0;
+  state.current.hand = [cards.Copper, cards.Copper];
+  ai.coinLossMargin = () => 99;
+  priority = ai.topdeckPriority(state, state.current);
+  expect(priority).toEqual([cards.Copper]);
+});
+
+test('topdeckPriority skips treasures that would hinder buy options', () => {
+  const state = new State();
+  const ai = new BasicAI();
+  let priority;
+
+  state.setUp([ai, ai], muteConfig);
+  state.current.actions = 0;
+  state.current.hand = [cards.Gold, cards.Silver, cards.Copper];
+  ai.coinLossMargin = () => 2;
+  priority = ai.topdeckPriority(state, state.current);
+  expect(priority).toEqual([cards.Silver, cards.Copper]);
+});
+
+test('topdeckPriority skips treasures if there are action options', () => {
+  const state = new State();
+  const ai = new BasicAI();
+  let priority;
+
+  state.setUp([ai, ai], muteConfig);
+  state.current.actions = 0;
+  state.current.hand = [cards.Smithy, cards.Silver, cards.Copper];
+  ai.coinLossMargin = () => 2;
+  priority = ai.topdeckPriority(state, state.current);
+  expect(priority).toEqual([cards.Smithy]);
+});
+
+test('topdeckPriority returns worst card if it doesn\'t want to save anything', () => {
+  const state = new State();
+  const ai = new BasicAI();
+  let priority;
+
+  state.setUp([ai, ai], muteConfig);
+  state.current.actions = 1;
+  state.current.hand = [cards.Village, cards.Gold, cards.Estate, cards.Curse];
+  ai.coinLossMargin = () => 2;
+  ai.choose = () => cards.Curse;
+  priority = ai.topdeckPriority(state, state.current);
+  expect(priority).toEqual([cards.Curse]);
 });
 
 test('topdeckValue forwards to discardValue', () => {
@@ -1186,18 +1241,6 @@ test('discardValue tries not to draw dead actions', () => {
   player1.actionBalance = () => -1;
   state.current = player1;
   expect(ai1.discardValue(state, cards.Smithy, player1)).toBeGreaterThan(0);
-});
-
-test('topdeckPriority prioritizes treasures by coin value', () => {
-  const state = new State();
-  const ai = new BasicAI();
-  let priority;
-
-  state.setUp([ ai, ai ], muteConfig);
-  state.current.hand = [ cards.Silver, cards.Gold, cards.Copper ];
-
-  priority = ai.topdeckPriority(state, state.current);
-  expect(priority.map(card => card.toString())).toEqual([ 'Gold', 'Silver', 'Copper' ]);
 });
 
 test('goingGreen', () => {

@@ -983,36 +983,44 @@ export default class BasicAI {
    * @return {(String|Card)[]}
    */
   topdeckPriority (state, my) {
-    const actions = [];
-    const treasures = [];
+    const actions = my.hand.filter(card => card.isAction());
     const priority = [];
     let playableTerminals = my.countPlayableTerminals();
 
-    my.hand.forEach(card => {
-      if (card.isAction()) {
-        actions.push(card);
-      }
-
-      if (card.isTreasure()) {
-        treasures.push(card);
-      }
-    });
-
     // 1) Actions
-
-    // Descending order
     actions.sort((cardA, cardB) => {
-      return this.getChoiceValue(CHOICE_PLAY, state, cardB, my) - this.getChoiceValue(CHOICE_PLAY, state, cardA, my);
+      return this.getChoiceValue(CHOICE_PLAY, state, cardB, my) -
+        this.getChoiceValue(CHOICE_PLAY, state, cardA, my);
     });
 
-    // Take the last elements of the playable ones
     priority.push(...actions.slice(playableTerminals));
 
     // 2) Put back as much money as you can
-    treasures.sort((cardA, cardB) => cardB.coins - cardA.coins);
-    priority.push(...treasures);
+    if (priority.length === 0) {
+      // Get a list of all distinct treasures in hand, in order.
+      const treasures = [];
 
-    // TODO Finish this method
+      my.hand.forEach(card => {
+        if (card.isTreasure() && treasures.indexOf(card) === -1) {
+          treasures.push(card);
+        }
+      });
+
+      treasures.sort((cardA, cardB) => cardB.coins - cardA.coins);
+
+      // Get the margin of how much money we're willing to discard.
+      const margin = my.agent.coinLossMargin(state);
+
+      // Find the treasure cards worth less than that.
+      priority.push(...treasures.filter(card => card.coins <= margin));
+
+      // TODO Don't put back last Potion if Alchemists are in play
+    }
+
+    // 3) Put back the worst card (take priority for discard)
+    if (priority.length === 0) {
+      return [my.agent.choose(CHOICE_DISCARD, state, my.hand)];
+    }
 
     return priority;
   }
