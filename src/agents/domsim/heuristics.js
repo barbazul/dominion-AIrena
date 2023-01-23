@@ -345,7 +345,7 @@ const heuristics = {
     }
   },
   'Mining Village': { types: ['Village', 'Cycler'], playPriority: 9, discardPriority: 22 },
-  Courtyard: { types: ['Terminal'], discardPriority: 24, playPriority: 24 }
+  Courtyard: { types: [ 'Terminal' ], discardPriority: 24, playPriority: 24 }
 };
 
 /* Stryker enable ArrayDeclaration, ObjectLiteral */
