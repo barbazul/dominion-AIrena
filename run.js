@@ -34,6 +34,7 @@ import SingleBaron from './src/agents/dominiate/singleBaron.js';
 import ObmBridge from './src/agents/dominiate/obmBridge.js';
 import Artisan from './src/agents/barbazul/artisan.js';
 import CouncilRoomMilitiaMiningVillage from './src/agents/barbazul/councilRoomMilitiaMiningVillage.js';
+import Courtyard from './src/agents/domsim/courtyard.js';
 import yargs from 'yargs';
 
 const argv = yargs(process.argv.slice(2))
@@ -81,7 +82,8 @@ const players = [
   new Artisan(),
   new SingleBaron(),
   new ObmBridge(),
-  new CouncilRoomMilitiaMiningVillage()
+  new CouncilRoomMilitiaMiningVillage(),
+  new Courtyard()
 ];
 
 const statsBotAgent = new StatsBot(statsBotOptions);

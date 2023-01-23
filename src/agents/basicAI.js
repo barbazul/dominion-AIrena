@@ -966,14 +966,11 @@ export default class BasicAI {
    * Only works well for putting back 1 card, and for 1 buy.
    *
    *  Make a priority order of:
-   *  1. Actions we can't or don't intende to play, from best to worst
+   *  1. Actions we can't or don't intend to play, from best to worst
    *  2. Treasures we can afford to put back
    *  3. Junk cards
    *
    * Renamed from original BasicAI.putOnDeckPriority
-   *
-   * IMPORTANT: Currently not being used. If we ever use it it would be for
-   * some hypootetical CHOICE_TOPDECK_FROM_HAND.
    *
    * @param {State} state
    * @param {Player} my

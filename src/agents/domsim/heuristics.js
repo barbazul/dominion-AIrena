@@ -44,7 +44,8 @@ const heuristics = {
 
   // Intrigue
   Baron: { types: [ 'Terminal' ], discardPriority: 25, playPriority: 22 },
-  'Mining Village': { types: [ 'Village', 'Cycler' ], playPriority: 9, discardPriority: 22 }
+  'Mining Village': { types: [ 'Village', 'Cycler' ], playPriority: 9, discardPriority: 22 },
+  Courtyard: { types: [ 'Terminal' ], discardPriority: 24, playPriority: 24 }
 };
 
 export default heuristics;
