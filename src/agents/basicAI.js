@@ -1012,7 +1012,7 @@ export default class BasicAI {
       const margin = my.agent.coinLossMargin(state);
 
       // Find the treasure cards worth less than that.
-      priority.push(...treasures.filter(card => card.coins <= margin));
+      priority.push(...treasures.filter(card => this.coinsDueToCard(state, card) <= margin));
 
       // TODO Don't put back last Potion if Alchemists are in play
     }
@@ -1203,6 +1203,19 @@ export default class BasicAI {
     }
 
     return Infinity;
+  }
+
+  /**
+   * Estimate the number of coins we'd lose by discarding/trashing/putting back
+   * a card.
+   *
+   * @todo Implement this
+   * @param {State} state
+   * @param {Card} card
+   * @return {number}
+   */
+  coinsDueToCard (state, card) {
+    return card.coins;
   }
 
   /**
