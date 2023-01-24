@@ -1018,8 +1018,12 @@ export default class BasicAI {
     }
 
     // 3) Put back the worst card (take priority for discard)
+
     if (priority.length === 0) {
-      return [my.agent.choose(CHOICE_DISCARD, state, my.hand)];
+      // Addition to Dominiate, push null to avoid topdecking if it's an option
+      priority.push(null);
+      priority.push(my.agent.choose(CHOICE_DISCARD, state, my.hand));
+      return priority;
     }
 
     return priority;

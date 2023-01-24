@@ -1017,7 +1017,7 @@ test('topdeckPriority returns worst card if it doesn\'t want to save anything', 
   ai.coinLossMargin = () => 2;
   ai.choose = () => cards.Curse;
   priority = ai.topdeckPriority(state, state.current);
-  expect(priority).toEqual([cards.Curse]);
+  expect(priority).toEqual([null, cards.Curse]);
 });
 
 test('topdeckValue forwards to discardValue', () => {
