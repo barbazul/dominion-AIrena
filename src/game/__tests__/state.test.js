@@ -1531,6 +1531,7 @@ test('Copied state has same stuff', () => {
   expect(newState.phase).toEqual(state.phase);
   expect(newState.cache).toEqual({});
   expect(newState.costModifiers).toEqual(state.costModifiers);
+  expect(newState.rng).toBe(state.rng);
 });
 
 test('Copied state has new players', () => {

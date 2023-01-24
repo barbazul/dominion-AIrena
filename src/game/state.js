@@ -566,6 +566,9 @@ export default class State {
     newState.phase = this.phase;
     newState.cache = {};
 
+    // Addition to Dominiate: Also copy the RNG
+    newState.rng = this.rng;
+
     return newState;
   }
 
