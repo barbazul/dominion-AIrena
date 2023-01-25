@@ -31,6 +31,7 @@ import BigMoneyUltimateFor3or4 from '../domsim/bigMoneyUltimateFor3or4.js';
 import DoubleMoatFor3or4 from '../domsim/doubleMoatFor3or4.js';
 import WitchAndMoatFor3or4 from '../domsim/witchAndMoatFor3or4.js';
 import WitchFor3or4 from '../domsim/witchFor3or4.js';
+import Artisan from './artisan.js';
 
 export default class StatsBot extends ProxyAgent {
   constructor (options = {}) {
@@ -80,7 +81,8 @@ export default class StatsBot extends ProxyAgent {
       new Smithy(),
       new Witch(),
       new WitchAndMoatFor3or4(),
-      new WitchFor3or4()
+      new WitchFor3or4(),
+      new Artisan()
     ];
   }
 
