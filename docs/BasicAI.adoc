@@ -167,6 +167,13 @@ If choice was not in trashPriority assumes trash is undesireable and assigns
 all negative values.
 By default, we want to trash the card with the lowest (cost + VP).
 
+=== BasicAi.topdeckPriority(State state, Card card, Player my): (String|Card)[]
+
+First, try to topdeck an action that won't be played this turn.
+If not possible, try topdecking the most earning treasure that we can afford
+without hampering out buying power this turn.
+Finally, treat the topdecking as if it were a discard and get rid of the most useless card.
+
 == Helper Methods
 
 These helper functions allow easy access to the player state or metrics of the
