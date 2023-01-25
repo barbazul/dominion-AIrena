@@ -1,4 +1,4 @@
-import BasicAI, { CHOICE_DISCARD, CHOICE_GAIN } from '../../agents/basicAI';
+import BasicAI, { CHOICE_GAIN, CHOICE_TOPDECK } from '../../agents/basicAI';
 import cards from '../../game/cards';
 import State from '../../game/state';
 import Artisan from '../artisan';
@@ -107,7 +107,7 @@ test('Trigger a topdeck choice', () => {
 
   card.playEffect(state);
 
-  expect(state.current.agent.choose).toHaveBeenCalledWith(CHOICE_DISCARD, state, [cards.Estate, cards.Copper]);
+  expect(state.current.agent.choose).toHaveBeenCalledWith(CHOICE_TOPDECK, state, [cards.Estate, cards.Copper]);
 });
 
 test('Topdeck chosen card', () => {

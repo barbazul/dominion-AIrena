@@ -33,6 +33,7 @@ import Witch from './src/agents/domsim/witch.js';
 import WitchAndMoatFor3or4 from './src/agents/domsim/witchAndMoatFor3or4.js';
 import WitchFor3or4 from './src/agents/domsim/witchFor3or4.js';
 import StatsBot from './src/agents/barbazul/statsBot.js';
+import Artisan from './src/agents/barbazul/artisan.js';
 import yargs from 'yargs';
 import * as fs from 'fs';
 
@@ -81,7 +82,8 @@ const players = [
   new Smithy(),
   new Witch(),
   new WitchAndMoatFor3or4(),
-  new WitchFor3or4()
+  new WitchFor3or4(),
+  new Artisan()
 ];
 
 const statsBotAgent = new StatsBot(statsBotOptions);

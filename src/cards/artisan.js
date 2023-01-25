@@ -1,4 +1,4 @@
-import { CHOICE_DISCARD, CHOICE_GAIN } from '../agents/basicAI.js';
+import { CHOICE_GAIN, CHOICE_TOPDECK } from '../agents/basicAI.js';
 import cards from '../game/cards.js';
 import BasicAction from './basicAction.js';
 
@@ -23,7 +23,7 @@ export default class Artisan extends BasicAction {
     let chosenTopdeck;
 
     // TODO Should not be asking for a discard choice but a CHOICE_TOPDECK if it existed
-    chosenTopdeck = state.current.agent.choose(CHOICE_DISCARD, state, [...new Set(state.current.hand)]);
+    chosenTopdeck = state.current.agent.choose(CHOICE_TOPDECK, state, [...new Set(state.current.hand)]);
     state.doTopdeck(state.current, chosenTopdeck);
   }
 
