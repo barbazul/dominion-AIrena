@@ -38,6 +38,7 @@ import ObmBridge from './src/agents/dominiate/obmBridge.js';
 import Artisan from './src/agents/barbazul/artisan.js';
 import CouncilRoomMilitiaMiningVillage from './src/agents/barbazul/councilRoomMilitiaMiningVillage.js';
 import Courtyard from './src/agents/domsim/courtyard.js';
+import ObmCourtyard from './src/agents/dominiate/obmCourtyard.js';
 import yargs from 'yargs';
 import * as fs from 'fs';
 
@@ -91,7 +92,8 @@ const players = [
   new SingleBaron(),
   new ObmBridge(),
   new CouncilRoomMilitiaMiningVillage(),
-  new Courtyard()
+  new Courtyard(),
+  new ObmCourtyard()
 ];
 
 const statsBotAgent = new StatsBot(statsBotOptions);
