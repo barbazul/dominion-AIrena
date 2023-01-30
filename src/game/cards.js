@@ -33,9 +33,10 @@ import Witch from '../cards/witch.js';
 import Workshop from '../cards/workshop.js';
 import Baron from '../cards/baron.js';
 import Bridge from '../cards/bridge.js';
-import MiningVillage from '../cards/miningVillage.js';
 import Conspirator from '../cards/conspirator.js';
 import Courtyard from '../cards/courtyard.js';
+import Duke from '../cards/duke.js';
+import MiningVillage from '../cards/miningVillage.js';
 
 const cards = {
   // Basic cards
@@ -80,6 +81,7 @@ const cards = {
   Bridge: new Bridge(),
   Conspirator: new Conspirator(),
   Courtyard: new Courtyard(),
+  Duke: new Duke(),
   'Mining Village': new MiningVillage()
 };
 
