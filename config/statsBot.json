@@ -1,167 +1,197 @@
 {
-  "BasicAI": {
-    "plays": 320,
-    "wins": 124,
-    "rate": 0.3875
-  },
-  "BigMoney": {
-    "plays": 320,
-    "wins": 106.5,
-    "rate": 0.3328125
-  },
-  "Big Smithy": {
-    "plays": 320,
-    "wins": 173.5,
-    "rate": 0.5421875
-  },
-  "BM Library": {
-    "plays": 320,
-    "wins": 158,
-    "rate": 0.49375
-  },
-  "Chapel Witch": {
-    "plays": 320,
-    "wins": 240,
-    "rate": 0.75
-  },
-  "Double Militia": {
-    "plays": 320,
-    "wins": 155.5,
-    "rate": 0.4859375
-  },
-  "Double Witch": {
-    "plays": 320,
-    "wins": 254,
-    "rate": 0.79375
-  },
-  "Moneylender Witch": {
-    "plays": 320,
-    "wins": 229,
-    "rate": 0.715625
-  },
-  "SillyAI": {
-    "plays": 320,
-    "wins": 25,
-    "rate": 0.078125
-  },
-  "Single Witch": {
-    "plays": 320,
-    "wins": 236,
-    "rate": 0.7375
-  },
-  "First Game by michaeljb": {
-    "plays": 300,
-    "wins": 116.5,
-    "rate": 0.3883333333333333
-  },
-  "Bureaucrat/Gardens": {
-    "plays": 320,
-    "wins": 225,
-    "rate": 0.703125
-  },
-  "Burning Skull HTBD#1": {
-    "plays": 310,
-    "wins": 235.5,
-    "rate": 0.7596774193548387
-  },
-  "Council Room/Militia": {
-    "plays": 320,
-    "wins": 137,
-    "rate": 0.428125
-  },
-  "DomPlayer": {
-    "plays": 320,
-    "wins": 105,
-    "rate": 0.328125
-  },
-  "Lab/Militia/Chapel": {
-    "plays": 310,
-    "wins": 195.5,
-    "rate": 0.6306451612903226
-  },
-  "Festival": {
-    "plays": 320,
-    "wins": 112,
-    "rate": 0.35
-  },
-  "Council Room": {
-    "plays": 320,
-    "wins": 191.5,
-    "rate": 0.5984375
-  },
-  "Bureaucrat": {
-    "plays": 320,
-    "wins": 120,
-    "rate": 0.375
-  },
-  "Big Money Ultimate": {
-    "plays": 320,
-    "wins": 115,
-    "rate": 0.359375
-  },
-  "WorkshopGardens": {
-    "plays": 320,
-    "wins": 167,
-    "rate": 0.521875
-  },
-  "Basic Big Money": {
-    "plays": 320,
-    "wins": 54.5,
-    "rate": 0.1703125
-  },
-  "Big Money Ultimate for 3 or 4": {
-    "plays": 320,
-    "wins": 80.5,
-    "rate": 0.2515625
-  },
-  "Double Moat for 3 or 4": {
-    "plays": 320,
-    "wins": 100,
-    "rate": 0.3125
-  },
-  "Laboratory": {
-    "plays": 320,
-    "wins": 155,
-    "rate": 0.484375
-  },
-  "Militia": {
-    "plays": 320,
-    "wins": 156.5,
-    "rate": 0.4890625
-  },
-  "Moat": {
-    "plays": 320,
-    "wins": 149.5,
-    "rate": 0.4671875
-  },
-  "Smithy": {
-    "plays": 320,
-    "wins": 196,
-    "rate": 0.6125
-  },
-  "Witch": {
-    "plays": 320,
-    "wins": 258.5,
-    "rate": 0.8078125
-  },
-  "Witch and Moat for 3 or 4": {
-    "plays": 320,
-    "wins": 163,
-    "rate": 0.509375
-  },
-  "Witch for 3 or 4": {
-    "plays": 320,
-    "wins": 226,
-    "rate": 0.70625
-  },
-  "Artisan": {
-    "plays": 320,
-    "wins": 98.5,
-    "rate": 0.3078125
-  },
-  "StatsBot": {
-    "plays": 320,
-    "wins": 200.5,
-    "rate": 0.6265625
-  }
+    "BasicAI": {
+        "plays": 380,
+        "wins": 140.5,
+        "rate": 0.36973684210526314
+    },
+    "BigMoney": {
+        "plays": 380,
+        "wins": 154,
+        "rate": 0.4052631578947368
+    },
+    "Big Smithy": {
+        "plays": 396,
+        "wins": 217.5,
+        "rate": 0.5492424242424242
+    },
+    "BM Library": {
+        "plays": 403,
+        "wins": 204,
+        "rate": 0.5062034739454094
+    },
+    "Chapel Witch": {
+        "plays": 406,
+        "wins": 288,
+        "rate": 0.7093596059113301
+    },
+    "Double Militia": {
+        "plays": 380,
+        "wins": 187.5,
+        "rate": 0.4934210526315789
+    },
+    "Double Witch": {
+        "plays": 436,
+        "wins": 310,
+        "rate": 0.7110091743119266
+    },
+    "Moneylender Witch": {
+        "plays": 391,
+        "wins": 277.5,
+        "rate": 0.7097186700767263
+    },
+    "SillyAI": {
+        "plays": 380,
+        "wins": 47.5,
+        "rate": 0.125
+    },
+    "Single Witch": {
+        "plays": 399,
+        "wins": 283.5,
+        "rate": 0.7105263157894737
+    },
+    "First Game by michaeljb": {
+        "plays": 360,
+        "wins": 136,
+        "rate": 0.37777777777777777
+    },
+    "Bureaucrat/Gardens": {
+        "plays": 404,
+        "wins": 251.5,
+        "rate": 0.6225247524752475
+    },
+    "Burning Skull HTBD#1": {
+        "plays": 380,
+        "wins": 282.5,
+        "rate": 0.743421052631579
+    },
+    "Council Room/Militia": {
+        "plays": 380,
+        "wins": 173,
+        "rate": 0.45526315789473687
+    },
+    "DomPlayer": {
+        "plays": 380,
+        "wins": 130.5,
+        "rate": 0.34342105263157896
+    },
+    "Lab/Militia/Chapel": {
+        "plays": 378,
+        "wins": 239,
+        "rate": 0.6322751322751323
+    },
+    "Festival": {
+        "plays": 380,
+        "wins": 150.5,
+        "rate": 0.3960526315789474
+    },
+    "Council Room": {
+        "plays": 424,
+        "wins": 238.5,
+        "rate": 0.5625
+    },
+    "Bureaucrat": {
+        "plays": 380,
+        "wins": 153,
+        "rate": 0.4026315789473684
+    },
+    "Big Money Ultimate": {
+        "plays": 380,
+        "wins": 147.5,
+        "rate": 0.3881578947368421
+    },
+    "WorkshopGardens": {
+        "plays": 381,
+        "wins": 190,
+        "rate": 0.49868766404199477
+    },
+    "Basic Big Money": {
+        "plays": 380,
+        "wins": 66.5,
+        "rate": 0.175
+    },
+    "Big Money Ultimate for 3 or 4": {
+        "plays": 380,
+        "wins": 107.5,
+        "rate": 0.28289473684210525
+    },
+    "Double Moat for 3 or 4": {
+        "plays": 380,
+        "wins": 106,
+        "rate": 0.2789473684210526
+    },
+    "Laboratory": {
+        "plays": 382,
+        "wins": 170.5,
+        "rate": 0.4463350785340314
+    },
+    "Militia": {
+        "plays": 386,
+        "wins": 194,
+        "rate": 0.5025906735751295
+    },
+    "Moat": {
+        "plays": 392,
+        "wins": 197,
+        "rate": 0.5025510204081632
+    },
+    "Smithy": {
+        "plays": 403,
+        "wins": 221,
+        "rate": 0.5483870967741935
+    },
+    "Witch": {
+        "plays": 418,
+        "wins": 296.5,
+        "rate": 0.7093301435406698
+    },
+    "Witch and Moat for 3 or 4": {
+        "plays": 380,
+        "wins": 211.5,
+        "rate": 0.5565789473684211
+    },
+    "Witch for 3 or 4": {
+        "plays": 382,
+        "wins": 271.5,
+        "rate": 0.7107329842931938
+    },
+    "Artisan": {
+        "plays": 380,
+        "wins": 110.5,
+        "rate": 0.29078947368421054
+    },
+    "Single Baron": {
+        "plays": 381,
+        "wins": 174.5,
+        "rate": 0.458005249343832
+    },
+    "OBM Bridge": {
+        "plays": 384,
+        "wins": 175.5,
+        "rate": 0.45703125
+    },
+    "Mining Council Militia": {
+        "plays": 380,
+        "wins": 78,
+        "rate": 0.20526315789473684
+    },
+    "Courtyard": {
+        "plays": 413,
+        "wins": 264,
+        "rate": 0.639225181598063
+    },
+    "OBM Courtyard": {
+        "plays": 403,
+        "wins": 258.5,
+        "rate": 0.641439205955335
+    },
+    "Duke": {
+        "plays": 380,
+        "wins": 53,
+        "rate": 0.1394736842105263
+    },
+    "StatsBot": {
+        "plays": 380,
+        "wins": 243.5,
+        "rate": 0.6407894736842106
+    }
 }

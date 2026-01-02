@@ -32,6 +32,12 @@ import DoubleMoatFor3or4 from '../domsim/doubleMoatFor3or4.js';
 import WitchAndMoatFor3or4 from '../domsim/witchAndMoatFor3or4.js';
 import WitchFor3or4 from '../domsim/witchFor3or4.js';
 import Artisan from './artisan.js';
+import CouncilRoomMilitiaMiningVillage from './councilRoomMilitiaMiningVillage.js';
+import ObmBridge from '../dominiate/obmBridge.js';
+import ObmCourtyard from '../dominiate/obmCourtyard.js';
+import SingleBaron from '../dominiate/singleBaron.js';
+import Courtyard from '../domsim/courtyard.js';
+import Duke from '../domsim/duke.js';
 
 export default class StatsBot extends ProxyAgent {
   constructor (options = {}) {
@@ -52,6 +58,12 @@ export default class StatsBot extends ProxyAgent {
 
     this.agents = [
       new BasicAI(),
+
+      // Barbazul agents
+      new Artisan(),
+      new CouncilRoomMilitiaMiningVillage(),
+
+      // Dominiate agents
       new BigMoney(),
       new BigSmithy(),
       new BMLibrary(),
@@ -59,22 +71,28 @@ export default class StatsBot extends ProxyAgent {
       new DoubleMilitia(),
       new DoubleWitch(),
       new MoneylenderWitch(),
-      new SillyAI(), // index: 8
+      new ObmBridge(),
+      new ObmCourtyard(),
+      new SillyAI(),
+      new SingleBaron(),
       new SingleWitch(),
-      new FirstGame(),
+
+      // Domsim Agents
+      new BasicBigMoney(),
+      new BigMoneyUltimate(),
+      new BigMoneyUltimateFor3or4(),
+      new Bureaucrat(),
       new BureaucratGardens(),
       new BurningSkullHTBD1(),
-      new CouncilRoomMilitia(),
-      new DomPlayer(),
-      new LabMilitiaChapel(),
-      new Festival(),
       new CouncilRoom(),
-      new Bureaucrat(),
-      new BigMoneyUltimate(),
-      new WorkshopGardens(),
-      new BasicBigMoney(),
-      new BigMoneyUltimateFor3or4(),
+      new CouncilRoomMilitia(),
+      new Courtyard(),
+      new DomPlayer(),
       new DoubleMoatFor3or4(),
+      new Duke(),
+      new Festival(),
+      new FirstGame(),
+      new LabMilitiaChapel(),
       new Laboratory(),
       new Militia(),
       new Moat(),
@@ -82,7 +100,7 @@ export default class StatsBot extends ProxyAgent {
       new Witch(),
       new WitchAndMoatFor3or4(),
       new WitchFor3or4(),
-      new Artisan()
+      new WorkshopGardens()
     ];
   }
 
