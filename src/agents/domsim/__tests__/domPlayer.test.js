@@ -372,3 +372,33 @@ test('playValue from calculated priority', () => {
   // This expectations assumes current basicAI implementation. Adjust expected value if method changes
   expect(ai.playValue(state, card, state.current)).toBe(77);
 });
+
+test('playPriority is sorted by value', () => {
+  const testCards = [cards.Copper, cards.Silver, cards.Gold];
+  const ai = new DomPlayer();
+  const state = new State();
+
+  state.setUp([ai, ai], muteConfig);
+
+  ai.playValue = (state, card) => card.coins;
+  state.current.hand = testCards;
+
+  let priority = ai.playPriority(state, state.current);
+
+  expect(priority).toEqual(testCards.toReversed());
+});
+
+test('playPriority filters unwanted cards', () => {
+  const testCards = [cards.Copper, cards.Silver, cards.Copper];
+  const ai = new DomPlayer();
+  const state = new State();
+
+  state.setUp([ai, ai], muteConfig);
+
+  ai.wantsToPlay = (card, state, player) => card.name !== 'Copper';
+  state.current.hand = testCards;
+
+  let priority = ai.playPriority(state, state.current);
+
+  expect(priority).toEqual([cards.Silver]);
+});
