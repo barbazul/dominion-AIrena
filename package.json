@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "jest",
-    "static": "eslint src"
+    "static": "eslint *.js src"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.12.11",

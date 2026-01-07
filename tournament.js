@@ -41,7 +41,8 @@ import Courtyard from './src/agents/domsim/courtyard.js';
 import ObmCourtyard from './src/agents/dominiate/obmCourtyard.js';
 import yargs from 'yargs';
 import * as fs from 'fs';
-import Duke from "./src/agents/domsim/duke.js";
+import Duke from './src/agents/domsim/duke.js';
+import Farm from './src/agents/domsim/farm.js';
 
 const argv = yargs(process.argv.slice(2))
   .option('statsbot-stats-file', {
@@ -95,14 +96,15 @@ const players = [
   new CouncilRoomMilitiaMiningVillage(),
   new Courtyard(),
   new ObmCourtyard(),
-  new Duke()
+  new Duke(),
+  new Farm()
 ];
 
 const statsBotAgent = new StatsBot(statsBotOptions);
 
 players.push(statsBotAgent);
 
-let scoreBoard = Object.fromEntries(players.map(p => [ p.toString(), { plays: 0, wins: 0, rate: 0.0 } ]));
+let scoreBoard = Object.fromEntries(players.map(p => [p.toString(), { plays: 0, wins: 0, rate: 0.0 }]));
 
 function getWinner (state) {
   const scores = [];
@@ -150,7 +152,8 @@ for (let i = 0; i < players.length - 1; i++) {
   for (let j = i + 1; j < players.length; j++) {
     for (let game = 0; game < gamesPerMatch; game++) {
       let state = new State();
-      let logFn = () => {};
+      let logFn = () => {
+      };
 
       if (players[i].toString() === 'SillyAI' || players[j].toString() === 'SillyAI') {
         logFn = console.log;

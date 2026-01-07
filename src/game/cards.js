@@ -37,6 +37,7 @@ import Conspirator from '../cards/conspirator.js';
 import Courtyard from '../cards/courtyard.js';
 import Duke from '../cards/duke.js';
 import MiningVillage from '../cards/miningVillage.js';
+import Farm from '../cards/farm.js';
 
 const cards = {
   // Basic cards
@@ -82,6 +83,7 @@ const cards = {
   Conspirator: new Conspirator(),
   Courtyard: new Courtyard(),
   Duke: new Duke(),
+  Farm: new Farm(),
   'Mining Village': new MiningVillage()
 };
 

@@ -37,7 +37,8 @@ import CouncilRoomMilitiaMiningVillage from './src/agents/barbazul/councilRoomMi
 import Courtyard from './src/agents/domsim/courtyard.js';
 import ObmCourtyard from './src/agents/dominiate/obmCourtyard.js';
 import yargs from 'yargs';
-import Duke from "./src/agents/domsim/duke.js";
+import Duke from './src/agents/domsim/duke.js';
+import Farm from './src/agents/domsim/farm.js';
 
 const argv = yargs(process.argv.slice(2))
   .option('statsbot-stats-file', {
@@ -87,7 +88,8 @@ const players = [
   new CouncilRoomMilitiaMiningVillage(),
   new Courtyard(),
   new ObmCourtyard(),
-  new Duke()
+  new Duke(),
+  new Farm()
 ];
 
 const statsBotAgent = new StatsBot(statsBotOptions);
