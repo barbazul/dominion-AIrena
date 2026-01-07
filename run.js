@@ -96,14 +96,7 @@ const players = [
   new CouncilRoomMilitiaMiningVillage(),
   new Courtyard(), // 35
   new ObmCourtyard(),
-  new Duke(),
-  new Farm(),
-  new Ironworks(),
-  new IronworksGardensPaper(), // 40
-  new IronworksGardensRock(),
-  new IronworksGardensScissors(),
-  new Masquerade(),
-  new CantripLurker()
+  new Duke()
 ];
 
 const statsBotAgent = new StatsBot(statsBotOptions);
