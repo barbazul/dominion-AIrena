@@ -8,6 +8,8 @@ import cards from '../../game/cards.js';
 import { STRATEGY_AGGRESSIVE_TRASHING, STRATEGY_STANDARD, STRATEGY_TRASH_WHEN_OBSOLETE } from './domPlayer.js';
 import { CHOICE_TRASH } from '../basicAI.js';
 
+/* Stryker disable ArrayDeclaration, ObjectLiteral */
+
 const helpers = {
   /**
    * Safely check agent play strategy for card.
@@ -122,14 +124,10 @@ const heuristics = {
      * @return {boolean}
      */
     wantsToBePlayed: (state, my) => {
-      if (my.hand.length === 0) {
-        return false;
-      }
-
       const isAggressive = helpers.getPlayStrategyFor(my.agent, cards.Chapel) === STRATEGY_AGGRESSIVE_TRASHING;
       const minMoneyInDeck = isAggressive ? 4 : 6;
       const trashOverBuyThreshold = isAggressive ? 3 : 4;
-      const cardsInHand = my.hand.slice(0);
+      const cardsInHand = my.hand;
       const totalMoney = my.agent.getTotalMoney(my);
       let trashCount = 0;
 
@@ -140,9 +138,9 @@ const heuristics = {
       }
 
       let cardToTrash = my.agent.choose(CHOICE_TRASH, state, my.hand);
-
       // Optimization: Avoid recalculating value
       // my.agent.trashValue(state, cardToTrash, my) > 0 &&
+
       return trashCount > 0 &&
         (
           !my.agent.removingReducesBuyingPower(my, state, cardToTrash) ||
@@ -295,5 +293,7 @@ const heuristics = {
   'Mining Village': { types: [ 'Village', 'Cycler' ], playPriority: 9, discardPriority: 22 },
   Courtyard: { types: [ 'Terminal' ], discardPriority: 24, playPriority: 24 }
 };
+
+/* Stryker enable ArrayDeclaration, ObjectLiteral */
 
 export default heuristics;
