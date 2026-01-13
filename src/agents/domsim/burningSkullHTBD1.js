@@ -1,75 +1,79 @@
-import { DomPlayer } from './domPlayer.js';
+import {DomPlayer} from './domPlayer.js';
+import cards from '../../game/cards.js';
 
 export default class BurningSkullHTBD1 extends DomPlayer {
-  constructor () {
+  constructor() {
     super();
     this.name = 'Burning Skull HTBD#1';
-    this.requires = ['Sentry', 'Vassal', 'Throne Room', 'Laboratory', 'Militia', 'Poacher', 'Harbinger'];
+    this.requires = [
+      cards.Sentry, cards.Vassal, cards['Throne Room'], cards.Laboratory,
+      cards.Militia, cards.Poacher, cards.Harbinger
+    ];
   }
 
-  gainPriority (state, my) {
+  gainPriority(state, my) {
     const priority = [];
 
-    if (my.countInDeck('Laboratory') > 0) {
-      my.log(`I have ${my.countInDeck('Laboratory')} Labs -> I want Province`);
-      priority.push('Province');
+    if (my.countInDeck(cards.Laboratory) > 0) {
+      my.log(`I have ${my.countInDeck(cards.Laboratory)} Labs -> I want Province`);
+      priority.push(cards.Province);
     }
 
-    if (state.countInSupply('Province') <= 4) {
-      my.log(`There are ${state.countInSupply('Province')} Provs left -> I want Duchy`);
-      priority.push('Duchy');
+    if (state.countInSupply(cards.Province) <= 4) {
+      my.log(`There are ${state.countInSupply(cards.Province)} Provs left -> I want Duchy`);
+      priority.push(cards.Duchy);
     }
 
-    if (state.countInSupply('Province') <= 2) {
-      my.log(`There are ${state.countInSupply('Province')} Provs left -> I want Estate`);
-      priority.push('Estate');
+    if (state.countInSupply(cards.Province) <= 2) {
+      my.log(`There are ${state.countInSupply(cards.Province)} Provs left -> I want Estate`);
+      priority.push(cards.Estate);
     }
 
-    if (my.countInDeck('Sentry') < 4) {
-      my.log(`I have ${my.countInDeck('Sentry')} Sentries -> I want Sentries`);
-      priority.push('Sentry');
+    if (my.countInDeck(cards.Sentry) < 4) {
+      my.log(`I have ${my.countInDeck(cards.Sentry)} Sentries -> I want Sentries`);
+      priority.push(cards.Sentry);
     }
 
     if (this.getTotalMoney(my) < 8) {
       my.log(`I have ${this.getTotalMoney(my)} total moneys -> I want Gold`);
-      priority.push('Gold');
+      priority.push(cards.Gold);
     }
 
     if (this.getTotalMoney(my) < 6) {
       my.log(`I have ${this.getTotalMoney(my)} total moneys -> I want Vassal`);
-      priority.push('Vassal');
+      priority.push(cards.Vassal);
     }
 
-    if (my.countInDeck('Sentry') > 1 &&
-      my.countInDeck('Throne Room') < this.countCardTypeInDeck(my, 'Cycler') &&
-      my.countInDeck('Throne Room') < 1) {
-      my.log(`I have ${my.countInDeck('Sentry')} Sentries, ${this.countCardTypeInDeck(my, 'Cycler')} cantrips and ${my.countInDeck('Throne Room')} Throne Rooms -> I want TRs`);
-      priority.push('Throne Room');
+    if (my.countInDeck(cards.Sentry) > 1 &&
+        my.countInDeck(cards['Throne Room']) < this.countCardTypeInDeck(my, 'Cycler') &&
+        my.countInDeck(cards['Throne Room']) < 1) {
+      my.log(`I have ${my.countInDeck(cards.Sentry)} Sentries, ${this.countCardTypeInDeck(my, 'Cycler')} cantrips and ${my.countInDeck(cards['Throne Room'])} Throne Rooms -> I want TRs`);
+      priority.push(cards['Throne Room']);
     }
 
     my.log('I always wants more Labs');
-    priority.push('Laboratory');
+    priority.push(cards.Laboratory);
 
-    if (my.countInDeck('Sentry') > 1 &&
-      my.countInDeck('Throne Room') < this.countCardTypeInDeck(my, 'Cycler')) {
-      my.log(`I have ${my.countInDeck('Sentry')} Sentries, ${this.countCardTypeInDeck(my, 'Cycler')} cantrips and ${my.countInDeck('Throne Room')} Throne Rooms -> I want TRs`);
-      priority.push('Throne Room');
+    if (my.countInDeck(cards.Sentry) > 1 &&
+        my.countInDeck(cards['Throne Room']) < this.countCardTypeInDeck(my, 'Cycler')) {
+      my.log(`I have ${my.countInDeck(cards.Sentry)} Sentries, ${this.countCardTypeInDeck(my, 'Cycler')} cantrips and ${my.countInDeck(cards['Throne Room'])} Throne Rooms -> I want TRs`);
+      priority.push(cards['Throne Room']);
     }
 
-    if (my.countInDeck('Militia') === 0) {
+    if (my.countInDeck(cards.Militia) === 0) {
       my.log('No Militia -> I want Militia');
-      priority.push('Militia');
+      priority.push(cards.Militia);
     }
 
-    if (my.countInDeck('Vassal') === 0) {
+    if (my.countInDeck(cards.Vassal) === 0) {
       my.log('No Vassal -> I want Vassal');
-      priority.push('Vassal');
+      priority.push(cards.Vassal);
     }
 
     my.log('I always wants more Poachers');
-    priority.push('Poacher');
+    priority.push(cards.Poacher);
     my.log('I always wants more Harbingers');
-    priority.push('Harbinger');
+    priority.push(cards.Harbinger);
 
     return priority;
   }
