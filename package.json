@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "jest",
-    "static": "eslint src"
+    "static": "eslint src",
+    "mutation": "npx stryker run --incremental"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.12.11",
