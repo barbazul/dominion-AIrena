@@ -260,25 +260,32 @@ describe('Heuristics for Domsim', () => {
   });
 
   describe('With Mine', () => {
-    const ai = new DomPlayer();
-    const state = new State();
-    state.setUp([ai, ai], { log: jest.fn(), warn: jest.fn() });
+    let ai;
+    let state;
+
+    beforeEach(() => {
+      ai = new DomPlayer();
+      state = new State();
+      state.setUp([ai, ai], { log: jest.fn(), warn: jest.fn() });
+    });
 
     test('Mine wantsToBePlayed when agent finds cards to mine', () => {
-      ai.checkForCardToMine = jest.fn(() => {
-        return { trash: [cards.Copper], gain: [cards.Silver] }
-      });
-
+      state.current.hand = [cards.Copper];
       expect(heuristics[cards.Mine].wantsToBePlayed(state, state.current)).toBe(true);
     })
 
     test('Mine doesn\'t want to be played when agent finds no cards to mine', () => {
-      ai.checkForCardToMine = jest.fn(() => {
-        return null;
-      });
-
+      state.current.hand = [];
       expect(heuristics[cards.Mine].wantsToBePlayed(state, state.current)).toBe(false);
     })
+
+    test('Mine triggers an agent upgrade choice when selecting the card to Mine', () => {
+      ai.choose = jest.fn(() => {
+        return { trash: [cards.Copper], gain: [cards.Silver] }
+      });
+
+      expect(heuristics[cards.Mine].checkForCardToMine(state, state.current)).toEqual({trash: [cards.Copper], gain: [cards.Silver]});
+    });
   })
 
   describe('With Moneylender', () => {

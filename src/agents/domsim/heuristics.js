@@ -6,7 +6,7 @@
  */
 import cards from '../../game/cards.js';
 import { STRATEGY_AGGRESSIVE_TRASHING, STRATEGY_STANDARD, STRATEGY_TRASH_WHEN_OBSOLETE } from './domPlayer.js';
-import { CHOICE_TRASH } from '../basicAI.js';
+import { CHOICE_TRASH, CHOICE_UPGRADE } from '../basicAI.js';
 
 /* Stryker disable ArrayDeclaration, ObjectLiteral */
 
@@ -186,14 +186,28 @@ const heuristics = {
 
     /**
      * Wants to be played when has good upgrade options
+     * See MineCard.java
      *
      * @param {State} state
      * @param {Player} my
      * @return {boolean}
      */
     wantsToBePlayed: (state, my) => {
-      return my.agent.checkForCardToMine(state, my) !== null;
+      return heuristics.Mine.checkForCardToMine(state, my) !== null;
+    },
+
+    /**
+     * See MineCard.java
+     *
+     * @param {State} state
+     * @param {Player} my
+     * @return {String[]}
+     */
+    checkForCardToMine (state, my) {
+      let upgradeChoices = cards.Mine.upgradeChoices(state, my.hand);
+      return my.agent.choose(CHOICE_UPGRADE, state, upgradeChoices);
     }
+
   },
   Moat: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 33 },
   Moneylender: {
