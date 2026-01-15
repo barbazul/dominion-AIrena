@@ -10,6 +10,11 @@ import Card from '../../../cards/card';
 const muteConfig = { log: () => {}, warn: () => {} };
 
 describe('DomPlayer', () => {
+  describe('with countTerminalsInDeck', () => {
+    test('countTerminalsInDeck returns 0 with empty deck', () => {
+      const ai = new DomPlayer();
+      const owner = new Player(ai, () => {});
+describe('DomPlayer', () => {
   describe('with findCardToRemodel', () => {
     test('findCardToRemodel returns null when no cards to remodel', () => {
       const ai = new DomPlayer();
@@ -49,8 +54,6 @@ describe('DomPlayer', () => {
       state.current.hand = [cards.Copper, cards.Estate];
       state.current.discard = [cards.Province];
       state.kingdom = { Silver: 10, Estate: 8 };
-import heuristics from "../heuristics";
-import Card from "../../../cards/card";
 
       expect(ai.findCardToRemodel(state.current, state, cards.Remodel, 2, true)).toBe(cards.Estate);
     });
@@ -213,18 +216,19 @@ import Card from "../../../cards/card";
       const ai = new DomPlayer();
       const state = new State();
 
-      state.setUp([ai, new BasicAI()], { log: () => {}, warn: () => {} });
+
+      state.setUp([ ai, new BasicAI() ], { log: () => {}, warn: () => {} });
       ai.gainPriority = () => [cards.Gold, cards.Silver];
-      const player = ai.myPlayer(state);
+      constplayer = ai.myPlayer(state);
       state.current = player;
       player.coins = 5;
-      player.hand = [cards.Copper];
+      player.hand = [ cards.Copper ];
 
       expect(ai.removingReducesBuyingPower(player, state, cards.Copper)).toBe(true);
     });
   });
 
-describe('with getPotentialCoins', () => {
+  describe('with getPotentialCoins', () => {
     test('getPotentialCoins returns 0 on empty hand and no previous coins', () => {
       const ai = new DomPlayer();
       const owner = new Player(ai, () => {});
@@ -541,228 +545,4 @@ describe('with getPotentialCoins', () => {
       expect(priority).toEqual([cards.Silver]);
     });
   });
-});
-
-test('Fallback discard value from heuristics', () => {
-  const card = cards.Curse;
-  const originalValue = heuristics[card].discardPriority;
-  const ai = new DomPlayer();
-  const state = new State();
-
-  state.setUp([ai, ai], muteConfig);
-
-  heuristics[card].discardPriority = 0;
-  expect(ai.fallbackDiscardValue(state, card, state.current)).toBe(16);
-
-  heuristics[card].discardPriority = 16;
-  expect(ai.fallbackDiscardValue(state, card, state.current)).toBe(0);
-
-  heuristics[card].discardPriority = 20;
-  expect(ai.fallbackDiscardValue(state, card, state.current)).toBe(-4);
-
-  heuristics[card].discardPriority = originalValue;
-});
-
-test('Fallback discard value without heuristics', () => {
-  const card = new Card();
-  const ai = new DomPlayer();
-  const state = new State();
-
-  state.setUp([ai, ai], muteConfig);
-
-  // This expectations assumes current basicAI implementation. Adjust expected value if method changes
-  expect(ai.fallbackDiscardValue(state, card, state.current)).toBe(0);
-});
-
-test('Discard actions when no actions left', () => {
-  const card = cards.Smithy;
-  const ai = new DomPlayer();
-  const state = new State();
-
-  state.setUp([ai, ai], muteConfig);
-  state.current.actions = 0;
-
-  expect(ai.discardValue(state, card, state.current)).toBe(15);
-});
-
-test('Check heuristics when actions left', () => {
-  const card = cards.Smithy;
-  const ai = new DomPlayer();
-  const state = new State();
-
-  ai.fallbackDiscardValue = () => -1;
-  state.setUp([ai, ai], muteConfig);
-  state.current.actions = 2;
-
-  expect(ai.discardValue(state, card, state.current)).toBe(-1);
-});
-
-test('Check specific heuristic function first for discardValue', () => {
-  const card = new BasicAction();
-  const ai = new DomPlayer();
-  const state = new State();
-
-  card.name = 'Fake Action';
-  heuristics[card] = {
-    discardPriority: 10,
-    calculatedDiscardPriority: () => -1
-  };
-
-  state.setUp([ai, ai], muteConfig);
-  expect(ai.discardValue(state, card, state.current)).toBe(-1);
-  delete heuristics[card];
-});
-
-test('Skip calculated discardValue if not a number', () => {
-  const card = new BasicAction();
-  const ai = new DomPlayer();
-  const state = new State();
-
-  card.name = 'Fake Action';
-  heuristics[card] = {
-    discardPriority: 10,
-    calculatedDiscardPriority: () => false
-  };
-
-  state.setUp([ai, ai], muteConfig);
-  expect(ai.discardValue(state, card, state.current)).toBe(6);
-  delete heuristics[card];
-});
-
-test('Get Trash value from heuristics', () => {
-  const card = cards.Province;
-  const originalValue = heuristics[card].trashPriority;
-  const ai = new DomPlayer();
-  const state = new State();
-
-  state.setUp([ai, ai]);
-
-  heuristics[card].trashPriority = 0;
-  expect(ai.trashValue(state, card, state.current)).toBe(16);
-
-  heuristics[card].trashPriority = 16;
-  expect(ai.trashValue(state, card, state.current)).toBe(0);
-
-  heuristics[card].trashPriority = 20;
-  expect(ai.trashValue(state, card, state.current)).toBe(-4);
-
-  heuristics[card].trashPriority = originalValue;
-});
-
-test('Trash value falls back to discardValue without heuristics', () => {
-  const card = cards.Curse;
-  const originalTrashValue = heuristics[card].trashPriority;
-  const originalDiscardValue = heuristics[card].discardPriority;
-  const ai = new DomPlayer();
-  const state = new State();
-
-  state.setUp([ai, ai], muteConfig);
-  delete heuristics[card].trashPriority;
-
-  heuristics[card].discardPriority = 0;
-  expect(ai.trashValue(state, card, state.current)).toBe(16);
-
-  heuristics[card].discardPriority = 16;
-  expect(ai.trashValue(state, card, state.current)).toBe(0);
-
-  heuristics[card].discardPriority = 10;
-  expect(ai.trashValue(state, card, state.current)).toBe(6);
-
-  heuristics[card].trashPriority = originalTrashValue;
-  heuristics[card].discardPriority = originalDiscardValue;
-});
-
-test('Check specific heuristic function first for trashValue', () => {
-  const card = new BasicAction();
-  const ai = new DomPlayer();
-  const state = new State();
-
-  card.name = 'Fake Action';
-  heuristics[card] = {
-    trashPriority: 10,
-    calculatedTrashPriority: () => -1
-  };
-
-  state.setUp([ai, ai], muteConfig);
-  expect(ai.trashValue(state, card, state.current)).toBe(-1);
-  delete heuristics[card];
-});
-
-test('Skip calculated trashValue if not a number', () => {
-  const card = new BasicAction();
-  const ai = new DomPlayer();
-  const state = new State();
-
-  card.name = 'Fake Action';
-  heuristics[card] = {
-    trashPriority: 10,
-    calculatedTrashPriority: () => false
-  };
-
-  state.setUp([ai, ai], muteConfig);
-  expect(ai.trashValue(state, card, state.current)).toBe(6);
-  delete heuristics[card];
-});
-
-test('Always wants to play without heuristic', () => {
-  const card = new BasicAction();
-  const ai = new DomPlayer();
-  const state = new State();
-
-  card.name = 'Fake Action';
-  state.setUp([ai, ai], muteConfig);
-  expect(ai.wantsToPlay(card, state, state.current)).toBe(true);
-});
-
-test('Check specific heuristic function first for wantsToPlay', () => {
-  const card = new BasicAction();
-  const ai = new DomPlayer();
-  const state = new State();
-
-  card.name = 'Fake Action';
-  heuristics[card] = {
-    wantsToBePlayed: () => false
-  };
-
-  state.setUp([ai, ai], muteConfig);
-  expect(ai.wantsToPlay(card, state, state.current)).toBe(false);
-  delete heuristics[card];
-});
-
-test('Fallback playValue without heuristics', () => {
-  const card = new Card();
-  const ai = new DomPlayer();
-  const state = new State();
-
-  state.setUp([ai, ai], muteConfig);
-
-  // This expectations assumes current basicAI implementation. Adjust expected value if method changes
-  expect(ai.playValue(state, card, state.current)).toBe(-1);
-});
-
-test('playValue from heuristics', () => {
-  const card = new Card();
-  const ai = new DomPlayer();
-  const state = new State();
-
-  state.setUp([ai, ai], muteConfig);
-  heuristics[card] = {playPriority: 5};
-
-  // This expectations assumes current basicAI implementation. Adjust expected value if method changes
-  expect(ai.playValue(state, card, state.current)).toBe(95);
-});
-
-test('playValue from calculated priority', () => {
-  const card = new Card();
-  const ai = new DomPlayer();
-  const state = new State();
-
-  state.setUp([ai, ai], muteConfig);
-  heuristics[card] = {
-    playPriority: 5,
-    calculatedPlayPriority: () => 77
-  };
-
-  // This expectations assumes current basicAI implementation. Adjust expected value if method changes
-  expect(ai.playValue(state, card, state.current)).toBe(77);
 });

@@ -666,50 +666,84 @@ test('Prefer discard Throne Room with no actions to copy', () => {
     const ai = new DomPlayer();
     const state = new State();
 
-    state.setUp([ai, ai], muteConfig);
+      state.setUp([ai, ai], muteConfig);
 
-    state.current.knownTopCards = 0;
-    state.current.actions = 2;
-    const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
-    expect(calculated).toEqual(75);
+      state.current.knownTopCards = 0;
+      state.current.actions = 2;
+      const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
+      expect(calculated).toEqual(75);
+    });
+
+    test('Vassal prioritize with top card known action and actions left.', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+
+      state.setUp([ai, ai], muteConfig);
+
+      state.current.knownTopCards = 1;
+      state.current.actions = 2;
+      state.current.draw[0] = cards.Smithy;
+      const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
+      expect(calculated).toEqual(99);
+    });
+
+    test('Vassal default priority when top card is not known and single action.', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+
+      state.setUp([ai, ai], muteConfig);
+
+      state.current.knownTopCards = 0;
+      state.current.actions = 1;
+      const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
+      expect(calculated).toEqual(75);
+    });
+
+    test('Vassal prioritize with top card known non-terminal action.', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+
+      state.setUp([ai, ai], muteConfig);
+
+      state.current.knownTopCards = 1;
+      state.current.actions = 1;
+      state.current.draw[0] = cards.Market;
+      const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
+      expect(calculated).toEqual(99);
+    });
   });
 
-  test('Vassal prioritize with top card known action and actions left.', () => {
-    const ai = new DomPlayer();
-    const state = new State();
+  describe('With Witch', () => {
+    test('Witch calculated discard priority is treated as Moat\'s if no curses left', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+      const card = cards.Witch;
+      let moatDiscardValue;
 
-    state.setUp([ai, ai], muteConfig);
+      state.setUp([ai, ai], {
+        log: () => {
+        },
+        warn: () => {
+        }
+      });
+      state.kingdom.Curse = 0;
+      moatDiscardValue = ai.discardValue(state, cards.Moat, state.current);
 
-    state.current.knownTopCards = 1;
-    state.current.actions = 2;
-    state.current.draw[0] = cards.Smithy;
-    const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
-    expect(calculated).toEqual(99);
+      expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(moatDiscardValue);
+    });
+
+    test('Witch skips calculated discard priority with curses in supply', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+      const card = cards.Witch;
+
+      state.setUp([ai, ai], {
+        log: () => {
+        },
+        warn: () => {
+        }
+      });
+      expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(false);
+    });
   });
-
-  test('Vassal default priority when top card is not known and single action.', () => {
-    const ai = new DomPlayer();
-    const state = new State();
-
-    state.setUp([ai, ai], muteConfig);
-
-    state.current.knownTopCards = 0;
-    state.current.actions = 1;
-    const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
-    expect(calculated).toEqual(75);
-  });
-
-  test('Vassal prioritize with top card known non-terminal action.', () => {
-    const ai = new DomPlayer();
-    const state = new State();
-
-    state.setUp([ai, ai], muteConfig);
-
-    state.current.knownTopCards = 1;
-    state.current.actions = 1;
-    state.current.draw[0] = cards.Market;
-    const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
-    expect(calculated).toEqual(99);
-  });
-
 });
