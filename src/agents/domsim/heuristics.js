@@ -179,7 +179,22 @@ const heuristics = {
   Market: { types: ['Cycler'], discardPriority: 30, playPriority: 13 },
   Merchant: { types: ['Cycler'], discardPriority: 19, playPriority: 7 },
   Militia: { types: [ 'Terminal' ], discardPriority: 25, playPriority: 30 },
-  Mine: { types: [ 'Terminal' ], discardPriority: 22, playPriority: 24 },
+  Mine: {
+    types: [ 'Terminal' ],
+    discardPriority: 22,
+    playPriority: 24,
+
+    /**
+     * Wants to be played when has good upgrade options
+     *
+     * @param {State} state
+     * @param {Player} my
+     * @return {boolean}
+     */
+    wantsToBePlayed: (state, my) => {
+      return my.agent.checkForCardToMine(state, my) !== null;
+    }
+  },
   Moat: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 33 },
   Moneylender: {
     types: [ 'Terminal' ],

@@ -160,6 +160,127 @@ describe('Heuristics for Domsim', () => {
     });
   });
 
+  describe('With Chapel', () => {
+    test('Chapel does not want to be played with empty hand', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+
+      state.setUp([ai, ai], muteConfig);
+      state.current.hand = [];
+
+      expect(heuristics[cards.Chapel].wantsToBePlayed(state, state.current)).toBe(false);
+    });
+
+    it.each(
+        [
+          // No trash value
+          [2, () => 0, false, STRATEGY_STANDARD, 5, 2, false],
+          // Loses Money
+          [2, () => 1, true, STRATEGY_STANDARD, 5, 1, false],
+          // Aggressive trashing
+          [2, () => 1, true, STRATEGY_AGGRESSIVE_TRASHING, 5, 2, false],
+          [2, () => 1, false, STRATEGY_AGGRESSIVE_TRASHING, 5, 0, true],
+          [3, () => 1, true, STRATEGY_AGGRESSIVE_TRASHING, 5, 0, true],
+          [3, () => 1, false, STRATEGY_AGGRESSIVE_TRASHING, 5, 0, true],
+          [2, () => 1, false, STRATEGY_AGGRESSIVE_TRASHING, 3, 0, true],
+          [3, () => 1, true, STRATEGY_AGGRESSIVE_TRASHING, 3, 0, true],
+          [3, () => 1, false, STRATEGY_AGGRESSIVE_TRASHING, 3, 0, true],
+          [3, () => 0, true, STRATEGY_STANDARD, 7, 2, false],
+          [3, () => 1, true, STRATEGY_STANDARD, 7, 2, false],
+          [3, () => 1, false, STRATEGY_STANDARD, 7, 2, false]
+        ]
+    )(
+        'Chapel wantsToBePlayed #%#',
+        (
+            cardsInHand,
+            trashValue,
+            loseMoney,
+            strategy,
+            totalMoney,
+            potentialCoin,
+            expected
+        ) => {
+          const ai = new DomPlayer();
+          const state = new State();
+
+          state.setUp([ai, ai], muteConfig);
+
+          // Has cards in hand
+          state.current.hand = Array(cardsInHand).fill(cards.Estate);
+          // Cards have trash value (1st condition)
+          ai.trashValue = trashValue;
+          // Trashing would lose money (2nd condition)
+          ai.removingReducesBuyingPower = () => loseMoney;
+          // Aggressive trash strategy (2 cards < threshold=3, 3rd condition)
+          ai.playStrategies[cards.Chapel] = strategy;
+          // Total money would go below threshold (5 - 2 = 3 < 4, 4th condition)
+          // Total money is over min money threshold (5th condition)
+          ai.getTotalMoney = () => totalMoney;
+          ai.getPotentialCoinValue = () => potentialCoin;
+
+          ai.choose = () => cards.Estate;
+          expect(heuristics[cards.Chapel].wantsToBePlayed(state, state.current)).toBe(expected);
+        }
+    );
+  });
+
+  describe('With Gardens', () => {
+    test('Gardens calculated trash priority when agent wants gardens', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+
+      state.setUp([ai, ai], {
+        log: () => {
+        },
+        warn: () => {
+        }
+      });
+      ai.wantsToGainOrKeep = () => true;
+
+      expect(heuristics[cards.Gardens].calculatedTrashPriority(state, cards.Gardens, state.current))
+          .toBe(-49);
+    });
+
+    test('Gardens calculated trash priority ignores when agent does not want gardens', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+
+      state.setUp([ai, ai], {
+        log: () => {
+        },
+        warn: () => {
+        }
+      });
+      ai.wantsToGainOrKeep = () => false;
+
+      expect(heuristics[cards.Gardens].calculatedTrashPriority(state, cards.Gardens, state.current))
+          .toBe(false);
+    });
+
+  });
+
+  describe('With Mine', () => {
+    const ai = new DomPlayer();
+    const state = new State();
+    state.setUp([ai, ai], { log: jest.fn(), warn: jest.fn() });
+
+    test('Mine wantsToBePlayed when agent finds cards to mine', () => {
+      ai.checkForCardToMine = jest.fn(() => {
+        return { trash: [cards.Copper], gain: [cards.Silver] }
+      });
+
+      expect(heuristics[cards.Mine].wantsToBePlayed(state, state.current)).toBe(true);
+    })
+
+    test('Mine doesn\'t want to be played when agent finds no cards to mine', () => {
+      ai.checkForCardToMine = jest.fn(() => {
+        return null;
+      });
+
+      expect(heuristics[cards.Mine].wantsToBePlayed(state, state.current)).toBe(false);
+    })
+  })
+
   describe('With Moneylender', () => {
     test('Prefer discard Moneylender with no coppers on hand', () => {
       const ai = new DomPlayer();
@@ -269,6 +390,58 @@ describe('Heuristics for Domsim', () => {
     });
   });
 
+  describe('With Vassal', () => {
+    test('Vassal default priority when top card is not known.', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+
+      state.setUp([ai, ai], muteConfig);
+
+      state.current.knownTopCards = 0;
+      state.current.actions = 2;
+      const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
+      expect(calculated).toEqual(75);
+    });
+
+    test('Vassal prioritize with top card known action and actions left.', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+
+      state.setUp([ai, ai], muteConfig);
+
+      state.current.knownTopCards = 1;
+      state.current.actions = 2;
+      state.current.draw[0] = cards.Smithy;
+      const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
+      expect(calculated).toEqual(99);
+    });
+
+    test('Vassal default priority when top card is not known and single action.', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+
+      state.setUp([ai, ai], muteConfig);
+
+      state.current.knownTopCards = 0;
+      state.current.actions = 1;
+      const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
+      expect(calculated).toEqual(75);
+    });
+
+    test('Vassal prioritize with top card known non-terminal action.', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+
+      state.setUp([ai, ai], muteConfig);
+
+      state.current.knownTopCards = 1;
+      state.current.actions = 1;
+      state.current.draw[0] = cards.Market;
+      const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
+      expect(calculated).toEqual(99);
+    });
+  });
+
   describe('With Witch', () => {
     test('Witch calculated discard priority is treated as Moat\'s if no curses left', () => {
       const ai = new DomPlayer();
@@ -302,154 +475,4 @@ describe('Heuristics for Domsim', () => {
       expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(false);
     });
   });
-
-  describe('With Gardens', () => {
-    test('Gardens calculated trash priority when agent wants gardens', () => {
-      const ai = new DomPlayer();
-      const state = new State();
-
-      state.setUp([ai, ai], {
-        log: () => {
-        },
-        warn: () => {
-        }
-      });
-      ai.wantsToGainOrKeep = () => true;
-
-      expect(heuristics[cards.Gardens].calculatedTrashPriority(state, cards.Gardens, state.current))
-          .toBe(-49);
-    });
-
-    test('Gardens calculated trash priority ignores when agent does not want gardens', () => {
-      const ai = new DomPlayer();
-      const state = new State();
-
-      state.setUp([ai, ai], {
-        log: () => {
-        },
-        warn: () => {
-        }
-      });
-      ai.wantsToGainOrKeep = () => false;
-
-      expect(heuristics[cards.Gardens].calculatedTrashPriority(state, cards.Gardens, state.current))
-          .toBe(false);
-    });
-
-  });
-
-  describe('With Chapel', () => {
-    test('Chapel does not want to be played with empty hand', () => {
-      const ai = new DomPlayer();
-      const state = new State();
-
-      state.setUp([ai, ai], muteConfig);
-      state.current.hand = [];
-
-      expect(heuristics[cards.Chapel].wantsToBePlayed(state, state.current)).toBe(false);
-    });
-
-    it.each(
-        [
-          // No trash value
-          [2, () => 0, false, STRATEGY_STANDARD, 5, 2, false],
-          // Loses Money
-          [2, () => 1, true, STRATEGY_STANDARD, 5, 1, false],
-          // Aggressive trashing
-          [2, () => 1, true, STRATEGY_AGGRESSIVE_TRASHING, 5, 2, false],
-          [2, () => 1, false, STRATEGY_AGGRESSIVE_TRASHING, 5, 0, true],
-          [3, () => 1, true, STRATEGY_AGGRESSIVE_TRASHING, 5, 0, true],
-          [3, () => 1, false, STRATEGY_AGGRESSIVE_TRASHING, 5, 0, true],
-          [2, () => 1, false, STRATEGY_AGGRESSIVE_TRASHING, 3, 0, true],
-          [3, () => 1, true, STRATEGY_AGGRESSIVE_TRASHING, 3, 0, true],
-          [3, () => 1, false, STRATEGY_AGGRESSIVE_TRASHING, 3, 0, true],
-          [3, () => 0, true, STRATEGY_STANDARD, 7, 2, false],
-          [3, () => 1, true, STRATEGY_STANDARD, 7, 2, false],
-          [3, () => 1, false, STRATEGY_STANDARD, 7, 2, false]
-        ]
-    )(
-        'Chapel wantsToBePlayed #%#',
-        (
-            cardsInHand,
-            trashValue,
-            loseMoney,
-            strategy,
-            totalMoney,
-            potentialCoin,
-            expected
-        ) => {
-          const ai = new DomPlayer();
-          const state = new State();
-
-          state.setUp([ai, ai], muteConfig);
-
-          // Has cards in hand
-          state.current.hand = Array(cardsInHand).fill(cards.Estate);
-          // Cards have trash value (1st condition)
-          ai.trashValue = trashValue;
-          // Trashing would lose money (2nd condition)
-          ai.removingReducesBuyingPower = () => loseMoney;
-          // Aggressive trash strategy (2 cards < threshold=3, 3rd condition)
-          ai.playStrategies[cards.Chapel] = strategy;
-          // Total money would go below threshold (5 - 2 = 3 < 4, 4th condition)
-          // Total money is over min money threshold (5th condition)
-          ai.getTotalMoney = () => totalMoney;
-          ai.getPotentialCoinValue = () => potentialCoin;
-
-          ai.choose = () => cards.Estate;
-          expect(heuristics[cards.Chapel].wantsToBePlayed(state, state.current)).toBe(expected);
-        }
-    );
-  });
-
-  test('Vassal default priority when top card is not known.', () => {
-    const ai = new DomPlayer();
-    const state = new State();
-
-    state.setUp([ai, ai], muteConfig);
-
-    state.current.knownTopCards = 0;
-    state.current.actions = 2;
-    const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
-    expect(calculated).toEqual(75);
-  });
-
-  test('Vassal prioritize with top card known action and actions left.', () => {
-    const ai = new DomPlayer();
-    const state = new State();
-
-    state.setUp([ai, ai], muteConfig);
-
-    state.current.knownTopCards = 1;
-    state.current.actions = 2;
-    state.current.draw[0] = cards.Smithy;
-    const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
-    expect(calculated).toEqual(99);
-  });
-
-  test('Vassal default priority when top card is not known and single action.', () => {
-    const ai = new DomPlayer();
-    const state = new State();
-
-    state.setUp([ai, ai], muteConfig);
-
-    state.current.knownTopCards = 0;
-    state.current.actions = 1;
-    const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
-    expect(calculated).toEqual(75);
-  });
-
-  test('Vassal prioritize with top card known non-terminal action.', () => {
-    const ai = new DomPlayer();
-    const state = new State();
-
-    state.setUp([ai, ai], muteConfig);
-
-    state.current.knownTopCards = 1;
-    state.current.actions = 1;
-    state.current.draw[0] = cards.Market;
-    const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
-    expect(calculated).toEqual(99);
-  });
-
 });
