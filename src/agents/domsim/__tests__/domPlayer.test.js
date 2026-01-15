@@ -230,7 +230,7 @@ import Card from "../../../cards/card";
     });
   });
 
-describe('with getPotentialCoins', () => {
+  describe('with getPotentialCoins', () => {
     test('getPotentialCoins returns 0 on empty hand and no previous coins', () => {
       const ai = new DomPlayer();
       const owner = new Player(ai, () => {});
