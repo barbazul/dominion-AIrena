@@ -1,4 +1,5 @@
 import { DomPlayer } from './domPlayer.js';
+import cards from '../../game/cards.js';
 
 export default class CouncilRoomMilitia extends DomPlayer {
   constructor () {
@@ -17,38 +18,38 @@ export default class CouncilRoomMilitia extends DomPlayer {
     const priority = [];
 
     if (my.getAvailableMoney() >= 13) {
-      priority.push('Province');
+      priority.push(cards.Province);
     }
 
-    if (my.countInDeck('Province') >= 1) {
-      priority.push('Province');
+    if (my.countInDeck(cards.Province) >= 1) {
+      priority.push(cards.Province);
     }
 
-    if (state.countInSupply('Province') <= 4) {
-      priority.push('Duchy');
+    if (state.countInSupply(cards.Province) <= 4) {
+      priority.push(cards.Duchy);
     }
 
-    if (state.countInSupply('Province') <= 2) {
-      priority.push('Estate');
+    if (state.countInSupply(cards.Province) <= 2) {
+      priority.push(cards.Estate);
     }
 
-    if (my.countInDeck('Gold') < my.countInDeck('Council Room') - 1 && this.getTotalMoney(my) < 16) {
-      priority.push('Gold');
+    if (my.countInDeck(cards.Gold) < my.countInDeck(cards['Council Room']) - 1 && this.getTotalMoney(my) < 16) {
+      priority.push(cards.Gold);
     }
 
-    if (my.countInDeck('Council Room') < 1) {
-      priority.push('Council Room');
+    if (my.countInDeck(cards['Council Room']) < 1) {
+      priority.push(cards['Council Room']);
     }
 
-    if (my.countInDeck('Council Room') < my.countInDeck('Village') - 1) {
-      priority.push('Council Room');
+    if (my.countInDeck(cards['Council Room']) < my.countInDeck(cards.Village) - 1) {
+      priority.push(cards['Council Room']);
     }
 
-    if (my.countInDeck('Militia') === 0) {
-      priority.push('Militia');
+    if (my.countInDeck(cards.Militia) === 0) {
+      priority.push(cards.Militia);
     }
 
-    priority.push('Village');
+    priority.push(cards.Village);
 
     return priority;
   }
