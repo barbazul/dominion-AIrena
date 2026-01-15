@@ -76,9 +76,6 @@ export class DomPlayer extends BasicAI {
   wantsToPlay (cardName, state, my) {
     // TODO Move into heuristics
     const specific = {
-      Mine: (state, my) => {
-        return this.checkForCardToMine(state, my) !== null;
-      },
       Smithy: (state, my) => {
         return !(this.getPlayStrategyFor('Smithy') === STRATEGY_PLAY_IF_NOT_BUYING_TOP_CARD &&
           this.isGoingToBuyTopCardInBuyRules(state, my));
