@@ -246,7 +246,25 @@ const heuristics = {
     }
   },
   Poacher: { types: ['Cycler'], discardPriority: 30, playPriority: 10 },
-  Remodel: { types: [ 'Terminal' ], discardPriority: 18, playPriority: 24 },
+
+  Remodel: {
+    types: [ 'Terminal', 'Trasher', 'TrashForBenefit' ],
+    discardPriority: 18,
+    playPriority: 24,
+
+    /**
+     * Wants to be played when has a card to Remodel
+     * See RemodelCard.java
+     *
+     * @param {State} state
+     * @param {Player} my
+     * @return {boolean}
+     */
+    wantsToBePlayed: (state, my) => {
+      return my.agent.findCardToRemodel(my, state, cards.Remodel, 2, true) !== null;
+    }
+  },
+
   Sentry: { types: ['Cycler'], discardPriority: 22, playPriority: 2 },
   Smithy: { types: [ 'Terminal' ], discardPriority: 24, playPriority: 25 },
   'Throne Room': {

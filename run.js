@@ -126,7 +126,7 @@ rivals.forEach(player => {
 
 for (let i = 0; i < numGames; i++) {
   state.setUp(rivals, config);
-  console.log(state.kingdom);
+  logFn(state.kingdom);
   state.startGame();
   state.doGameAnalysis();
 
