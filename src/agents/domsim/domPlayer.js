@@ -91,9 +91,9 @@ export class DomPlayer extends BasicAI {
         if (my.actions === 1) {
           discardValue = this.discardValue(state, card, my);
         } else {
-          const hypotetical = my.copy();
-          hypotetical.actions = 1;
-          discardValue = this.discardValue(state, card, hypotetical);
+          const hypothetical = my.copy();
+          hypothetical.actions = 1;
+          discardValue = this.discardValue(state, card, hypothetical);
         }
 
         if (discardValue > 6) {
