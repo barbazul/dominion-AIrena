@@ -10,6 +10,117 @@ import Card from '../../../cards/card';
 const muteConfig = { log: () => {}, warn: () => {} };
 
 describe('DomPlayer', () => {
+  describe('with findCardToRemodel', () => {
+    test('findCardToRemodel returns null when no cards to remodel', () => {
+      const ai = new DomPlayer();
+      const owner = new Player(ai, () => {});
+
+      const myMock = {
+        hand: [],
+      };
+
+      const stateMock = {};
+
+      expect(ai.findCardToRemodel(myMock, stateMock, cards.Remodel, 2, true)).toBe(null);
+    });
+
+    test('findCardToRemodel finds an obvious card', () => {
+      const ai = new DomPlayer();
+      const owner = new Player(ai, () => {});
+      const state = new State();
+      state.setUp([ai, ai], muteConfig);
+      state.current.hand = [cards.Estate];
+
+      expect(ai.findCardToRemodel(state.current, state, cards.Remodel, 2, true)).toBe(cards.Estate);
+    });
+
+    test('findCardToRemodel finds skips the excluded card', () => {
+      const ai = new DomPlayer();
+      const owner = new Player(ai, () => {});
+      const state = new State();
+      state.setUp([ai, ai], muteConfig);
+      state.current.hand = [cards.Remodel, cards.Estate];
+
+      expect(ai.findCardToRemodel(state.current, state, cards.Remodel, 2, true)).toBe(cards.Estate);
+    });
+
+    test('findCardToRemodel selects the best card to trash to gain a card with a better trash value on late game', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+      state.setUp([ai, ai], muteConfig);
+      // Copper allows to gain Estate, but Estate allows to gain Silver, which has a higher trash value
+      state.current.hand = [cards.Copper, cards.Estate];
+      state.current.discard = [cards.Province];
+      state.kingdom = { Silver: 10, Estate: 8 };
+
+      expect(ai.findCardToRemodel(state.current, state, cards.Remodel, 2, true)).toBe(cards.Estate);
+    });
+
+    test('findCardToRemodel does not care about the best card to trash to gain a card with a better trash value on early game', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+      state.setUp([ai, ai], muteConfig);
+      // Copper allows to gain Estate, but Estate allows to gain Silver, which has a higher trash value
+      state.current.hand = [cards.Copper, cards.Estate];
+      state.kingdom = { Silver: 10, Estate: 8 };
+
+      expect(ai.findCardToRemodel(state.current, state, cards.Remodel, 2, true)).toBe(cards.Copper);
+    });
+
+    test('findCardToRemodel selects the a card that is mode desirable to trash when gain is equal', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+      state.setUp([ai, ai], muteConfig);
+      // Copper and Curse allow to gain Estate, but Curse is a nicer Trash
+      state.current.hand = [cards.Copper, cards.Curse];
+      state.kingdom = { Estate: 8 };
+
+      expect(ai.findCardToRemodel(state.current, state, cards.Remodel, 2, true)).toBe(cards.Curse);
+    });
+  })
+
+  describe('with stillInEarlyGame', () => {
+    it('Defaults to true', () => {
+      const ai = new DomPlayer();
+      const owner = new Player(ai, () => {});
+      const state = new State();
+
+      state.current = owner;
+      owner.getDeck = () => [ ];
+      expect(ai.stillInEarlyGame(state, owner)).toBe(true);
+    });
+
+    it('Returns false when deck contains victory cards we want to discard', () => {
+      const ai = new DomPlayer();
+      const owner = new Player(ai, () => {});
+      const state = new State();
+
+      state.current = owner;
+      owner.getDeck = () => [ cards.Duchy ];
+      expect(ai.stillInEarlyGame(state, owner)).toBe(false);
+    });
+
+    it('Ignores Estates', () => {
+      const ai = new DomPlayer();
+      const owner = new Player(ai, () => {});
+      const state = new State();
+
+      state.current = owner;
+      expect(ai.stillInEarlyGame(state, owner)).toBe(true);
+    });
+
+    it('Only Considers vitory cards', () => {
+      const ai = new DomPlayer();
+      const owner = new Player(ai, () => {});
+      const state = new State();
+
+      ai.discardValue = () => 10; // Force discard intent
+      state.current = owner;
+      owner.getDeck = () => [ cards.Artisan ]; // Action should not be considered
+      expect(ai.stillInEarlyGame(state, owner)).toBe(true);
+    });
+  });
+
   describe('with countTerminalsInDeck', () => {
     test('countTerminalsInDeck returns 0 with empty deck', () => {
       const ai = new DomPlayer();

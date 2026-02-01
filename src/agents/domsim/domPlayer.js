@@ -9,6 +9,102 @@ export class DomPlayer extends BasicAI {
   }
 
   /**
+   * See DomPlayer.findCardToRemodel
+   *
+   * @param {Player} my
+   * @param {State} state
+   * @param {Card} cardInHandThatCanNotBeRemodeled
+   * @param {int} theAmount The increase in vale of the card to gain
+   * @param {boolean} sameCardAllowed
+   * @return {Card|null}
+   * @todo Finish Implementation and also consider creating upgradeValue
+   */
+  findCardToRemodel (my, state, cardInHandThatCanNotBeRemodeled, theAmount, sameCardAllowed) {
+    // Skip the card that cannot be remodeled
+    const theCardsToConsiderTrashing = my.hand.slice(0).filter(card => card !== cardInHandThatCanNotBeRemodeled);
+    // DomCardName theDesiredCardIfRemodelNotUsed = getDesiredCard(getTotalPotentialCurrency(), false);
+
+    const upgradeOptions = cards.Remodel.upgradeChoices(state, theCardsToConsiderTrashing);
+    // TODO The first part of this algorithm looks like some optimization to only consider "interesting" trash/gains
+    // temporarily remove the card from hand AND deck
+    // DomCardName theRemodelGainCard = getDesiredCardWithRestriction(null,theMaxCostOfCardToGain, false, sameCardAllowed?null:cardInHandThatCanNotBeRemodeled.getName());
+    // DomCardName theDesiredCard = getDesiredCard(getTotalPotentialCurrency(), false);
+    // first we will make a list of cards we consider good candidates for trashing
+    // only add to the list if:
+    //   -what we will gain is better than the card we trash (so of course it's not null)
+    //   -(and the card we will gain is better than what we were able to buy without using Remodel
+    //     or -trashing the card will not hinder our buying potential)
+    // Restore the hand
+
+    // nothing good found
+    if (theCardsToConsiderTrashing.length === 0) {
+      return null;
+    }
+
+    let theBestCardToTrash = null;
+    let theBestCardToGain = null;
+    const isStillInEarlyGame = this.stillInEarlyGame(state, my);
+
+    // now we scan the lists to find the best possible trashing candidate
+    upgradeOptions.forEach(upgradeOption => {
+      if (isStillInEarlyGame) {
+        if (
+          theBestCardToGain === null ||
+          this.trashValue(state, upgradeOption.trash[0], my) > this.trashValue(state, theBestCardToTrash, my)
+        ) {
+          theBestCardToGain = upgradeOption.gain[0];
+          theBestCardToTrash = upgradeOption.trash[0];
+        }
+      } else {
+        if (
+          theBestCardToGain === null ||
+          // trashing this card will give us a better card to trash later
+          (this.trashValue(state, upgradeOption.gain[0], my) > this.trashValue(state, theBestCardToGain, my)) ||
+          // trashing this card is more desirable while still allowing us to gain the best card
+          (this.trashValue(state, upgradeOption.gain[0], my) === this.trashValue(state, theBestCardToGain, my) &&
+          this.trashValue(state, upgradeOption.trash[0], my) > this.trashValue(state, theBestCardToTrash, my))
+        ) {
+          theBestCardToGain = upgradeOption.gain[0];
+          theBestCardToTrash = upgradeOption.trash[0];
+        }
+      }
+    });
+
+    return theBestCardToTrash;
+  }
+
+  /**
+   * See DomPlayer.stilInEarlyGame
+   *
+   * @param {State} state
+   * @param {Player} my
+   * @return {boolean}
+   */
+  stillInEarlyGame (state, my) {
+    let result = true;
+
+    my.getDeck()
+      .filter(card => card !== cards.Estate && card.isVictory())
+      .forEach(card => {
+        let discardValue;
+
+        if (my.actions === 1) {
+          discardValue = this.discardValue(state, card, my);
+        } else {
+          const hypotetical = my.copy();
+          hypotetical.actions = 1;
+          discardValue = this.discardValue(state, card, hypotetical);
+        }
+
+        if (discardValue > 6) {
+          result = false;
+        }
+      });
+
+    return result;
+  }
+
+  /**
    *
    * @param {Player} my
    * @return {number}
@@ -117,7 +213,7 @@ export class DomPlayer extends BasicAI {
 
     // TODO Original would call discardValue forcing actions to 1.
     // TODO change this to passing my.copy() when method is finished
-    return this.fallbackDiscardValue(state, card, my);
+    return this.discardValue(state, card, my);
   }
 
   /**
