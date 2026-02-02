@@ -134,7 +134,7 @@ describe('DomPlayer', () => {
       const ai = new DomPlayer();
       const owner = new Player(ai, () => {});
 
-      owner.getDeck = () => [ new BasicAction(), new BasicAction() ];
+      owner.getDeck = () => [ cards.Militia, cards.Artisan ];
       expect(ai.countTerminalsInDeck(owner)).toBe(2);
     });
 

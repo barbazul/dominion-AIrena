@@ -120,7 +120,7 @@ export default class FirstGame extends DomPlayer {
       priority.push('Remodel');
     }
 
-    if (this.countTerminalsInDeck(my) > my.countInDeck('Village') + 1) {
+    if (this.countTypeInDeck(my, 'Terminal') > my.countInDeck('Village') + 1) {
       priority.push('Village');
     }
 
@@ -153,7 +153,7 @@ export default class FirstGame extends DomPlayer {
 
     this.midturnGainSmiithy(state, my, priority);
 
-    if (my.countInDeck('Village') < this.countTerminalsInDeck(my)) {
+    if (my.countInDeck('Village') < this.countTypeInDeck(my, 'Terminal')) {
       priority.push('Village');
     }
 
@@ -189,7 +189,7 @@ export default class FirstGame extends DomPlayer {
   }
 
   getHasTerminalSpace (my) {
-    return my.countInDeck('Village') === this.countTerminalsInDeck(my) - 1 &&
+    return my.countInDeck('Village') === this.countTypeInDeck(my, 'Terminal') - 1 &&
       my.countInDeck('Smithy') < 6;
   }
 
@@ -214,7 +214,7 @@ export default class FirstGame extends DomPlayer {
     if (state.phase !== PHASE_ACTION &&
       my.coins === 6 &&
       my.buys > 1 &&
-      this.countTerminalsInDeck(my) > my.countInDeck('Village') &&
+      this.countTypeInDeck(my, 'Terminal') > my.countInDeck('Village') &&
       state.countInSupply('Village') > 1 && my.countInDeck('Smithy') > 1) {
       priority.push('Village');
     }
