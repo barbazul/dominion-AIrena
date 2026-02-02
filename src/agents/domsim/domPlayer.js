@@ -11,6 +11,7 @@ export class DomPlayer extends BasicAI {
   /**
    * See DomPlayer.findCardToRemodel
    *
+   * @see https://github.com/Geronimoo/DominionSim/blob/master/src/main/java/be/aga/dominionSimulator/DomPlayer.java#L264
    * @param {Player} my
    * @param {State} state
    * @param {Card} cardInHandThatCanNotBeRemodeled
@@ -74,8 +75,33 @@ export class DomPlayer extends BasicAI {
   }
 
   /**
+   *
+   * @see https://github.com/Geronimoo/DominionSim/blob/master/src/main/java/be/aga/dominionSimulator/DomPlayer.java#L648
+   * @param {Player} my
+   * @param {String} type
+   * @return {number}
+   */
+  countTypeInDeck (my, type) {
+    let count = 0;
+    for (let card of my.getDeck()) {
+      let types = card.types.slice();
+
+      if (heuristics[card] && heuristics[card].types) {
+        types = types.concat(heuristics[card].types);
+      }
+
+      if (types.indexOf(type) > -1) {
+        count++;
+      }
+    }
+
+    return count;
+  }
+
+  /**
    * See DomPlayer.stilInEarlyGame
    *
+   * @see https://github.com/Geronimoo/DominionSim/blob/master/src/main/java/be/aga/dominionSimulator/DomPlayer.java#L4061
    * @param {State} state
    * @param {Player} my
    * @return {boolean}
@@ -105,22 +131,6 @@ export class DomPlayer extends BasicAI {
   }
 
   /**
-   *
-   * @param {Player} my
-   * @return {number}
-   */
-  countTerminalsInDeck (my) {
-    let count = 0;
-    for (let card of my.getDeck()) {
-      if (card.isAction() && card.actions === 0) {
-        count++;
-      }
-    }
-
-    return count;
-  }
-
-  /**
    * @param {State} state
    * @param {Player} my
    * @return {String[]|Card[]}
@@ -132,6 +142,17 @@ export class DomPlayer extends BasicAI {
     );
 
     return choices.filter(cardName => this.wantsToPlay(cardName, state, my));
+  }
+
+  /**
+   * Originally created to count Terminals in deck. Use countTypeInDeck instead.
+   *
+   * @deprecated
+   * @param {Player} my
+   * @return {number}
+   */
+  countTerminalsInDeck (my) {
+    return this.countTypeInDeck(my, 'Terminal');
   }
 
   /**
