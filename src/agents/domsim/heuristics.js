@@ -67,7 +67,7 @@ const heuristics = {
   Estate: {
     playPriority: 100,
     discardPriority: 9,
-    types: ['Base', 'Junk'],
+    types: [ 'Base', 'Junk' ],
     /**
      * Avoid trashing when collecting estates
      *
@@ -101,10 +101,13 @@ const heuristics = {
       return false;
     }
   },
-  Province: { playPriority: 100, discardPriority: 7, trashPriority: 60 },
+  Province: { playPriority: 100, discardPriority: 7 },
 
   // Base Set
-  Artisan: { types: ['Terminal'], discardPriority: 27, playPriority: 30 },
+  Colony: { playPriority: 100, discardPriority: 6 },
+
+  // kingdom cards
+  Artisan: { playPriority: 30, discardPriority: 27, types: [ 'Terminal' ] },
   Bandit: { types: ['Terminal'], discardPriority: 23, playPriority: 23 },
   Bureaucrat: { types: ['Terminal'], discardPriority: 20, playPriority: 29 },
   Cellar: { types: ['Cycler'], discardPriority: 17, playPriority: 16 },
