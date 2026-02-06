@@ -26,12 +26,12 @@ const helpers = {
 };
 
 const heuristics = {
-  Curse: { discardPriority: 10, trashPriority: 0 },
-  Copper: { discardPriority: 15, playPriority: 55 },
+  // common cards
+  Curse: { playPriority: 100, discardPriority: 10 },
+  Copper: { playPriority: 55, discardPriority: 15 },
   Silver: {
-    discardPriority: 20,
     playPriority: 25,
-
+    discardPriority: 20,
     /**
      * Consider the trashWhenObsolete strategy.
      *
@@ -60,12 +60,13 @@ const heuristics = {
       return false;
     }
   },
-  Gold: { discardPriority: 24, playPriority: 30 },
+  Gold: { playPriority: 30, discardPriority: 24 },
+  Platinum: { playPriority: 23, discardPriority: 33 },
+  Potion: { playPriority: 40, discardPriority: 22 },
   Estate: {
-    types: [ 'Base', 'Junk' ],
+    playPriority: 100,
     discardPriority: 9,
-    trashPriority: 100,
-
+    types: [ 'Base', 'Junk' ],
     /**
      * Avoid trashing when collecting estates
      *
@@ -82,9 +83,8 @@ const heuristics = {
     }
   },
   Duchy: {
+    playPriority: 100,
     discardPriority: 8,
-    trashPriority: 100,
-
     /**
      * Avoid trashing when collecting duchies
      *
@@ -100,8 +100,11 @@ const heuristics = {
       return false;
     }
   },
-  Province: { discardPriority: 7, trashPriority: 60 },
-  Artisan: { types: [ 'Terminal' ], discardPriority: 27, playPriority: 30 },
+  Province: { playPriority: 100, discardPriority: 7 },
+  Colony: { playPriority: 100, discardPriority: 6 },
+
+  // kingdom cards
+  Artisan: { playPriority: 30, discardPriority: 27, types: [ 'Terminal' ] },
   Bandit: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 23 },
   Bureaucrat: { types: [ 'Terminal' ], discardPriority: 20, playPriority: 29 },
   Cellar: { types: ['Cycler'], discardPriority: 17, playPriority: 16 },
