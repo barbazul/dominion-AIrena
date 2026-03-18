@@ -1,5 +1,6 @@
 import { PHASE_ACTION } from '../../game/state.js';
 import { DomPlayer } from './domPlayer.js';
+import cards from "../../game/cards.js";
 
 /**
  * This is a bot built for the First Game suggested set of 10. It utilizes 8 of the 10 available kingdom cards, and was
@@ -11,7 +12,10 @@ export default class FirstGame extends DomPlayer {
   constructor () {
     super();
     this.name = 'First Game by michaeljb';
-    this.requires = ['Smithy', 'Cellar', 'Mine', 'Market', 'Remodel', 'Village', 'Workshop', 'Militia'];
+    this.requires = [
+        cards.Smithy, cards.Cellar, cards.Mine, cards.Market, cards.Remodel,
+        cards.Village, cards.Workshop, cards.Militia
+    ];
   }
 
   /**
@@ -69,35 +73,35 @@ export default class FirstGame extends DomPlayer {
 
     this.firstTurns(my, priority);
 
-    if (my.countInDeck('Market') === 0) {
-      priority.push('Market');
+    if (my.countInDeck(cards.Market) === 0) {
+      priority.push(cards.Market);
     }
 
-    if (my.countInDeck('Gold') < 1) {
-      priority.push('Gold');
+    if (my.countInDeck(cards.Gold) < 1) {
+      priority.push(cards.Gold);
     }
 
     this.addEngineParts(my, state, priority);
 
     if (state.phase !== PHASE_ACTION) {
-      if (my.countInDeck('Cellar') < 1) {
-        priority.push('Cellar');
+      if (my.countInDeck(cards.Cellar) < 1) {
+        priority.push(cards.Cellar);
       }
 
-      if (my.countInDeck('Cellar') < 2 && my.countInDeck('Smithy') > 0) {
-        priority.push('Cellar');
+      if (my.countInDeck(cards.Cellar) < 2 && my.countInDeck('Smithy') > 0) {
+        priority.push(cards.Cellar);
       }
     }
 
     this.midturnGainCellar(state, my, priority);
 
     if (state.phase === PHASE_ACTION) {
-      priority.push('Gold');
-      priority.push('Silver');
+      priority.push(cards.Gold);
+      priority.push(cards.Silver);
     }
 
-    if (my.countInDeck('Cellar') < 3 && my.countCardTypeInDeck('Victory') > 3) {
-      priority.push('Cellar');
+    if (my.countInDeck(cards.Cellar) < 3 && my.countCardTypeInDeck('Victory') > 3) {
+      priority.push(cards.Cellar);
     }
 
     this.replenishPayload(my, priority);
@@ -108,7 +112,7 @@ export default class FirstGame extends DomPlayer {
   }
 
   firstTurns (my, priority) {
-    if (my.countInDeck('Mine') === 0 && my.countInDeck('Market') > 0) {
+    if (my.countInDeck('Mine') === 0 && my.countInDeck(cards.Market) > 0) {
       priority.push('Mine');
     }
 
@@ -136,12 +140,12 @@ export default class FirstGame extends DomPlayer {
   midturnGainCellar (state, my, priority) {
     if (state.phase === PHASE_ACTION && my.countInHand('Militia') === 0 &&
       my.countInHand('Workshop') === 0 && my.countInHand('Mine') === 0) {
-      if (my.countInDeck('Cellar') < 1) {
-        priority.push('Cellar');
+      if (my.countInDeck(cards.Cellar) < 1) {
+        priority.push(cards.Cellar);
       }
 
-      if (my.countInDeck('Cellar') < 2 && my.countInDeck('Smithy') > 0) {
-        priority.push('Cellar');
+      if (my.countInDeck(cards.Cellar) < 2 && my.countInDeck('Smithy') > 0) {
+        priority.push(cards.Cellar);
       }
     }
   }
@@ -162,7 +166,7 @@ export default class FirstGame extends DomPlayer {
     }
 
     if (state.phase !== PHASE_ACTION) {
-      priority.push('Market');
+      priority.push(cards.Market);
     }
 
     if (my.countInDeck('Village') < 9) {
@@ -171,8 +175,8 @@ export default class FirstGame extends DomPlayer {
   }
 
   getMoneyInHand (my) {
-    return my.coins + my.countInHand('Copper') + 2 * my.countInHand('Silver') +
-      3 * my.countInHand('Gold');
+    return my.coins + my.countInHand('Copper') + 2 * my.countInHand(cards.Silver) +
+      3 * my.countInHand(cards.Gold);
   }
 
   midturnGainSmiithy (state, my, priority) {
@@ -194,13 +198,13 @@ export default class FirstGame extends DomPlayer {
   }
 
   getMarkets (my, state, priority) {
-    if (my.countInDeck('Market') < 5 && state.phase !== PHASE_ACTION && my.countInDeck('Smmithy') > 1) {
-      priority.push('Market');
+    if (my.countInDeck(cards.Market) < 5 && state.phase !== PHASE_ACTION && my.countInDeck('Smmithy') > 1) {
+      priority.push(cards.Market);
     }
 
-    if (my.countInDeck('Market') < 5 && state.phase === PHASE_ACTION && my.countInDeck('Smithy') > 3 &&
+    if (my.countInDeck(cards.Market) < 5 && state.phase === PHASE_ACTION && my.countInDeck('Smithy') > 3 &&
       my.countInHand('Mine') === 0) {
-      priority.push('Market');
+      priority.push(cards.Market);
     }
   }
 
@@ -222,7 +226,7 @@ export default class FirstGame extends DomPlayer {
 
   replenishPayload (my, priority) {
     if (my.countCardTypeInDeck('Treasure') < 7) {
-      priority.push('Silver');
+      priority.push(cards.Silver);
     }
 
     if (my.countCardTypeInDeck('Treasure') < 5) {
@@ -252,7 +256,7 @@ export default class FirstGame extends DomPlayer {
 
   panicPoints (my, priority, state) {
     if (my.countInDeck('Province') > 2 &&
-      my.countInDeck('Cellar') > 0 &&
+      my.countInDeck(cards.Cellar) > 0 &&
       my.countInDeck('Smithy') > 5) {
       priority.push('Estate');
     }
