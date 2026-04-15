@@ -26,46 +26,53 @@ export default class FirstGame extends DomPlayer {
    */
   gainPriority (state, my) {
     // HACK
-    my.countCardTypeInDeck = function (type) {
-      let count = 0;
+    if (my.countCardTypeInDeck === undefined) {
+      my.countCardTypeInDeck = function (type) {
+        let count = 0;
 
-      for (let card of this.getDeck()) {
-        if (card.types.indexOf(type) !== -1) {
-          count++;
-        }
-      }
-
-      return count;
-    };
-
-    // HACK
-    my.countMaxOpponentVP = function (state) {
-      let maxvp = 0;
-
-      for (let player of state.players) {
-        let vp = 0;
-        if (player !== this) {
-          for (let card of player.getDeck()) {
-            vp += card.getVP(player);
+        for (let card of this.getDeck()) {
+          if (card.types.indexOf(type) !== -1) {
+            count++;
           }
         }
 
-        maxvp = Math.max(maxvp, vp);
-      }
+        return count;
+      };
+    }
 
-      return maxvp;
-    };
 
     // HACK
-    my.countVP = function () {
-      let vp = 0;
+    if (my.countMaxOpponentVP === undefined) {
+      my.countMaxOpponentVP = function (state) {
+        let maxvp = 0;
 
-      for (let card of this.getDeck()) {
-        vp += card.getVP(this);
-      }
+        for (let player of state.players) {
+          let vp = 0;
+          if (player !== this) {
+            for (let card of player.getDeck()) {
+              vp += card.getVP(player);
+            }
+          }
 
-      return vp;
-    };
+          maxvp = Math.max(maxvp, vp);
+        }
+
+        return maxvp;
+      };
+    }
+
+    // HACK
+    if (my.countVP === undefined) {
+      my.countVP = function () {
+        let vp = 0;
+
+        for (let card of this.getDeck()) {
+          vp += card.getVP(this);
+        }
+
+        return vp;
+      };
+    }
 
     const priority = [];
 
@@ -237,46 +244,47 @@ export default class FirstGame extends DomPlayer {
   addEndGameGreening (state, my, priority) {
     this.duchyDancing(state, my, priority);
 
-    if (my.countInDeck('Province') > 0) {
-      priority.push('Province');
+    if (my.countInDeck(cards.Province) > 0) {
+      priority.push(cards.Province);
     }
 
     if (my.countInDeck('Smithy') > 4 &&
       my.coins > 13 &&
       my.buys > 1) {
-      priority.push('Province');
+      priority.push(cards.Province);
     }
 
-    if (my.countInDeck('Province') > 0 && state.countInSupply('Province') <= 5) {
-      priority.push('Duchy');
+    if (my.countInDeck(cards.Province) > 0 && state.countInSupply(cards.Province) <= 5) {
+      priority.push(cards.Duchy);
     }
 
     this.panicPoints(my, priority, state);
   }
 
   panicPoints (my, priority, state) {
-    if (my.countInDeck('Province') > 2 &&
+    if (my.countInDeck(cards.Province) > 2 &&
       my.countInDeck(cards.Cellar) > 0 &&
       my.countInDeck('Smithy') > 5) {
       priority.push('Estate');
     }
 
-    if (state.countInSupply('Province') <= 2) {
+    if (state.countInSupply(cards.Province) <= 2) {
       priority.push('Estate');
     }
   }
 
   duchyDancing (state, my, priority) {
-    if (state.countInSupply('Province') > 2 &&
+    if (state.countInSupply(cards.Province) > 2 &&
       my.countVP() <= my.countMaxOpponentVP(state) - 20 &&
-      state.phase !== PHASE_ACTION && my.countInDeck('Province') > 0) {
-      priority.push('Duchy');
+      state.phase !== PHASE_ACTION &&
+      my.countInDeck(cards.Province) > 0) {
+      priority.push(cards.Duchy);
     }
 
-    if (state.countInSupply('Province') === 2 &&
+    if (state.countInSupply(cards.Province) === 2 &&
       my.countVP() <= my.countMaxOpponentVP(state) &&
       state.phase !== PHASE_ACTION) {
-      priority.push('Duchy');
+      priority.push(cards.Duchy);
     }
   }
 }
