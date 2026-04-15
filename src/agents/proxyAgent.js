@@ -1,8 +1,9 @@
 import BasicAI from './basicAI.js';
 
-export default class ProxyAgent extends BasicAI {
+export default class ProxyAgent {
   constructor () {
-    super();
+    this.requires = [];
+    this.name = this.constructor.name;
 
     /**
      * @type {BasicAI}
@@ -37,52 +38,59 @@ export default class ProxyAgent extends BasicAI {
     this.actualAgent = ai;
 
     /**
-     * Make sure the actual agent will retrieve the player with the proxyAI
+     * Make sure the actual agent will retrieve the player with the proxyAgent
      * when asked for myPlayer.
      */
-    ai.myPlayer = (state) => this.myPlayer(state);
+    ai.myPlayer = this.myPlayer.bind(this);
+
+    /**
+     * Add proxy methods for any proprietary agent methods.
+     * Used for DomSim compatibility.
+     */
+
+    let obj = ai;
+    while (obj) {
+      Object.getOwnPropertyNames(obj).forEach(property => {
+        if (typeof obj[property] === 'function' && typeof this[property] === 'undefined') {
+          console.log('Adding proxy method ' + ai.toString() + ':' + property);
+          this[property] = (...args) => this.actualAgent[property](...args);
+        }
+      });
+
+      obj = Object.getPrototypeOf(obj);
+    }
   }
 
   /**
+   * Same logic as BasicAI.myPlayer, but with for proxyAgent.
+   *
+   * @see BasicAI.myPlayer
+   * @param {State} state
+   */
+  myPlayer (state) {
+    for (let i = 0; i < state.players.length; i++) {
+      if (state.players[i].agent === this) {
+        return state.players[i];
+      }
+    }
+
+    throw new Error(this.name + ' is being asked a decision but is not playing');
+  }
+
+  /**
+   * Same as BasicAI.copy, but also copies the actual agent.
+   *
+   * @see BasicAI.copy
    * @return {ProxyAgent|BasicAI}
    */
   copy () {
-    const newAgent = super.copy();
-
+    const newAgent = new this.constructor();
+    newAgent.name = this.name + '*';
     newAgent.setActualAgent(this.actualAgent.copy());
-
     return newAgent;
   }
 
-  /**
-   * Temporary proxy method for DomPlayer agents
-   *
-   * @deprecated
-   * @todo Use https://gist.github.com/loilo/4d385d64e2b8552dcc12a0f5126b6df8 to have magic methods
-   * @param {Player} my
-   * @return {int}
-   */
-  getTotalMoney (my) {
-    if (this.actualAgent.getTotalMoney) {
-      return this.actualAgent.getTotalMoney(my);
-    }
-
-    return 0;
-  }
-
-  /**
-   * Temporary proxy method for DomPlayer agents
-   *
-   * @param {Player} my
-   * @param {State} state
-   * @param {Card} cardToTrash
-   * @return {boolean}
-   */
-  removingReducesBuyingPower (my, state, cardToTrash) {
-    if (this.actualAgent.removingReducesBuyingPower) {
-      return this.actualAgent.removingReducesBuyingPower(my, state, cardToTrash);
-    }
-
-    return false;
+  toString () {
+    return this.name;
   }
 }

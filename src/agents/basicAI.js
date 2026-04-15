@@ -1123,7 +1123,10 @@ export default class BasicAI {
       }
     }
 
-    const [ hypothesis, hypotheticallyMy ] = state.hypothetical(this);
+    // Considering proxyAgent, we trace back the agent from the matching player
+    const my = this.myPlayer(state);
+
+    const [ hypothesis, hypotheticallyMy ] = state.hypothetical(my.agent);
 
     return this.fastForwardToBuy(hypothesis, hypotheticallyMy);
   }
