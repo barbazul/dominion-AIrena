@@ -26,11 +26,13 @@ describe('FirstGame Class', () => {
     };
   });
 
-  test('should initialize with correct settings', () => {
-    expect(firstGame.name).toBe('First Game by michaeljb');
-    expect(firstGame.requires).toEqual([
-      cards.Smithy, cards.Cellar, cards.Mine, cards.Market, cards.Remodel, cards.Village, cards.Workshop, cards.Militia
-    ]);
+  describe('set up', () => {
+    test('should initialize with correct settings', () => {
+      expect(firstGame.name).toBe('First Game by michaeljb');
+      expect(firstGame.requires).toEqual([
+        cards.Smithy, cards.Cellar, cards.Mine, cards.Market, cards.Remodel, cards.Village, cards.Workshop, cards.Militia
+      ]);
+    });
   });
 
   describe('Duchy Dancing', () => {
@@ -134,6 +136,79 @@ describe('FirstGame Class', () => {
       expect(priority).toEqual(expect.arrayContaining([cards.Duchy, null]));
       // One Duchy from base greening, one from duchy-dancing behind on points
       expect(priority.filter(card => card === cards.Duchy).length).toBe(2);
+    });
+  });
+
+  describe('End game greening', () => {
+    test('wants province in End Game', () => {
+      // Has a province, this is the end game
+      mockPlayer.countInDeck.mockReturnValue(1);
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).toEqual(expect.arrayContaining([cards.Province]));
+      expect(priority.filter(card => card === cards.Province).length).toBe(1);
+    });
+
+    test('doesn\t want province before End Game', () => {
+      // Has no province, not end game yet
+      mockPlayer.countInDeck.mockReturnValue(0);
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).not.toContain(cards.Province);
+    });
+
+    test('can buy province + something else to enter end game', () => {
+      mockPlayer.countInDeck.mockImplementation(card => (card === cards.Smithy ? 5 : 0));
+      mockPlayer.coins = 14;
+      mockPlayer.buys = 2;
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).toEqual(expect.arrayContaining([cards.Province]));
+      expect(priority.filter(card => card === cards.Province).length).toBe(1);
+    });
+
+    test('not enough Smithies to start End Game', () => {
+      mockPlayer.countInDeck.mockImplementation(card => (card === cards.Smithy ? 4 : 0));
+      mockPlayer.coins = 14;
+      mockPlayer.buys = 2;
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).not.toContain(cards.Province);
+    });
+
+    test('not enough coins to start End Game', () => {
+      mockPlayer.countInDeck.mockImplementation(card => (card === cards.Smithy ? 5 : 0));
+      mockPlayer.coins = 13;
+      mockPlayer.buys = 2;
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).not.toContain(cards.Province);
+    });
+
+    test('not enough buys to enter the End Game', () => {
+      mockPlayer.countInDeck.mockImplementation(card => (card === cards.Smithy ? 5 : 0));
+      mockPlayer.coins = 14;
+      mockPlayer.buys = 1;
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).not.toContain(cards.Province);
+    });
+
+    test('end game Duchies', () => {
+      mockPlayer.countInDeck.mockReturnValue(1);
+      mockState.countInSupply.mockReturnValue(5);
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).toEqual(expect.arrayContaining([cards.Duchy]));
+      expect(priority.filter(card => card === cards.Duchy).length).toBe(1);
+    });
+
+    test('no Duchies before End Game', () => {
+      mockPlayer.countInDeck.mockReturnValue(0);
+      mockState.countInSupply.mockReturnValue(5);
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).not.toContain(cards.Duchy);
     });
   });
 
