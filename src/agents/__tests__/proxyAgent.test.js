@@ -2,6 +2,7 @@ import ProxyAgent from '../proxyAgent';
 import BasicAI from '../basicAI';
 import SillyAI from '../dominiate/sillyAI';
 import State from '../../game/state';
+import { DomPlayer } from '../domsim/domPlayer.js';
 
 describe('ProxyAgent', () => {
   describe('with getActualAgent', () => {
@@ -31,6 +32,15 @@ describe('ProxyAgent', () => {
       state.setUp([proxyAgent, rivalAgent], { log: () => {} });
 
       expect(actualAgent.myPlayer(state)).toBe(proxyAgent.myPlayer(state));
+    });
+
+    it('proxies the original method if it is defined', () => {
+      const proxyAgent = new ProxyAgent();
+      const actualAgent = new DomPlayer();
+
+      proxyAgent.setActualAgent(actualAgent);
+
+      expect(proxyAgent.getTotalMoney).toBeDefined();
     });
   });
 
@@ -64,6 +74,25 @@ describe('ProxyAgent', () => {
       proxyAgent.choose('FAKE_CHOICE', state, ['CHOICE_1', 'CHOICE_2']);
 
       expect(actualAgent.choose).toHaveBeenCalledWith('FAKE_CHOICE', state, ['CHOICE_1', 'CHOICE_2']);
+    });
+  });
+
+  describe('with Proxied methods', () => {
+    describe('with pessimisticBuyPhase', () => {
+      it('build hypothetical state for the right agent', () => {
+        const proxyAgent = new ProxyAgent();
+        const actualAgent = new SillyAI();
+        const state = new State();
+
+        state.hypothetical = jest.fn(() => []);
+        actualAgent.fastForwardToBuy = jest.fn();
+        proxyAgent.setActualAgent(actualAgent);
+        state.setUp([proxyAgent, actualAgent], { log: () => {} });
+
+        proxyAgent.pessimisticBuyPhase(state);
+
+        expect(state.hypothetical).toHaveBeenCalledWith(proxyAgent);
+      });
     });
   });
 });

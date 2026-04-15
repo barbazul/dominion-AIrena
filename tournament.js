@@ -155,10 +155,6 @@ for (let i = 0; i < players.length - 1; i++) {
       let logFn = () => {
       };
 
-      if (players[i].toString() === 'SillyAI' || players[j].toString() === 'SillyAI') {
-        logFn = console.log;
-      }
-
       if (game === 0) {
         console.log(`${players[i]} vs ${players[j]}`);
       }
