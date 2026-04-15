@@ -33,6 +33,110 @@ describe('FirstGame Class', () => {
     ]);
   });
 
+  describe('Duchy Dancing', () => {
+    test('wants to buy duchy when extremely behind in points', () => {
+      mockState.countInSupply.mockReturnValue(6);
+      mockState.phase = PHASE_BUY;
+      mockPlayer.countVP = jest.fn(() => 6);
+      mockPlayer.countMaxOpponentVP = jest.fn(() => 26);
+      mockPlayer.countInDeck.mockReturnValue(1);
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).toEqual(expect.arrayContaining([cards.Duchy, null]));
+      expect(priority.filter(card => card === cards.Duchy).length).toBe(1);
+    });
+
+    test('wants to buy extend the game when behind in points', () => {
+      mockState.countInSupply.mockReturnValue(2);
+      mockState.phase = PHASE_BUY;
+      mockPlayer.countVP = jest.fn(() => 6);
+      mockPlayer.countMaxOpponentVP = jest.fn(() => 6);
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).toEqual(expect.arrayContaining([cards.Duchy, null]));
+      expect(priority.filter(card => card === cards.Duchy).length).toBe(1);
+    });
+
+    test('doesn\'t duchy-dance any more on last province', () => {
+      mockState.countInSupply.mockReturnValue(1);
+      mockState.phase = PHASE_BUY;
+      mockPlayer.countVP = jest.fn(() => 6);
+      mockPlayer.countMaxOpponentVP = jest.fn(() => 26);
+      mockPlayer.countInDeck.mockReturnValue(1);
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      // Only one instance of Duchy should be in the priority list (base greening)
+      expect(priority).toEqual(expect.arrayContaining([cards.Duchy, null]));
+      expect(priority.filter(card => card === cards.Duchy).length).toBe(1);
+    });
+
+    test('doesn\'t want panic Duchy before first Province', () => {
+      mockState.countInSupply.mockReturnValue(6);
+      mockState.phase = PHASE_BUY;
+      mockPlayer.countVP = jest.fn(() => 6);
+      mockPlayer.countMaxOpponentVP = jest.fn(() => 26);
+      mockPlayer.countInDeck.mockReturnValue(0);
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).not.toContain(cards.Duchy);
+    });
+
+    test('no Duchy dancing when winning', () => {
+      mockState.countInSupply.mockReturnValue(6);
+      mockState.phase = PHASE_BUY;
+      mockPlayer.countVP = jest.fn(() => 6);
+      mockPlayer.countMaxOpponentVP = jest.fn(() => 0);
+      mockPlayer.countInDeck.mockReturnValue(1);
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).not.toContain(cards.Duchy);
+    });
+
+    test('no Duchy dancing when winning 2', () => {
+      mockState.countInSupply.mockReturnValue(2);
+      mockState.phase = PHASE_BUY;
+      mockPlayer.countVP = jest.fn(() => 6);
+      mockPlayer.countMaxOpponentVP = jest.fn(() => 0);
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).not.toContain(cards.Duchy);
+    });
+
+    test('no duchy dancing mid-turn', () => {
+      mockState.countInSupply.mockReturnValue(6);
+      mockState.phase = PHASE_ACTION;
+      mockPlayer.countVP = jest.fn(() => 6);
+      mockPlayer.countMaxOpponentVP = jest.fn(() => 26);
+      mockPlayer.countInDeck.mockReturnValue(1);
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).not.toContain(cards.Duchy);
+    });
+
+    test('no duchy dancing mid-turn 2', () => {
+      mockState.countInSupply.mockReturnValue(2);
+      mockState.phase = PHASE_ACTION;
+      mockPlayer.countVP = jest.fn(() => 6);
+      mockPlayer.countMaxOpponentVP = jest.fn(() => 26);
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).not.toContain(cards.Duchy);
+    });
+
+    test('Not desperate for Duchies if already buying provinces', () => {
+      mockState.countInSupply.mockReturnValue(2);
+      mockState.phase = PHASE_BUY;
+      mockPlayer.countVP = jest.fn(() => 6);
+      mockPlayer.countMaxOpponentVP = jest.fn(() => 26);
+      mockPlayer.countInDeck.mockReturnValue(1);
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).toEqual(expect.arrayContaining([cards.Duchy, null]));
+      // One Duchy from base greening, one from duchy-dancing behind on points
+      expect(priority.filter(card => card === cards.Duchy).length).toBe(2);
+    });
+  });
+
   test('gainPriority returns correct priorities when phase is ACTION', () => {
     mockState.phase = PHASE_ACTION;
     mockPlayer.countInDeck.mockImplementation(card => (card === cards.Gold ? 1 : 0));
@@ -65,14 +169,14 @@ describe('FirstGame Class', () => {
 
   test('gainPriority includes Duchy when supply is low', () => {
     mockState.phase = 'BUY_PHASE';
-    mockState.countInSupply.mockImplementation(card => (card === 'Province' ? 2 : 10));
+    mockState.countInSupply.mockImplementation(card => (card === cards.Province ? 2 : 10));
     mockPlayer.countInDeck.mockReturnValueOnce(1); // Province count
     mockPlayer.countVP = jest.fn(() => 30);
     mockPlayer.countMaxOpponentVP = jest.fn(() => 40);
 
     const priority = firstGame.gainPriority(mockState, mockPlayer);
 
-    expect(priority).toEqual(expect.arrayContaining(['Duchy', null]));
+    expect(priority).toEqual(expect.arrayContaining([cards.Duchy, null]));
   });
 
   test('gainPriority wants a first market if there is none in the deck', () => {
