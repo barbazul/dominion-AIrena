@@ -212,6 +212,56 @@ describe('FirstGame Class', () => {
     });
   });
 
+  describe('Panic points', () => {
+    test('wants to buy Estate when deck is under control', () => {
+      mockPlayer.countInDeck.mockImplementation(card => {
+        if (card === cards.Province) return 3;
+        if (card === cards.Cellar) return 1;
+        if (card === cards.Smithy) return 6;
+        return 0;
+      });
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).toEqual(expect.arrayContaining([cards.Estate]));
+    });
+
+    test('not enough Provinces to buy Estate', () => {
+      mockPlayer.countInDeck.mockImplementation(card => {
+        if (card === cards.Province) return 2;
+        if (card === cards.Cellar) return 1;
+        if (card === cards.Smithy) return 6;
+        return 0;
+      });
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).not.toContain(cards.Estate);
+    });
+
+    test('not enough Cellars to buy Estate', () => {
+      mockPlayer.countInDeck.mockImplementation(card => {
+        if (card === cards.Province) return 3;
+        if (card === cards.Cellar) return 0;
+        if (card === cards.Smithy) return 6;
+        return 0;
+      });
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).not.toContain(cards.Estate);
+    });
+
+    test('not enough Smithies to buy Estate', () => {
+      mockPlayer.countInDeck.mockImplementation(card => {
+        if (card === cards.Province) return 3;
+        if (card === cards.Cellar) return 1;
+        if (card === cards.Smithy) return 5;
+        return 0;
+      });
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).not.toContain(cards.Estate);
+    });
+  });
+
   test('gainPriority returns correct priorities when phase is ACTION', () => {
     mockState.phase = PHASE_ACTION;
     mockPlayer.countInDeck.mockImplementation(card => (card === cards.Gold ? 1 : 0));
