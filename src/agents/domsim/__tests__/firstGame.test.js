@@ -260,6 +260,12 @@ describe('FirstGame Class', () => {
       const priority = firstGame.gainPriority(mockState, mockPlayer);
       expect(priority).not.toContain(cards.Estate);
     });
+
+    test('wants to buy Estate when there are 2 or less Provinces left', () => {
+      mockState.countInSupply.mockReturnValue(2);
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).toEqual(expect.arrayContaining([cards.Estate]));
+    })
   });
 
   test('gainPriority returns correct priorities when phase is ACTION', () => {
