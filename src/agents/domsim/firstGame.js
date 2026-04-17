@@ -265,11 +265,11 @@ export default class FirstGame extends DomPlayer {
     if (my.countInDeck(cards.Province) > 2 &&
       my.countInDeck(cards.Cellar) > 0 &&
       my.countInDeck(cards.Smithy) > 5) {
-      priority.push('Estate');
+      priority.push(cards.Estate);
     }
 
     if (state.countInSupply(cards.Province) <= 2) {
-      priority.push('Estate');
+      priority.push(cards.Estate);
     }
   }
 
