@@ -349,4 +349,178 @@ describe('FirstGame Class', () => {
       expect(coins).toBe(11);
     });
   });
+
+  describe('getVillageWithExtraBuys', () => {
+    test('wants a Village with 7 coins and extra buys', () => {
+      mockPlayer.coins = 7;
+      mockPlayer.buys = 2;
+      mockState.phase = PHASE_BUY;
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).toContain(cards.Village);
+    });
+
+    test('does\'t want a Village without extra buys', () => {
+      mockPlayer.coins = 7;
+      mockPlayer.buys = 1;
+      mockState.phase = PHASE_BUY;
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).not.toContain(cards.Village);
+    });
+
+    test('doesn\'t want a Village with coins != 7', () => {
+      mockPlayer.coins = 6;
+      mockPlayer.buys = 2;
+      mockState.phase = PHASE_BUY;
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).not.toContain(cards.Village);
+    });
+
+    test('does\'t want a Village midturn', () => {
+      mockPlayer.coins = 7;
+      mockPlayer.buys = 2;
+      mockState.phase = PHASE_ACTION;
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+      expect(priority).not.toContain(cards.Village);
+    });
+
+    test('wants a Village with 6 coins, extra buys and excess terminals', () => {
+      mockState.phase = PHASE_BUY;
+      mockPlayer.coins = 6;
+      mockPlayer.buys = 2;
+      firstGame.countTypeInDeck = jest.fn().mockReturnValue(2);
+      mockState.countInSupply.mockReturnValue(2);
+      mockPlayer.countInDeck.mockImplementation(card => {
+        switch (card) {
+          case cards.Village: return 1;
+          case cards.Smithy: return 2;
+          default: return 0;
+        }
+      });
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+
+      expect(priority).toContain(cards.Village);
+      expect(priority.filter(card => card === cards.Village).length).toBe(3);
+    });
+
+    test('does\'t want a Village midturn 2', () => {
+      mockState.phase = PHASE_ACTION;
+      mockPlayer.coins = 6;
+      mockPlayer.buys = 2;
+      firstGame.countTypeInDeck = jest.fn().mockReturnValue(2);
+      mockState.countInSupply.mockReturnValue(2);
+      mockPlayer.countInDeck.mockImplementation(card => {
+        switch (card) {
+          case cards.Village: return 1;
+          case cards.Smithy: return 2;
+          default: return 0;
+        }
+      });
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+
+      expect(priority).toContain(cards.Village);
+      expect(priority.filter(card => card === cards.Village).length).toBe(2);
+    });
+
+    test('doesn\'t want a Village with coins != 6', () => {
+      mockState.phase = PHASE_BUY;
+      mockPlayer.coins = 2;
+      mockPlayer.buys = 2;
+      firstGame.countTypeInDeck = jest.fn().mockReturnValue(2);
+      mockState.countInSupply.mockReturnValue(2);
+      mockPlayer.countInDeck.mockImplementation(card => {
+        switch (card) {
+          case cards.Village: return 1;
+          case cards.Smithy: return 2;
+          default: return 0;
+        }
+      });
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+
+      expect(priority).toContain(cards.Village);
+      expect(priority.filter(card => card === cards.Village).length).toBe(2);
+    });
+
+    test('does\'t want a Village without extra buys 2', () => {
+      mockState.phase = PHASE_BUY;
+      mockPlayer.coins = 6;
+      mockPlayer.buys = 1;
+      firstGame.countTypeInDeck = jest.fn().mockReturnValue(2);
+      mockState.countInSupply.mockReturnValue(2);
+      mockPlayer.countInDeck.mockImplementation(card => {
+        switch (card) {
+          case cards.Village: return 1;
+          case cards.Smithy: return 2;
+          default: return 0;
+        }
+      });
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+
+      expect(priority).toContain(cards.Village);
+      expect(priority.filter(card => card === cards.Village).length).toBe(2);
+    });
+
+    test('does\'t want a Village without excess terminals', () => {
+      mockState.phase = PHASE_BUY;
+      mockPlayer.coins = 6;
+      mockPlayer.buys = 2;
+      firstGame.countTypeInDeck = jest.fn().mockReturnValue(2);
+      mockState.countInSupply.mockReturnValue(2);
+      mockPlayer.countInDeck.mockImplementation(card => {
+        switch (card) {
+          case cards.Village: return 2;
+          case cards.Smithy: return 2;
+          default: return 0;
+        }
+      });
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+
+      expect(priority).toContain(cards.Village);
+      expect(priority.filter(card => card === cards.Village).length).toBe(1);
+    });
+
+    test('does\'t want the last Village', () => {
+      mockState.phase = PHASE_BUY;
+      mockPlayer.coins = 6;
+      mockPlayer.buys = 2;
+      firstGame.countTypeInDeck = jest.fn().mockReturnValue(2);
+      mockState.countInSupply.mockReturnValue(1);
+      mockPlayer.countInDeck.mockImplementation(card => {
+        switch (card) {
+          case cards.Village: return 1;
+          case cards.Smithy: return 2;
+          default: return 0;
+        }
+      });
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+
+      expect(priority).toContain(cards.Village);
+      expect(priority.filter(card => card === cards.Village).length).toBe(2);
+    });
+
+    test('does\'t want village before the first couple of smithies', () => {
+      mockState.phase = PHASE_BUY;
+      mockPlayer.coins = 6;
+      mockPlayer.buys = 2;
+      firstGame.countTypeInDeck = jest.fn().mockReturnValue(1);
+      mockState.countInSupply.mockReturnValue(2);
+      mockPlayer.countInDeck.mockImplementation(card => {
+        switch (card) {
+          case cards.Village: return 0;
+          case cards.Smithy: return 1;
+          default: return 0;
+        }
+      });
+
+      const priority = firstGame.gainPriority(mockState, mockPlayer);
+
+      expect(priority).toContain(cards.Village);
+      expect(priority.filter(card => card === cards.Village).length).toBe(2);
+    });
+  });
 });
