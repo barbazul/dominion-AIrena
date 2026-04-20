@@ -10,10 +10,10 @@ describe('WitchFor3or4', () => {
   beforeEach(() => {
     player = new WitchFor3or4();
     my = {
-      countInDeck: jest.fn(),
+      countInDeck: jest.fn()
     };
     state = {
-      gainsToEndGame: jest.fn(),
+      gainsToEndGame: jest.fn()
     };
   });
 
@@ -53,7 +53,7 @@ describe('WitchFor3or4', () => {
 
   test('should prioritize a second Witch if less than 2 Witches are in the deck', () => {
     my.countInDeck
-        .mockImplementation(card => (card === cards.Witch ? 1 : 0)); // Second Witch count
+      .mockImplementation(card => (card === cards.Witch ? 1 : 0)); // Second Witch count
     const priority = player.gainPriority(state, my);
     expect(priority.filter((card) => card === cards.Witch).length).toBe(1);
   });

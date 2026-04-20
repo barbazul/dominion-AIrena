@@ -1,8 +1,8 @@
-import {DomPlayer} from './domPlayer.js';
+import { DomPlayer } from './domPlayer.js';
 import cards from '../../game/cards.js';
 
 export default class BurningSkullHTBD1 extends DomPlayer {
-  constructor() {
+  constructor () {
     super();
     this.name = 'Burning Skull HTBD#1';
     this.requires = [
@@ -11,23 +11,10 @@ export default class BurningSkullHTBD1 extends DomPlayer {
     ];
   }
 
-  gainPriority(state, my) {
+  gainPriority (state, my) {
     const priority = [];
 
-    if (my.countInDeck(cards.Laboratory) > 0) {
-      my.log(`I have ${my.countInDeck(cards.Laboratory)} Labs -> I want Province`);
-      priority.push(cards.Province);
-    }
-
-    if (state.countInSupply(cards.Province) <= 4) {
-      my.log(`There are ${state.countInSupply(cards.Province)} Provs left -> I want Duchy`);
-      priority.push(cards.Duchy);
-    }
-
-    if (state.countInSupply(cards.Province) <= 2) {
-      my.log(`There are ${state.countInSupply(cards.Province)} Provs left -> I want Estate`);
-      priority.push(cards.Estate);
-    }
+    this.endGameGreening(my, priority, state);
 
     if (my.countInDeck(cards.Sentry) < 4) {
       my.log(`I have ${my.countInDeck(cards.Sentry)} Sentries -> I want Sentries`);
@@ -44,9 +31,7 @@ export default class BurningSkullHTBD1 extends DomPlayer {
       priority.push(cards.Vassal);
     }
 
-    if (my.countInDeck(cards.Sentry) > 1 &&
-        my.countInDeck(cards['Throne Room']) < this.countCardTypeInDeck(my, 'Cycler') &&
-        my.countInDeck(cards['Throne Room']) < 1) {
+    if (this.wantsThroneRoom(my)) {
       my.log(`I have ${my.countInDeck(cards.Sentry)} Sentries, ${this.countCardTypeInDeck(my, 'Cycler')} cantrips and ${my.countInDeck(cards['Throne Room'])} Throne Rooms -> I want TRs`);
       priority.push(cards['Throne Room']);
     }
@@ -76,5 +61,28 @@ export default class BurningSkullHTBD1 extends DomPlayer {
     priority.push(cards.Harbinger);
 
     return priority;
+  }
+
+  wantsThroneRoom (my) {
+    return my.countInDeck(cards.Sentry) > 1 &&
+        my.countInDeck(cards['Throne Room']) < this.countCardTypeInDeck(my, 'Cycler') &&
+        my.countInDeck(cards['Throne Room']) < 1;
+  }
+
+  endGameGreening (my, priority, state) {
+    if (my.countInDeck(cards.Laboratory) > 0) {
+      my.log(`I have ${my.countInDeck(cards.Laboratory)} Labs -> I want Province`);
+      priority.push(cards.Province);
+    }
+
+    if (state.countInSupply(cards.Province) <= 4) {
+      my.log(`There are ${state.countInSupply(cards.Province)} Provs left -> I want Duchy`);
+      priority.push(cards.Duchy);
+    }
+
+    if (state.countInSupply(cards.Province) <= 2) {
+      my.log(`There are ${state.countInSupply(cards.Province)} Provs left -> I want Estate`);
+      priority.push(cards.Estate);
+    }
   }
 }

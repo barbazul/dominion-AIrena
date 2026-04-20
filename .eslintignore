@@ -1,4 +1,1 @@
 src/agents/dominiate/**
-src/agents/domsim/**
-!src/agents/domsim/domPlayer.js
-!src/agents/domsim/heuristics.js

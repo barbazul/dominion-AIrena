@@ -69,7 +69,7 @@ describe('BigMoneyUltimateFor3or4', () => {
       mockMy.countInDeck.mockReturnValue(1); // Has Gold
       mockState.gainsToEndGame.mockReturnValue(2); // Near end game
       const priority = player.gainPriority(mockState, mockMy);
-      
+
       // Check that the order is maintained
       const expectedOrder = [
         cards.Province,
@@ -78,7 +78,7 @@ describe('BigMoneyUltimateFor3or4', () => {
         cards.Gold,
         cards.Silver
       ];
-      
+
       expectedOrder.forEach((card, index) => {
         expect(priority[index]).toBe(card);
       });

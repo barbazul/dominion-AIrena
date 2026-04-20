@@ -4,10 +4,10 @@ import cards from '../../game/cards.js';
 export default class Smithy extends DomPlayer {
   constructor () {
     super();
-    this.requires = [ cards.Smithy ]
+    this.requires = [ cards.Smithy ];
   }
 
-  gainPriority(state, my) {
+  gainPriority (state, my) {
     const priority = [];
 
     if (this.getTotalMoney(my) > 15) {

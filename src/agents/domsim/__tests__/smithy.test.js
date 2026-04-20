@@ -28,9 +28,9 @@ describe('Smithy', () => {
       smithy.getTotalMoney = jest.fn().mockReturnValue(16);
       mockState.countInSupply.mockReturnValue(8);
       jest.spyOn(smithy, 'countCardTypeInDeck').mockReturnValue(17);
-      
+
       const priority = smithy.gainPriority(mockState, mockPlayer);
-      
+
       expect(priority[0]).toBe(cards.Province);
     });
 
@@ -38,9 +38,9 @@ describe('Smithy', () => {
       smithy.getTotalMoney = jest.fn().mockReturnValue(10);
       mockState.countInSupply.mockReturnValue(4);
       jest.spyOn(smithy, 'countCardTypeInDeck').mockReturnValue(17);
-      
+
       const priority = smithy.gainPriority(mockState, mockPlayer);
-      
+
       expect(priority).toContain(cards.Duchy);
     });
 
@@ -48,9 +48,9 @@ describe('Smithy', () => {
       smithy.getTotalMoney = jest.fn().mockReturnValue(10);
       mockState.countInSupply.mockReturnValue(2);
       jest.spyOn(smithy, 'countCardTypeInDeck').mockReturnValue(17);
-      
+
       const priority = smithy.gainPriority(mockState, mockPlayer);
-      
+
       expect(priority).toContain(cards.Estate);
     });
 
@@ -59,9 +59,9 @@ describe('Smithy', () => {
       mockState.countInSupply.mockReturnValue(8);
       mockPlayer.countInDeck.mockReturnValue(1); // 1 Smithy
       smithy.countCardTypeInDeck = jest.fn().mockReturnValue(22); // 22 Treasures
-      
+
       const priority = smithy.gainPriority(mockState, mockPlayer);
-      
+
       expect(priority).toContain(cards.Smithy);
     });
 
@@ -69,9 +69,9 @@ describe('Smithy', () => {
       smithy.getTotalMoney = jest.fn().mockReturnValue(10);
       mockState.countInSupply.mockReturnValue(8);
       jest.spyOn(smithy, 'countCardTypeInDeck').mockReturnValue(17);
-      
+
       const priority = smithy.gainPriority(mockState, mockPlayer);
-      
+
       expect(priority).toContain(cards.Gold);
       expect(priority).toContain(cards.Silver);
     });
@@ -81,9 +81,9 @@ describe('Smithy', () => {
       mockState.countInSupply.mockReturnValue(8);
       mockPlayer.countInDeck.mockReturnValue(0);
       smithy.countCardTypeInDeck = jest.fn().mockReturnValue(22);
-      
+
       const priority = smithy.gainPriority(mockState, mockPlayer);
-      
+
       expect(priority.indexOf(cards.Province)).toBeLessThan(priority.indexOf(cards.Gold));
       expect(priority.indexOf(cards.Gold)).toBeLessThan(priority.indexOf(cards.Silver));
     });

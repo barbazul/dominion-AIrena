@@ -1,6 +1,6 @@
 import { PHASE_ACTION } from '../../game/state.js';
 import { DomPlayer } from './domPlayer.js';
-import cards from "../../game/cards.js";
+import cards from '../../game/cards.js';
 
 /**
  * This is a bot built for the First Game suggested set of 10. It utilizes 8 of the 10 available kingdom cards, and was
@@ -13,8 +13,8 @@ export default class FirstGame extends DomPlayer {
     super();
     this.name = 'First Game by michaeljb';
     this.requires = [
-        cards.Smithy, cards.Cellar, cards.Mine, cards.Market, cards.Remodel,
-        cards.Village, cards.Workshop, cards.Militia
+      cards.Smithy, cards.Cellar, cards.Mine, cards.Market, cards.Remodel,
+      cards.Village, cards.Workshop, cards.Militia
     ];
   }
 
@@ -25,54 +25,7 @@ export default class FirstGame extends DomPlayer {
    * @return {String[]}
    */
   gainPriority (state, my) {
-    // HACK
-    if (my.countCardTypeInDeck === undefined) {
-      my.countCardTypeInDeck = function (type) {
-        let count = 0;
-
-        for (let card of this.getDeck()) {
-          if (card.types.indexOf(type) !== -1) {
-            count++;
-          }
-        }
-
-        return count;
-      };
-    }
-
-
-    // HACK
-    if (my.countMaxOpponentVP === undefined) {
-      my.countMaxOpponentVP = function (state) {
-        let maxvp = 0;
-
-        for (let player of state.players) {
-          let vp = 0;
-          if (player !== this) {
-            for (let card of player.getDeck()) {
-              vp += card.getVP(player);
-            }
-          }
-
-          maxvp = Math.max(maxvp, vp);
-        }
-
-        return maxvp;
-      };
-    }
-
-    // HACK
-    if (my.countVP === undefined) {
-      my.countVP = function () {
-        let vp = 0;
-
-        for (let card of this.getDeck()) {
-          vp += card.getVP(this);
-        }
-
-        return vp;
-      };
-    }
+    this.hackPlayerState(my);
 
     const priority = [];
 
@@ -116,6 +69,56 @@ export default class FirstGame extends DomPlayer {
     priority.push(null); // Dont buy other stuff
 
     return priority;
+  }
+
+  hackPlayerState (my) {
+    // HACK
+    if (my.countCardTypeInDeck === undefined) {
+      my.countCardTypeInDeck = function (type) {
+        let count = 0;
+
+        for (let card of this.getDeck()) {
+          if (card.types.indexOf(type) !== -1) {
+            count++;
+          }
+        }
+
+        return count;
+      };
+    }
+
+    // HACK
+    if (my.countMaxOpponentVP === undefined) {
+      my.countMaxOpponentVP = function (state) {
+        let maxvp = 0;
+
+        for (let player of state.players) {
+          let vp = 0;
+          if (player !== this) {
+            for (let card of player.getDeck()) {
+              vp += card.getVP(player);
+            }
+          }
+
+          maxvp = Math.max(maxvp, vp);
+        }
+
+        return maxvp;
+      };
+    }
+
+    // HACK
+    if (my.countVP === undefined) {
+      my.countVP = function () {
+        let vp = 0;
+
+        for (let card of this.getDeck()) {
+          vp += card.getVP(this);
+        }
+
+        return vp;
+      };
+    }
   }
 
   firstTurns (my, priority) {

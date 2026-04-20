@@ -10,10 +10,10 @@ describe('BureaucratGardens', () => {
   beforeEach(() => {
     bureaucratGardens = new BureaucratGardens();
     mockState = {
-      countInSupply: jest.fn(),
+      countInSupply: jest.fn()
     };
     mockPlayer = {
-      countInDeck: jest.fn(),
+      countInDeck: jest.fn()
     };
   });
 
@@ -60,7 +60,7 @@ describe('BureaucratGardens', () => {
         cards.Estate,
         cards.Bureaucrat,
         cards.Silver,
-        cards.Copper,
+        cards.Copper
       ]);
     });
 
