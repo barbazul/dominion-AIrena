@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "jest",
-    "static": "eslint src"
+    "static": "eslint src",
+    "mutation": "npx stryker run --incremental"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.12.11",
@@ -22,9 +23,9 @@
   },
   "jest": {
     "collectCoverage": true,
+    "roots": ["<rootDir>/src/"],
     "collectCoverageFrom": [
-      "src/**/*.js",
-      "!src/agents/domsim/*.js"
+      "src/**/*.js"
     ],
     "coverageThreshold": {
       "global": {

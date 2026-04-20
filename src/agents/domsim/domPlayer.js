@@ -1,22 +1,96 @@
 import cards from '../../game/cards.js';
-import BasicAI, {CHOICE_TRASH, CHOICE_UPGRADE} from '../basicAI.js';
+import BasicAI, { CHOICE_UPGRADE } from '../basicAI.js';
 import heuristics from './heuristics.js';
 
 export class DomPlayer extends BasicAI {
-  constructor() {
+  constructor () {
     super();
     this.playStrategies = {};
   }
 
   /**
+   * See DomPlayer.findCardToRemodel
    *
+   * @see https://github.com/Geronimoo/DominionSim/blob/master/src/main/java/be/aga/dominionSimulator/DomPlayer.java#L264
    * @param {Player} my
+   * @param {State} state
+   * @param {Card} cardInHandThatCanNotBeRemodeled
+   * @param {int} theAmount The increase in vale of the card to gain
+   * @param {boolean} sameCardAllowed
+   * @return {Card|null}
+   * @todo Finish Implementation and also consider creating upgradeValue
+   */
+  findCardToRemodel (my, state, cardInHandThatCanNotBeRemodeled, theAmount, sameCardAllowed) {
+    // Skip the card that cannot be remodeled
+    const theCardsToConsiderTrashing = my.hand.slice(0).filter(card => card !== cardInHandThatCanNotBeRemodeled);
+    // DomCardName theDesiredCardIfRemodelNotUsed = getDesiredCard(getTotalPotentialCurrency(), false);
+
+    const upgradeOptions = cards.Remodel.upgradeChoices(state, theCardsToConsiderTrashing);
+    // TODO The first part of this algorithm looks like some optimization to only consider "interesting" trash/gains
+    // temporarily remove the card from hand AND deck
+    // DomCardName theRemodelGainCard = getDesiredCardWithRestriction(null,theMaxCostOfCardToGain, false, sameCardAllowed?null:cardInHandThatCanNotBeRemodeled.getName());
+    // DomCardName theDesiredCard = getDesiredCard(getTotalPotentialCurrency(), false);
+    // first we will make a list of cards we consider good candidates for trashing
+    // only add to the list if:
+    //   -what we will gain is better than the card we trash (so of course it's not null)
+    //   -(and the card we will gain is better than what we were able to buy without using Remodel
+    //     or -trashing the card will not hinder our buying potential)
+    // Restore the hand
+
+    // nothing good found
+    if (theCardsToConsiderTrashing.length === 0) {
+      return null;
+    }
+
+    let theBestCardToTrash = null;
+    let theBestCardToGain = null;
+    const isStillInEarlyGame = this.stillInEarlyGame(state, my);
+
+    // now we scan the lists to find the best possible trashing candidate
+    upgradeOptions.forEach(upgradeOption => {
+      if (isStillInEarlyGame) {
+        if (
+          theBestCardToGain === null ||
+          this.trashValue(state, upgradeOption.trash[0], my) > this.trashValue(state, theBestCardToTrash, my)
+        ) {
+          theBestCardToGain = upgradeOption.gain[0];
+          theBestCardToTrash = upgradeOption.trash[0];
+        }
+      } else {
+        if (
+          theBestCardToGain === null ||
+          // trashing this card will give us a better card to trash later
+          (this.trashValue(state, upgradeOption.gain[0], my) > this.trashValue(state, theBestCardToGain, my)) ||
+          // trashing this card is more desirable while still allowing us to gain the best card
+          (this.trashValue(state, upgradeOption.gain[0], my) === this.trashValue(state, theBestCardToGain, my) &&
+          this.trashValue(state, upgradeOption.trash[0], my) > this.trashValue(state, theBestCardToTrash, my))
+        ) {
+          theBestCardToGain = upgradeOption.gain[0];
+          theBestCardToTrash = upgradeOption.trash[0];
+        }
+      }
+    });
+
+    return theBestCardToTrash;
+  }
+
+  /**
+   *
+   * @see https://github.com/Geronimoo/DominionSim/blob/master/src/main/java/be/aga/dominionSimulator/DomPlayer.java#L648
+   * @param {Player} my
+   * @param {String} type
    * @return {number}
    */
-  countTerminalsInDeck(my) {
+  countTypeInDeck (my, type) {
     let count = 0;
     for (let card of my.getDeck()) {
-      if (card.isAction() && card.actions === 0) {
+      let types = card.types.slice();
+
+      if (heuristics[card] && heuristics[card].types) {
+        types = types.concat(heuristics[card].types);
+      }
+
+      if (types.indexOf(type) > -1) {
         count++;
       }
     }
@@ -25,11 +99,43 @@ export class DomPlayer extends BasicAI {
   }
 
   /**
+   * See DomPlayer.stilInEarlyGame
+   *
+   * @see https://github.com/Geronimoo/DominionSim/blob/master/src/main/java/be/aga/dominionSimulator/DomPlayer.java#L4061
+   * @param {State} state
+   * @param {Player} my
+   * @return {boolean}
+   */
+  stillInEarlyGame (state, my) {
+    let result = true;
+
+    my.getDeck()
+      .filter(card => card !== cards.Estate && card.isVictory())
+      .forEach(card => {
+        let discardValue;
+
+        if (my.actions === 1) {
+          discardValue = this.discardValue(state, card, my);
+        } else {
+          const hypothetical = my.copy();
+          hypothetical.actions = 1;
+          discardValue = this.discardValue(state, card, hypothetical);
+        }
+
+        if (discardValue > 6) {
+          result = false;
+        }
+      });
+
+    return result;
+  }
+
+  /**
    * @param {State} state
    * @param {Player} my
    * @return {String[]|Card[]}
    */
-  playPriority(state, my) {
+  playPriority (state, my) {
     let choices = my.hand.slice(0).sort(
       (card1, card2) => this.playValue(state, cards[card2], my) -
         this.playValue(state, cards[card1], my)
@@ -39,39 +145,38 @@ export class DomPlayer extends BasicAI {
   }
 
   /**
+   * Originally created to count Terminals in deck. Use countTypeInDeck instead.
+   *
+   * @deprecated
+   * @param {Player} my
+   * @return {number}
+   */
+  countTerminalsInDeck (my) {
+    return this.countTypeInDeck(my, 'Terminal');
+  }
+
+  /**
    * Play value mapped from aPlayPriority argument in DomCardName
    *
-   * Value is substracted from 100 as sorting in DomSim is ascending
+   * Value is subtracted from 100 as sorting in DomSim is ascending
    *
    * @param {State} state
    * @param {Card} card
    * @param {Player} my
    * @returns {Number|*}
    */
-  playValue(state, card, my) {
-    // TODO Move this into heuristics
-    const specific = {
-      Vassal: (state, my) => {
-        if (
-          my.knownTopCards > 0 && my.draw[0].isAction() &&
-          !(heuristics[my.draw[0]].types && heuristics[my.draw[0]].types.indexOf('Terminal') > -1)
-        ) {
-            return 99;
-        }
+  playValue (state, card, my) {
+    let calculatedValue;
 
-        if (my.knownTopCards > 0 && my.draw[0].isAction() && my.actions > 1) {
-          return 99;
-        }
+    if (heuristics[card] && typeof heuristics[card].calculatedPlayPriority === 'function') {
+      calculatedValue = heuristics[card].calculatedPlayPriority(state, card, my);
 
-        return 100 - heuristics.Vassal.playPriority;
+      if (typeof calculatedValue === 'number') {
+        return calculatedValue;
       }
     }
 
-    if (specific[card]) {
-      return specific[card](state, my);
-    }
-
-    if (heuristics[card].playPriority !== undefined) {
+    if (heuristics[card] && heuristics[card].playPriority !== undefined) {
       return 100 - heuristics[card].playPriority;
     }
 
@@ -85,37 +190,9 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @return {boolean}
    */
-  wantsToPlay(cardName, state, my) {
+  wantsToPlay (cardName, state, my) {
     // TODO Move into heuristics
     const specific = {
-      Chapel: (state, my) => {
-        const minMoneyInDeck = this.getPlayStrategyFor('Chapel') === STRATEGY_AGGRESSIVE_TRASHING ? 4 : 6;
-        const trashOverBuyThreshold = this.getPlayStrategyFor('Chapel') === STRATEGY_AGGRESSIVE_TRASHING ? 3 : 4;
-        let trashCount = 0;
-        const cardsInHand = my.hand.slice(0);
-
-        if (my.hand.length === 0) {
-          return false;
-        }
-
-        for (let card of cardsInHand) {
-          if (this.trashValue(state, card, my) > 0) {
-            trashCount++;
-          }
-        }
-
-        let cardToTrash = this.choose(CHOICE_TRASH, state, my.hand);
-
-        return this.trashValue(state, cardToTrash, my) > 0 ||
-          this.removingReducesBuyingPower(my, state, cardToTrash) && trashCount < trashOverBuyThreshold ||
-          this.getTotalMoney(my) - this.getPotentialCoinValue(my, cardToTrash) < minMoneyInDeck
-          && this.getTotalMoney(my) >= minMoneyInDeck;
-
-
-      },
-      Mine: (state, my) => {
-        return this.checkForCardToMine(state, my) !== null;
-      },
       Smithy: (state, my) => {
         return !(this.getPlayStrategyFor('Smithy') === STRATEGY_PLAY_IF_NOT_BUYING_TOP_CARD &&
           this.isGoingToBuyTopCardInBuyRules(state, my));
@@ -124,6 +201,10 @@ export class DomPlayer extends BasicAI {
 
     if (specific[cardName]) {
       return specific[cardName](state, my);
+    }
+
+    if (heuristics[cardName] && typeof heuristics[cardName].wantsToBePlayed === 'function') {
+      return heuristics[cardName].wantsToBePlayed(state, my);
     }
 
     return true;
@@ -136,19 +217,24 @@ export class DomPlayer extends BasicAI {
    * @param {Card} card
    * @param {Player} my
    */
-  trashValue(state, card, my) {
-    // TODO Some cards have specific trashValue functions
-    // TODO Duchy if (owner!=null && owner.wantsToGainOrKeep(DomCardName.Duchy)) return 40;
+  trashValue (state, card, my) {
+    let calculatedValue;
 
-    if (card === cards.Duchy && this.wantsToGainOrKeep(card)) {
-      return 16 - 40;
+    if (heuristics[card] && typeof heuristics[card].calculatedTrashPriority === 'function') {
+      calculatedValue = heuristics[card].calculatedTrashPriority(state, card, my);
+
+      if (typeof calculatedValue === 'number') {
+        return calculatedValue;
+      }
     }
 
-    if (heuristics[card] && heuristics[card].trashPriority) {
+    if (heuristics[card] && typeof heuristics[card].trashPriority !== 'undefined') {
       return 16 - heuristics[card].trashPriority;
     }
 
-    return this.fallbackDiscardValue(state, card, my);
+    // TODO Original would call discardValue forcing actions to 1.
+    // TODO change this to passing my.copy() when method is finished
+    return this.discardValue(state, card, my);
   }
 
   /**
@@ -157,13 +243,13 @@ export class DomPlayer extends BasicAI {
    * @param {Card} card
    * @return {boolean}
    */
-  wantsToGainOrKeep(card) {
+  wantsToGainOrKeep (card) {
     // TODO This is a placeholder. This will be implemented after redoing decision engine.
     return card === cards.Duchy || card === cards.Province;
   }
 
   /**
-   * Values are substrated from 16 due to the inverted priority logic between
+   * Values are subtracted from 16 due to the inverted priority logic between
    * DomSim and Dominiate.
    *
    * @param {State} state
@@ -171,9 +257,20 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @returns {Number}
    */
-  discardValue(state, card, my) {
-    // TODO some cards have specific heuristics
+  discardValue (state, card, my) {
+    let calculatedValue;
     // TODO Province heuristic regarding Tournament
+    // TODO Estate heuristics regarding Estate Token
+    // TODO Estate heuristics regarding Baron
+
+    // Check if there is a specific heuristic function and it returns a numeric value
+    if (heuristics[card] && typeof heuristics[card].calculatedDiscardPriority === 'function') {
+      calculatedValue = heuristics[card].calculatedDiscardPriority(state, card, my);
+
+      if (typeof calculatedValue === 'number') {
+        return calculatedValue;
+      }
+    }
 
     if (my.actions < 1 && card.isAction()) {
       return 15;
@@ -183,7 +280,7 @@ export class DomPlayer extends BasicAI {
   }
 
   /**
-   * This is the falback to heuristics discard evaluation.
+   * This is the fallback to heuristics discard evaluation.
    * Also used as trashValue function
    *
    * @param {State} state
@@ -191,7 +288,7 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @returns {Number}
    */
-  fallbackDiscardValue(state, card, my) {
+  fallbackDiscardValue (state, card, my) {
     if (heuristics[card] && heuristics[card].discardPriority !== undefined) {
       return 16 - heuristics[card].discardPriority;
     }
@@ -204,13 +301,13 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @return {boolean}
    */
-  isGoingToBuyTopCardInBuyRules(state, my) {
+  isGoingToBuyTopCardInBuyRules (state, my) {
     // we don't want to mess with a hand if we're going to buy the top card this turn (although we could)
     // @todo cannot currently model this with just dynamic priority lists
     return my.getAvailableMoney() >= 8;
   }
 
-  getPlayStrategyFor(card) {
+  getPlayStrategyFor (card) {
     let theStrategy = this.playStrategies[card];
     return theStrategy === undefined ? STRATEGY_STANDARD : theStrategy;
   }
@@ -220,12 +317,12 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @return {String[]}
    */
-  checkForCardToMine(state, my) {
+  checkForCardToMine (state, my) {
     let upgradeChoices = cards.Mine.upgradeChoices(state, my.hand);
     return this.choose(CHOICE_UPGRADE, state, upgradeChoices);
   }
 
-  countCardTypeInDeck(my, type) {
+  countCardTypeInDeck (my, type) {
     const deck = my.getDeck();
     let count = 0;
 
@@ -251,7 +348,7 @@ export class DomPlayer extends BasicAI {
    * @param {Player} my
    * @return {Number}
    */
-  getPotentialCoins(my) {
+  getPotentialCoins (my) {
     let value = my.coins;
 
     for (let card of my.hand) {
@@ -267,7 +364,7 @@ export class DomPlayer extends BasicAI {
    * @param {Card} cardToTrash
    * @returns {boolean}
    */
-  removingReducesBuyingPower(my, state, cardToTrash) {
+  removingReducesBuyingPower (my, state, cardToTrash) {
     const value = this.getPotentialCoinValue(my, cardToTrash);
     const initialCoins = my.coins;
     const initialHand = my.hand.slice();
@@ -303,7 +400,7 @@ export class DomPlayer extends BasicAI {
    * @param {Card} card
    * @returns {number}
    */
-  getPotentialCoinValue(my, card) {
+  getPotentialCoinValue (my, card) {
     if (my.actions === 0 && card.isAction()) {
       return 0;
     }
@@ -316,8 +413,9 @@ export class DomPlayer extends BasicAI {
    * terminal money as well.
    *
    * @param {Player} my
+   * @return {int}
    */
-  getTotalMoney(my) {
+  getTotalMoney (my) {
     let total = 0;
 
     for (let card of my.getDeck()) {
@@ -331,3 +429,4 @@ export class DomPlayer extends BasicAI {
 export const STRATEGY_STANDARD = 'standard';
 export const STRATEGY_PLAY_IF_NOT_BUYING_TOP_CARD = 'playIfNotBuyingTopCard ';
 export const STRATEGY_AGGRESSIVE_TRASHING = 'aggressiveTrashing';
+export const STRATEGY_TRASH_WHEN_OBSOLETE = 'trashWhenObsolete';

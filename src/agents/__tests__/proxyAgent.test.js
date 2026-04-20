@@ -2,42 +2,97 @@ import ProxyAgent from '../proxyAgent';
 import BasicAI from '../basicAI';
 import SillyAI from '../dominiate/sillyAI';
 import State from '../../game/state';
+import { DomPlayer } from '../domsim/domPlayer.js';
 
-test('getActualAgent defaults to BasicAI if no aget was set', () => {
-  const proxyAgent = new ProxyAgent();
-  expect(proxyAgent.getActualAgent()).toBeInstanceOf(BasicAI);
-  expect(proxyAgent.getActualAgent().toString()).toBe('BasicAI');
-});
+describe('ProxyAgent', () => {
+  describe('with getActualAgent', () => {
+    it('defaults to BasicAI if no agent was set', () => {
+      const proxyAgent = new ProxyAgent();
+      expect(proxyAgent.getActualAgent()).toBeInstanceOf(BasicAI);
+      expect(proxyAgent.getActualAgent().toString()).toBe('BasicAI');
+    });
 
-test('getActualAgent honors selected agent', () => {
-  const proxyAgent = new ProxyAgent();
-  const actualAgent = new SillyAI();
+    it('honors selected agent', () => {
+      const proxyAgent = new ProxyAgent();
+      const actualAgent = new SillyAI();
 
-  proxyAgent.setActualAgent(actualAgent);
-  expect(proxyAgent.getActualAgent()).toBe(actualAgent);
-});
+      proxyAgent.setActualAgent(actualAgent);
+      expect(proxyAgent.getActualAgent()).toBe(actualAgent);
+    });
+  });
 
-test('setActualAgent hacks the agent to keep track of the player', () => {
-  const proxyAgent = new ProxyAgent();
-  const actualAgent = new SillyAI();
-  const rivalAgent = new BasicAI();
-  const state = new State();
+  describe('with setActualAgent', () => {
+    it('hacks the agent to keep track of the player', () => {
+      const proxyAgent = new ProxyAgent();
+      const actualAgent = new SillyAI();
+      const rivalAgent = new BasicAI();
+      const state = new State();
 
-  proxyAgent.setActualAgent(actualAgent);
-  state.setUp([proxyAgent, rivalAgent], { log: () => {} });
+      proxyAgent.setActualAgent(actualAgent);
+      state.setUp([proxyAgent, rivalAgent], { log: () => {} });
 
-  expect(actualAgent.myPlayer(state)).toBe(proxyAgent.myPlayer(state));
-});
+      expect(actualAgent.myPlayer(state)).toBe(proxyAgent.myPlayer(state));
+    });
 
-test('Copy assigns a copy of the current actual agent', () => {
-  const proxyAgent = new ProxyAgent();
-  const actualAgent = new SillyAI();
+    it('proxies the original method if it is defined', () => {
+      const proxyAgent = new ProxyAgent();
+      const actualAgent = new DomPlayer();
 
-  proxyAgent.setActualAgent(actualAgent);
+      proxyAgent.setActualAgent(actualAgent);
 
-  /** @var {ProxyAgent} */
-  const copy = proxyAgent.copy();
+      expect(proxyAgent.getTotalMoney).toBeDefined();
+    });
+  });
 
-  expect(copy.actualAgent).not.toBe(actualAgent);
-  expect(copy.actualAgent).toBeInstanceOf(SillyAI);
+  describe('with copy', () => {
+    it('assigns a copy of the current actual agent', () => {
+      const proxyAgent = new ProxyAgent();
+      const actualAgent = new SillyAI();
+
+      proxyAgent.setActualAgent(actualAgent);
+
+      /** @var {ProxyAgent} */
+      const copy = proxyAgent.copy();
+
+      expect(copy.actualAgent).not.toBe(actualAgent);
+      expect(copy.actualAgent).toBeInstanceOf(SillyAI);
+    });
+  });
+
+  describe('with choose', () => {
+    it('defers the choice to the actual agent', () => {
+      const proxyAgent = new ProxyAgent();
+      const actualAgent = new SillyAI();
+      const state = new State();
+
+      actualAgent.choose = jest.fn();
+      jest.spyOn(actualAgent, 'choose');
+
+      proxyAgent.setActualAgent(actualAgent);
+
+      /** @var {ProxyAgent} */
+      proxyAgent.choose('FAKE_CHOICE', state, ['CHOICE_1', 'CHOICE_2']);
+
+      expect(actualAgent.choose).toHaveBeenCalledWith('FAKE_CHOICE', state, ['CHOICE_1', 'CHOICE_2']);
+    });
+  });
+
+  describe('with Proxied methods', () => {
+    describe('with pessimisticBuyPhase', () => {
+      it('build hypothetical state for the right agent', () => {
+        const proxyAgent = new ProxyAgent();
+        const actualAgent = new SillyAI();
+        const state = new State();
+
+        state.hypothetical = jest.fn(() => []);
+        actualAgent.fastForwardToBuy = jest.fn();
+        proxyAgent.setActualAgent(actualAgent);
+        state.setUp([proxyAgent, actualAgent], { log: () => {} });
+
+        proxyAgent.pessimisticBuyPhase(state);
+
+        expect(state.hypothetical).toHaveBeenCalledWith(proxyAgent);
+      });
+    });
+  });
 });

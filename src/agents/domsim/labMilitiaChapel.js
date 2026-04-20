@@ -14,7 +14,7 @@ export default class LabMilitiaChapel extends DomPlayer {
     super();
     this.name = 'Lab/Militia/Chapel';
     this.requires = [ 'Festival', 'Market', 'Laboratory', 'Militia', 'Chapel' ];
-    this.playStrategies.Chapel = STRATEGY_AGGRESSIVE_TRASHING;
+    this.playStrategies[cards.Chapel] = STRATEGY_AGGRESSIVE_TRASHING;
   }
 
   gainPriority (state, my) {
