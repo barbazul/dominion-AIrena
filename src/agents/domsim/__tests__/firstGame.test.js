@@ -1,9 +1,8 @@
 import FirstGame from '../firstGame';
-import cards from "../../../game/cards.js";
-import {PHASE_ACTION, PHASE_BUY} from "../../../game/state.js";
+import cards from '../../../game/cards.js';
+import { PHASE_ACTION, PHASE_BUY } from '../../../game/state.js';
 
 describe('FirstGame Class', () => {
-
   let firstGame;
   let mockState;
   let mockPlayer;
@@ -265,7 +264,7 @@ describe('FirstGame Class', () => {
       mockState.countInSupply.mockReturnValue(2);
       const priority = firstGame.gainPriority(mockState, mockPlayer);
       expect(priority).toEqual(expect.arrayContaining([cards.Estate]));
-    })
+    });
   });
 
   describe('First Turns', () => {

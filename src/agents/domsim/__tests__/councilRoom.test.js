@@ -1,6 +1,6 @@
 import cards from '../../../game/cards.js';
 import State from '../../../game/state.js';
-import CouncilRoom from "../councilRoom.js";
+import CouncilRoom from '../councilRoom.js';
 
 describe('Council Room', () => {
   let ai;
@@ -13,14 +13,14 @@ describe('Council Room', () => {
     state = new State();
 
     my = {
-      countInDeck: jest.fn(),
+      countInDeck: jest.fn()
     };
-  })
+  });
 
   test('gainPriority at the beginning of the game', () => {
     ai.getTotalMoney = jest.fn().mockReturnValue(7); // Total money is 7 at beginning of game
     my.countInDeck = jest.fn().mockReturnValue(0); // Simulate not having bought cards
-    state.countInSupply = jest.fn().mockReturnValue(8)
+    state.countInSupply = jest.fn().mockReturnValue(8);
     const priority = ai.gainPriority(state, my);
     expect(priority).toEqual([cards.Gold, cards['Council Room'], cards['Council Room'], cards.Silver]);
   });

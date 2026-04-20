@@ -7,10 +7,10 @@ describe('WitchAndMoatFor3or4', () => {
 
   beforeEach(() => {
     state = {
-      gainsToEndGame: jest.fn(),
+      gainsToEndGame: jest.fn()
     };
     my = {
-      countInDeck: jest.fn(),
+      countInDeck: jest.fn()
     };
   });
 

@@ -8,7 +8,7 @@ export default class WitchFor3or4 extends DomPlayer {
     this.requires = [ cards.Witch ];
   }
 
-  gainPriority(state, my) {
+  gainPriority (state, my) {
     const priority = [];
 
     if (my.countInDeck(cards.Gold) > 0) {

@@ -81,7 +81,7 @@ describe('BurningSkullHTBD1', () => {
     expect(result).toContain(cards['Throne Room']);
     expect(result.filter((card) => card === cards['Throne Room'])).toHaveLength(2);
     expect(mockMy.log).toHaveBeenCalledWith(
-        'I have 4 Sentries, 5 cantrips and 0 Throne Rooms -> I want TRs'
+      'I have 4 Sentries, 5 cantrips and 0 Throne Rooms -> I want TRs'
     );
   });
 

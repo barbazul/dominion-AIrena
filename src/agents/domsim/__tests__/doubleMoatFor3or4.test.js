@@ -2,21 +2,21 @@ import DoubleMoatFor3or4 from '../doubleMoatFor3or4';
 import cards from '../../../game/cards';
 
 class MockState {
-  constructor(gainsToEndGame) {
+  constructor (gainsToEndGame) {
     this._gainsToEndGame = gainsToEndGame;
   }
 
-  gainsToEndGame() {
+  gainsToEndGame () {
     return this._gainsToEndGame;
   }
 }
 
 class MockPlayer {
-  constructor(deck) {
+  constructor (deck) {
     this._deck = deck;
   }
 
-  countInDeck(card) {
+  countInDeck (card) {
     return this._deck[card] || 0;
   }
 }
@@ -30,7 +30,7 @@ describe('DoubleMoatFor3or4', () => {
 
   test('should prioritize Province if Gold is in the deck', () => {
     const state = new MockState(10);
-    const my = new MockPlayer({[cards.Gold]: 1});
+    const my = new MockPlayer({ [cards.Gold]: 1 });
 
     expect(player.gainPriority(state, my)).toContain(cards.Province);
   });
@@ -65,14 +65,14 @@ describe('DoubleMoatFor3or4', () => {
 
   test('should prioritize Moat if fewer than 2 are in the deck', () => {
     const state = new MockState(10);
-    const my = new MockPlayer({[cards.Moat]: 1});
+    const my = new MockPlayer({ [cards.Moat]: 1 });
 
     expect(player.gainPriority(state, my)).toContain(cards.Moat);
   });
 
   test('should not prioritize Moat if 2 or more are in the deck', () => {
     const state = new MockState(10);
-    const my = new MockPlayer({[cards.Moat]: 2});
+    const my = new MockPlayer({ [cards.Moat]: 2 });
 
     expect(player.gainPriority(state, my)).not.toContain(cards.Moat);
   });

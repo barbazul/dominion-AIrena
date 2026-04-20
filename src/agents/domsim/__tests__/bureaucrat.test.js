@@ -2,7 +2,7 @@ import Bureaucrat from '../bureaucrat.js';
 import State from '../../../game/state.js';
 import cards from '../../../game/cards.js';
 
-const muteConfig = {log: jest.fn()};
+const muteConfig = { log: jest.fn() };
 
 describe('DomSim Bureaurat bot', () => {
   const agent = new Bureaucrat();

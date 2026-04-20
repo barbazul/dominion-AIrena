@@ -1,5 +1,5 @@
 import LabMilitiaChapel from '../labMilitiaChapel.js';
-import cards from "../../../game/cards.js";
+import cards from '../../../game/cards.js';
 
 describe('LabMilitiaChapel', () => {
   let player, state;
@@ -31,7 +31,7 @@ describe('LabMilitiaChapel', () => {
   test('should include Province in priority if already owned', () => {
     const bot = new LabMilitiaChapel();
     player.countInDeck.mockImplementation((card) =>
-        card === cards.Province ? 1 : 0
+      card === cards.Province ? 1 : 0
     );
     const priority = bot.gainPriority(state, player);
     expect(priority).toContain(cards.Province);
@@ -40,7 +40,7 @@ describe('LabMilitiaChapel', () => {
   test('should include Duchy if there are 3 or fewer Provinces in the supply', () => {
     const bot = new LabMilitiaChapel();
     state.countInSupply.mockImplementation((card) =>
-        card === cards.Province ? 3 : 10
+      card === cards.Province ? 3 : 10
     );
     const priority = bot.gainPriority(state, player);
     expect(priority).toContain(cards.Duchy);
@@ -49,7 +49,7 @@ describe('LabMilitiaChapel', () => {
   test('should include Estate if there are 2 or fewer Provinces in the supply', () => {
     const bot = new LabMilitiaChapel();
     state.countInSupply.mockImplementation((card) =>
-        card === cards.Province ? 2 : 10
+      card === cards.Province ? 2 : 10
     );
     const priority = bot.gainPriority(state, player);
     expect(priority).toContain(cards.Estate);
@@ -58,7 +58,7 @@ describe('LabMilitiaChapel', () => {
   test('should include Gold if no Gold cards are in the deck', () => {
     const bot = new LabMilitiaChapel();
     player.countInDeck.mockImplementation((card) =>
-        card === cards.Gold ? 0 : 1
+      card === cards.Gold ? 0 : 1
     );
     const priority = bot.gainPriority(state, player);
     expect(priority).toContain(cards.Gold);
@@ -67,7 +67,7 @@ describe('LabMilitiaChapel', () => {
   test('should include Festival if no Festival cards are in the deck', () => {
     const bot = new LabMilitiaChapel();
     player.countInDeck.mockImplementation((card) =>
-        card === cards.Festival ? 0 : 1
+      card === cards.Festival ? 0 : 1
     );
     const priority = bot.gainPriority(state, player);
     expect(priority).toContain(cards.Festival);
@@ -76,7 +76,7 @@ describe('LabMilitiaChapel', () => {
   test('should include Market if more than 2 Laboratory cards are in the deck', () => {
     const bot = new LabMilitiaChapel();
     player.countInDeck.mockImplementation((card) =>
-        card === cards.Laboratory ? 3 : 0
+      card === cards.Laboratory ? 3 : 0
     );
     const priority = bot.gainPriority(state, player);
     expect(priority).toContain(cards.Market);
@@ -91,7 +91,7 @@ describe('LabMilitiaChapel', () => {
   test('should include Militia if no Militia cards are in the deck', () => {
     const bot = new LabMilitiaChapel();
     player.countInDeck.mockImplementation((card) =>
-        card === cards.Militia ? 0 : 1
+      card === cards.Militia ? 0 : 1
     );
     const priority = bot.gainPriority(state, player);
     expect(priority).toContain(cards.Militia);
@@ -100,7 +100,7 @@ describe('LabMilitiaChapel', () => {
   test('should include Chapel if no Chapel cards are in the deck', () => {
     const bot = new LabMilitiaChapel();
     player.countInDeck.mockImplementation((card) =>
-        card === cards.Chapel ? 0 : 1
+      card === cards.Chapel ? 0 : 1
     );
     const priority = bot.gainPriority(state, player);
     expect(priority).toContain(cards.Chapel);

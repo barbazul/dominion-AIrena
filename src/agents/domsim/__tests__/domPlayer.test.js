@@ -13,10 +13,9 @@ describe('DomPlayer', () => {
   describe('with findCardToRemodel', () => {
     test('findCardToRemodel returns null when no cards to remodel', () => {
       const ai = new DomPlayer();
-      const owner = new Player(ai, () => {});
 
       const myMock = {
-        hand: [],
+        hand: []
       };
 
       const stateMock = {};
@@ -26,7 +25,6 @@ describe('DomPlayer', () => {
 
     test('findCardToRemodel finds an obvious card', () => {
       const ai = new DomPlayer();
-      const owner = new Player(ai, () => {});
       const state = new State();
       state.setUp([ai, ai], muteConfig);
       state.current.hand = [cards.Estate];
@@ -36,7 +34,6 @@ describe('DomPlayer', () => {
 
     test('findCardToRemodel finds skips the excluded card', () => {
       const ai = new DomPlayer();
-      const owner = new Player(ai, () => {});
       const state = new State();
       state.setUp([ai, ai], muteConfig);
       state.current.hand = [cards.Remodel, cards.Estate];
@@ -80,7 +77,7 @@ describe('DomPlayer', () => {
 
       expect(ai.findCardToRemodel(state.current, state, cards.Remodel, 2, true)).toBe(cards.Curse);
     });
-  })
+  });
 
   describe('with stillInEarlyGame', () => {
     it('Defaults to true', () => {
@@ -490,7 +487,7 @@ describe('DomPlayer', () => {
       const state = new State();
 
       state.setUp([ai, ai], muteConfig);
-      heuristics[card] = {playPriority: 5};
+      heuristics[card] = { playPriority: 5 };
 
       // This expectations assumes current basicAI implementation. Adjust expected value if method changes
       expect(ai.playValue(state, card, state.current)).toBe(95);

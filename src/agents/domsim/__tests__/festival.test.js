@@ -2,21 +2,21 @@ import Festival from '../festival';
 import cards from '../../../game/cards';
 
 class MockState {
-  constructor(provinceCount) {
+  constructor (provinceCount) {
     this._provinceCount = provinceCount;
   }
 
-  countInSupply(card) {
+  countInSupply (card) {
     return card === cards.Province ? this._provinceCount : 0;
   }
 }
 
 class MockPlayer {
-  constructor(deck) {
+  constructor (deck) {
     this._deck = deck;
   }
 
-  countInDeck(card) {
+  countInDeck (card) {
     return this._deck[card] || 0;
   }
 }
@@ -30,7 +30,7 @@ describe('Festival', () => {
 
   test('should prioritize Province if Gold is in the deck', () => {
     const state = new MockState(8);
-    const my = new MockPlayer({[cards.Gold]: 1});
+    const my = new MockPlayer({ [cards.Gold]: 1 });
 
     expect(player.gainPriority(state, my)).toContain(cards.Province);
   });

@@ -1,17 +1,17 @@
 import CouncilRoomMilitia from '../councilRoomMilitia.js';
-import cards from "../../../game/cards.js";
+import cards from '../../../game/cards.js';
 
 describe('CouncilRoomMilitia', () => {
   let stateMock, playerMock, councilRoomMilitia;
 
   beforeEach(() => {
     stateMock = {
-      countInSupply: jest.fn(),
+      countInSupply: jest.fn()
     };
 
     playerMock = {
       getAvailableMoney: jest.fn(),
-      countInDeck: jest.fn(),
+      countInDeck: jest.fn()
     };
 
     councilRoomMilitia = new CouncilRoomMilitia();
