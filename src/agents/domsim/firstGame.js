@@ -158,7 +158,7 @@ export default class FirstGame extends DomPlayer {
   }
 
   addEngineParts (my, state, priority) {
-    this.getVillaWithExtraBuys(my, state, priority);
+    this.getVillageWithExtraBuys(my, state, priority);
 
     this.getMarkets(my, state, priority);
 
@@ -215,7 +215,7 @@ export default class FirstGame extends DomPlayer {
     }
   }
 
-  getVillaWithExtraBuys (my, state, priority) {
+  getVillageWithExtraBuys (my, state, priority) {
     if (my.buys > 1 &&
       my.coins === 7 &&
       state.phase !== PHASE_ACTION) {
@@ -226,7 +226,9 @@ export default class FirstGame extends DomPlayer {
       my.coins === 6 &&
       my.buys > 1 &&
       this.countTypeInDeck(my, 'Terminal') > my.countInDeck(cards.Village) &&
-      state.countInSupply(cards.Village) > 1 && my.countInDeck(cards.Smithy) > 1) {
+      state.countInSupply(cards.Village) > 1 &&
+      my.countInDeck(cards.Smithy) > 1
+    ) {
       priority.push(cards.Village);
     }
   }
