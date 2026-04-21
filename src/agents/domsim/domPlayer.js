@@ -229,9 +229,9 @@ export class DomPlayer extends BasicAI {
 
       // Intrigue
       Baron: (state, my) => {
-        return my.countInHand(cards.Estate) > 0
-          /* TODO || my.wants(cards.Estate) */
-          || state.countInSupply(cards.Estate) === 0;
+        return my.countInHand(cards.Estate) > 0 ||
+          /* TODO my.wants(cards.Estate) || */
+          state.countInSupply(cards.Estate) === 0;
       }
     };
 
