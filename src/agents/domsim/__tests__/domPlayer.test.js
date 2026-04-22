@@ -218,13 +218,12 @@ import Card from "../../../cards/card";
       const ai = new DomPlayer();
       const state = new State();
 
-
-      state.setUp([ ai, new BasicAI() ], { log: () => {}, warn: () => {} });
+      state.setUp([ai, new BasicAI()], { log: () => {}, warn: () => {} });
       ai.gainPriority = () => [cards.Gold, cards.Silver];
-      constplayer = ai.myPlayer(state);
+      const player = ai.myPlayer(state);
       state.current = player;
       player.coins = 5;
-      player.hand = [ cards.Copper ];
+      player.hand = [cards.Copper];
 
       expect(ai.removingReducesBuyingPower(player, state, cards.Copper)).toBe(true);
     });
