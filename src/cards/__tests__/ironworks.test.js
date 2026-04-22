@@ -66,6 +66,19 @@ test('Ironworks grants +1 Card when a Victory card is gained', () => {
   expect(state.current.drawCards).toHaveBeenCalledWith(1);
 });
 
+test('Ironworks filters out empty piles', () => {
+  const card = new Ironworks();
+  const state = new State();
+
+  state.setUp([new BasicAI(), new BasicAI()], muteConfig);
+  state.kingdom = { 'Village': 0 };
+  state.gainOneOf = jest.fn(() => null);
+
+  card.playEffect(state);
+
+  expect(state.gainOneOf).toHaveBeenCalledWith(state.current, []);
+});
+
 test('Ironworks grants no bonus when nothing is gained', () => {
   const card = new Ironworks();
   const state = new State();

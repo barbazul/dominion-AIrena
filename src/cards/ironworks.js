@@ -19,7 +19,7 @@ export default class Ironworks extends BasicAction {
     for (const cardName of Object.keys(state.kingdom)) {
       const card = cards[cardName];
 
-      if (card.getCost(state) <= 4) {
+      if (state.kingdom[cardName] > 0 && card.getCost(state) <= 4) {
         choices.push(card);
       }
     }

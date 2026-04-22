@@ -38,6 +38,19 @@ test('Filters out expensive cards', () => {
   expect(state.gainOneOf).toHaveBeenCalledWith(state.current, [gainedCard]);
 });
 
+test('Filters out empty piles', () => {
+  const card = new Workshop();
+  const state = new State();
+  const basicAI = new BasicAI();
+
+  state.setUp([basicAI, basicAI], { log: () => {}, warn: () => {} });
+  state.kingdom = { 'Village': 0 };
+  state.gainOneOf = jest.fn(() => {});
+  card.playEffect(state);
+
+  expect(state.gainOneOf).toHaveBeenCalledWith(state.current, []);
+});
+
 test('Does nothing if there are no valid cards to gain', () => {
   const card = new Workshop();
   const state = new State();

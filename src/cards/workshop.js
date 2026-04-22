@@ -20,7 +20,7 @@ export default class Workshop extends BasicAction {
 
       card = cards[cardName];
 
-      if (card.getCost(state) <= 4) {
+      if (state.kingdom[cardName] > 0 && card.getCost(state) <= 4) {
         choices.push(card);
       }
     }
