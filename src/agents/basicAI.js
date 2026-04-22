@@ -1022,6 +1022,23 @@ export default class BasicAI {
   }
 
   /**
+   * Evaluates Lurker choices between trashing an Action from the Supply
+   * or gaining an Action from the trash.
+   *
+   * @param {State} state
+   * @param {{ mode: string, card: Card }} choice
+   * @param {Player} my
+   * @return {number}
+   */
+  lurkerValue (state, choice, my) {
+    if (choice.mode === 'gain') {
+      return this.cardInDeckValue(state, choice.card, my) + 10;
+    }
+
+    return 5;
+  }
+
+  /**
    * Checks if Agent wants to trash Mining Village after playing it.
    *
    * Checks if the agent is already greening and trashing would allow it to

@@ -39,6 +39,7 @@ import Duke from '../cards/duke.js';
 import MiningVillage from '../cards/miningVillage.js';
 import Farm from '../cards/farm.js';
 import Ironworks from '../cards/ironworks.js';
+import Lurker from '../cards/lurker.js';
 
 const cards = {
   // Basic cards
@@ -86,6 +87,7 @@ const cards = {
   Duke: new Duke(),
   Farm: new Farm(),
   Ironworks: new Ironworks(),
+  Lurker: new Lurker(),
   'Mining Village': new MiningVillage()
 };
 
