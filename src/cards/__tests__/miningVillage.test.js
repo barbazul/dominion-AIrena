@@ -21,7 +21,7 @@ test('Trash after play gains coins', () => {
   state.setUp([new BasicAI(), new BasicAI()], muteConfig);
   state.trash = [];
   state.current.coins = 0;
-  state.current.inPlay = [ card ];
+  state.current.inPlay = [card];
   state.current.playLocation = LOCATION_IN_PLAY;
   state.current.agent.wantsToTrashMiningVillage = () => true;
 
@@ -40,7 +40,7 @@ test('Don\'t trash when player doesn\'t want to', () => {
   state.setUp([new BasicAI(), new BasicAI()], muteConfig);
   state.trash = [];
   state.current.coins = 0;
-  state.current.inPlay = [ card ];
+  state.current.inPlay = [card];
   state.current.playLocation = LOCATION_IN_PLAY;
   state.current.agent.wantsToTrashMiningVillage = () => false;
 
@@ -57,7 +57,7 @@ test('Can\'t trash if card is not in play', () => {
   const state = new State();
 
   state.setUp([new BasicAI(), new BasicAI()], muteConfig);
-  state.trash = [ card ];
+  state.trash = [card];
   state.current.coins = 0;
   state.current.inPlay = [];
   state.current.playLocation = LOCATION_TRASH;

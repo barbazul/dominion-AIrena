@@ -4,7 +4,7 @@ import cards from '../../game/cards.js';
 export default class Militia extends DomPlayer {
   constructor () {
     super();
-    this.requires = [ cards.Militia ];
+    this.requires = [cards.Militia];
   }
 
   gainPriority (state, my) {

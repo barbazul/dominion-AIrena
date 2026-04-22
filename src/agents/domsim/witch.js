@@ -4,7 +4,7 @@ import cards from '../../game/cards.js';
 export default class Witch extends DomPlayer {
   constructor () {
     super();
-    this.requires = [ cards.Witch ];
+    this.requires = [cards.Witch];
   }
 
   gainPriority (state, my) {

@@ -16,9 +16,7 @@ export default class Workshop extends BasicAction {
     const choices = [];
 
     for (const cardName of Object.keys(state.kingdom)) {
-      let card;
-
-      card = cards[cardName];
+      const card = cards[cardName];
 
       if (state.kingdom[cardName] > 0 && card.getCost(state) <= 4) {
         choices.push(card);

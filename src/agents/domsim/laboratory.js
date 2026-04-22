@@ -4,7 +4,7 @@ import cards from '../../game/cards.js';
 export default class Laboratory extends DomPlayer {
   constructor () {
     super();
-    this.requires = [ cards.Laboratory ];
+    this.requires = [cards.Laboratory];
   }
 
   gainPriority (state, my) {

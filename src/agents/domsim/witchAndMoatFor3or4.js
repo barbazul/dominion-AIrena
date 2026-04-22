@@ -5,7 +5,7 @@ export default class WitchAndMoatFor3or4 extends DomPlayer {
   constructor () {
     super();
     this.name = 'Witch and Moat for 3 or 4';
-    this.requires = [ cards.Witch, cards.Moat ];
+    this.requires = [cards.Witch, cards.Moat];
   }
 
   gainPriority (state, my) {

@@ -33,7 +33,7 @@ export function banditAttack (opp, state) {
   // Todo Reveal the cards (for Patron)
   opp.log(`${opp.agent} reveals ${topCards}.`);
 
-  for (let card of topCards) {
+  for (const card of topCards) {
     if (!card.isTreasure() || card === cards.Copper) {
       toDiscard.push(card);
       continue;

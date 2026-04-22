@@ -7,11 +7,11 @@ export default class Courtyard extends DomPlayer {
     this.requires = [cards.Courtyard];
   }
 
-  gainPriority(state, my) {
+  gainPriority (state, my) {
     const priority = [];
 
     if (my.countInDeck(cards.Gold) > 0) {
-      priority.push(cards.Province)
+      priority.push(cards.Province);
     }
 
     if (state.countInSupply(cards.Province) <= 4) {

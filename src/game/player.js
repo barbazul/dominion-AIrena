@@ -222,7 +222,7 @@ export default class Player {
   getTotalMoney () {
     let total = 0;
 
-    for (let card of this.getDeck()) {
+    for (const card of this.getDeck()) {
       if (card.isTreasure() || card.actions >= 1) {
         total += card.coins;
       }
@@ -251,7 +251,7 @@ export default class Player {
   getTreasureInHand () {
     let total = 0;
 
-    for (let card of this.hand) {
+    for (const card of this.hand) {
       if (card.isTreasure()) {
         total += card.coins;
       }

@@ -5,7 +5,7 @@ export default class CouncilRoom extends DomPlayer {
   constructor () {
     super();
     this.name = 'Council Room';
-    this.requires = [ cards['Council Room'] ];
+    this.requires = [cards['Council Room']];
   }
 
   gainPriority (state, my) {

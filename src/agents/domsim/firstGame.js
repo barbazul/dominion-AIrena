@@ -77,7 +77,7 @@ export default class FirstGame extends DomPlayer {
       my.countCardTypeInDeck = function (type) {
         let count = 0;
 
-        for (let card of this.getDeck()) {
+        for (const card of this.getDeck()) {
           if (card.types.indexOf(type) !== -1) {
             count++;
           }
@@ -92,10 +92,10 @@ export default class FirstGame extends DomPlayer {
       my.countMaxOpponentVP = function (state) {
         let maxvp = 0;
 
-        for (let player of state.players) {
+        for (const player of state.players) {
           let vp = 0;
           if (player !== this) {
-            for (let card of player.getDeck()) {
+            for (const card of player.getDeck()) {
               vp += card.getVP(player);
             }
           }
@@ -112,7 +112,7 @@ export default class FirstGame extends DomPlayer {
       my.countVP = function () {
         let vp = 0;
 
-        for (let card of this.getDeck()) {
+        for (const card of this.getDeck()) {
           vp += card.getVP(this);
         }
 

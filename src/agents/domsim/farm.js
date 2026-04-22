@@ -1,11 +1,11 @@
-import {DomPlayer} from "./domPlayer.js";
-import cards from "../../game/cards.js";
+import { DomPlayer } from './domPlayer.js';
+import cards from '../../game/cards.js';
 
 export default class Farm extends DomPlayer {
   constructor () {
     super();
     this.name = 'Farm';
-    this.requires = [ cards.Farm ];
+    this.requires = [cards.Farm];
   }
 
   gainPriority (state, my) {

@@ -1,4 +1,3 @@
-
 /**
  * Base card class to be extended by all other cards
  */

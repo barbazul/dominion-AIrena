@@ -2,7 +2,7 @@ import { DomPlayer } from './domPlayer.js';
 import cards from '../../game/cards.js';
 
 export default class Duke extends DomPlayer {
-  gainPriority(state, my) {
+  gainPriority (state, my) {
     const priority = [];
 
     if (my.getTotalMoney() >= 14) {
@@ -17,7 +17,7 @@ export default class Duke extends DomPlayer {
       priority.push(cards.Duke);
     }
 
-    state.log("Dukes in supply: " + state.countInSupply(cards.Duke));
+    state.log('Dukes in supply: ' + state.countInSupply(cards.Duke));
     if (state.countInSupply(cards.Duke) <= 3) {
       priority.push(cards.Estate);
     }

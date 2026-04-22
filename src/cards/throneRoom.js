@@ -17,7 +17,7 @@ export default class ThroneRoom extends BasicAction {
     const choices = [];
     let choice = null;
 
-    for (let card of state.current.hand) {
+    for (const card of state.current.hand) {
       if (card.isAction()) {
         choices.push(card);
       }

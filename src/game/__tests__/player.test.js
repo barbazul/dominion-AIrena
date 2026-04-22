@@ -24,12 +24,11 @@ test('Draw cards returns empty with no deck or discard', () => {
   const basicAI = new BasicAI();
   const log = () => {};
   const player = new Player(basicAI, log);
-  let drawn;
 
   player.hand = [];
   player.draw = [];
   player.discard = [];
-  drawn = player.drawCards(1);
+  const drawn = player.drawCards(1);
 
   expect(drawn).toHaveLength(0);
   expect(player.hand).toHaveLength(0);
@@ -43,12 +42,11 @@ test('Draw cards with enough cards in deck', () => {
   const player = new Player(basicAI, log);
   const card1 = new Card();
   const card2 = new Card();
-  let drawn;
 
   player.hand = [];
   player.draw = [card1, card2];
   player.discard = [];
-  drawn = player.drawCards(1);
+  const drawn = player.drawCards(1);
 
   expect(drawn).toHaveLength(1);
   expect(player.hand).toHaveLength(1);
@@ -62,12 +60,11 @@ test('Draw more cards than owned ignores extra cards (overdraw)', () => {
   const player = new Player(basicAI, log);
   const card1 = new Card();
   const card2 = new Card();
-  let drawn;
 
   player.hand = [];
   player.draw = [card1, card2];
   player.discard = [];
-  drawn = player.drawCards(3);
+  const drawn = player.drawCards(3);
 
   expect(drawn).toHaveLength(2);
   expect(player.hand).toHaveLength(2);
@@ -136,12 +133,11 @@ test('Draw more than draw causes shuffle', () => {
   const card2 = new Card();
   const card3 = new Card();
   const card4 = new Card();
-  let drawn;
 
   player.hand = [];
   player.draw = [card4];
   player.discard = [card1, card2, card3];
-  drawn = player.drawCards(3);
+  const drawn = player.drawCards(3);
 
   expect(drawn).toHaveLength(3);
   expect(player.hand).toHaveLength(3);
@@ -234,7 +230,6 @@ test('countInPlay returns the number of copies of a card in play', () => {
   const player = new Player(new BasicAI(), () => {});
   const card1 = new Card();
   const card2 = new Card();
-  let count;
 
   card1.name = 'A Card';
   card2.name = 'Another Card';
@@ -242,7 +237,7 @@ test('countInPlay returns the number of copies of a card in play', () => {
   player.inPlay = [card1, card2, card1];
   player.hand = [card1];
   player.countInStack = jest.fn(() => 2);
-  count = player.countInPlay(card1);
+  const count = player.countInPlay(card1);
 
   expect(player.countInStack).toHaveBeenCalledWith(card1, player.inPlay);
   expect(count).toBe(2);
@@ -252,14 +247,13 @@ test('countPlayed returns the number of times a card was played', () => {
   const player = new Player(new BasicAI(), () => {});
   const card1 = new Card();
   const card2 = new Card();
-  let count;
 
   card1.name = 'A Card';
   card2.name = 'Another Card';
 
   player.cardsPlayed = [card1, card2, card1];
   player.countInStack = jest.fn(() => 2);
-  count = player.countPlayed(card1);
+  const count = player.countPlayed(card1);
 
   expect(player.countInStack).toHaveBeenCalledWith(card1, player.cardsPlayed);
   expect(count).toBe(2);
@@ -336,16 +330,16 @@ test('countPlayableTerminals accounts for villages in hand when available', () =
 test('Topdeck cards puts cards at the begining of draw pile', () => {
   const player = new Player(new BasicAI(), () => {});
 
-  player.draw = [ cards.Curse ];
-  player.topdeck([ cards.Copper, cards.Silver ]);
+  player.draw = [cards.Curse];
+  player.topdeck([cards.Copper, cards.Silver]);
 
-  expect(player.draw).toEqual([ cards.Copper, cards.Silver, cards.Curse ]);
+  expect(player.draw).toEqual([cards.Copper, cards.Silver, cards.Curse]);
 });
 
 test('Topdecked cards are known', () => {
   const player = new Player(new BasicAI(), () => {});
 
-  player.topdeck([ cards.Copper, cards.Silver ]);
+  player.topdeck([cards.Copper, cards.Silver]);
 
   expect(player.knownTopCards).toEqual(2);
 });
@@ -372,20 +366,20 @@ test('actionBalance totals potential actions gained from cards in hand', () => {
   const player = new Player(new BasicAI(), () => {});
 
   player.actions = 1;
-  player.hand = [ cards.Village, cards.Village ];
+  player.hand = [cards.Village, cards.Village];
   expect(player.actionBalance()).toEqual(3);
 });
 
 test('actionBalance skips non-action cards', () => {
   const player = new Player(new BasicAI(), () => {});
   player.actions = 1;
-  player.hand = [ cards.Village, cards.Gold ];
+  player.hand = [cards.Village, cards.Gold];
   expect(player.actionBalance()).toEqual(2);
 });
 
 test('countTypeInDeck counts correctly', () => {
   const player = new Player(new BasicAI(), () => {});
-  player.draw = [ cards.Village, cards.Smithy ];
+  player.draw = [cards.Village, cards.Smithy];
   player.hand = [];
   player.discard = [];
   expect(player.countTypeInDeck('Action')).toEqual(2);
@@ -393,7 +387,7 @@ test('countTypeInDeck counts correctly', () => {
 
 test('getActionDensity', () => {
   const player = new Player(new BasicAI(), () => {});
-  player.draw = [ cards.Village, cards.Copper ];
+  player.draw = [cards.Village, cards.Copper];
   player.hand = [];
   player.discard = [];
   expect(player.getActionDensity()).toEqual(0.5);
@@ -403,8 +397,8 @@ test('actionBalance considers dead draws from terminals', () => {
   const player = new Player(new BasicAI(), () => {});
 
   player.actions = 1;
-  player.draw = [ cards.Smithy, cards.Smithy, cards.Smithy ];
-  player.hand = [ cards.Village, cards.Smithy ];
+  player.draw = [cards.Smithy, cards.Smithy, cards.Smithy];
+  player.hand = [cards.Village, cards.Smithy];
   player.discard = [];
   expect(player.actionBalance()).toEqual(-2);
 });
@@ -417,7 +411,6 @@ test('copy creates a new Player instance', () => {
 
 test('Copied Player has same stuff', () => {
   const player = new Player(new BasicAI(), () => {});
-  let newPlayer;
 
   player.actions = 3;
   player.buys = 4;
@@ -432,14 +425,14 @@ test('Copied Player has same stuff', () => {
     cards.Copper, cards.Copper
   ];
 
-  player.discard = [ cards.Smithy ];
-  player.inPlay = [ cards.Village ];
+  player.discard = [cards.Smithy];
+  player.inPlay = [cards.Village];
   player.playLocation = LOCATION_TRASH;
   player.gainLocation = LOCATION_HAND;
   player.actionsPlayed = 48;
   player.turnsTaken = 5;
 
-  newPlayer = player.copy();
+  const newPlayer = player.copy();
 
   expect(newPlayer.actions).toEqual(player.actions);
   expect(newPlayer.buys).toEqual(player.buys);

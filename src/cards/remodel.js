@@ -43,21 +43,19 @@ export default class Remodel extends BasicAction {
    */
   upgradeChoices (state, cardList) {
     const choices = [];
-    let used = [];
+    const used = [];
 
-    for (let card of cardList) {
+    for (const card of cardList) {
       if (used.indexOf(card) === -1) {
         used.push(card);
 
         for (const cardName of Object.keys(state.kingdom)) {
-          if (state.kingdom.hasOwnProperty(cardName)) {
-            let card2;
-
+          if (Object.prototype.hasOwnProperty.call(state.kingdom, cardName)) {
             if (state.countInSupply(cardName) === 0) {
               continue;
             }
 
-            card2 = cards[cardName];
+            const card2 = cards[cardName];
 
             if (this.upgradeFilter(state, card, card2)) {
               choices.push({ trash: [card], gain: [card2] });

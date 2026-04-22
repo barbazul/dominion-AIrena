@@ -5,7 +5,7 @@ export default class DoubleMoatFor3or4 extends DomPlayer {
   constructor () {
     super();
     this.name = 'Double Moat for 3 or 4';
-    this.requires = [ cards.Moat ];
+    this.requires = [cards.Moat];
   }
 
   gainPriority (state, my) {

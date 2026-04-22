@@ -450,7 +450,6 @@ describe('Heuristics for Domsim', () => {
       const ai = new DomPlayer();
       const state = new State();
       const card = cards.Witch;
-      let moatDiscardValue;
 
       state.setUp([ai, ai], {
         log: () => {
@@ -459,7 +458,7 @@ describe('Heuristics for Domsim', () => {
         }
       });
       state.kingdom.Curse = 0;
-      moatDiscardValue = ai.discardValue(state, cards.Moat, state.current);
+      const moatDiscardValue = ai.discardValue(state, cards.Moat, state.current);
 
       expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(moatDiscardValue);
     });

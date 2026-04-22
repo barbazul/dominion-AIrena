@@ -71,7 +71,7 @@ test('Ironworks filters out empty piles', () => {
   const state = new State();
 
   state.setUp([new BasicAI(), new BasicAI()], muteConfig);
-  state.kingdom = { 'Village': 0 };
+  state.kingdom = { Village: 0 };
   state.gainOneOf = jest.fn(() => null);
 
   card.playEffect(state);

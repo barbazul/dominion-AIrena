@@ -17,7 +17,7 @@ test('Play effect allows gain', () => {
   const gainedCard = new Village();
 
   state.setUp([basicAI, basicAI], { log: () => {}, warn: () => {} });
-  state.kingdom = { 'Village': 10 };
+  state.kingdom = { Village: 10 };
   state.gainOneOf = jest.fn(() => gainedCard);
   card.playEffect(state);
 
@@ -31,7 +31,7 @@ test('Filters out expensive cards', () => {
   const gainedCard = new Village();
 
   state.setUp([basicAI, basicAI], { log: () => {}, warn: () => {} });
-  state.kingdom = { 'Province': 8, 'Village': 10 };
+  state.kingdom = { Province: 8, Village: 10 };
   state.gainOneOf = jest.fn(() => {});
   card.playEffect(state);
 
@@ -44,7 +44,7 @@ test('Filters out empty piles', () => {
   const basicAI = new BasicAI();
 
   state.setUp([basicAI, basicAI], { log: () => {}, warn: () => {} });
-  state.kingdom = { 'Village': 0 };
+  state.kingdom = { Village: 0 };
   state.gainOneOf = jest.fn(() => {});
   card.playEffect(state);
 
@@ -57,7 +57,7 @@ test('Does nothing if there are no valid cards to gain', () => {
   const basicAI = new BasicAI();
 
   state.setUp([basicAI, basicAI], { log: () => {}, warn: () => {} });
-  state.kingdom = { 'Province': 8 };
+  state.kingdom = { Province: 8 };
   state.gainOneOf = jest.fn(() => {});
   card.playEffect(state);
 

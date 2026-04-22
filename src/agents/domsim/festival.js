@@ -5,7 +5,7 @@ export default class Festival extends DomPlayer {
   constructor () {
     super();
     this.name = 'Festival';
-    this.requires = [ cards.Festival ];
+    this.requires = [cards.Festival];
   }
 
   gainPriority (state, my) {

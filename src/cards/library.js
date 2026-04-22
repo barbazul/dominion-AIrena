@@ -29,7 +29,7 @@ export default class Library extends BasicAction {
 
       // Assume the times the AI wants to set the card aside are the times it
       // is on the discard priority list or has a positive discard value.
-      if (card.isAction() && player.agent.choose(CHOICE_DISCARD, state, [ card, null ])) {
+      if (card.isAction() && player.agent.choose(CHOICE_DISCARD, state, [card, null])) {
         state.log(`${player.agent} sets aside a ${card}.`);
         aside.push(card);
         continue;

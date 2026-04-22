@@ -15,7 +15,7 @@ export default class CouncilRoom extends BasicAction {
    * @param {State} state
    */
   playEffect (state) {
-    for (let opp of state.players) {
+    for (const opp of state.players) {
       if (opp !== state.current) {
         opp.drawCards(1);
       }

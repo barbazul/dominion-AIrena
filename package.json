@@ -13,17 +13,16 @@
     "@babel/preset-env": "^7.12.11",
     "@stryker-mutator/core": "^9.4.0",
     "@stryker-mutator/jest-runner": "^9.4.0",
-    "eslint": "^5.9.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-node": "^8.0.0",
-    "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "jest": "^27.3.1"
+    "eslint": "^9.39.4",
+    "globals": "^17.5.0",
+    "jest": "^27.3.1",
+    "neostandard": "^0.13.0"
   },
   "jest": {
     "collectCoverage": true,
-    "roots": ["<rootDir>/src/"],
+    "roots": [
+      "<rootDir>/src/"
+    ],
     "collectCoverageFrom": [
       "src/**/*.js"
     ],

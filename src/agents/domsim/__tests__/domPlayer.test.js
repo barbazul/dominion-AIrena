@@ -86,7 +86,7 @@ describe('DomPlayer', () => {
       const state = new State();
 
       state.current = owner;
-      owner.getDeck = () => [ ];
+      owner.getDeck = () => [];
       expect(ai.stillInEarlyGame(state, owner)).toBe(true);
     });
 
@@ -96,7 +96,7 @@ describe('DomPlayer', () => {
       const state = new State();
 
       state.current = owner;
-      owner.getDeck = () => [ cards.Duchy ];
+      owner.getDeck = () => [cards.Duchy];
       expect(ai.stillInEarlyGame(state, owner)).toBe(false);
     });
 
@@ -116,7 +116,7 @@ describe('DomPlayer', () => {
 
       ai.discardValue = () => 10; // Force discard intent
       state.current = owner;
-      owner.getDeck = () => [ cards.Artisan ]; // Action should not be considered
+      owner.getDeck = () => [cards.Artisan]; // Action should not be considered
       expect(ai.stillInEarlyGame(state, owner)).toBe(true);
     });
   });
@@ -134,7 +134,7 @@ describe('DomPlayer', () => {
       const ai = new DomPlayer();
       const owner = new Player(ai, () => {});
 
-      owner.getDeck = () => [ cards.Militia, cards.Artisan ];
+      owner.getDeck = () => [cards.Militia, cards.Artisan];
       expect(ai.countTerminalsInDeck(owner)).toBe(2);
     });
 
@@ -142,7 +142,7 @@ describe('DomPlayer', () => {
       const ai = new DomPlayer();
       const owner = new Player(ai, () => {});
 
-      owner.getDeck = () => [ cards.Copper, cards.Copper ];
+      owner.getDeck = () => [cards.Copper, cards.Copper];
       expect(ai.countTerminalsInDeck(owner)).toBe(0);
     });
 
@@ -150,7 +150,7 @@ describe('DomPlayer', () => {
       const ai = new DomPlayer();
       const owner = new Player(ai, () => {});
 
-      owner.getDeck = () => [ cards.Village, cards.Market, cards.Militia ];
+      owner.getDeck = () => [cards.Village, cards.Market, cards.Militia];
       expect(ai.countTerminalsInDeck(owner)).toBe(1);
     });
   });
@@ -168,7 +168,7 @@ describe('DomPlayer', () => {
       const ai = new DomPlayer();
       const owner = new Player(ai, () => {});
 
-      owner.getDeck = () => [ cards.Gold, cards.Market, cards.Militia ];
+      owner.getDeck = () => [cards.Gold, cards.Market, cards.Militia];
       expect(ai.getTotalMoney(owner)).toBe(6);
     });
   });
@@ -210,14 +210,13 @@ describe('DomPlayer', () => {
     test('removingReducesBuyingPower returns true when buy decision changes', () => {
       const ai = new DomPlayer();
       const state = new State();
-      let player;
 
-      state.setUp([ ai, new BasicAI() ], { log: () => {}, warn: () => {} });
+      state.setUp([ai, new BasicAI()], { log: () => {}, warn: () => {} });
       ai.gainPriority = () => [cards.Gold, cards.Silver];
-      player = ai.myPlayer(state);
+      const player = ai.myPlayer(state);
       state.current = player;
       player.coins = 5;
-      player.hand = [ cards.Copper ];
+      player.hand = [cards.Copper];
 
       expect(ai.removingReducesBuyingPower(player, state, cards.Copper)).toBe(true);
     });
@@ -237,7 +236,7 @@ describe('DomPlayer', () => {
       const ai = new DomPlayer();
       const owner = new Player(ai, () => {});
 
-      owner.hand = [ cards.Copper, cards.Silver ];
+      owner.hand = [cards.Copper, cards.Silver];
       owner.coins = 2;
       expect(ai.getPotentialCoins(owner)).toBe(5);
     });
@@ -520,7 +519,7 @@ describe('DomPlayer', () => {
       ai.playValue = (state, card) => card.coins;
       state.current.hand = testCards;
 
-      let priority = ai.playPriority(state, state.current);
+      const priority = ai.playPriority(state, state.current);
 
       expect(priority).toEqual(testCards.toReversed());
     });
@@ -535,7 +534,7 @@ describe('DomPlayer', () => {
       ai.wantsToPlay = (card, state, player) => card.name !== 'Copper';
       state.current.hand = testCards;
 
-      let priority = ai.playPriority(state, state.current);
+      const priority = ai.playPriority(state, state.current);
 
       expect(priority).toEqual([cards.Silver]);
     });

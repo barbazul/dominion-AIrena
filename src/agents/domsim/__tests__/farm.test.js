@@ -1,4 +1,3 @@
-
 import State from '../../../game/state.js';
 import Farm from '../farm.js';
 import cards from '../../../game/cards.js';
@@ -13,10 +12,10 @@ test('gainPriority at start of game', () => {
   state.kingdom[cards.Farm] = 8;
 
   expect(ai.gainPriority(state, state.current))
-      .toEqual([
-        cards.Gold,
-        cards.Silver
-      ]);
+    .toEqual([
+      cards.Gold,
+      cards.Silver
+    ]);
 });
 
 test('gainPriority wants Province with high money', () => {

@@ -19,7 +19,7 @@ test('doGameAnalysis always sets an actual agent', () => {
   const state = new State();
 
   state.setUp(
-    [ statsBot, statsBot ],
+    [statsBot, statsBot],
     {
       log: () => {},
       warn: () => {},
@@ -38,7 +38,7 @@ test('doGameAnalysis skips better bots that don\'t match the requirements', () =
   const state = new State();
 
   state.setUp(
-    [ statsBot, statsBot ],
+    [statsBot, statsBot],
     {
       log: () => {},
       warn: () => {},
@@ -47,7 +47,7 @@ test('doGameAnalysis skips better bots that don\'t match the requirements', () =
   );
 
   statsBot.setActualAgent = jest.fn(statsBot.setActualAgent);
-  statsBot.agents = [ new BigMoney(), new BigSmithy(), new BMLibrary() ];
+  statsBot.agents = [new BigMoney(), new BigSmithy(), new BMLibrary()];
   statsBot.stats = {
     // Worst always available as it has no requirements
     BigMoney: { plays: 10, wins: 3, rate: 0.3 },
@@ -69,7 +69,7 @@ test('doGameAnalysis skips bots with no stats', () => {
   const state = new State();
 
   state.setUp(
-    [ statsBot, statsBot ],
+    [statsBot, statsBot],
     {
       log: () => {},
       warn: () => {},
@@ -78,7 +78,7 @@ test('doGameAnalysis skips bots with no stats', () => {
   );
 
   statsBot.setActualAgent = jest.fn(statsBot.setActualAgent);
-  statsBot.agents = [ new BigMoney(), new BasicAI() ];
+  statsBot.agents = [new BigMoney(), new BasicAI()];
 
   statsBot.stats = {
     // Worst always available as it has no requirements

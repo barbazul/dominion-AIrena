@@ -49,9 +49,7 @@ const heuristics = {
      * @param {Player} my
      */
     calculatedTrashPriority: (state, card, my) => {
-      let strategy;
-
-      strategy = helpers.getPlayStrategyFor(my.agent, card);
+      const strategy = helpers.getPlayStrategyFor(my.agent, card);
       if (strategy === STRATEGY_TRASH_WHEN_OBSOLETE) {
         // TODO Kings Court check to be implemented later
 
@@ -67,7 +65,7 @@ const heuristics = {
   Estate: {
     playPriority: 100,
     discardPriority: 9,
-    types: [ 'Base', 'Junk' ],
+    types: ['Base', 'Junk'],
     /**
      * Avoid trashing when collecting estates
      *
@@ -104,12 +102,12 @@ const heuristics = {
   Province: { playPriority: 100, discardPriority: 7, trashPriority: 60 },
 
   // Base Set
-  Artisan: { types: [ 'Terminal' ], discardPriority: 27, playPriority: 30 },
-  Bandit: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 23 },
-  Bureaucrat: { types: [ 'Terminal' ], discardPriority: 20, playPriority: 29 },
+  Artisan: { types: ['Terminal'], discardPriority: 27, playPriority: 30 },
+  Bandit: { types: ['Terminal'], discardPriority: 23, playPriority: 23 },
+  Bureaucrat: { types: ['Terminal'], discardPriority: 20, playPriority: 29 },
   Cellar: { types: ['Cycler'], discardPriority: 17, playPriority: 16 },
   Chapel: {
-    types: [ 'Terminal' ],
+    types: ['Terminal'],
     discardPriority: 18,
     playPriority: 37,
 
@@ -128,13 +126,13 @@ const heuristics = {
       const totalMoney = my.agent.getTotalMoney(my);
       let trashCount = 0;
 
-      for (let card of cardsInHand) {
+      for (const card of cardsInHand) {
         if (my.agent.trashValue(state, card, my) > 0) {
           trashCount++;
         }
       }
 
-      let cardToTrash = my.agent.choose(CHOICE_TRASH, state, my.hand);
+      const cardToTrash = my.agent.choose(CHOICE_TRASH, state, my.hand);
       // Optimization: Avoid recalculating value
       // my.agent.trashValue(state, cardToTrash, my) > 0 &&
 
@@ -149,7 +147,7 @@ const heuristics = {
         );
     }
   },
-  'Council Room': { types: [ 'Terminal' ], discardPriority: 27, playPriority: 25 },
+  'Council Room': { types: ['Terminal'], discardPriority: 27, playPriority: 25 },
   Festival: { discardPriority: 26, playPriority: 3 },
   Gardens: {
     discardPriority: 9,
@@ -172,12 +170,12 @@ const heuristics = {
   },
   Harbinger: { types: ['Cycler'], discardPriority: 16, playPriority: 5 },
   Laboratory: { types: ['Cycler', 'Card_Advantage'], discardPriority: 40, playPriority: 8 },
-  Library: { types: [ 'Terminal' ], discardPriority: 30, playPriority: 20 },
+  Library: { types: ['Terminal'], discardPriority: 30, playPriority: 20 },
   Market: { types: ['Cycler'], discardPriority: 30, playPriority: 13 },
   Merchant: { types: ['Cycler'], discardPriority: 19, playPriority: 7 },
-  Militia: { types: [ 'Terminal' ], discardPriority: 25, playPriority: 30 },
+  Militia: { types: ['Terminal'], discardPriority: 25, playPriority: 30 },
   Mine: {
-    types: [ 'Terminal' ],
+    types: ['Terminal'],
     discardPriority: 22,
     playPriority: 24,
 
@@ -201,14 +199,14 @@ const heuristics = {
      * @return {String[]}
      */
     checkForCardToMine (state, my) {
-      let upgradeChoices = cards.Mine.upgradeChoices(state, my.hand);
+      const upgradeChoices = cards.Mine.upgradeChoices(state, my.hand);
       return my.agent.choose(CHOICE_UPGRADE, state, upgradeChoices);
     }
 
   },
-  Moat: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 33 },
+  Moat: { types: ['Terminal'], discardPriority: 23, playPriority: 33 },
   Moneylender: {
-    types: [ 'Terminal' ],
+    types: ['Terminal'],
     discardPriority: 21,
     playPriority: 23,
 
@@ -245,7 +243,7 @@ const heuristics = {
   Poacher: { types: ['Cycler'], discardPriority: 30, playPriority: 10 },
 
   Remodel: {
-    types: [ 'Terminal', 'Trasher', 'TrashForBenefit' ],
+    types: ['Terminal', 'Trasher', 'TrashForBenefit'],
     discardPriority: 18,
     playPriority: 24,
 
@@ -263,7 +261,7 @@ const heuristics = {
   },
 
   Sentry: { types: ['Cycler'], discardPriority: 22, playPriority: 2 },
-  Smithy: { types: [ 'Terminal' ], discardPriority: 24, playPriority: 25 },
+  Smithy: { types: ['Terminal'], discardPriority: 24, playPriority: 25 },
   'Throne Room': {
     discardPriority: 22,
     playPriority: 7,
@@ -284,7 +282,7 @@ const heuristics = {
     }
   },
   Vassal: {
-    types: [ 'Terminal' ],
+    types: ['Terminal'],
     discardPriority: 23,
     playPriority: 25,
 
@@ -311,7 +309,7 @@ const heuristics = {
   },
   Village: { types: ['Cycler', 'Village'], discardPriority: 21, playPriority: 5 },
   Witch: {
-    types: [ 'Terminal' ],
+    types: ['Terminal'],
     discardPriority: 40,
 
     /**
@@ -330,12 +328,12 @@ const heuristics = {
     },
     playPriority: 18
   },
-  Workshop: { types: [ 'Terminal' ], discardPriority: 22, playPriority: 38 },
+  Workshop: { types: ['Terminal'], discardPriority: 22, playPriority: 38 },
 
   // Intrigue
-  Baron: { types: [ 'Terminal' ], discardPriority: 25, playPriority: 22 },
-  'Mining Village': { types: [ 'Village', 'Cycler' ], playPriority: 9, discardPriority: 22 },
-  Courtyard: { types: [ 'Terminal' ], discardPriority: 24, playPriority: 24 }
+  Baron: { types: ['Terminal'], discardPriority: 25, playPriority: 22 },
+  'Mining Village': { types: ['Village', 'Cycler'], playPriority: 9, discardPriority: 22 },
+  Courtyard: { types: ['Terminal'], discardPriority: 24, playPriority: 24 }
 };
 
 /* Stryker enable ArrayDeclaration, ObjectLiteral */

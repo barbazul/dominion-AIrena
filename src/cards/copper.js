@@ -17,5 +17,5 @@ export default class Copper extends Silver {
 
     // Coppers in initial decks come from the supply
     return base - 7 * numPlayers;
-  };
-};
+  }
+}

@@ -4,7 +4,7 @@ import cards from '../../game/cards.js';
 export default class WorkshopGardens extends DomPlayer {
   constructor () {
     super();
-    this.requires = [ cards.Gardens, cards.Workshop ];
+    this.requires = [cards.Gardens, cards.Workshop];
   }
 
   gainPriority (state, my) {

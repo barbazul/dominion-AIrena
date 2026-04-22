@@ -83,7 +83,7 @@ export class DomPlayer extends BasicAI {
    */
   countTypeInDeck (my, type) {
     let count = 0;
-    for (let card of my.getDeck()) {
+    for (const card of my.getDeck()) {
       let types = card.types.slice();
 
       if (heuristics[card] && heuristics[card].types) {
@@ -136,7 +136,7 @@ export class DomPlayer extends BasicAI {
    * @return {String[]|Card[]}
    */
   playPriority (state, my) {
-    let choices = my.hand.slice(0).sort(
+    const choices = my.hand.slice(0).sort(
       (card1, card2) => this.playValue(state, cards[card2], my) -
         this.playValue(state, cards[card1], my)
     );
@@ -353,7 +353,7 @@ export class DomPlayer extends BasicAI {
   }
 
   getPlayStrategyFor (card) {
-    let theStrategy = this.playStrategies[card];
+    const theStrategy = this.playStrategies[card];
     return theStrategy === undefined ? STRATEGY_STANDARD : theStrategy;
   }
 
@@ -363,7 +363,7 @@ export class DomPlayer extends BasicAI {
    * @return {String[]}
    */
   checkForCardToMine (state, my) {
-    let upgradeChoices = cards.Mine.upgradeChoices(state, my.hand);
+    const upgradeChoices = cards.Mine.upgradeChoices(state, my.hand);
     return this.choose(CHOICE_UPGRADE, state, upgradeChoices);
   }
 
@@ -371,7 +371,7 @@ export class DomPlayer extends BasicAI {
     const deck = my.getDeck();
     let count = 0;
 
-    for (let card of deck) {
+    for (const card of deck) {
       // TODO take into account Estate Token to treat Estates as actions. Possibly not necessary
       // if (theCardName==DomCardName.Estate && owner.isEstateTokenPlaced() && aCardType==DomCardType.Action)
       //   theCount+= get( theCardName ).size();
@@ -396,7 +396,7 @@ export class DomPlayer extends BasicAI {
   getPotentialCoins (my) {
     let value = my.coins;
 
-    for (let card of my.hand) {
+    for (const card of my.hand) {
       value += card.coins;
     }
 
@@ -463,7 +463,7 @@ export class DomPlayer extends BasicAI {
   getTotalMoney (my) {
     let total = 0;
 
-    for (let card of my.getDeck()) {
+    for (const card of my.getDeck()) {
       total += card.coins;
     }
 

@@ -1,4 +1,3 @@
-
 import Witch from '../witch';
 import { DomPlayer } from '../domPlayer';
 import cards from '../../../game/cards';

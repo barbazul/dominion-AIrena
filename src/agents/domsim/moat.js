@@ -4,7 +4,7 @@ import cards from '../../game/cards.js';
 export default class Moat extends DomPlayer {
   constructor () {
     super();
-    this.requires = [ cards.Moat ];
+    this.requires = [cards.Moat];
   }
 
   gainPriority (state, my) {

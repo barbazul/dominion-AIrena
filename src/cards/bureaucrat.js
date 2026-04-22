@@ -27,9 +27,8 @@ export default class Bureaucrat extends BasicAttack {
    */
   bureaucratAttack (opp, state) {
     const victoryCards = [];
-    let choice;
 
-    for (let card of opp.hand) {
+    for (const card of opp.hand) {
       if (card.isVictory()) {
         victoryCards.push(card);
       }
@@ -40,7 +39,7 @@ export default class Bureaucrat extends BasicAttack {
       return;
     }
 
-    choice = opp.agent.choose(CHOICE_TOPDECK, state, victoryCards);
+    const choice = opp.agent.choose(CHOICE_TOPDECK, state, victoryCards);
     state.doTopdeck(opp, choice);
   }
 }

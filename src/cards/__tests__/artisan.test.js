@@ -5,7 +5,7 @@ import Artisan from '../artisan';
 
 const muteConfig = { log: () => {}, warn: () => {} };
 
-let setUpState = function (choice) {
+const setUpState = function (choice) {
   const state = new State();
   const card = new Artisan();
 

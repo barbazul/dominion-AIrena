@@ -15,7 +15,7 @@ test('Play effect allows trash 4', () => {
   const allowTrashMock = jest.fn(() => []);
 
   state.allowTrash = allowTrashMock;
-  state.setUp([ new BasicAI(), new BasicAI() ], { log: () => {} });
+  state.setUp([new BasicAI(), new BasicAI()], { log: () => {} });
   card.playEffect(state);
   expect(allowTrashMock).toHaveBeenCalledWith(state.current, 4);
 });

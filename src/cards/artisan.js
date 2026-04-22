@@ -20,24 +20,21 @@ export default class Artisan extends BasicAction {
   }
 
   doTopdeckPart (state) {
-    let chosenTopdeck;
-
     // TODO Should not be asking for a discard choice but a CHOICE_TOPDECK if it existed
-    chosenTopdeck = state.current.agent.choose(CHOICE_TOPDECK, state, [...new Set(state.current.hand)]);
+    const chosenTopdeck = state.current.agent.choose(CHOICE_TOPDECK, state, [...new Set(state.current.hand)]);
     state.doTopdeck(state.current, chosenTopdeck);
   }
 
   doGainPart (state) {
     const choices = [];
-    let chosenGain;
 
-    for (let card of Object.keys(state.kingdom)) {
+    for (const card of Object.keys(state.kingdom)) {
       if (cards[card].getCost(state) <= 5 && state.kingdom[card] > 0) {
         choices.push(cards[card]);
       }
     }
 
-    chosenGain = state.current.agent.choose(CHOICE_GAIN, state, choices);
+    const chosenGain = state.current.agent.choose(CHOICE_GAIN, state, choices);
 
     if (chosenGain) {
       state.gainCard(state.current, chosenGain, 'hand');

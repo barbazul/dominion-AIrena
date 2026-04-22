@@ -35,12 +35,12 @@ test('Call for discard choice', () => {
   const card = new Baron();
 
   state.setUp([new BasicAI(), new BasicAI()], muteConfig);
-  state.current.hand = [ cards.Estate ];
+  state.current.hand = [cards.Estate];
   state.current.agent.choose = jest.fn(() => null);
 
   card.playEffect(state);
 
-  expect(state.current.agent.choose).toHaveBeenCalledWith(CHOICE_DISCARD, state, [ null, cards.Estate ]);
+  expect(state.current.agent.choose).toHaveBeenCalledWith(CHOICE_DISCARD, state, [null, cards.Estate]);
 });
 
 test('Discarded Estate, gain coins', () => {
@@ -48,7 +48,7 @@ test('Discarded Estate, gain coins', () => {
   const card = new Baron();
 
   state.setUp([new BasicAI(), new BasicAI()], muteConfig);
-  state.current.hand = [ cards.Estate ];
+  state.current.hand = [cards.Estate];
   state.current.coins = 0;
   state.current.agent.choose = jest.fn(() => cards.Estate);
 

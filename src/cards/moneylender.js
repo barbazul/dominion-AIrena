@@ -14,15 +14,13 @@ export default class Moneylender extends basicAction {
    * @param {State} state
    */
   playEffect (state) {
-    let choice;
-
     // No effect without copper in hand
     if (state.current.hand.indexOf(cards.Copper) === -1) {
       return;
     }
 
     // Trashing is optional (2nd Ed.)
-    choice = state.current.agent.choose(CHOICE_TRASH, state, [cards.Copper, null]);
+    const choice = state.current.agent.choose(CHOICE_TRASH, state, [cards.Copper, null]);
 
     if (choice === null) {
       return;

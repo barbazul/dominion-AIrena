@@ -8,7 +8,7 @@ import Gold from '../gold';
 import Silver from '../silver';
 
 const setUpState = function (state, card1, card2) {
-  state.setUp([ new BasicAI(), new BasicAI() ], { log: () => {} });
+  state.setUp([new BasicAI(), new BasicAI()], { log: () => {} });
   state.current.getCardsFromDeck = jest.fn(() => [card1, card2]);
   state.current.agent.choose = jest.fn(() => card2);
   state.current.discard = [];
@@ -63,10 +63,9 @@ test('banditAttack causes to trash single treasure', () => {
   const state = new State();
   const card1 = new Silver();
   const card2 = new Card();
-  let player;
 
   state.setUp([new BasicAI(), new BasicAI()], { log: () => {} });
-  player = state.current;
+  const player = state.current;
   player.getCardsFromDeck = jest.fn(() => [card1, card2]);
   player.discard = [];
   state.trash = [];

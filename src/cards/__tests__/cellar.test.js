@@ -17,7 +17,7 @@ test('Play effect allows discard', () => {
   const allowDiscardMock = jest.fn(() => []);
 
   state.allowDiscard = allowDiscardMock;
-  state.setUp([ new BasicAI(), new BasicAI() ], { log: () => {} });
+  state.setUp([new BasicAI(), new BasicAI()], { log: () => {} });
   card.playEffect(state);
   expect(allowDiscardMock).toHaveBeenCalledWith(state.current, Infinity);
 });
@@ -36,7 +36,7 @@ test('Draw as many cards as discarded', () => {
   card3.name = 'Card 3';
   card4.name = 'Card 4';
 
-  state.setUp([ basicAi, basicAi ], { log: () => {} });
+  state.setUp([basicAi, basicAi], { log: () => {} });
   state.current.hand = [card1, card2];
   state.current.draw = [card3, card4];
   state.current.discard = [];

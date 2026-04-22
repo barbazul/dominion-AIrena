@@ -13,7 +13,7 @@ export default class LabMilitiaChapel extends DomPlayer {
   constructor () {
     super();
     this.name = 'Lab/Militia/Chapel';
-    this.requires = [ 'Festival', 'Market', 'Laboratory', 'Militia', 'Chapel' ];
+    this.requires = ['Festival', 'Market', 'Laboratory', 'Militia', 'Chapel'];
     this.playStrategies[cards.Chapel] = STRATEGY_AGGRESSIVE_TRASHING;
   }
 

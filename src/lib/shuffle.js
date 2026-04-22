@@ -9,7 +9,6 @@ import seedrandom from 'seedrandom';
 export default function shuffle (arr, rng = null) {
   const resp = [];
   const keys = [];
-  let size;
 
   if (arr && !(arr instanceof Array)) {
     return null;
@@ -19,7 +18,7 @@ export default function shuffle (arr, rng = null) {
     rng = seedrandom();
   }
 
-  size = arr.length;
+  const size = arr.length;
 
   for (let i = 0; i < size; i++) {
     keys.push(i);

@@ -54,7 +54,6 @@ export default class BasicAI {
     // Flatten all choices as strings for easy matching
     const flatChoices = choices.map(choice => choice === null ? null : choice.toString());
     let priority;
-    let priorityFunc;
     let bestChoice = null;
 
     // No real choice
@@ -70,7 +69,7 @@ export default class BasicAI {
 
     // First, try the priority function. If we reach the end of the priority
     // list, treat it as "none of the above".
-    priorityFunc = this.getPriorityFunction(type);
+    const priorityFunc = this.getPriorityFunction(type);
 
     if (priorityFunc) {
       // Get the priority list
@@ -164,13 +163,11 @@ export default class BasicAI {
    * @returns {number}
    */
   getChoiceValue (type, state, choice, my) {
-    let specificFunction;
-
     if (choice === null) {
       return 0;
     }
 
-    specificFunction = this.getValueFunction(type);
+    const specificFunction = this.getValueFunction(type);
 
     if (specificFunction) {
       const result = specificFunction.call(this, state, choice, my);
@@ -206,21 +203,18 @@ export default class BasicAI {
    * @return {number}
    */
   choiceToValue (type, state, choice, my) {
-    let priorityFunc;
-    let priority = [];
-    let priorityIndex;
-
     if (choice === null) {
       return 0;
     }
 
-    priorityFunc = this.getPriorityFunction(type);
+    const priorityFunc = this.getPriorityFunction(type);
+    let priority = [];
 
     if (priorityFunc) {
       priority = priorityFunc.call(this, state, my);
     }
 
-    priorityIndex = priority.indexOf(choice.toString());
+    const priorityIndex = priority.indexOf(choice.toString());
 
     if (priorityIndex !== -1) {
       return (priority.length - priorityIndex) * 100;
@@ -350,7 +344,7 @@ export default class BasicAI {
     /**
      * @type {(String|Card)[]}
      */
-    const priority = [ cards.Curse ];
+    const priority = [cards.Curse];
 
     if (state.gainsToEndGame() > 4) {
       priority.push(cards.Estate);
@@ -480,7 +474,7 @@ export default class BasicAI {
        * @param {Player} my
        * @return {number}
        */
-      'Library': (state, my) => {
+      Library: (state, my) => {
         const terminalValues = [260, 260, 260, 260, 210, 192, 118, 101];
         const nonTerminalValues = [955, 955, 955, 955, 695, 620, 420, 101];
 
@@ -547,36 +541,36 @@ export default class BasicAI {
         return state.gainsToEndGame() >= 5 || my.draw.indexOf(cards.Curse) > -1 ? 895 : -5;
       },
       */
-      'Cartographer': 890,
+      Cartographer: 890,
       'Bag of Gold': 885,
-      'Apothecary': 880,
-      'Scout': 875,
+      Apothecary: 880,
+      Scout: 875,
       'Scrying Pool': 870,
-      'Spy': 860,
+      Spy: 860,
 
       // 4: cards that give +2 actions. (800-849)
       'Trusty Steed': 848,
-      'Festival': 845,
-      'University': 842,
+      Festival: 845,
+      University: 842,
       'Farming Village': 838,
-      'Bazaar': 835,
+      Bazaar: 835,
       'Worker\' Village': 832,
-      'City': 829,
+      City: 829,
       'Walled Village': 826,
       'Fishing Village': 823,
-      'Village': 820,
+      Village: 820,
       'Border Village': 817,
       'Mining Village': 814,
 
       // 5: cards that give +1 action and are almost always good. (700-800)
       'Grand Market': 795,
       'Hunting Party': 790,
-      'Alchemist': 785,
-      'Laboratory': 782,
-      'Caravan': 780,
-      'Market': 775,
-      'Peddler': 770,
-      'Treasury': 765,
+      Alchemist: 785,
+      Laboratory: 782,
+      Caravan: 780,
+      Market: 775,
+      Peddler: 770,
+      Treasury: 765,
 
       /**
        * Removed the check for multiplier
@@ -599,11 +593,11 @@ export default class BasicAI {
       },
       */
 
-      'Familiar': 755,
-      'Highway': 750,
-      'Scheme': 745,
+      Familiar: 755,
+      Highway: 750,
+      Scheme: 745,
       'Wishing Well': 745,
-      'Golem': 743, // seems to be reasonable to expect +1 action from Golem
+      Golem: 743, // seems to be reasonable to expect +1 action from Golem
 
       /**
        * @param {State} state
@@ -618,12 +612,12 @@ export default class BasicAI {
 
       // 'Spice Merchant': (state, my) => my.hand.indexOf(cards.Copper) > -1 ? 740 : (spiceMerchantWantsToTrash ? 410 : 80),
       // 'Stables': stablesDiscardChoice ? 735 :  50,
-      'Apprentice': 730,
+      Apprentice: 730,
       'Pearl Diver': 725,
-      'Hamlet': 720,
-      'Lighthouse': 715,
-      'Haven': 710,
-      'Minion': 705,
+      Hamlet: 720,
+      Lighthouse: 715,
+      Haven: 710,
+      Minion: 705,
 
       // 6: terminal card-drawers, if we have actions to spare. (600-699)
       /**
@@ -656,7 +650,7 @@ export default class BasicAI {
        * @param {Player} my
        * @return {number}
        */
-      'Courtyard': (state, my) => {
+      Courtyard: (state, my) => {
         return my.actions > 1 && (my.discard.length + my.draw.length) <= 3 ? 615 : 188;
       },
 
@@ -683,14 +677,14 @@ export default class BasicAI {
 
       // 8: card-cycling that might improve the hand. (400-499)
       // 'Upgrade': wantsToTrash >= multiplayer ? 490 : -30,
-      'Oasis': 480,
-      'Pawn': 470,
-      'Warehouse': 460,
-      'Cellar': 450,
+      Oasis: 480,
+      Pawn: 470,
+      Warehouse: 460,
+      Cellar: 450,
 
       // 9: non-terminal cards that don't succeed but at least give us something. (300-399)
       // 10: terminals. Of course, Nobles might be a non-terminal
-      'Nobles': 296,
+      Nobles: 296,
 
       /**
        * @param {State} state
@@ -710,17 +704,17 @@ export default class BasicAI {
         return -40;
       },
       */
-      'Followers': 292,
-      'Mountebank': 290,
+      Followers: 292,
+      Mountebank: 290,
       'Sea Hag': 286,
       'Young Witch': 282,
-      'Tribute': 281, // after Curses but before other terminals; there is probably a better spot for it
-      'Goons': 278,
-      'Wharf': 275,
-      'Tactician': 272, // playing Tactician is extremely situational and this doesn't take it into account.
-      'Masquerade': 270,
-      'Vault': 268,
-      'Princess': 264,
+      Tribute: 281, // after Curses but before other terminals; there is probably a better spot for it
+      Goons: 278,
+      Wharf: 275,
+      Tactician: 272, // playing Tactician is extremely situational and this doesn't take it into account.
+      Masquerade: 270,
+      Vault: 268,
+      Princess: 264,
 
       /**
        * @param {State} state
@@ -732,19 +726,19 @@ export default class BasicAI {
         return my.countInHand('Province') > 0 ? 282 : 166;
       },
       */
-      'Jester': 258,
-      'Militia': 254,
-      'Cutpurse': 250,
-      'Bridge': 246,
-      'Bishop': 243,
+      Jester: 258,
+      Militia: 254,
+      Cutpurse: 250,
+      Bridge: 246,
+      Bishop: 243,
       'Horse Traders': 240,
       'Jack of All Trades': 236,
-      'Steward': 233,
-      'Moneylender': 230,
-      'Expand': 226,
-      'Remodel': 223,
-      'Salvager': 220,
-      'Mine': 217,
+      Steward: 233,
+      Moneylender: 230,
+      Expand: 226,
+      Remodel: 223,
+      Salvager: 220,
+      Mine: 217,
 
       /**
        * @param {State} state
@@ -764,7 +758,7 @@ export default class BasicAI {
         }
       },
       */
-      'Envoy': 203,
+      Envoy: 203,
       'Merchant Ship': 186,
 
       /**
@@ -787,20 +781,20 @@ export default class BasicAI {
         return -5;
       },
       */
-      'Monument': 182,
+      Monument: 182,
       // 'Remake': wantsToTrash >= multiplayer * 2 ? 178 : -35,
-      'Adventurer': 176,
-      'Harvest': 174,
-      'Haggler': 170,
-      'Mandarin': 168,
-      'Woodcutter': 164,
+      Adventurer: 176,
+      Harvest: 174,
+      Haggler: 170,
+      Mandarin: 168,
+      Woodcutter: 164,
       'Nomad Camp': 162,
-      'Chancellor': 160,
+      Chancellor: 160,
       'Counting House': 158,
       // 'Outpost': state.extraTurn ? -15 : 154,
       // 'Ambassador': my.actions > 0 && wantsToTrash > 0 ? 1100 : -1
       // 'Trading Post': wantsToTrash >= multiplier * 2 ? 148 : -38,
-      'Chapel': (state, my) => {
+      Chapel: (state, my) => {
         if (my.agent.wantsToTrash(state, my) > 0) {
           return 146;
         }
@@ -813,21 +807,21 @@ export default class BasicAI {
       'Secret Chamber': 138,
       'Pirate Ship': 136,
       'Noble Brigand': 134,
-      'Island': 132,
+      Island: 132,
       'Fortune Teller': 130,
-      'Bureaucrat': 128,
-      'Navigator': 126,
-      'Herbalist': 122,
-      'Moat': 120,
-      'Ironworks': 115,
-      'Workshop': 112,
-      'Smugglers': 110,
-      'Feast': 108,
+      Bureaucrat: 128,
+      Navigator: 126,
+      Herbalist: 122,
+      Moat: 120,
+      Ironworks: 115,
+      Workshop: 112,
+      Smugglers: 110,
+      Feast: 108,
       // 'Transmute': this.choose('mint', state, my.hand) ? 106 : -27,
-      'Saboteur': 104,
+      Saboteur: 104,
       'Poor House': 103,
-      'Duchess': 102,
-      'Thief': 100
+      Duchess: 102,
+      Thief: 100
 
       // 11: cards that have become useless. Maybe they'll decrease
       // the cost of Peddler, trigger Conspirator, or something. (20-99)
@@ -979,7 +973,7 @@ export default class BasicAI {
   topdeckPriority (state, my) {
     const actions = my.hand.filter(card => card.isAction());
     const priority = [];
-    let playableTerminals = my.countPlayableTerminals();
+    const playableTerminals = my.countPlayableTerminals();
 
     // 1) Actions
     actions.sort((cardA, cardB) => {
@@ -1086,7 +1080,7 @@ export default class BasicAI {
   wantsToTrash (state, my) {
     let trashableCards = 0;
 
-    for (let card of my.hand) {
+    for (const card of my.hand) {
       if (this.choose(CHOICE_TRASH, state, [card, null])) {
         trashableCards++;
       }
@@ -1137,7 +1131,7 @@ export default class BasicAI {
     // Considering proxyAgent, we trace back the agent from the matching player
     const my = this.myPlayer(state);
 
-    const [ hypothesis, hypotheticallyMy ] = state.hypothetical(my.agent);
+    const [hypothesis, hypotheticallyMy] = state.hypothetical(my.agent);
 
     return this.fastForwardToBuy(hypothesis, hypotheticallyMy);
   }
@@ -1211,9 +1205,9 @@ export default class BasicAI {
     const coins = newState.current.coins;
     const baseCard = newState.getSingleBuyDecision();
 
-    for (let increment of [1, 2, 3, 4, 5, 6, 7, 8]) {
+    for (const increment of [1, 2, 3, 4, 5, 6, 7, 8]) {
       newState.current.coins = coins + increment;
-      let cardToBuy = newState.getSingleBuyDecision();
+      const cardToBuy = newState.getSingleBuyDecision();
 
       if (cardToBuy !== baseCard) {
         return increment;

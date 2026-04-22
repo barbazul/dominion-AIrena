@@ -44,7 +44,7 @@ test('Choose null when there are no choices', () => {
   const ai2 = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai1, ai2 ], muteConfig);
+  state.setUp([ai1, ai2], muteConfig);
   expect(ai1.choose(CHOICE_DISCARD, state, [])).toBeNull();
 });
 
@@ -54,7 +54,7 @@ test('Choose only choice', () => {
   const state = new State();
   const card1 = new Card();
 
-  state.setUp([ ai1, ai2 ], muteConfig);
+  state.setUp([ai1, ai2], muteConfig);
   ai1.fakeValue = () => -Infinity;
   expect(ai1.choose('fake', state, [card1])).toBe(card1);
 });
@@ -87,11 +87,11 @@ test('Priority list is considered when possible', () => {
   const card1 = new Card();
   const card2 = new Card();
 
-  state.setUp([ ai1, ai2 ], muteConfig);
-  ai1.discardPriority = () => [ 'Skip this', 'Choose this', 'Ignore this' ];
+  state.setUp([ai1, ai2], muteConfig);
+  ai1.discardPriority = () => ['Skip this', 'Choose this', 'Ignore this'];
   card1.name = 'Ignore this';
   card2.name = 'Choose this';
-  expect(ai1.choose('discard', state, [ card1, card2 ])).toEqual(card2);
+  expect(ai1.choose('discard', state, [card1, card2])).toEqual(card2);
 });
 
 test('Return null when its legal and preferable', () => {
@@ -99,9 +99,9 @@ test('Return null when its legal and preferable', () => {
   const ai2 = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai1, ai2 ], muteConfig);
-  ai1.discardPriority = () => [ 'Skip this', null, 'Ignore this' ];
-  expect(ai1.choose('discard', state, [ 'Ignore this', null ])).toBeNull();
+  state.setUp([ai1, ai2], muteConfig);
+  ai1.discardPriority = () => ['Skip this', null, 'Ignore this'];
+  expect(ai1.choose('discard', state, ['Ignore this', null])).toBeNull();
 });
 
 test('Choice value of null is 0', () => {
@@ -109,7 +109,7 @@ test('Choice value of null is 0', () => {
   const ai2 = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai1, ai2 ], muteConfig);
+  state.setUp([ai1, ai2], muteConfig);
   const choiceValue = ai1.getChoiceValue('discard', state, null, ai1.myPlayer(state));
   expect(choiceValue).toBe(0);
 });
@@ -119,7 +119,7 @@ test('Choice value is -1000 if ai does not know how to make the decision', () =>
   const ai2 = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai1, ai2 ], { warn: () => {} });
+  state.setUp([ai1, ai2], { warn: () => {} });
   const choiceValue = ai1.getChoiceValue('fakeType', state, 'fakeChoice', ai1.myPlayer(state));
   expect(choiceValue).toBe(-1000);
 });
@@ -135,10 +135,9 @@ test('Fallback discard value is negative card cost', () => {
   const ai2 = new BasicAI();
   const state = new State();
   const card = new Card();
-  let player;
 
-  state.setUp([ ai1, ai2 ], muteConfig);
-  player = ai1.myPlayer(state);
+  state.setUp([ai1, ai2], muteConfig);
+  const player = ai1.myPlayer(state);
   // Setting actions to 0 to validate the action case
   player.actions = 0;
   card.isAction = () => false;
@@ -151,11 +150,9 @@ test('Action discard value is greater when no actions left', () => {
   const ai2 = new BasicAI();
   const state = new State();
   const card = new Card();
-  /** @var {Player} player */
-  let player;
 
-  state.setUp([ ai1, ai2 ], muteConfig);
-  player = ai1.myPlayer(state);
+  state.setUp([ai1, ai2], muteConfig);
+  const player = ai1.myPlayer(state);
   player.actions = 0;
   state.current = player;
   card.isAction = () => true;
@@ -173,11 +170,9 @@ test('Get choice value from specific function', () => {
   const ai1 = new BasicAI();
   const ai2 = new BasicAI();
   const state = new State();
-  /** @var {Player} player */
-  let player;
 
-  state.setUp([ ai1, ai2 ], muteConfig);
-  player = ai1.myPlayer(state);
+  state.setUp([ai1, ai2], muteConfig);
+  const player = ai1.myPlayer(state);
   ai1.fakeValue = () => 123456;
   expect(ai1.getChoiceValue('fake', state, new Card(), player)).toBe(123456);
 });
@@ -188,11 +183,9 @@ test('Specific function cant assign value to choice', () => {
   const state = new State();
   const warnFunction = jest.fn(() => {});
   const card = new Card();
-  /** @var {Player} player */
-  let player;
 
-  state.setUp([ ai1, ai2 ], { log: () => {}, warn: warnFunction });
-  player = ai1.myPlayer(state);
+  state.setUp([ai1, ai2], { log: () => {}, warn: warnFunction });
+  const player = ai1.myPlayer(state);
   ai1.fakeValue = () => null;
   ai1.name = 'AIName';
   card.name = 'Fake Card';
@@ -207,10 +200,10 @@ test('Make choice based on value function when priority list fails', () => {
   const valueFunction = jest.fn(() => 1000);
   const card = new Card();
 
-  state.setUp([ ai1, ai2 ], muteConfig);
+  state.setUp([ai1, ai2], muteConfig);
   card.name = 'Fake Card';
   ai1.fakeValue = valueFunction;
-  ai1.fakePriority = () => [ 'Other Card', 'Better Card' ];
+  ai1.fakePriority = () => ['Other Card', 'Better Card'];
   ai1.choose('fake', state, [card, card]);
   expect(valueFunction).toHaveBeenCalled();
 });
@@ -222,7 +215,7 @@ test('Make choice based on value function when priority list is missing', () => 
   const valueFunction = jest.fn(() => 1000);
   const card = new Card();
 
-  state.setUp([ ai1, ai2 ], muteConfig);
+  state.setUp([ai1, ai2], muteConfig);
   card.name = 'Fake Card';
   ai1.fakeValue = valueFunction;
   ai1.choose('fake', state, [card, card]);
@@ -243,7 +236,7 @@ test('Choice by value returns the best choice', () => {
   const card1 = new Card();
   const card2 = new Card();
 
-  state.setUp([ ai1, ai2 ], muteConfig);
+  state.setUp([ai1, ai2], muteConfig);
   card1.name = 'Worst Choice';
   card2.name = 'Best Choice';
   ai1.fakeValue = valueFunction;
@@ -259,7 +252,7 @@ test('Throw an error when AI cant make a choice', () => {
   const card1 = new Card();
   const card2 = new Card();
 
-  state.setUp([ ai1, ai2 ], muteConfig);
+  state.setUp([ai1, ai2], muteConfig);
   ai1.fakeValue = () => -Infinity;
 
   expect(() => {
@@ -274,7 +267,7 @@ test('Choose null if available and AI cannot decide', () => {
   const card1 = new Card();
   const card2 = new Card();
 
-  state.setUp([ ai1, ai2 ], muteConfig);
+  state.setUp([ai1, ai2], muteConfig);
   ai1.fakeValue = () => -Infinity;
 
   expect(ai1.choose('fake', state, [card1, card2, null])).toBeNull();
@@ -388,7 +381,6 @@ test('Fallback gainValue prefers treasures and actions', () => {
   const card2 = new Card();
   const card3 = new Card();
   const card4 = new Card();
-  let card1Value, card2Value, card3Value, card4Value;
 
   card1.cost = 3;
   card2.cost = 3;
@@ -399,10 +391,10 @@ test('Fallback gainValue prefers treasures and actions', () => {
   card4.isTreasure = () => true;
   card4.isAction = () => true;
 
-  card1Value = ai.gainValue(state, card1, player);
-  card2Value = ai.gainValue(state, card2, player);
-  card3Value = ai.gainValue(state, card3, player);
-  card4Value = ai.gainValue(state, card4, player);
+  const card1Value = ai.gainValue(state, card1, player);
+  const card2Value = ai.gainValue(state, card2, player);
+  const card3Value = ai.gainValue(state, card3, player);
+  const card4Value = ai.gainValue(state, card4, player);
 
   expect(card2Value).toBeGreaterThan(card1Value);
   expect(card3Value).toBeGreaterThan(card1Value);
@@ -681,9 +673,7 @@ test('Fallback playValue function -> Cantrips', () => {
   ];
 
   for (let i = 0; i < testCards.length; i++) {
-    let actualValue;
-
-    actualValue = ai.playValue(state, testCards[i], state.current);
+    const actualValue = ai.playValue(state, testCards[i], state.current);
     expect(actualValue).toBeGreaterThanOrEqual(700);
     expect(actualValue).toBeLessThan(800);
   }
@@ -735,9 +725,7 @@ test('Fallback playValue function -> Other terminals', () => {
   ];
 
   for (let i = 0; i < testCards.length; i++) {
-    let actualValue;
-
-    actualValue = ai.playValue(state, testCards[i], state.current);
+    const actualValue = ai.playValue(state, testCards[i], state.current);
     expect(actualValue).toBeGreaterThanOrEqual(100);
     expect(actualValue).toBeLessThan(200);
   }
@@ -897,8 +885,8 @@ test('wantsToTrash returns the number of cards to trash', () => {
   const ai = new BasicAI();
   const player = new Player(ai, () => {});
   const state = new State();
-  let trashable = new Card();
-  let untrashable = new Card();
+  const trashable = new Card();
+  const untrashable = new Card();
 
   trashable.name = 'Trashable';
   untrashable.name = 'Not Trashable';
@@ -906,11 +894,11 @@ test('wantsToTrash returns the number of cards to trash', () => {
 
   ai.choose = (type, state, options) => {
     const values = {
-      'Trashable': true,
+      Trashable: true,
       'Not Trashable': false
     };
 
-    for (let card of options) {
+    for (const card of options) {
       if (values[card]) {
         return card;
       }
@@ -928,7 +916,6 @@ test('topdeckPriority prioritizes actions thant won\'t be played by play value',
   const action1 = new BasicAction();
   const action2 = new BasicAction();
   const action3 = new BasicAction();
-  let priority;
 
   state.setUp([ai, ai], muteConfig);
 
@@ -950,73 +937,68 @@ test('topdeckPriority prioritizes actions thant won\'t be played by play value',
     return values[card.toString()];
   });
 
-  priority = ai.topdeckPriority(state, state.current);
+  const priority = ai.topdeckPriority(state, state.current);
   expect(priority.map(card => card.toString())).toEqual(['Action 2', 'Action 1']);
 });
 
 test('topdeckPriority prefers most valuable treasures', () => {
   const state = new State();
   const ai = new BasicAI();
-  let priority;
 
   state.setUp([ai, ai], muteConfig);
   state.current.actions = 0;
   state.current.hand = [cards.Copper, cards.Silver];
   ai.coinLossMargin = () => 99;
-  priority = ai.topdeckPriority(state, state.current);
+  const priority = ai.topdeckPriority(state, state.current);
   expect(priority).toEqual([cards.Silver, cards.Copper]);
 });
 
 test('topdeckPriority skips duplicate treasures', () => {
   const state = new State();
   const ai = new BasicAI();
-  let priority;
 
   state.setUp([ai, ai], muteConfig);
   state.current.actions = 0;
   state.current.hand = [cards.Copper, cards.Copper];
   ai.coinLossMargin = () => 99;
-  priority = ai.topdeckPriority(state, state.current);
+  const priority = ai.topdeckPriority(state, state.current);
   expect(priority).toEqual([cards.Copper]);
 });
 
 test('topdeckPriority skips treasures that would hinder buy options', () => {
   const state = new State();
   const ai = new BasicAI();
-  let priority;
 
   state.setUp([ai, ai], muteConfig);
   state.current.actions = 0;
   state.current.hand = [cards.Gold, cards.Silver, cards.Copper];
   ai.coinLossMargin = () => 2;
-  priority = ai.topdeckPriority(state, state.current);
+  const priority = ai.topdeckPriority(state, state.current);
   expect(priority).toEqual([cards.Silver, cards.Copper]);
 });
 
 test('topdeckPriority skips treasures if there are action options', () => {
   const state = new State();
   const ai = new BasicAI();
-  let priority;
 
   state.setUp([ai, ai], muteConfig);
   state.current.actions = 0;
   state.current.hand = [cards.Smithy, cards.Silver, cards.Copper];
   ai.coinLossMargin = () => 2;
-  priority = ai.topdeckPriority(state, state.current);
+  const priority = ai.topdeckPriority(state, state.current);
   expect(priority).toEqual([cards.Smithy]);
 });
 
 test('topdeckPriority returns worst card if it doesn\'t want to save anything', () => {
   const state = new State();
   const ai = new BasicAI();
-  let priority;
 
   state.setUp([ai, ai], muteConfig);
   state.current.actions = 1;
   state.current.hand = [cards.Village, cards.Gold, cards.Estate, cards.Curse];
   ai.coinLossMargin = () => 2;
   ai.choose = () => cards.Curse;
-  priority = ai.topdeckPriority(state, state.current);
+  const priority = ai.topdeckPriority(state, state.current);
   expect(priority).toEqual([null, cards.Curse]);
 });
 
@@ -1219,12 +1201,11 @@ test('discardValue wants to discard actions only in own turn', () => {
   const ai1 = new BasicAI();
   const ai2 = new BasicAI();
   const state = new State();
-  let player1, player2;
 
-  state.setUp([ ai1, ai2 ], muteConfig);
-  player1 = ai1.myPlayer(state);
+  state.setUp([ai1, ai2], muteConfig);
+  const player1 = ai1.myPlayer(state);
   player1.actions = 0;
-  player2 = ai2.myPlayer(state);
+  const player2 = ai2.myPlayer(state);
   state.current = player2;
   expect(ai1.discardValue(state, cards.Village, player1)).toBeLessThan(0);
 });
@@ -1233,10 +1214,9 @@ test('discardValue tries not to draw dead actions', () => {
   const ai1 = new BasicAI();
   const ai2 = new BasicAI();
   const state = new State();
-  let player1;
 
-  state.setUp([ ai1, ai2 ], muteConfig);
-  player1 = ai1.myPlayer(state);
+  state.setUp([ai1, ai2], muteConfig);
+  const player1 = ai1.myPlayer(state);
   player1.actions = 1;
   player1.actionBalance = () => -1;
   state.current = player1;
@@ -1247,15 +1227,15 @@ test('goingGreen', () => {
   const state = new State();
   const ai = new BasicAI();
 
-  state.setUp([ ai, ai ], muteConfig);
+  state.setUp([ai, ai], muteConfig);
 
-  state.current.draw = [ cards.Duchy, cards.Province, cards.Province ];
+  state.current.draw = [cards.Duchy, cards.Province, cards.Province];
   expect(ai.goingGreen(state, state.current)).toBe(3);
 
-  state.current.draw = [ cards.Duchy, cards.Duchy, cards.Province, cards.Province ];
+  state.current.draw = [cards.Duchy, cards.Duchy, cards.Province, cards.Province];
   expect(ai.goingGreen(state, state.current)).toBe(4);
 
-  state.current.draw = [ cards.Estate, cards.Estate, cards.Estate ];
+  state.current.draw = [cards.Estate, cards.Estate, cards.Estate];
   expect(ai.goingGreen(state, state.current)).toBe(0);
 });
 
@@ -1272,7 +1252,7 @@ test('fastForwardToBuy requires a hypothetical state', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai, ai ], muteConfig);
+  state.setUp([ai, ai], muteConfig);
   state.phase = PHASE_ACTION;
 
   expect(
@@ -1286,7 +1266,7 @@ test('fastForwardToBuy returns the state in buy phase', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai, ai ], muteConfig);
+  state.setUp([ai, ai], muteConfig);
   state.phase = PHASE_ACTION;
   state.depth = 1;
 
@@ -1297,16 +1277,16 @@ test('fastForwardToBuy keeps same cards in draw and discard', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai, ai ], muteConfig);
+  state.setUp([ai, ai], muteConfig);
   state.phase = PHASE_ACTION;
   state.depth = 1;
 
   // agent will play smithy and still not draw
   ai.playValue = () => 1;
   ai.playPriority = undefined;
-  state.current.hand = [ cards.Smithy ];
-  state.current.draw = [ cards.Copper, cards.Copper, cards.Copper ];
-  state.current.discard = [ cards.Estate, cards.Estate, cards.Estate ];
+  state.current.hand = [cards.Smithy];
+  state.current.draw = [cards.Copper, cards.Copper, cards.Copper];
+  state.current.discard = [cards.Estate, cards.Estate, cards.Estate];
 
   const drawBackup = state.current.draw.slice(0);
   const discardBackup = state.current.discard.slice(0);
@@ -1321,7 +1301,7 @@ test('pessimisticBuyPhase returns a hypothetical state', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai, ai ], muteConfig);
+  state.setUp([ai, ai], muteConfig);
 
   const actual = ai.pessimisticBuyPhase(state);
 
@@ -1333,9 +1313,9 @@ test('pessimisticBuyPhase returns a state in buy phase', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai, ai ], muteConfig);
+  state.setUp([ai, ai], muteConfig);
   state.phase = PHASE_ACTION;
-  state.current.hand = [ cards.Copper ];
+  state.current.hand = [cards.Copper];
 
   const actual = ai.pessimisticBuyPhase(state);
 
@@ -1348,9 +1328,9 @@ test('pessimisticBuyPhase prevents recursion', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai, ai ], muteConfig);
+  state.setUp([ai, ai], muteConfig);
   state.phase = PHASE_ACTION;
-  state.current.hand = [ cards.Copper, cards.Smithy ];
+  state.current.hand = [cards.Copper, cards.Smithy];
 
   ai.playValue = (state, card, my) => {
     ai.pessimisticBuyPhase(state);
@@ -1365,9 +1345,9 @@ test('coinLossMargin is 0 when no card is wanted', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai, ai ], muteConfig);
+  state.setUp([ai, ai], muteConfig);
   state.current.coins = 5;
-  ai.gainPriority = () => [ null ];
+  ai.gainPriority = () => [null];
   expect(ai.coinLossMargin(state)).toBe(0);
 });
 
@@ -1375,9 +1355,9 @@ test('coinLossMargin is the difference between current coins and wished card cos
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai, ai ], muteConfig);
+  state.setUp([ai, ai], muteConfig);
   state.current.coins = 5;
-  ai.gainPriority = () => [ cards.Silver, null ];
+  ai.gainPriority = () => [cards.Silver, null];
   expect(ai.coinLossMargin(state)).toBe(2);
 });
 
@@ -1385,9 +1365,9 @@ test('coinGainMargin returns Infinity when no better card is wanted', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai, ai ], muteConfig);
+  state.setUp([ai, ai], muteConfig);
   state.current.coins = 3;
-  ai.gainPriority = () => [ cards.Silver ];
+  ai.gainPriority = () => [cards.Silver];
   expect(ai.coinGainMargin(state)).toBe(Infinity);
 });
 
@@ -1395,9 +1375,9 @@ test('coinGainMargin the missing coins for the next card in the list', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai, ai ], muteConfig);
+  state.setUp([ai, ai], muteConfig);
   state.current.coins = 3;
-  ai.gainPriority = () => [ cards.Gold, cards.Silver ];
+  ai.gainPriority = () => [cards.Gold, cards.Silver];
   expect(ai.coinGainMargin(state)).toBe(3);
 });
 
@@ -1405,7 +1385,7 @@ test('wantsToTrashMining village is true when greening and can buy a better card
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai, ai ], muteConfig);
+  state.setUp([ai, ai], muteConfig);
   ai.goingGreen = () => true;
   ai.coinGainMargin = () => 2;
   expect(ai.wantsToTrashMiningVillage(state, state.current)).toBeTruthy();
@@ -1415,7 +1395,7 @@ test('wantsToTrashMining village is false when not greening', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai, ai ], muteConfig);
+  state.setUp([ai, ai], muteConfig);
   ai.goingGreen = () => false;
   ai.coinGainMargin = () => 2;
   expect(ai.wantsToTrashMiningVillage(state, state.current)).toBeFalsy();
@@ -1425,7 +1405,7 @@ test('wantsToTrashMining village is false when won\t gain a better card', () => 
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai, ai ], muteConfig);
+  state.setUp([ai, ai], muteConfig);
   ai.goingGreen = () => true;
   ai.coinGainMargin = () => 3;
   expect(ai.wantsToTrashMiningVillage(state, state.current)).toBeFalsy();

@@ -92,7 +92,7 @@ export default class State {
 
     players.forEach(agent => {
       agent.requires.forEach(c => {
-        let card = cards[c];
+        const card = cards[c];
         if (selectedCards.indexOf(card) === -1) {
           selectedCards.push(card);
         }
@@ -132,7 +132,7 @@ export default class State {
     moreCards = shuffle(moreCards);
 
     while (selection.length < 10) {
-      let candidate = cards[moreCards[index]];
+      const candidate = cards[moreCards[index]];
 
       // TODO Also filter special supplies and prizes
       if (selection.indexOf(candidate) === -1 && baseCards.indexOf(candidate) === -1) {
@@ -164,8 +164,8 @@ export default class State {
   emptyPiles () {
     const piles = [];
 
-    for (let card in this.kingdom) {
-      if (this.kingdom.hasOwnProperty(card) && this.kingdom[card] === 0) {
+    for (const card in this.kingdom) {
+      if (Object.prototype.hasOwnProperty.call(this.kingdom, card) && this.kingdom[card] === 0) {
         piles.push(card);
       }
     }
@@ -204,18 +204,13 @@ export default class State {
    * Minimum number of buys/gains necessary to end the game.
    */
   gainsToEndGame () {
-    let piles;
-    let lowestPiles;
-    let returnValue;
-
     if (this.cache.gainsToEndGame !== undefined) {
       return this.cache.gainsToEndGame;
     }
 
-    piles = Object.values(this.kingdom);
-    lowestPiles = piles.sort((a, b) => a - b).slice(0, this.totalPilesToEndGame());
-
-    returnValue = Math.min(lowestPiles.reduce((sum, value) => sum + value, 0), this.kingdom.Province);
+    const piles = Object.values(this.kingdom);
+    const lowestPiles = piles.sort((a, b) => a - b).slice(0, this.totalPilesToEndGame());
+    const returnValue = Math.min(lowestPiles.reduce((sum, value) => sum + value, 0), this.kingdom.Province);
 
     this.cache.gainsToEndGame = returnValue;
     return returnValue;
@@ -267,8 +262,6 @@ export default class State {
   }
 
   doPlay (card, source, from) {
-    let index;
-
     this.current.log(`${this.current.agent} plays ${card}.`);
 
     if (source === undefined) {
@@ -276,7 +269,7 @@ export default class State {
       return null;
     }
 
-    index = source.indexOf(card);
+    const index = source.indexOf(card);
 
     if (index === -1) {
       this.warn(`${this.current.agent.name} tried to play ${card} but has none in ${from}`);
@@ -299,7 +292,6 @@ export default class State {
    * @return {Card|null}
    */
   doDiscard (player, card, from = 'hand') {
-    let index;
     const source = player[from];
 
     if (source === undefined) {
@@ -307,7 +299,7 @@ export default class State {
       return null;
     }
 
-    index = source.indexOf(card);
+    const index = source.indexOf(card);
 
     if (index === -1) {
       this.warn(`${player.agent.name} has no , ${card} to discard`);
@@ -328,7 +320,6 @@ export default class State {
    * @param {String} from
    */
   doTopdeck (player, card, from = 'hand') {
-    let index;
     const source = player[from];
 
     if (source === undefined) {
@@ -336,7 +327,7 @@ export default class State {
       return;
     }
 
-    index = source.indexOf(card);
+    const index = source.indexOf(card);
 
     if (index === -1) {
       this.warn(`${player.agent.name} has no ${card} to topdeck`);
@@ -385,14 +376,13 @@ export default class State {
     while (discarded.length < num) {
       // in allowDiscard, valid cards are the entire hand, plus null to stop discarding
       const validDiscards = [];
-      let choice;
 
       for (let i = 0; i < player.hand.length; i++) {
         validDiscards.push(player.hand[i]);
       }
 
       validDiscards.push(null);
-      choice = player.agent.choose('discard', this, validDiscards);
+      const choice = player.agent.choose('discard', this, validDiscards);
 
       if (choice === null) {
         return discarded;
@@ -447,10 +437,9 @@ export default class State {
 
     while (trashed.length < num) {
       const validTrashes = player.hand.slice(0);
-      let choice;
 
       validTrashes.push(null);
-      choice = player.agent.choose(CHOICE_TRASH, this, validTrashes);
+      const choice = player.agent.choose(CHOICE_TRASH, this, validTrashes);
 
       if (choice === null) {
         return trashed;
@@ -491,7 +480,7 @@ export default class State {
    * @param {function(Player, State):void} effect
    */
   attackOpponents (effect) {
-    for (let opp of this.players) {
+    for (const opp of this.players) {
       if (opp !== this.current) {
         this.attackPlayer(opp, effect);
       }
@@ -514,7 +503,7 @@ export default class State {
     const attackEvent = { blocked: false };
 
     // Handle reaction cards in hand
-    for (let card of player.hand) {
+    for (const card of player.hand) {
       if (card.isReaction()) {
         card.reactToAttack(this, player, attackEvent);
       }
@@ -614,7 +603,7 @@ export default class State {
           const handSize = player.hand.length;
 
           const combined = shuffle(
-            [ ...player.hand, ...player.draw ],
+            [...player.hand, ...player.draw],
             this.rng
           );
 
@@ -703,7 +692,7 @@ export default class State {
     }
 
     for (const card in this.kingdom) {
-      if (this.kingdom.hasOwnProperty(card)) {
+      if (Object.prototype.hasOwnProperty.call(this.kingdom, card)) {
         total += this.kingdom[card];
       }
     }
@@ -766,7 +755,7 @@ export default class State {
     while (this.current.actions > 0) {
       actions = [null];
 
-      for (let card of this.current.hand) {
+      for (const card of this.current.hand) {
         if (card.isAction()) {
           actions.push(card);
         }
@@ -793,7 +782,6 @@ export default class State {
   doTreasurePhase () {
     do {
       const treasures = [];
-      let choice;
 
       // Prepare the set of treasures that may be played.
       for (const card of this.current.hand) {
@@ -808,7 +796,7 @@ export default class State {
 
       // Ask the agent for a choice
       treasures.push(null);
-      choice = this.current.agent.choose('play', this, treasures);
+      const choice = this.current.agent.choose('play', this, treasures);
 
       if (choice === null) {
         return;
@@ -828,10 +816,8 @@ export default class State {
     const buyable = [null];
 
     for (const cardName in this.kingdom) {
-      let card;
-
-      if (this.kingdom.hasOwnProperty(cardName)) {
-        card = cards[cardName];
+      if (Object.prototype.hasOwnProperty.call(this.kingdom, cardName)) {
+        const card = cards[cardName];
 
         if (this.kingdom[cardName] > 0 && card.getCost(this) <= this.current.coins) {
           buyable.push(card);

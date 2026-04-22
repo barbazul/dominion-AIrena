@@ -21,7 +21,7 @@ export default class Baron extends BasicAction {
       discardEstate = state.current.agent.choose(
         CHOICE_DISCARD,
         state,
-        [ null, cards.Estate ]
+        [null, cards.Estate]
       );
     }
 
