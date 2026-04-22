@@ -33,7 +33,7 @@ export default class Courtyard extends DomPlayer {
     }
 
     if (my.countInDeck(cards.Courtyard) < 1) {
-      priority.push(Courtyard);
+      priority.push(cards.Courtyard);
     }
 
     if (my.countInDeck(cards.Courtyard) < this.countCardTypeInDeck(my, 'Treasure') / 8) {
