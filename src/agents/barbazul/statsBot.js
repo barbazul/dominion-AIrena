@@ -4,6 +4,10 @@ import BasicBigMoney from '../domsim/basicBigMoney.js';
 import BasicAI from '../basicAI.js';
 import { DomPlayer } from '../domsim/domPlayer.js';
 import FirstGame from '../domsim/firstGame.js';
+import Ironworks from '../domsim/ironworks.js';
+import IronworksGardensPaper from '../domsim/ironworksGardensPaper.js';
+import IronworksGardensRock from '../domsim/ironworksGardensRock.js';
+import IronworksGardensScissors from '../domsim/ironworksGardensScissors.js';
 import BigMoneyUltimate from '../domsim/bigMoneyUltimate.js';
 import BigMoney from '../dominiate/bigMoney.js';
 import Festival from '../domsim/festival.js';
@@ -92,6 +96,10 @@ export default class StatsBot extends ProxyAgent {
       new Duke(),
       new Festival(),
       new FirstGame(),
+      new Ironworks(),
+      new IronworksGardensPaper(),
+      new IronworksGardensRock(),
+      new IronworksGardensScissors(),
       new LabMilitiaChapel(),
       new Laboratory(),
       new Militia(),
@@ -122,7 +130,8 @@ export default class StatsBot extends ProxyAgent {
     candidates.forEach(candidate => {
       // Skip candidates for which we have no stats
       const candidateScore = this.stats[candidate] === undefined
-        ? 0 : this.stats[candidate].rate;
+        ? 0
+        : this.stats[candidate].rate;
 
       if (candidateScore > score) {
         winner = candidate;
@@ -136,7 +145,7 @@ export default class StatsBot extends ProxyAgent {
 
   getCandidatesForCurrentKingdom (state) {
     return this.agents.filter(bot => {
-      for (let requirement of bot.requires) {
+      for (const requirement of bot.requires) {
         if (state.kingdom[requirement] === undefined) {
           return false;
         }

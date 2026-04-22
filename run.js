@@ -39,6 +39,10 @@ import ObmCourtyard from './src/agents/dominiate/obmCourtyard.js';
 import yargs from 'yargs';
 import Duke from './src/agents/domsim/duke.js';
 import Farm from './src/agents/domsim/farm.js';
+import Ironworks from './src/agents/domsim/ironworks.js';
+import IronworksGardensPaper from './src/agents/domsim/ironworksGardensPaper.js';
+import IronworksGardensRock from './src/agents/domsim/ironworksGardensRock.js';
+import IronworksGardensScissors from './src/agents/domsim/ironworksGardensScissors.js';
 
 const argv = yargs(process.argv.slice(2))
   .option('statsbot-stats-file', {
@@ -89,7 +93,11 @@ const players = [
   new Courtyard(),
   new ObmCourtyard(),
   new Duke(),
-  new Farm()
+  new Farm(),
+  new Ironworks(),
+  new IronworksGardensPaper(),
+  new IronworksGardensRock(),
+  new IronworksGardensScissors()
 ];
 
 const statsBotAgent = new StatsBot(statsBotOptions);
@@ -98,7 +106,7 @@ players.push(statsBotAgent);
 const start = new Date();
 const state = new State();
 const player1 = players[players.length - 1];
-const rivals = [ player1 ];
+const rivals = [player1];
 const numPlayers = 2;
 
 while (rivals.length < numPlayers) {
@@ -150,7 +158,7 @@ for (let i = 0; i < numGames; i++) {
     let score = 0;
     const deck = {};
 
-    for (let card of p.getDeck()) {
+    for (const card of p.getDeck()) {
       if (!deck[card]) {
         deck[card] = 0;
       }

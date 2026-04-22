@@ -43,6 +43,10 @@ import yargs from 'yargs';
 import * as fs from 'fs';
 import Duke from './src/agents/domsim/duke.js';
 import Farm from './src/agents/domsim/farm.js';
+import Ironworks from './src/agents/domsim/ironworks.js';
+import IronworksGardensPaper from './src/agents/domsim/ironworksGardensPaper.js';
+import IronworksGardensRock from './src/agents/domsim/ironworksGardensRock.js';
+import IronworksGardensScissors from './src/agents/domsim/ironworksGardensScissors.js';
 
 const argv = yargs(process.argv.slice(2))
   .option('statsbot-stats-file', {
@@ -97,14 +101,18 @@ const players = [
   new Courtyard(),
   new ObmCourtyard(),
   new Duke(),
-  new Farm()
+  new Farm(),
+  new Ironworks(),
+  new IronworksGardensPaper(),
+  new IronworksGardensRock(),
+  new IronworksGardensScissors()
 ];
 
 const statsBotAgent = new StatsBot(statsBotOptions);
 
 players.push(statsBotAgent);
 
-let scoreBoard = Object.fromEntries(players.map(p => [p.toString(), { plays: 0, wins: 0, rate: 0.0 }]));
+const scoreBoard = Object.fromEntries(players.map(p => [p.toString(), { plays: 0, wins: 0, rate: 0.0 }]));
 
 function getWinner (state) {
   const scores = [];
@@ -116,7 +124,7 @@ function getWinner (state) {
     let score = 0;
     const deck = {};
 
-    for (let card of p.getDeck()) {
+    for (const card of p.getDeck()) {
       if (!deck[card]) {
         deck[card] = 0;
       }
@@ -151,8 +159,8 @@ let gameCounter = 0;
 for (let i = 0; i < players.length - 1; i++) {
   for (let j = i + 1; j < players.length; j++) {
     for (let game = 0; game < gamesPerMatch; game++) {
-      let state = new State();
-      let logFn = () => {
+      const state = new State();
+      const logFn = () => {
       };
 
       if (game === 0) {
@@ -177,7 +185,7 @@ for (let i = 0; i < players.length - 1; i++) {
         state.doPhase();
       }
 
-      let winner = getWinner(state);
+      const winner = getWinner(state);
       scoreBoard[players[i]].plays++;
       scoreBoard[players[j]].plays++;
 
@@ -204,8 +212,8 @@ for (let i = 0; i < players.length - 1; i++) {
 
 const elapsed = new Date().getTime() - start.getTime();
 
-let ranking = [];
-for (let p in scoreBoard) {
+const ranking = [];
+for (const p in scoreBoard) {
   ranking.push({
     player: p,
     score: scoreBoard[p].rate
@@ -230,7 +238,7 @@ if (argv['update-stats-file']) {
     stats = JSON.parse(fs.readFileSync(argv['update-stats-file'], { encoding: 'utf8' }));
   }
 
-  for (let p in scoreBoard) {
+  for (const p in scoreBoard) {
     if (!stats[p]) {
       stats[p] = scoreBoard[p];
     } else {
