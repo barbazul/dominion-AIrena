@@ -33,6 +33,7 @@ import StatsBot from './src/agents/barbazul/statsBot.js';
 import SingleBaron from './src/agents/dominiate/singleBaron.js';
 import ObmBridge from './src/agents/dominiate/obmBridge.js';
 import Artisan from './src/agents/barbazul/artisan.js';
+import CantripLurker from './src/agents/barbazul/cantripLurker.js';
 import CouncilRoomMilitiaMiningVillage from './src/agents/barbazul/councilRoomMilitiaMiningVillage.js';
 import Courtyard from './src/agents/domsim/courtyard.js';
 import ObmCourtyard from './src/agents/dominiate/obmCourtyard.js';
@@ -61,43 +62,44 @@ const players = [
   new BigMoney(),
   new BigSmithy(),
   new BMLibrary(),
-  new BureaucratGardens(),
-  new BurningSkullHTBD1(), // 6
+  new BureaucratGardens(), // 5
+  new BurningSkullHTBD1(),
   new ChapelWitch(),
-  new CouncilRoomMilitia(), // 8
+  new CouncilRoomMilitia(),
   new DoubleMilitia(),
-  new DoubleWitch(),
-  new FirstGame(), // 11
+  new DoubleWitch(), // 10
+  new FirstGame(),
   new MoneylenderWitch(),
-  new LabMilitiaChapel(), // 13
+  new LabMilitiaChapel(),
   new Festival(),
-  new SingleWitch(),
+  new SingleWitch(), // 15
   new CouncilRoom(),
   new Bureaucrat(),
-  new BigMoneyUltimate(), // 18
+  new BigMoneyUltimate(),
   new WorkshopGardens(),
   new BasicBigMoney(), // 20
   new BigMoneyUltimateFor3or4(),
   new DoubleMoatFor3or4(),
   new Laboratory(),
   new Militia(),
-  new Moat(),
+  new Moat(), // 25
   new Smithy(),
   new Witch(),
   new WitchAndMoatFor3or4(),
   new WitchFor3or4(),
-  new Artisan(),
+  new Artisan(), // 30
   new SingleBaron(),
   new ObmBridge(),
   new CouncilRoomMilitiaMiningVillage(),
   new Courtyard(),
-  new ObmCourtyard(),
+  new ObmCourtyard(), // 35
   new Duke(),
   new Farm(),
   new Ironworks(),
   new IronworksGardensPaper(),
-  new IronworksGardensRock(),
-  new IronworksGardensScissors()
+  new IronworksGardensRock(), // 40
+  new IronworksGardensScissors(),
+  new CantripLurker()
 ];
 
 const statsBotAgent = new StatsBot(statsBotOptions);

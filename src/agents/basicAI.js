@@ -1303,3 +1303,4 @@ export const CHOICE_TRASH = 'trash';
 export const CHOICE_UPGRADE = 'upgrade';
 export const CHOICE_MULTIPLY = 'multiply';
 export const CHOICE_TOPDECK = 'topdeck';
+export const CHOICE_LURKER = 'lurker';

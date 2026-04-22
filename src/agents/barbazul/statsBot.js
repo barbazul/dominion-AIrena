@@ -36,6 +36,7 @@ import DoubleMoatFor3or4 from '../domsim/doubleMoatFor3or4.js';
 import WitchAndMoatFor3or4 from '../domsim/witchAndMoatFor3or4.js';
 import WitchFor3or4 from '../domsim/witchFor3or4.js';
 import Artisan from './artisan.js';
+import CantripLurker from './cantripLurker.js';
 import CouncilRoomMilitiaMiningVillage from './councilRoomMilitiaMiningVillage.js';
 import ObmBridge from '../dominiate/obmBridge.js';
 import ObmCourtyard from '../dominiate/obmCourtyard.js';
@@ -65,6 +66,7 @@ export default class StatsBot extends ProxyAgent {
 
       // Barbazul agents
       new Artisan(),
+      new CantripLurker(),
       new CouncilRoomMilitiaMiningVillage(),
 
       // Dominiate agents

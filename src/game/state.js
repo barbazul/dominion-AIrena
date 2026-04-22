@@ -20,6 +20,15 @@ export default class State {
     this.trash = [];
 
     /**
+     * Look up a card object by its name string. Useful for code that needs card
+     * objects from kingdom keys without importing the cards catalog directly.
+     *
+     * @param {string} name
+     * @return {Card|undefined}
+     */
+    this.getCard = name => cards[name];
+
+    /**
      * A list of CostModifier objects which have a "modify" method that takes a card and returns
      * a modification to its cost.  Objects must also have a "source" property that
      * specifies which card caused the cost modification.

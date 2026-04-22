@@ -1,5 +1,5 @@
 import BasicAction from './basicAction.js';
-import cards from '../game/cards.js';
+import { CHOICE_LURKER } from '../agents/basicAI.js';
 
 export const LURKER_TRASH = 'trash';
 export const LURKER_GAIN = 'gain';
@@ -26,7 +26,7 @@ export default class Lurker extends BasicAction {
       return;
     }
 
-    const choice = state.current.agent.choose('lurker', state, choices);
+    const choice = state.current.agent.choose(CHOICE_LURKER, state, choices);
 
     if (!choice) {
       return;
@@ -57,7 +57,7 @@ export default class Lurker extends BasicAction {
     const choices = [];
 
     for (const cardName of Object.keys(state.kingdom)) {
-      const card = cards[cardName];
+      const card = state.getCard(cardName);
 
       if (card && state.kingdom[cardName] > 0 && card.isAction()) {
         choices.push({ mode: LURKER_TRASH, card });

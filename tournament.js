@@ -36,6 +36,7 @@ import SingleBaron from './src/agents/dominiate/singleBaron.js';
 import StatsBot from './src/agents/barbazul/statsBot.js';
 import ObmBridge from './src/agents/dominiate/obmBridge.js';
 import Artisan from './src/agents/barbazul/artisan.js';
+import CantripLurker from './src/agents/barbazul/cantripLurker.js';
 import CouncilRoomMilitiaMiningVillage from './src/agents/barbazul/councilRoomMilitiaMiningVillage.js';
 import Courtyard from './src/agents/domsim/courtyard.js';
 import ObmCourtyard from './src/agents/dominiate/obmCourtyard.js';
@@ -105,7 +106,8 @@ const players = [
   new Ironworks(),
   new IronworksGardensPaper(),
   new IronworksGardensRock(),
-  new IronworksGardensScissors()
+  new IronworksGardensScissors(),
+  new CantripLurker()
 ];
 
 const statsBotAgent = new StatsBot(statsBotOptions);
