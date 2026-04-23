@@ -331,7 +331,19 @@ const heuristics = {
   Workshop: { types: ['Terminal'], discardPriority: 22, playPriority: 38 },
 
   // Intrigue
-  Baron: { types: ['Terminal'], discardPriority: 25, playPriority: 22 },
+  Baron: {
+    types: ['Terminal'],
+    discardPriority: 25,
+    playPriority: 22,
+
+    calculatedDiscardPriority: (state, card, my) => {
+      if (my.actions > 0 && my.hand.indexOf(cards.Baron) > -1 &&
+          my.countInHand(cards.Baron) === 1 &&
+          my.hand.indexOf(cards.Estate) > -1) {
+        return 29;
+      }
+    }
+  },
   'Mining Village': { types: ['Village', 'Cycler'], playPriority: 9, discardPriority: 22 },
   Courtyard: { types: ['Terminal'], discardPriority: 24, playPriority: 24 }
 };

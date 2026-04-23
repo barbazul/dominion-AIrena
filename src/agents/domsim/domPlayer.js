@@ -1,5 +1,5 @@
 import cards from '../../game/cards.js';
-import BasicAI, { CHOICE_UPGRADE } from '../basicAI.js';
+import BasicAI, { CHOICE_TRASH, CHOICE_UPGRADE } from '../basicAI.js';
 import heuristics from './heuristics.js';
 
 export class DomPlayer extends BasicAI {
@@ -204,20 +204,18 @@ export class DomPlayer extends BasicAI {
           return false;
         }
 
-        for (let card of cardsInHand) {
+        for (const card of cardsInHand) {
           if (this.trashValue(state, card, my) > 0) {
             trashCount++;
           }
         }
 
-        let cardToTrash = this.choose(CHOICE_TRASH, state, my.hand);
+        const cardToTrash = this.choose(CHOICE_TRASH, state, my.hand);
 
         return this.trashValue(state, cardToTrash, my) > 0 ||
-          this.removingReducesBuyingPower(my, state, cardToTrash) && trashCount < trashOverBuyThreshold ||
-          this.getTotalMoney(my) - this.getPotentialCoinValue(my, cardToTrash) < minMoneyInDeck
-          && this.getTotalMoney(my) >= minMoneyInDeck;
-
-
+          (this.removingReducesBuyingPower(my, state, cardToTrash) && trashCount < trashOverBuyThreshold) ||
+          (this.getTotalMoney(my) - this.getPotentialCoinValue(my, cardToTrash) < minMoneyInDeck &&
+          this.getTotalMoney(my) >= minMoneyInDeck);
       },
       Mine: (state, my) => {
         return this.checkForCardToMine(state, my) !== null;
@@ -295,15 +293,6 @@ export class DomPlayer extends BasicAI {
    */
   discardValue (state, card, my) {
     let calculatedValue;
-    // TODO some cards have specific heuristics
-    if (card === cards.Baron) {
-      if (my.actions > 0 && my.hand.indexOf(cards.Baron) > -1
-        && my.countInHand(cards.Baron) === 1
-        && my.hand.indexOf(cards.Estate) > -1) {
-        return 16 - 29;
-      }
-    }
-
     // TODO Province heuristic regarding Tournament
     // TODO Estate heuristics regarding Estate Token
     // TODO Estate heuristics regarding Baron
@@ -378,7 +367,7 @@ export class DomPlayer extends BasicAI {
 
       if (
         card.types.indexOf(type) > -1 ||
-        (heuristics[card].types && heuristics[card].types.indexOf(type) > -1)
+        (heuristics[card]?.types && heuristics[card].types.indexOf(type) > -1)
       ) {
         count++;
       }
