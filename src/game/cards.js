@@ -40,6 +40,7 @@ import MiningVillage from '../cards/miningVillage.js';
 import Farm from '../cards/farm.js';
 import Ironworks from '../cards/ironworks.js';
 import Lurker from '../cards/lurker.js';
+import Masquerade from '../cards/masquerade.js';
 
 const cards = {
   // Basic cards
@@ -88,6 +89,7 @@ const cards = {
   Farm: new Farm(),
   Ironworks: new Ironworks(),
   Lurker: new Lurker(),
+  Masquerade: new Masquerade(),
   'Mining Village': new MiningVillage()
 };
 
