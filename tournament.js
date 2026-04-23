@@ -4,6 +4,7 @@ import BasicAI from './src/agents/basicAI.js';
 import BigMoney from './src/agents/dominiate/bigMoney.js';
 import BigSmithy from './src/agents/dominiate/bigSmithy.js';
 import BMLibrary from './src/agents/dominiate/bmLibrary.js';
+import BMMasquerade from './src/agents/dominiate/bmMasquerade.js';
 import ChapelWitch from './src/agents/dominiate/chapelWitch.js';
 import DoubleMilitia from './src/agents/dominiate/doubleMilitia.js';
 import DoubleWitch from './src/agents/dominiate/doubleWitch.js';
@@ -69,6 +70,7 @@ const players = [
   new BigMoney(),
   new BigSmithy(),
   new BMLibrary(),
+  new BMMasquerade(),
   new ChapelWitch(),
   new DoubleMilitia(),
   new DoubleWitch(),

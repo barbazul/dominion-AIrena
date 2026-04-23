@@ -10,6 +10,7 @@ import IronworksGardensRock from '../domsim/ironworksGardensRock.js';
 import IronworksGardensScissors from '../domsim/ironworksGardensScissors.js';
 import BigMoneyUltimate from '../domsim/bigMoneyUltimate.js';
 import BigMoney from '../dominiate/bigMoney.js';
+import BMMasquerade from '../dominiate/bmMasquerade.js';
 import Festival from '../domsim/festival.js';
 import CouncilRoomMilitia from '../domsim/councilRoomMilitia.js';
 import Bureaucrat from '../domsim/bureaucrat.js';
@@ -74,6 +75,7 @@ export default class StatsBot extends ProxyAgent {
       new BigMoney(),
       new BigSmithy(),
       new BMLibrary(),
+      new BMMasquerade(),
       new ChapelWitch(),
       new DoubleMilitia(),
       new DoubleWitch(),
