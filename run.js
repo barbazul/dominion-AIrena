@@ -23,6 +23,7 @@ import BasicBigMoney from './src/agents/domsim/basicBigMoney.js';
 import BigMoneyUltimateFor3or4 from './src/agents/domsim/bigMoneyUltimateFor3or4.js';
 import DoubleMoatFor3or4 from './src/agents/domsim/doubleMoatFor3or4.js';
 import Laboratory from './src/agents/domsim/laboratory.js';
+import Masquerade from './src/agents/domsim/masquerade.js';
 import Militia from './src/agents/domsim/militia.js';
 import Moat from './src/agents/domsim/moat.js';
 import Smithy from './src/agents/domsim/smithy.js';
@@ -99,6 +100,7 @@ const players = [
   new IronworksGardensPaper(),
   new IronworksGardensRock(), // 40
   new IronworksGardensScissors(),
+  new Masquerade(),
   new CantripLurker()
 ];
 

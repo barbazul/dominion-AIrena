@@ -16,6 +16,7 @@ import Bureaucrat from '../domsim/bureaucrat.js';
 import Militia from '../domsim/militia.js';
 import DoubleMilitia from '../dominiate/doubleMilitia.js';
 import Laboratory from '../domsim/laboratory.js';
+import Masquerade from '../domsim/masquerade.js';
 import BMLibrary from '../dominiate/bmLibrary.js';
 import Moat from '../domsim/moat.js';
 import WorkshopGardens from '../domsim/workshopGardens.js';
@@ -104,6 +105,7 @@ export default class StatsBot extends ProxyAgent {
       new IronworksGardensScissors(),
       new LabMilitiaChapel(),
       new Laboratory(),
+      new Masquerade(),
       new Militia(),
       new Moat(),
       new Smithy(),
