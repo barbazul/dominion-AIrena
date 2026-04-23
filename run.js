@@ -64,43 +64,43 @@ const players = [
   new BigMoney(),
   new BigSmithy(),
   new BMLibrary(),
-  new BMMasquerade(),
-  new BureaucratGardens(), // 5
+  new BMMasquerade(), // 5
+  new BureaucratGardens(),
   new BurningSkullHTBD1(),
   new ChapelWitch(),
   new CouncilRoomMilitia(),
-  new DoubleMilitia(),
-  new DoubleWitch(), // 10
+  new DoubleMilitia(), // 10
+  new DoubleWitch(),
   new FirstGame(),
   new MoneylenderWitch(),
   new LabMilitiaChapel(),
-  new Festival(),
-  new SingleWitch(), // 15
+  new Festival(), // 15
+  new SingleWitch(),
   new CouncilRoom(),
   new Bureaucrat(),
   new BigMoneyUltimate(),
-  new WorkshopGardens(),
-  new BasicBigMoney(), // 20
+  new WorkshopGardens(), // 20
+  new BasicBigMoney(),
   new BigMoneyUltimateFor3or4(),
   new DoubleMoatFor3or4(),
   new Laboratory(),
-  new Militia(),
-  new Moat(), // 25
+  new Militia(), // 25
+  new Moat(),
   new Smithy(),
   new Witch(),
   new WitchAndMoatFor3or4(),
-  new WitchFor3or4(),
-  new Artisan(), // 30
+  new WitchFor3or4(), // 30
+  new Artisan(),
   new SingleBaron(),
   new ObmBridge(),
   new CouncilRoomMilitiaMiningVillage(),
-  new Courtyard(),
-  new ObmCourtyard(), // 35
+  new Courtyard(), // 35
+  new ObmCourtyard(),
   new Duke(),
   new Farm(),
   new Ironworks(),
-  new IronworksGardensPaper(),
-  new IronworksGardensRock(), // 40
+  new IronworksGardensPaper(), // 40
+  new IronworksGardensRock(),
   new IronworksGardensScissors(),
   new Masquerade(),
   new CantripLurker()
