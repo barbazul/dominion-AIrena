@@ -40,6 +40,7 @@ import WitchFor3or4 from '../domsim/witchFor3or4.js';
 import Artisan from './artisan.js';
 import CantripLurker from './cantripLurker.js';
 import CouncilRoomMilitiaMiningVillage from './councilRoomMilitiaMiningVillage.js';
+import Mill from './mill.js';
 import ObmBridge from '../dominiate/obmBridge.js';
 import ObmCourtyard from '../dominiate/obmCourtyard.js';
 import SingleBaron from '../dominiate/singleBaron.js';
@@ -70,6 +71,7 @@ export default class StatsBot extends ProxyAgent {
       new Artisan(),
       new CantripLurker(),
       new CouncilRoomMilitiaMiningVillage(),
+      new Mill(),
 
       // Dominiate agents
       new BigMoney(),

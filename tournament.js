@@ -40,6 +40,7 @@ import ObmBridge from './src/agents/dominiate/obmBridge.js';
 import Artisan from './src/agents/barbazul/artisan.js';
 import CantripLurker from './src/agents/barbazul/cantripLurker.js';
 import CouncilRoomMilitiaMiningVillage from './src/agents/barbazul/councilRoomMilitiaMiningVillage.js';
+import Mill from './src/agents/barbazul/mill.js';
 import Courtyard from './src/agents/domsim/courtyard.js';
 import ObmCourtyard from './src/agents/dominiate/obmCourtyard.js';
 import yargs from 'yargs';
@@ -111,7 +112,8 @@ const players = [
   new IronworksGardensRock(),
   new IronworksGardensScissors(),
   new Masquerade(),
-  new CantripLurker()
+  new CantripLurker(),
+  new Mill()
 ];
 
 const statsBotAgent = new StatsBot(statsBotOptions);
