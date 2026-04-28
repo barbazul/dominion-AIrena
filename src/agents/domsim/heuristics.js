@@ -32,8 +32,8 @@ const helpers = {
 
 const heuristics = {
   // Base Cards
-  Curse: { playPriority: 100,discardPriority: 10, trashPriority: 0 },
-  Copper: {  playPriority: 55 , discardPriority: 15 },
+  Curse: { playPriority: 100, discardPriority: 10, trashPriority: 0 },
+  Copper: { playPriority: 55, discardPriority: 15 },
   Silver: {
     playPriority: 25,
     discardPriority: 20,
@@ -52,66 +52,6 @@ const heuristics = {
      */
     calculatedTrashPriority: (state, card, my) => {
       const strategy = helpers.getPlayStrategyFor(my.agent, card);
-      if (strategy === STRATEGY_TRASH_WHEN_OBSOLETE) {
-        // TODO Kings Court check to be implemented later
-
-        if (my.countTypeInDeck('Action') > 9 || my.countInDeck(cards.Silver) > 3) {
-          return 1;
-        }
-      }
-
-      return false;
-    }
-  },
-  Gold: {  playPriority: 30 , discardPriority: 24 },
-  Estate: {
-    playPriority: 100,
-    discardPriority: 9,
-    types: [ 'Base', 'Junk' ],
-    /**
-     * Avoid trashing when collecting estates
-     *
-     * @param {State} state
-     * @param {Card} card
-     * @param {Player} my
-     */
-    calculatedTrashPriority: (state, card, my) => {
-      if (my.agent.wantsToGainOrKeep && my.agent.wantsToGainOrKeep(card, state, my)) {
-        return -19;
-      }
-
-      return false;
-    }
-  },
-  Duchy: {
-    playPriority: 100,
-    discardPriority: 8,
-    /**
-     * Avoid trashing when collecting duchies
-     *
-     * @param {State} state
-     * @param {Card} card
-     * @param {Player} my
-     */
-    calculatedTrashPriority: (state, card, my) => {
-      if (my.agent.wantsToGainOrKeep && my.agent.wantsToGainOrKeep(card, state, my)) {
-        return -24;
-      }
-
-      return false;
-    }
-  },
-  Province: { playPriority: 100, discardPriority: 7 },
-
-  // Base Set
-  Colony: { playPriority: 100, discardPriority: 6 },
-
-  // kingdom cards
-  Artisan: { playPriority: 30, discardPriority: 27, types: [ 'Terminal' ] },
-  Bandit: { types: ['Terminal'], discardPriority: 23, playPriority: 23 },
-  Bureaucrat: { types: ['Terminal'], discardPriority: 20, playPriority: 29 },
-      const strategy = helpers.getPlayStrategyFor(my.agent, card);
-
       if (strategy === STRATEGY_TRASH_WHEN_OBSOLETE) {
         // TODO Kings Court check to be implemented later
 
@@ -161,7 +101,7 @@ const heuristics = {
       return false;
     }
   },
-  Province: { playPriority: 100, discardPriority: 7, trashPriority: 60 },
+  Province: { playPriority: 100, discardPriority: 7 },
 
   // Base Set
   Artisan: { playPriority: 30, discardPriority: 27, types: ['Terminal'] },
@@ -341,7 +281,10 @@ const heuristics = {
       return false;
     }
   },
-  Vassal: { types: ['Terminal'], discardPriority: 23, playPriority: 25 ,
+  Vassal: {
+    types: ['Terminal'],
+    discardPriority: 23,
+    playPriority: 25,
 
     /**
      * Prefer to play Vassal when top card is known and non-terminal or with
@@ -363,7 +306,8 @@ const heuristics = {
 
       return 100 - heuristics[card].playPriority;
     }
-  },  Village: { types: ['Cycler', 'Village'], discardPriority: 21, playPriority: 5 },
+  },
+  Village: { types: ['Cycler', 'Village'], discardPriority: 21, playPriority: 5 },
   Witch: {
     types: ['Terminal'],
     discardPriority: 40,

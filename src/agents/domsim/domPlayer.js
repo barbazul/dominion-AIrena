@@ -1,5 +1,5 @@
 import cards from '../../game/cards.js';
-import BasicAI, {  CHOICE_UPGRADE } from '../basicAI.js';
+import BasicAI, { CHOICE_UPGRADE } from '../basicAI.js';
 import heuristics from './heuristics.js';
 
 export class DomPlayer extends BasicAI {

@@ -10,11 +10,6 @@ import Card from '../../../cards/card';
 const muteConfig = { log: () => {}, warn: () => {} };
 
 describe('DomPlayer', () => {
-  describe('with countTerminalsInDeck', () => {
-    test('countTerminalsInDeck returns 0 with empty deck', () => {
-      const ai = new DomPlayer();
-      const owner = new Player(ai, () => {});
-describe('DomPlayer', () => {
   describe('with findCardToRemodel', () => {
     test('findCardToRemodel returns null when no cards to remodel', () => {
       const ai = new DomPlayer();
