@@ -110,6 +110,63 @@ const heuristics = {
   Artisan: { playPriority: 30, discardPriority: 27, types: [ 'Terminal' ] },
   Bandit: { types: ['Terminal'], discardPriority: 23, playPriority: 23 },
   Bureaucrat: { types: ['Terminal'], discardPriority: 20, playPriority: 29 },
+      const strategy = helpers.getPlayStrategyFor(my.agent, card);
+
+      if (strategy === STRATEGY_TRASH_WHEN_OBSOLETE) {
+        // TODO Kings Court check to be implemented later
+
+        if (my.countTypeInDeck('Action') > 9 || my.countInDeck(cards.Silver) > 3) {
+          return 1;
+        }
+      }
+
+      return false;
+    }
+  },
+  Gold: { playPriority: 30, discardPriority: 24 },
+  Estate: {
+    playPriority: 100,
+    discardPriority: 9,
+    types: ['Base', 'Junk'],
+    /**
+     * Avoid trashing when collecting estates
+     *
+     * @param {State} state
+     * @param {Card} card
+     * @param {Player} my
+     */
+    calculatedTrashPriority: (state, card, my) => {
+      if (my.agent.wantsToGainOrKeep && my.agent.wantsToGainOrKeep(card, state, my)) {
+        return -19;
+      }
+
+      return false;
+    }
+  },
+  Duchy: {
+    playPriority: 100,
+    discardPriority: 8,
+    /**
+     * Avoid trashing when collecting duchies
+     *
+     * @param {State} state
+     * @param {Card} card
+     * @param {Player} my
+     */
+    calculatedTrashPriority: (state, card, my) => {
+      if (my.agent.wantsToGainOrKeep && my.agent.wantsToGainOrKeep(card, state, my)) {
+        return -24;
+      }
+
+      return false;
+    }
+  },
+  Province: { playPriority: 100, discardPriority: 7, trashPriority: 60 },
+
+  // Base Set
+  Artisan: { playPriority: 30, discardPriority: 27, types: ['Terminal'] },
+  Bandit: { types: ['Terminal'], discardPriority: 23, playPriority: 23 },
+  Bureaucrat: { types: ['Terminal'], discardPriority: 20, playPriority: 29 },
   Cellar: { types: ['Cycler'], discardPriority: 17, playPriority: 16 },
   Chapel: {
     types: ['Terminal'],
@@ -229,23 +286,6 @@ const heuristics = {
 
       return false;
     },
-    playPriority: 23
- ,
-
-    /**
-     * Prefer to discard Moneylender with no Coppers on hand
-     *
-     * @param {State} state
-     * @param {Card} card
-     * @param {Player} my
-     */
-    calculatedDiscardPriority: (state, card, my) => {
-      if (my.countInHand(cards.Copper) === 0) {
-        return 16;
-      }
-
-      return false;
-    },
 
     /**
      * When there are no more Coppers in Deck, Moneylender is slightly better than Curse
@@ -282,7 +322,7 @@ const heuristics = {
     }
   },
   Sentry: { types: ['Cycler'], discardPriority: 22, playPriority: 2 },
-  Smithy: { types: [ 'Terminal' ], discardPriority: 24, playPriority: 25 },
+  Smithy: { types: ['Terminal'], discardPriority: 24, playPriority: 25 },
   'Throne Room': {
     discardPriority: 22,
     playPriority: 7,
@@ -301,7 +341,7 @@ const heuristics = {
       return false;
     }
   },
-  Vassal: { types: [ 'Terminal' ], discardPriority: 23, playPriority: 25 ,
+  Vassal: { types: ['Terminal'], discardPriority: 23, playPriority: 25 ,
 
     /**
      * Prefer to play Vassal when top card is known and non-terminal or with
@@ -325,7 +365,7 @@ const heuristics = {
     }
   },  Village: { types: ['Cycler', 'Village'], discardPriority: 21, playPriority: 5 },
   Witch: {
-    types: [ 'Terminal' ],
+    types: ['Terminal'],
     discardPriority: 40,
 
     /**
@@ -349,20 +389,28 @@ const heuristics = {
 
   // Intrigue
   Baron: {
-    types: ['Terminal'],
-    discardPriority: 25,
     playPriority: 22,
+    discardPriority: 25,
+    types: ['Terminal'],
 
+    /**
+     * Prefer to discard Baron with no Estates on hand
+     *
+     * @param state
+     * @param card
+     * @param my
+     * @returns {number}
+     */
     calculatedDiscardPriority: (state, card, my) => {
       if (my.actions > 0 && my.hand.indexOf(cards.Baron) > -1 &&
           my.countInHand(cards.Baron) === 1 &&
           my.hand.indexOf(cards.Estate) > -1) {
-        return 29;
+        return 16 - 29;
       }
     }
   },
   'Mining Village': { types: ['Village', 'Cycler'], playPriority: 9, discardPriority: 22 },
-  Courtyard: { types: [ 'Terminal' ], discardPriority: 24, playPriority: 24 }
+  Courtyard: { types: ['Terminal'], discardPriority: 24, playPriority: 24 }
 };
 
 /* Stryker enable ArrayDeclaration, ObjectLiteral */

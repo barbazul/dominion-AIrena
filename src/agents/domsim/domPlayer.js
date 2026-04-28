@@ -266,14 +266,6 @@ export class DomPlayer extends BasicAI {
    */
   discardValue (state, card, my) {
     let calculatedValue;
-    // TODO some cards have specific heuristics
-    if (card === cards.Baron) {
-      if (my.actions > 0 && my.hand.indexOf(cards.Baron) > -1
-        && my.countInHand(cards.Baron) === 1
-        && my.hand.indexOf(cards.Estate) > -1) {
-        return 16 - 29;
-      }
-    }
 
     // TODO Province heuristic regarding Tournament
     // TODO Estate heuristics regarding Estate Token
