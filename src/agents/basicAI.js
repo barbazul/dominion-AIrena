@@ -1022,6 +1022,18 @@ export default class BasicAI {
   }
 
   /**
+   * Prefers discarding hand for cycling and attacking over taking +$2.
+   *
+   * @param {State} state
+   * @param {string} choice
+   * @param {Player} my
+   * @return {number}
+   */
+  minionValue (state, choice, my) {
+    return choice === 'cards' ? 1 : 0;
+  }
+
+  /**
    * Evaluates Lurker choices between trashing an Action from the Supply
    * or gaining an Action from the trash.
    *
@@ -1304,3 +1316,4 @@ export const CHOICE_UPGRADE = 'upgrade';
 export const CHOICE_MULTIPLY = 'multiply';
 export const CHOICE_TOPDECK = 'topdeck';
 export const CHOICE_LURKER = 'lurker';
+export const CHOICE_MINION = 'minion';

@@ -42,6 +42,7 @@ import Ironworks from '../cards/ironworks.js';
 import Lurker from '../cards/lurker.js';
 import Masquerade from '../cards/masquerade.js';
 import Mill from '../cards/mill.js';
+import Minion from '../cards/minion.js';
 
 const cards = {
   // Basic cards
@@ -92,6 +93,7 @@ const cards = {
   Lurker: new Lurker(),
   Masquerade: new Masquerade(),
   Mill: new Mill(),
+  Minion: new Minion(),
   'Mining Village': new MiningVillage()
 };
 
