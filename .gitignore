@@ -1,5 +1,14 @@
 .idea/
 coverage/
 node_modules/
+reports/
+var/
+yarn-error.log
 # stryker temp files
 .stryker-tmp
+stryker-tmp/
+
+
+
+
+
