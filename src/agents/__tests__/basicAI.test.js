@@ -1479,6 +1479,137 @@ test('compareByDiscarding restores actions even when exception is thrown', () =>
   expect(state.current.actions).toBe(5);
 });
 
+test('discardHandValue calls compareByDiscarding exactly 5 times', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai], muteConfig);
+  ai.compareByDiscarding = jest.fn(() => 0);
+  state.current.draw = [cards.Copper, cards.Silver, cards.Gold];
+
+  ai.discardHandValue(state, [cards.Copper, cards.Silver], state.current, 2);
+
+  expect(ai.compareByDiscarding).toHaveBeenCalledTimes(5);
+});
+
+test('discardHandValue returns the sum of compareByDiscarding results', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai], muteConfig);
+  ai.compareByDiscarding = jest.fn()
+    .mockReturnValueOnce(1)
+    .mockReturnValueOnce(-1)
+    .mockReturnValueOnce(1)
+    .mockReturnValueOnce(0)
+    .mockReturnValueOnce(1);
+  state.current.draw = [cards.Copper, cards.Silver, cards.Gold];
+
+  const result = ai.discardHandValue(state, [cards.Copper, cards.Silver], state.current, 2);
+
+  expect(result).toBe(2);
+});
+
+test('discardHandValue passes the given hand as the second argument to compareByDiscarding', () => {
+  const ai = new BasicAI();
+  const state = new State();
+  const hand = [cards.Gold, cards.Province];
+
+  state.setUp([ai, ai], muteConfig);
+  ai.compareByDiscarding = jest.fn(() => 0);
+  state.current.draw = [cards.Copper, cards.Silver, cards.Gold];
+
+  ai.discardHandValue(state, hand, state.current, 2);
+
+  for (const call of ai.compareByDiscarding.mock.calls) {
+    expect(call[1]).toBe(hand);
+  }
+});
+
+test('discardHandValue does not modify the draw pile', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai], muteConfig);
+  ai.compareByDiscarding = jest.fn(() => 0);
+  state.current.draw = [cards.Copper, cards.Silver, cards.Gold];
+  state.current.discard = [cards.Estate, cards.Duchy];
+  const drawCopy = state.current.draw.slice();
+
+  ai.discardHandValue(state, [], state.current, 2);
+
+  expect(state.current.draw).toEqual(drawCopy);
+});
+
+test('discardHandValue does not modify the discard pile', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, ai], muteConfig);
+  ai.compareByDiscarding = jest.fn(() => 0);
+  state.current.draw = [cards.Copper];
+  state.current.discard = [cards.Estate, cards.Duchy, cards.Silver];
+  const discardCopy = state.current.discard.slice();
+
+  ai.discardHandValue(state, [], state.current, 3);
+
+  expect(state.current.discard).toEqual(discardCopy);
+});
+
+test('discardHandValue draws random hands only from draw pile when it has enough cards', () => {
+  const ai = new BasicAI();
+  const state = new State();
+  const drawOnlyCards = [cards.Gold, cards.Silver, cards.Province];
+  const discardOnlyCards = [cards.Curse, cards.Estate];
+
+  state.setUp([ai, ai], muteConfig);
+  state.current.draw = drawOnlyCards.slice();
+  state.current.discard = discardOnlyCards.slice();
+
+  const randomHands = [];
+  ai.compareByDiscarding = jest.fn((s, hand, randomHand) => {
+    randomHands.push(randomHand);
+    return 0;
+  });
+
+  ai.discardHandValue(state, [], state.current, 2);
+
+  for (const randomHand of randomHands) {
+    expect(randomHand).toHaveLength(2);
+    for (const card of randomHand) {
+      expect(drawOnlyCards).toContain(card);
+      expect(discardOnlyCards).not.toContain(card);
+    }
+  }
+});
+
+test('discardHandValue includes discard pile in pool when draw pile is smaller than nCards', () => {
+  const ai = new BasicAI();
+  const state = new State();
+  const drawOnlyCards = [cards.Gold];
+  const discardOnlyCards = [cards.Silver, cards.Copper, cards.Estate];
+  const fullPool = [...drawOnlyCards, ...discardOnlyCards];
+
+  state.setUp([ai, ai], muteConfig);
+  state.current.draw = drawOnlyCards.slice();
+  state.current.discard = discardOnlyCards.slice();
+
+  const randomHands = [];
+  ai.compareByDiscarding = jest.fn((s, hand, randomHand) => {
+    randomHands.push(randomHand);
+    return 0;
+  });
+
+  ai.discardHandValue(state, [], state.current, 3);
+
+  for (const randomHand of randomHands) {
+    expect(randomHand).toHaveLength(3);
+    for (const card of randomHand) {
+      expect(fullPool).toContain(card);
+    }
+  }
+});
+
 test('compareByDiscarding does not modify the original hand arrays', () => {
   const ai = new BasicAI();
   const state = new State();

@@ -1,5 +1,6 @@
 import cards from '../game/cards.js';
 import { PHASE_ACTION, PHASE_BUY, PHASE_TREASURE } from '../game/state.js';
+import shuffle from '../lib/shuffle.js';
 
 /**
  * This defines the base for an AI agent.
@@ -1098,6 +1099,37 @@ export default class BasicAI {
   }
 
   /**
+   * Decides the value of discarding an entire hand of cards by comparing it
+   * against randomly drawn hands of the same size from the draw pile.
+   *
+   * Draws 5 random hands of `nCards` from the player's draw pile (falling back
+   * to include the discard pile if the draw pile does not have enough cards)
+   * without modifying the actual piles, then returns the sum of
+   * `compareByDiscarding(state, hand, randomHand)` across all 5 comparisons.
+   *
+   * @param {State} state
+   * @param {Card[]} hand
+   * @param {Player} my
+   * @param {number} nCards
+   * @returns {number}
+   */
+  discardHandValue (state, hand, my, nCards) {
+    let pool = my.draw.slice();
+    if (pool.length < nCards) {
+      pool = pool.concat(my.discard);
+    }
+
+    let total = 0;
+    for (let i = 0; i < 5; i++) {
+      const shuffled = shuffle(pool.slice());
+      const randomHand = shuffled.slice(0, nCards);
+      total += this.compareByDiscarding(state, hand, randomHand);
+    }
+
+    return total;
+  }
+
+  /**
    * upgradeValue measures the benefit of choices on Remodel, Upgrade,
    * and so on, where you exchange one card for a better one.
    *
@@ -1333,7 +1365,6 @@ export default class BasicAI {
    * - old_multipliedActionPriority: Was already deprecated in Dominiate
    * - treasurePriority: Not being used in Dominiate
    * - discardFromOpponentDeckValue: Not being used in Dominiate
-   * - discardHandValue: Not being used in Dominiate
    * - gainOnDeckValue: Not being used in Dominiate
    */
 }
