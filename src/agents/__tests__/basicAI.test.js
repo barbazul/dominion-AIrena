@@ -1400,3 +1400,98 @@ test('coinGainMargin the missing coins for the next card in the list', () => {
   ai.gainPriority = () => [ cards.Gold, cards.Silver ];
   expect(ai.coinGainMargin(state)).toBe(3);
 });
+
+test('compareByDiscarding returns 0 when both hands are already at 2 or fewer cards', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+
+  expect(ai.compareByDiscarding(state, [ cards.Copper, cards.Silver ], [ cards.Gold, cards.Estate ])).toBe(0);
+});
+
+test('compareByDiscarding returns 0 when both hands reach 2 or fewer cards simultaneously', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+
+  // Both hands have 3 cards with the same discard value; they both discard at the same time
+  const hand1 = [ cards.Copper, cards.Copper, cards.Copper ];
+  const hand2 = [ cards.Copper, cards.Copper, cards.Copper ];
+
+  expect(ai.compareByDiscarding(state, hand1, hand2)).toBe(0);
+});
+
+test('compareByDiscarding returns 1 when hand1 is better', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+
+  // hand1 has Copper (choiceToValue=0), hand2 has Estate (choiceToValue=-2 via discardValue).
+  // hand1 discards Copper first (higher value), reaching 2 cards before hand2 does.
+  const hand1 = [ cards.Gold, cards.Silver, cards.Copper ];
+  const hand2 = [ cards.Estate, cards.Estate, cards.Copper ];
+
+  expect(ai.compareByDiscarding(state, hand1, hand2)).toBe(1);
+});
+
+test('compareByDiscarding returns -1 when hand2 is better', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+
+  const hand1 = [ cards.Estate, cards.Estate, cards.Copper ];
+  const hand2 = [ cards.Gold, cards.Silver, cards.Copper ];
+
+  expect(ai.compareByDiscarding(state, hand1, hand2)).toBe(-1);
+});
+
+test('compareByDiscarding restores actions after comparison', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+  state.current.actions = 3;
+
+  ai.compareByDiscarding(state, [ cards.Estate, cards.Copper, cards.Silver ], [ cards.Estate, cards.Copper, cards.Silver ]);
+
+  expect(state.current.actions).toBe(3);
+});
+
+test('compareByDiscarding restores actions even when exception is thrown', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+  state.current.actions = 5;
+
+  // With equal values both hands discard each iteration. Starting with 103 cards each:
+  // after 99 iterations each has 4 cards (>2), the 100th iteration throws before discarding.
+  const bigHand1 = Array.from({ length: 103 }, () => cards.Copper);
+  const bigHand2 = Array.from({ length: 103 }, () => cards.Copper);
+
+  ai.choiceToValue = () => 5;
+
+  expect(() => ai.compareByDiscarding(state, bigHand1, bigHand2)).toThrow('compareByDiscarding: exceeded 100 iterations');
+  expect(state.current.actions).toBe(5);
+});
+
+test('compareByDiscarding does not modify the original hand arrays', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ ai, ai ], muteConfig);
+
+  const hand1 = [ cards.Estate, cards.Copper, cards.Silver ];
+  const hand2 = [ cards.Gold, cards.Duchy, cards.Copper ];
+  const hand1Copy = hand1.slice();
+  const hand2Copy = hand2.slice();
+
+  ai.compareByDiscarding(state, hand1, hand2);
+
+  expect(hand1).toEqual(hand1Copy);
+  expect(hand2).toEqual(hand2Copy);
+});
