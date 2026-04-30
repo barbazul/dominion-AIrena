@@ -1448,7 +1448,7 @@ test('compareByDiscarding returns 0 when both hands are already at 2 or fewer ca
 
   state.setUp([ai, ai], muteConfig);
 
-  expect(ai.compareByDiscarding(state, [ cards.Copper, cards.Silver ], [ cards.Gold, cards.Estate ])).toBe(0);
+  expect(ai.compareByDiscarding(state, [cards.Copper, cards.Silver], [cards.Gold, cards.Estate])).toBe(0);
 });
 
 test('compareByDiscarding returns 0 when both hands reach 2 or fewer cards simultaneously', () => {
@@ -1482,7 +1482,7 @@ test('compareByDiscarding returns -1 when hand2 is better', () => {
   const ai = new BasicAI();
   const state = new State();
 
-  state.setUp([ ai, ai ], muteConfig);
+  state.setUp([ai, ai], muteConfig);
 
   const hand1 = [cards.Estate, cards.Estate, cards.Copper];
   const hand2 = [cards.Gold, cards.Silver, cards.Copper];
