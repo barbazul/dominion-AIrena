@@ -24,6 +24,140 @@ describe('Heuristics for Domsim', () => {
     });
   });
 
+  describe('With Duchy', () => {
+    test('Duchy calculated trash priority when agent wants Duchies', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+
+      state.setUp([ai, ai], {
+        log: () => {
+        },
+        warn: () => {
+        }
+      });
+      ai.wantsToGainOrKeep = () => true;
+
+      expect(heuristics[cards.Duchy].calculatedTrashPriority(state, cards.Duchy, state.current))
+        .toBe(-24);
+    });
+
+    test('Duchy calculated trash priority ignores when agent does not want Duchies', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+
+      state.setUp([ai, ai], {
+        log: () => {
+        },
+        warn: () => {
+        }
+      });
+      ai.wantsToGainOrKeep = () => false;
+
+      expect(heuristics[cards.Duchy].calculatedTrashPriority(state, cards.Duchy, state.current))
+        .toBe(false);
+    });
+  });
+
+  describe('With Estate', () => {
+    test('Estate calculated trash priority when agent wants Estates', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+
+      state.setUp([ai, ai], {
+        log: () => {
+        },
+        warn: () => {
+        }
+      });
+      ai.wantsToGainOrKeep = () => true;
+
+      expect(heuristics[cards.Estate].calculatedTrashPriority(state, cards.Estate, state.current))
+        .toBe(-19);
+    });
+
+    test('Estate calculated trash priority ignores when agent does not want Estates', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+
+      state.setUp([ai, ai], muteConfig);
+      ai.wantsToGainOrKeep = () => false;
+
+      expect(heuristics[cards.Estate].calculatedTrashPriority(state, cards.Estate, state.current))
+        .toBe(false);
+    });
+  });
+
+  describe('With Silver', () => {
+    test('Silver calculated trash priority with high action count', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+      const action = new BasicAction();
+
+      state.setUp([ai, ai], muteConfig);
+      ai.playStrategies[cards.Silver] = STRATEGY_TRASH_WHEN_OBSOLETE;
+      state.current.draw = [
+        action, action, action, action, action,
+        action, action, action, action, action
+      ];
+
+      expect(heuristics[cards.Silver].calculatedTrashPriority(state, cards.Silver, state.current))
+        .toBe(1);
+    });
+
+    test('Silver calculated trash priority with high Silver count', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+
+      state.setUp([ai, ai], muteConfig);
+      ai.playStrategies[cards.Silver] = STRATEGY_TRASH_WHEN_OBSOLETE;
+      state.current.draw = [cards.Silver, cards.Silver, cards.Silver, cards.Silver];
+
+      expect(heuristics[cards.Silver].calculatedTrashPriority(state, cards.Silver, state.current))
+        .toBe(1);
+    });
+
+    test('Silver calculated trash priority with not enough Silvers or actions', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+      const action = new BasicAction();
+
+      state.setUp([ai, ai], muteConfig);
+      ai.playStrategies[cards.Silver] = STRATEGY_TRASH_WHEN_OBSOLETE;
+      state.current.draw = [
+        cards.Silver, cards.Silver, cards.Silver,
+        action, action, action,
+        action, action, action,
+        action, action, action
+      ];
+
+      expect(heuristics[cards.Silver].calculatedTrashPriority(state, cards.Silver, state.current))
+        .toBe(false);
+    });
+
+    test('Silver calculated trash priority is skipped without specific strategy agent', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+
+      state.setUp([ai, ai], muteConfig);
+      ai.playStrategies[cards.Silver] = STRATEGY_STANDARD;
+
+      expect(heuristics[cards.Silver].calculatedTrashPriority(state, cards.Silver, state.current))
+        .toBe(false);
+    });
+
+    test('Won\'t trash with if agent determines standard strategy', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+
+      state.setUp([ai, ai], muteConfig);
+      ai.playStrategies[cards.Silver] = () => STRATEGY_STANDARD;
+      state.current.draw = [cards.Silver, cards.Silver, cards.Silver, cards.Silver];
+
+      expect(heuristics[cards.Silver].calculatedTrashPriority(state, cards.Silver, state.current))
+        .toBe(false);
+    });
+  });
+
   describe('With Chapel', () => {
     test('Chapel does not want to be played with empty hand', () => {
       const ai = new DomPlayer();
@@ -229,6 +363,7 @@ describe('Heuristics for Domsim', () => {
         warn: () => {
         }
       });
+      state.current.hand = [card];
       ai.wantsToGainOrKeep = () => true;
 
       expect(heuristics[card].calculatedDiscardPriority(state, card, state.current))
@@ -374,6 +509,7 @@ describe('Heuristics for Domsim', () => {
         warn: () => {
         }
       });
+      state.current.hand = [card];
       ai.wantsToGainOrKeep = () => true;
 
       expect(heuristics[card].calculatedDiscardPriority(state, card, state.current))
@@ -479,6 +615,39 @@ describe('Heuristics for Domsim', () => {
       state.current.draw[0] = cards.Market;
       const calculated = heuristics[cards.Vassal].calculatedPlayPriority(state, cards.Vassal, state.current);
       expect(calculated).toEqual(99);
+    });
+  });
+
+  describe('With Witch', () => {
+    test('Witch calculated discard priority is treated as Moat\'s if no curses left', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+      const card = cards.Witch;
+
+      state.setUp([ai, ai], {
+        log: () => {
+        },
+        warn: () => {
+        }
+      });
+      state.kingdom.Curse = 0;
+      const moatDiscardValue = ai.discardValue(state, cards.Moat, state.current);
+
+      expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(moatDiscardValue);
+    });
+
+    test('Witch skips calculated discard priority with curses in supply', () => {
+      const ai = new DomPlayer();
+      const state = new State();
+      const card = cards.Witch;
+
+      state.setUp([ai, ai], {
+        log: () => {
+        },
+        warn: () => {
+        }
+      });
+      expect(heuristics[card].calculatedDiscardPriority(state, card, state.current)).toBe(false);
     });
   });
 });

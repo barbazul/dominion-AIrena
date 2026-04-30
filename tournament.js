@@ -168,8 +168,7 @@ for (let i = 0; i < players.length - 1; i++) {
   for (let j = i + 1; j < players.length; j++) {
     for (let game = 0; game < gamesPerMatch; game++) {
       const state = new State();
-      const logFn = () => {
-      };
+      const logFn = () => {};
 
       if (game === 0) {
         console.log(`${players[i]} vs ${players[j]}`);

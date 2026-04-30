@@ -266,7 +266,6 @@ export class DomPlayer extends BasicAI {
    */
   discardValue (state, card, my) {
     let calculatedValue;
-
     // TODO Province heuristic regarding Tournament
     // TODO Estate heuristics regarding Estate Token
     // TODO Estate heuristics regarding Baron

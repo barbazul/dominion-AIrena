@@ -1,5 +1,6 @@
 import cards from '../game/cards.js';
 import { PHASE_ACTION, PHASE_BUY, PHASE_TREASURE } from '../game/state.js';
+import shuffle from '../lib/shuffle.js';
 
 /**
  * This defines the base for an AI agent.
@@ -1068,6 +1069,101 @@ export default class BasicAI {
   }
 
   /**
+   * Compares two hands by discarding their cards in priority order until one
+   * of them reaches 2 or fewer cards. Returns 1 if hand1 is better (discarded
+   * down first), -1 if hand2 is better, or 0 if both reach 2 or fewer cards
+   * at the same time.
+   *
+   * @param {State} state
+   * @param {Card[]} hand1
+   * @param {Card[]} hand2
+   * @returns {number}
+   */
+  compareByDiscarding (state, hand1, hand2) {
+    // Step 1: Preserve the original hands and actions for the current player
+    const workHand1 = hand1.slice();
+    const workHand2 = hand2.slice();
+    const originalActions = state.current.actions;
+
+    // Step 2: Set actions to 1
+    state.current.actions = 1;
+
+    const my = this.myPlayer(state);
+    let loopCounter = 0;
+
+    try {
+      // Steps 3-6: Discard in priority order until one hand has 2 or fewer cards
+      while (workHand1.length > 2 && workHand2.length > 2) {
+        if (++loopCounter >= 100) {
+          throw new Error('compareByDiscarding: exceeded 100 iterations');
+        }
+
+        // Step 3: Pick a discard choice for each hand
+        const choice1 = this.choose('discard', state, workHand1);
+        const choice2 = this.choose('discard', state, workHand2);
+
+        // Step 4: Determine the choice value of the chosen card
+        const value1 = this.choiceToValue('discard', state, choice1, my);
+        const value2 = this.choiceToValue('discard', state, choice2, my);
+
+        // Step 5: Remove the choice with the highest value from the corresponding hand.
+        // In case of a match, discard from both hands.
+        if (value1 >= value2) {
+          workHand1.splice(workHand1.indexOf(choice1), 1);
+        }
+
+        if (value2 >= value1) {
+          workHand2.splice(workHand2.indexOf(choice2), 1);
+        }
+      }
+    } finally {
+      // Step 7: Restore the number of actions for the active player
+      state.current.actions = originalActions;
+    }
+
+    // Step 8: Determine result
+    const hand1Done = workHand1.length <= 2;
+    const hand2Done = workHand2.length <= 2;
+
+    if (hand1Done && hand2Done) {
+      return 0;
+    }
+
+    return hand1Done ? 1 : -1;
+  }
+
+  /**
+   * Decides the value of discarding an entire hand of cards by comparing it
+   * against randomly drawn hands of the same size from the draw pile.
+   *
+   * Draws 5 random hands of `nCards` from the player's draw pile (falling back
+   * to include the discard pile if the draw pile does not have enough cards)
+   * without modifying the actual piles, then returns the sum of
+   * `compareByDiscarding(state, hand, randomHand)` across all 5 comparisons.
+   *
+   * @param {State} state
+   * @param {Card[]} hand
+   * @param {Player} my
+   * @param {number} nCards
+   * @returns {number}
+   */
+  discardHandValue (state, hand, my, nCards) {
+    let pool = my.draw.slice();
+    if (pool.length < nCards) {
+      pool = pool.concat(my.discard);
+    }
+
+    let total = 0;
+    for (let i = 0; i < 5; i++) {
+      const shuffled = shuffle(pool.slice());
+      const randomHand = shuffled.slice(0, nCards);
+      total += this.compareByDiscarding(state, hand, randomHand);
+    }
+
+    return total;
+  }
+
+  /**
    * upgradeValue measures the benefit of choices on Remodel, Upgrade,
    * and so on, where you exchange one card for a better one.
    *
@@ -1303,7 +1399,6 @@ export default class BasicAI {
    * - old_multipliedActionPriority: Was already deprecated in Dominiate
    * - treasurePriority: Not being used in Dominiate
    * - discardFromOpponentDeckValue: Not being used in Dominiate
-   * - discardHandValue: Not being used in Dominiate
    * - gainOnDeckValue: Not being used in Dominiate
    */
 }

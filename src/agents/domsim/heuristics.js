@@ -10,8 +10,6 @@ import { CHOICE_TRASH, CHOICE_UPGRADE } from '../basicAI.js';
 
 /* Stryker disable ArrayDeclaration, ObjectLiteral */
 
-/* Stryker disable ArrayDeclaration, ObjectLiteral */
-
 const helpers = {
   /**
    * Safely check agent play strategy for card.
@@ -356,6 +354,8 @@ const heuristics = {
   'Mining Village': { types: ['Village', 'Cycler'], playPriority: 9, discardPriority: 22 },
   Courtyard: { types: ['Terminal'], discardPriority: 24, playPriority: 24 }
 };
+
+/* Stryker enable ArrayDeclaration, ObjectLiteral */
 
 /* Stryker enable ArrayDeclaration, ObjectLiteral */
 
