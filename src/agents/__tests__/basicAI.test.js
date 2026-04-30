@@ -1667,3 +1667,66 @@ test('compareByDiscarding does not modify the original hand arrays', () => {
   expect(hand1).toEqual(hand1Copy);
   expect(hand2).toEqual(hand2Copy);
 });
+
+test('minionValue returns 0 for coins choice', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, new BasicAI()], muteConfig);
+
+  expect(ai.minionValue(state, 'coins', state.current)).toBe(0);
+});
+
+test('minionValue returns discardHandValue result when no opponent would discard', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, new BasicAI()], muteConfig);
+  ai.discardHandValue = jest.fn(() => 3);
+  state.players[1].hand = [cards.Copper, cards.Estate];
+
+  const result = ai.minionValue(state, 'cards', state.current);
+
+  expect(ai.discardHandValue).toHaveBeenCalledWith(state, state.current.hand, state.current, 4);
+  expect(result).toBe(3);
+});
+
+test('minionValue adds 2 when at least one opponent has 5 or more cards in hand', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, new BasicAI()], muteConfig);
+  ai.discardHandValue = jest.fn(() => 3);
+  state.players[1].hand = [cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper];
+
+  const result = ai.minionValue(state, 'cards', state.current);
+
+  expect(result).toBe(5);
+});
+
+test('minionValue adds 2 only once even when multiple opponents would discard', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, new BasicAI(), new BasicAI()], muteConfig);
+  ai.discardHandValue = jest.fn(() => 1);
+  state.players[1].hand = [cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper];
+  state.players[2].hand = [cards.Copper, cards.Copper, cards.Copper, cards.Copper, cards.Copper];
+
+  const result = ai.minionValue(state, 'cards', state.current);
+
+  expect(result).toBe(3);
+});
+
+test('minionValue does not add 2 when opponent has exactly 4 cards', () => {
+  const ai = new BasicAI();
+  const state = new State();
+
+  state.setUp([ai, new BasicAI()], muteConfig);
+  ai.discardHandValue = jest.fn(() => 2);
+  state.players[1].hand = [cards.Copper, cards.Copper, cards.Copper, cards.Copper];
+
+  const result = ai.minionValue(state, 'cards', state.current);
+
+  expect(result).toBe(2);
+});

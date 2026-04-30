@@ -1031,7 +1031,20 @@ export default class BasicAI {
    * @return {number}
    */
   minionValue (state, choice, my) {
-    return choice === 'cards' ? 1 : 0;
+    if (choice !== 'cards') {
+      return 0;
+    }
+
+    let value = this.discardHandValue(state, my.hand, my, 4);
+
+    const opponentWouldDiscard = state.players.some(
+      p => p !== my && p.hand.length >= 5
+    );
+    if (opponentWouldDiscard) {
+      value += 2;
+    }
+
+    return value;
   }
 
   /**
