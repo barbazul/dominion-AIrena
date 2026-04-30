@@ -1,242 +1,247 @@
 {
     "BasicAI": {
-        "plays": 1280,
-        "wins": 492.5,
-        "rate": 0.384765625
+        "plays": 1760,
+        "wins": 686,
+        "rate": 0.38977272727272727
     },
     "BigMoney": {
-        "plays": 1280,
-        "wins": 516,
-        "rate": 0.403125
+        "plays": 1760,
+        "wins": 730,
+        "rate": 0.4147727272727273
     },
     "Big Smithy": {
-        "plays": 1296,
-        "wins": 760.5,
-        "rate": 0.5868055555555556
+        "plays": 1776,
+        "wins": 1045.5,
+        "rate": 0.5886824324324325
     },
     "BM Library": {
-        "plays": 1303,
-        "wins": 693.5,
-        "rate": 0.532233307751343
+        "plays": 1783,
+        "wins": 965,
+        "rate": 0.5412226584408301
     },
     "Chapel Witch": {
-        "plays": 1306,
-        "wins": 940,
-        "rate": 0.7197549770290965
+        "plays": 1786,
+        "wins": 1304.5,
+        "rate": 0.7304031354983203
     },
     "Double Militia": {
-        "plays": 1280,
-        "wins": 657,
-        "rate": 0.51328125
+        "plays": 1760,
+        "wins": 931,
+        "rate": 0.5289772727272727
     },
     "Double Witch": {
-        "plays": 1336,
-        "wins": 1022,
-        "rate": 0.7649700598802395
+        "plays": 1816,
+        "wins": 1406.5,
+        "rate": 0.7745044052863436
     },
     "Moneylender Witch": {
-        "plays": 1291,
-        "wins": 922.5,
-        "rate": 0.7145623547637491
+        "plays": 1771,
+        "wins": 1266.5,
+        "rate": 0.715132693393563
     },
     "SillyAI": {
-        "plays": 1280,
-        "wins": 176.5,
-        "rate": 0.137890625
+        "plays": 1760,
+        "wins": 237.5,
+        "rate": 0.13494318181818182
     },
     "Single Witch": {
-        "plays": 1299,
-        "wins": 967,
-        "rate": 0.7444187836797537
+        "plays": 1779,
+        "wins": 1323.5,
+        "rate": 0.7439572793704329
     },
     "First Game by michaeljb": {
-        "plays": 1220,
-        "wins": 212,
-        "rate": 0.1737704918032787
+        "plays": 1680,
+        "wins": 253.5,
+        "rate": 0.15089285714285713
     },
     "Bureaucrat/Gardens": {
-        "plays": 1304,
-        "wins": 890.5,
-        "rate": 0.682898773006135
+        "plays": 1784,
+        "wins": 1241,
+        "rate": 0.695627802690583
     },
     "Burning Skull HTBD#1": {
-        "plays": 1260,
-        "wins": 390,
-        "rate": 0.30952380952380953
+        "plays": 1730,
+        "wins": 437.5,
+        "rate": 0.25289017341040465
     },
     "Council Room/Militia": {
-        "plays": 1280,
-        "wins": 587,
-        "rate": 0.45859375
+        "plays": 1760,
+        "wins": 820,
+        "rate": 0.4659090909090909
     },
     "DomPlayer": {
-        "plays": 1280,
-        "wins": 490.5,
-        "rate": 0.383203125
+        "plays": 1760,
+        "wins": 673.5,
+        "rate": 0.38267045454545456
     },
     "Lab/Militia/Chapel": {
-        "plays": 1258,
-        "wins": 511.5,
-        "rate": 0.40659777424483307
+        "plays": 1728,
+        "wins": 664,
+        "rate": 0.38425925925925924
     },
     "Festival": {
-        "plays": 1280,
-        "wins": 524.5,
-        "rate": 0.409765625
+        "plays": 1760,
+        "wins": 732,
+        "rate": 0.4159090909090909
     },
     "Council Room": {
-        "plays": 1324,
-        "wins": 797.5,
-        "rate": 0.6023413897280967
+        "plays": 1804,
+        "wins": 1089,
+        "rate": 0.6036585365853658
     },
     "Bureaucrat": {
-        "plays": 1280,
-        "wins": 577,
-        "rate": 0.45078125
+        "plays": 1760,
+        "wins": 818.5,
+        "rate": 0.46505681818181815
     },
     "Big Money Ultimate": {
-        "plays": 1280,
-        "wins": 500,
-        "rate": 0.390625
+        "plays": 1760,
+        "wins": 698,
+        "rate": 0.3965909090909091
     },
     "WorkshopGardens": {
-        "plays": 1281,
-        "wins": 925,
-        "rate": 0.7220921155347385
+        "plays": 1761,
+        "wins": 1324.5,
+        "rate": 0.752129471890971
     },
     "Basic Big Money": {
-        "plays": 1280,
-        "wins": 230,
-        "rate": 0.1796875
+        "plays": 1760,
+        "wins": 327,
+        "rate": 0.18579545454545454
     },
     "Big Money Ultimate for 3 or 4": {
-        "plays": 1280,
-        "wins": 382,
-        "rate": 0.2984375
+        "plays": 1760,
+        "wins": 529,
+        "rate": 0.30056818181818185
     },
     "Double Moat for 3 or 4": {
-        "plays": 1280,
-        "wins": 396.5,
-        "rate": 0.309765625
+        "plays": 1760,
+        "wins": 551,
+        "rate": 0.3130681818181818
     },
     "Laboratory": {
-        "plays": 1282,
-        "wins": 581.5,
-        "rate": 0.453588143525741
+        "plays": 1762,
+        "wins": 810.5,
+        "rate": 0.45998864926220207
     },
     "Militia": {
-        "plays": 1286,
-        "wins": 659,
-        "rate": 0.5124416796267496
+        "plays": 1766,
+        "wins": 922.5,
+        "rate": 0.5223669309173273
     },
     "Moat": {
-        "plays": 1292,
-        "wins": 644.5,
-        "rate": 0.4988390092879257
+        "plays": 1772,
+        "wins": 910,
+        "rate": 0.5135440180586908
     },
     "Smithy": {
-        "plays": 1303,
-        "wins": 769.5,
-        "rate": 0.5905602455871066
+        "plays": 1783,
+        "wins": 1077,
+        "rate": 0.604038137969714
     },
     "Witch": {
-        "plays": 1318,
-        "wins": 1026,
-        "rate": 0.7784522003034902
+        "plays": 1798,
+        "wins": 1399,
+        "rate": 0.7780867630700778
     },
     "Witch and Moat for 3 or 4": {
-        "plays": 1280,
-        "wins": 745,
-        "rate": 0.58203125
+        "plays": 1760,
+        "wins": 1024.5,
+        "rate": 0.5821022727272728
     },
     "Witch for 3 or 4": {
-        "plays": 1282,
-        "wins": 899.5,
-        "rate": 0.7016380655226209
+        "plays": 1762,
+        "wins": 1233.5,
+        "rate": 0.7000567536889898
     },
     "Artisan": {
-        "plays": 1280,
-        "wins": 413.5,
-        "rate": 0.323046875
+        "plays": 1760,
+        "wins": 570.5,
+        "rate": 0.3241477272727273
     },
     "Single Baron": {
-        "plays": 1281,
-        "wins": 590,
-        "rate": 0.4605776736924278
+        "plays": 1761,
+        "wins": 825.5,
+        "rate": 0.4687677455990914
     },
     "OBM Bridge": {
-        "plays": 1284,
-        "wins": 584,
-        "rate": 0.45482866043613707
+        "plays": 1764,
+        "wins": 815.5,
+        "rate": 0.4623015873015873
     },
     "Mining Council Militia": {
-        "plays": 1280,
-        "wins": 320.5,
-        "rate": 0.250390625
+        "plays": 1760,
+        "wins": 440,
+        "rate": 0.25
     },
     "Courtyard": {
-        "plays": 1313,
-        "wins": 898,
-        "rate": 0.683929931454684
+        "plays": 1793,
+        "wins": 1222,
+        "rate": 0.6815393195761293
     },
     "OBM Courtyard": {
-        "plays": 1303,
-        "wins": 890,
-        "rate": 0.6830391404451266
+        "plays": 1783,
+        "wins": 1225,
+        "rate": 0.6870443073471677
     },
     "Duke": {
-        "plays": 1280,
-        "wins": 208,
-        "rate": 0.1625
+        "plays": 1760,
+        "wins": 283,
+        "rate": 0.16079545454545455
     },
     "StatsBot": {
-        "plays": 1280,
-        "wins": 820.5,
-        "rate": 0.641015625
+        "plays": 1760,
+        "wins": 1149,
+        "rate": 0.6528409090909091
     },
     "Farm": {
-        "plays": 900,
-        "wins": 443.5,
-        "rate": 0.49277777777777776
+        "plays": 1380,
+        "wins": 671.5,
+        "rate": 0.4865942028985507
     },
     "Ironworks": {
-        "plays": 900,
-        "wins": 414.5,
-        "rate": 0.46055555555555555
+        "plays": 1380,
+        "wins": 643.5,
+        "rate": 0.46630434782608693
     },
     "Ironworks/Gardens (Paper)": {
-        "plays": 900,
-        "wins": 318.5,
-        "rate": 0.35388888888888886
+        "plays": 1380,
+        "wins": 485,
+        "rate": 0.35144927536231885
     },
     "Ironworks/Gardens (Rock)": {
-        "plays": 900,
-        "wins": 765.5,
-        "rate": 0.8505555555555555
+        "plays": 1380,
+        "wins": 1172.5,
+        "rate": 0.8496376811594203
     },
     "Ironworks/Gardens (Scissors)": {
-        "plays": 900,
-        "wins": 709.5,
-        "rate": 0.7883333333333333
+        "plays": 1380,
+        "wins": 1091,
+        "rate": 0.7905797101449276
     },
     "BM Masquerade": {
-        "plays": 470,
-        "wins": 247.5,
-        "rate": 0.526595744680851
+        "plays": 950,
+        "wins": 509.5,
+        "rate": 0.5363157894736842
     },
     "Masquerade": {
-        "plays": 470,
-        "wins": 279,
-        "rate": 0.5936170212765958
+        "plays": 950,
+        "wins": 579,
+        "rate": 0.6094736842105263
     },
     "CantripLurker": {
-        "plays": 470,
-        "wins": 103,
-        "rate": 0.21914893617021278
+        "plays": 950,
+        "wins": 232,
+        "rate": 0.24421052631578946
     },
     "Mill": {
-        "plays": 470,
-        "wins": 209.5,
-        "rate": 0.44574468085106383
+        "plays": 950,
+        "wins": 432.5,
+        "rate": 0.45526315789473687
+    },
+    "Minion": {
+        "plays": 480,
+        "wins": 63,
+        "rate": 0.13125
     }
 }

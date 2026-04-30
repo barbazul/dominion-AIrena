@@ -26,6 +26,7 @@ import DoubleMoatFor3or4 from './src/agents/domsim/doubleMoatFor3or4.js';
 import Laboratory from './src/agents/domsim/laboratory.js';
 import Masquerade from './src/agents/domsim/masquerade.js';
 import Militia from './src/agents/domsim/militia.js';
+import MinionAgent from './src/agents/domsim/minion.js';
 import Moat from './src/agents/domsim/moat.js';
 import Smithy from './src/agents/domsim/smithy.js';
 import Witch from './src/agents/domsim/witch.js';
@@ -105,7 +106,8 @@ const players = [
   new IronworksGardensScissors(),
   new Masquerade(),
   new CantripLurker(),
-  new Mill()
+  new Mill(),
+  new MinionAgent()
 ];
 
 const statsBotAgent = new StatsBot(statsBotOptions);

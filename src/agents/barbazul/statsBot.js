@@ -15,6 +15,7 @@ import Festival from '../domsim/festival.js';
 import CouncilRoomMilitia from '../domsim/councilRoomMilitia.js';
 import Bureaucrat from '../domsim/bureaucrat.js';
 import Militia from '../domsim/militia.js';
+import MinionAgent from '../domsim/minion.js';
 import DoubleMilitia from '../dominiate/doubleMilitia.js';
 import Laboratory from '../domsim/laboratory.js';
 import Masquerade from '../domsim/masquerade.js';
@@ -111,6 +112,7 @@ export default class StatsBot extends ProxyAgent {
       new Laboratory(),
       new Masquerade(),
       new Militia(),
+      new MinionAgent(),
       new Moat(),
       new Smithy(),
       new Witch(),
