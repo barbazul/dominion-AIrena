@@ -106,7 +106,7 @@ const players = [
   new IronworksGardensScissors(),
   new Masquerade(),
   new CantripLurker(),
-  new Mill(),
+  new Mill(), // 45
   new MinionAgent()
 ];
 
@@ -141,8 +141,6 @@ const stats = { ties: 0 };
 rivals.forEach(player => {
   stats[player] = 0;
 });
-
-config.required = ['Chapel'];
 
 for (let i = 0; i < numGames; i++) {
   state.setUp(rivals, config);
